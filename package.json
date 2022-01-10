@@ -1,0 +1,41 @@
+{
+  "name": "@qfi/qfi",
+  "description": "Quadratic Funding Infrastructure",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/"
+  },
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@nomiclabs/**",
+      "**/gitbook-cli/**",
+      "**/fs-extra/**"
+    ]
+  },
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "build:contracts": "yarn workspace @qfi/contracts run build",
+    "build:subgraph": "yarn workspace @qfi/subgraph run build",
+    "build:ui": "yarn workspace @qfi/ui run build",
+    "build:hooks": "yarn workspace @qfi/hooks run build",
+    "test": "yarn workspaces run test",
+    "test:contracts": "yarn workspace @qfi/contracts run test",
+    "deploy:subgraph":"yarn workspace @qfi/subgraph run deploy"
+  },
+  "keywords": [
+    "RxC"
+  ],
+  "author": "daodesigner",
+  "bugs": {
+    "url": "https://github.com/"
+  },
+  "homepage": "https://github.com/"
+}
