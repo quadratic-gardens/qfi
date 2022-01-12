@@ -1,3 +1,10 @@
+import { ethers } from 'hardhat';
+import chai from 'chai';
+import { solidity } from 'ethereum-waffle';
+
+chai.use(solidity);
+const { expect } = chai;
+
 describe('Funding Round Factory', () => {
   
   beforeEach(async () => {
@@ -227,4 +234,5 @@ describe('Funding Round Factory', () => {
   })
 
   
-})
+  })
+});
