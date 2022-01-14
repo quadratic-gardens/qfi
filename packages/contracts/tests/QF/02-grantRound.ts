@@ -171,6 +171,9 @@ describe("Quadratic Funding Infrastructure New Grant Round", () => {
     await expect(qfi.initialize(vkRegistry.address, messageAqFactory.address, messageAqFactoryGrants.address))
       .to.emit(qfi, "Init")
       .withArgs(vkRegistry.address, messageAqFactory.address);
+    console.log(await qfi.stateTreeDepth());
+    expect(await qfi.stateAq()).to.not.equal(ethers.constants.AddressZero)
+    expect(await qfi.stateTreeDepth()).to.equal(10);
   });
 
   it("Starts a new Quadratic Funding Grant Round", async () => {

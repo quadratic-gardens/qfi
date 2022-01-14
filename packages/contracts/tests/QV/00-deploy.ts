@@ -50,7 +50,7 @@ import { PollProcessorAndTallyer__factory } from "../../typechain/factories/Poll
 chai.use(solidity);
 const { expect } = chai;
 
-describe("Quadratic Funding Infrastructure Deploy", () => {
+describe("Quadratic Voting Infrastructure Deploy", () => {
   let deployer: Signer;
   let deployerAddress: string;
   let PoseidonT3Factory: PoseidonT3__factory;
@@ -217,7 +217,7 @@ describe("Quadratic Funding Infrastructure Deploy", () => {
 
   it("transfers PollFactory ownership to Quadratic Funding Infrastructure Contract", async () => {
     grantRoundFactory = await GrantRoundFactory.deploy();
-    grantRoundFactory.setRecipientRegistry(optimisticRecipientRegistry.address);
+    const tx = await grantRoundFactory.setRecipientRegistry(optimisticRecipientRegistry.address);
 
     pollFactory = await PollFactoryFactory.deploy();
     freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy();

@@ -55,7 +55,7 @@ import {MockVerifier__factory} from '../../typechain/factories/MockVerifier__fac
 chai.use(solidity);
 const { expect } = chai;
 
-describe("Quadratic Funding Infrastructure New Grant Round", () => {
+describe("Voting Period", () => {
   let deployer: Signer;
   let deployerAddress: string;
   let PoseidonT3Factory: PoseidonT3__factory;
