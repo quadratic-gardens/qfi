@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { BigNumberish, Signer } from "ethers";
+import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
 import { Keypair, VerifyingKey } from "maci-domainobjs";
@@ -33,6 +33,8 @@ import { GrantRoundFactory } from "../../typechain/GrantRoundFactory";
 import { PollFactory } from "../../typechain/PollFactory";
 import { MessageAqFactory } from "../../typechain/MessageAqFactory";
 import { QFI } from "../../typechain/QFI";
+import { Poll__factory } from "../../typechain/factories/Poll__factory";
+import { Poll } from "../../typechain/Poll";
 
 import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
 import { FreeForAllGatekeeper__factory } from "../../typechain/factories/FreeForAllGatekeeper__factory";
@@ -101,6 +103,28 @@ describe("New Voting Round", () => {
   let user2: Signer;
   let user3: Signer;
   let user4: Signer;
+  let user5: Signer;
+  let user6: Signer;
+  let user7: Signer;
+  let user8: Signer;
+  let user9: Signer;
+  let user10: Signer;
+  let user11: Signer;
+  let user12: Signer;
+  let user13: Signer;
+  let user14: Signer;
+  let user15: Signer;
+  let user16: Signer;
+  let user17: Signer;
+  let user18: Signer;
+  let user19: Signer;
+  let user20: Signer;
+  let user21: Signer;
+  let user22: Signer;
+  let user23: Signer;
+  let user24: Signer;
+  let user25: Signer;
+  let user26: Signer;
   let project1: Signer;
   let project2: Signer;
   let project3: Signer;
@@ -146,9 +170,41 @@ describe("New Voting Round", () => {
   let pollProcessorAndTallyer: PollProcessorAndTallyer;
   let mockVerifier: MockVerifier;
   let qfi: QFI;
+  let coordinator: Keypair;
+  let poll: Poll;
 
   beforeEach(async () => {
-    [deployer, user1, user2, user3, user4, project1, project2, project3] = await ethers.getSigners();
+    [
+      deployer,
+      user1,
+      user2,
+      user3,
+      user4,
+      user5,
+      user6,
+      user7,
+      user8,
+      user9,
+      user10,
+      user11,
+      user12,
+      user13,
+      user14,
+      user15,
+      user16,
+      user17,
+      user18,
+      user19,
+      user20,
+      user21,
+      user22,
+      user23,
+      user24,
+      user25,
+      user26,
+    ] = await ethers.getSigners();
+
+    ethers.Wallet.createRandom();
     deployerAddress = await deployer.getAddress();
     PoseidonT3Factory = new PoseidonT3__factory(deployer);
     PoseidonT4Factory = new PoseidonT4__factory(deployer);
@@ -205,6 +261,35 @@ describe("New Voting Round", () => {
     await messageAqFactory.transferOwnership(pollFactory.address);
     await messageAqFactoryGrants.transferOwnership(grantRoundFactory.address);
     await qfi.initialize(vkRegistry.address, messageAqFactory.address, messageAqFactoryGrants.address);
+
+    const stateTreeDepth = await qfi.stateTreeDepth();
+    const _stateTreeDepth = stateTreeDepth.toString();
+    const _intStateTreeDepth = 1;
+    const _messageTreeDepth = 4;
+    const _voteOptionTreeDepth = 2;
+    const _messageBatchSize = 25;
+    const _processVk = <VerifyingKeyStruct>testProcessVk.asContractParam();
+    const _tallyVk = <VerifyingKeyStruct>testTallyVk.asContractParam();
+
+    const { status } = await vkRegistry
+      .setVerifyingKeys(
+        _stateTreeDepth,
+        _intStateTreeDepth,
+        _messageTreeDepth,
+        _voteOptionTreeDepth,
+        _messageBatchSize,
+        _processVk,
+        _tallyVk
+      )
+      .then((tx) => tx.wait());
+    const pSig = await vkRegistry.genProcessVkSig(
+      _stateTreeDepth,
+      _messageTreeDepth,
+      _voteOptionTreeDepth,
+      _messageBatchSize
+    );
+    const tSig = await vkRegistry.genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth);
+    coordinator = new Keypair();
   });
 
   describe("User Sign Ups", () => {
@@ -227,7 +312,7 @@ describe("New Voting Round", () => {
         .withArgs(expectedStateIndex, expectedPubKey, expectedIntialVoiceCredits, expectedTimeStamp);
     });
 
-    it("verify - allows many users to sign up to maci with correct parameters", async () => {
+    it("verify - allows two users to sign up to maci with correct parameters", async () => {
       const provider = user1.provider ?? ethers.getDefaultProvider();
       const timeStamp = (await provider.getBlock("latest")).timestamp;
 
@@ -239,7 +324,7 @@ describe("New Voting Round", () => {
         const expectedPubKey = Object.values(_pubKey);
         const expectedStateIndex = index + 1 + "";
         const expectedIntialVoiceCredits = 100;
-        //NOTE: each transaction will tick 1 second 🤷
+        //NOTE: each transaction will tick 1 🤷
         const expectedTimeStamp = timeStamp + index + 1;
 
         return expect(qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData))
@@ -247,6 +332,46 @@ describe("New Voting Round", () => {
           .withArgs(expectedStateIndex, expectedPubKey, expectedIntialVoiceCredits, expectedTimeStamp);
       });
       await Promise.all(signups);
+    });
+
+    it("verify - allows many users to sign up to maci with correct parameters", async () => {
+      const userSigners = [
+        user1,
+        user2,
+        user3,
+        user4,
+        user5,
+        user6,
+        user7,
+        user8,
+        user9,
+        user10,
+        user11,
+        user12,
+        user13,
+        user14,
+        user15,
+        user16,
+        user17,
+        user18,
+        user19,
+        user20,
+        user21,
+        user22,
+        user23,
+        user24,
+        user25,
+      ];
+      for (const user of userSigners) {
+        const maciKey = new Keypair();
+        const _pubKey = maciKey.pubKey.asContractParam();
+        const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
+        const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
+        await expect(qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData)).to.emit(
+          qfi,
+          "SignUp"
+        );
+      }
     });
 
     it("require fail - sign up fails with invalid keys", async () => {
@@ -262,58 +387,74 @@ describe("New Voting Round", () => {
       ).to.be.revertedWith("MACI: _pubKey values should be less than the snark scalar field");
     });
   });
+  describe("Create a new Poll", () => {
+    const _duration = 15;
+    const _maxValues = {
+      maxUsers: 25,
+      maxMessages: 25,
+      maxVoteOptions: 25,
+    };
+    const _treeDepths = {
+      intStateTreeDepth: 1,
+      messageTreeDepth: 4,
+      messageTreeSubDepth: 2,
+      voteOptionTreeDepth: 2,
+    };
+    const _intStateTreeDepth = 1;
+    const _messageBatchSize = 25;
+    const _tallyBatchSize = 5 ** _intStateTreeDepth;
+    coordinator = new Keypair();
+    const _coordinatorPubkey = coordinator.pubKey.asContractParam();
 
-  describe("Set Verification Keys", () => {
-    it("verify - set verifying keys in vkRegistry contract", async () => {
-      const stateTreeDepth = await qfi.stateTreeDepth();
-      const _stateTreeDepth = stateTreeDepth.toString();
-      const _intStateTreeDepth = 1;
-      const _messageTreeDepth = 4;
-      const _voteOptionTreeDepth = 2;
-      const _messageBatchSize = 25;
-      const _processVk = <VerifyingKeyStruct>testProcessVk.asContractParam();
-      const _tallyVk = <VerifyingKeyStruct>testTallyVk.asContractParam();
+    const expectedPollId = "0";
+    //const expectedPollAddress = "0x4aAa546748B9b4DBaa3A1C58f0DD1b2d3C6E97Ef"; // NOTE: nonce hack to get the poll address. Use this for Integration test
+    const expectedPollAddress = "0xB550ae8163A275BD1a43D2074716FC384c696265"; // NOTE: nonce hack to get the poll address. Use this for Unit test
 
-      const { status } = await vkRegistry
-        .setVerifyingKeys(
-          _stateTreeDepth,
-          _intStateTreeDepth,
-          _messageTreeDepth,
-          _voteOptionTreeDepth,
-          _messageBatchSize,
-          _processVk,
-          _tallyVk
-        )
-        .then((tx) => tx.wait());
+    const expectedCoordinatorPublicKey = Object.values(_coordinatorPubkey);
 
-      expect(status).to.equal(1);
+    it("verify - deploys a new poll correctly", async () => {
+      const provider = deployer.provider ?? ethers.getDefaultProvider();
 
-      const pSig = await vkRegistry.genProcessVkSig(
-        _stateTreeDepth,
-        _messageTreeDepth,
-        _voteOptionTreeDepth,
-        _messageBatchSize
-      );
+      await expect(qfi.deployPoll(_duration, _maxValues, _treeDepths, _coordinatorPubkey))
+        .to.emit(qfi, "DeployPoll")
+        .withArgs(expectedPollId, expectedPollAddress, expectedCoordinatorPublicKey);
 
-      const isPSigSet = await vkRegistry.isProcessVkSet(pSig);
-      expect(isPSigSet).to.be.true;
+      const expectedTimeStamp = BigNumber.from((await provider.getBlock("latest")).timestamp);
+      const expectedDuration = BigNumber.from(_duration);
+      const pollContractAddress = await qfi.getPoll(0);
+      poll = new Poll__factory({ ...linkedLibraryAddresses }, deployer).attach(pollContractAddress);
+      const deployTimeandDuration = await poll.getDeployTimeAndDuration();
 
-      const tSig = await vkRegistry.genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth);
-      const isTSigSet = await vkRegistry.isTallyVkSet(tSig);
-      expect(isTSigSet).to.be.true;
+      expect([...deployTimeandDuration]).to.deep.equal([expectedTimeStamp, expectedDuration]);
 
-      // Check that the VKs are set
-      const processVkOnChain = await vkRegistry.getProcessVk(
-        _stateTreeDepth,
-        _messageTreeDepth,
-        _voteOptionTreeDepth,
-        _messageBatchSize
-      );
-      expect(processVkOnChain).to.have.own.property('alpha1')
+      expect(await poll.stateAqMerged()).to.be.false;
+      expect((await poll.currentSbCommitment()).toString()).to.equal("0");
+      expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(0);
+      expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
 
-      const tallyVkOnChain = await vkRegistry.getTallyVk(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth);
-      expect(tallyVkOnChain).to.have.own.property('alpha1')
-      expect(tallyVkOnChain.alpha1.x).to.not.be.empty
+      const onChainMaxValues = await poll.maxValues();
+      expect([onChainMaxValues.maxMessages, onChainMaxValues.maxVoteOptions]).to.deep.equal([
+        BigNumber.from(_maxValues.maxMessages),
+        BigNumber.from(_maxValues.maxVoteOptions),
+      ]);
+
+      const onChainTreeDepths = await poll.treeDepths();
+      expect([
+        onChainTreeDepths.intStateTreeDepth,
+        onChainTreeDepths.messageTreeSubDepth,
+        onChainTreeDepths.messageTreeDepth,
+        onChainTreeDepths.voteOptionTreeDepth,
+      ]).to.deep.equal([
+        _treeDepths.intStateTreeDepth,
+        _treeDepths.messageTreeSubDepth,
+        _treeDepths.messageTreeDepth,
+        _treeDepths.voteOptionTreeDepth,
+      ]);
+      const onChainBatchSizes = await poll.batchSizes();
+      expect([onChainBatchSizes.messageBatchSize, onChainBatchSizes.tallyBatchSize]).to.deep.equal([
+        _messageBatchSize,
+        _tallyBatchSize,
+      ]);
     });
   });
 });

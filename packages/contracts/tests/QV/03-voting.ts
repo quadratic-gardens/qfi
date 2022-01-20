@@ -1,7 +1,9 @@
 import { ethers } from "hardhat";
-import { Signer } from "ethers";
+import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
+import { Keypair, VerifyingKey } from "maci-domainobjs";
+import { G1Point, G2Point } from "maci-crypto";
 
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
 import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
@@ -31,12 +33,14 @@ import { GrantRoundFactory } from "../../typechain/GrantRoundFactory";
 import { PollFactory } from "../../typechain/PollFactory";
 import { MessageAqFactory } from "../../typechain/MessageAqFactory";
 import { QFI } from "../../typechain/QFI";
+import { Poll__factory } from "../../typechain/factories/Poll__factory";
+import { Poll } from "../../typechain/Poll";
 
 import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
 import { FreeForAllGatekeeper__factory } from "../../typechain/factories/FreeForAllGatekeeper__factory";
 import { ConstantInitialVoiceCreditProxy__factory } from "../../typechain/factories/ConstantInitialVoiceCreditProxy__factory";
 
-import { VkRegistry } from "../../typechain/VkRegistry";
+import { VerifyingKeyStruct, VkRegistry } from "../../typechain/VkRegistry";
 import { FreeForAllGatekeeper } from "../../typechain/FreeForAllGatekeeper";
 import { ConstantInitialVoiceCreditProxy } from "../../typechain/ConstantInitialVoiceCreditProxy";
 
@@ -49,14 +53,43 @@ import { BaseERC20Token__factory } from "../../typechain/factories/BaseERC20Toke
 import { PollProcessorAndTallyer } from "../../typechain/PollProcessorAndTallyer";
 import { PollProcessorAndTallyer__factory } from "../../typechain/factories/PollProcessorAndTallyer__factory";
 
-import {MockVerifier} from '../../typechain/MockVerifier'
-import {MockVerifier__factory} from '../../typechain/factories/MockVerifier__factory'
+import { MockVerifier } from "../../typechain/MockVerifier";
+import { MockVerifier__factory } from "../../typechain/factories/MockVerifier__factory";
 
 chai.use(solidity);
 const { expect } = chai;
+const testProcessVk = new VerifyingKey(
+  new G1Point(BigInt(0), BigInt(1)),
+  new G2Point([BigInt(2), BigInt(3)], [BigInt(4), BigInt(5)]),
+  new G2Point([BigInt(6), BigInt(7)], [BigInt(8), BigInt(9)]),
+  new G2Point([BigInt(10), BigInt(11)], [BigInt(12), BigInt(13)]),
+  [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
+);
 
-describe("Voting Period", () => {
+const testTallyVk = new VerifyingKey(
+  new G1Point(BigInt(0), BigInt(1)),
+  new G2Point([BigInt(2), BigInt(3)], [BigInt(4), BigInt(5)]),
+  new G2Point([BigInt(6), BigInt(7)], [BigInt(8), BigInt(9)]),
+  new G2Point([BigInt(10), BigInt(11)], [BigInt(12), BigInt(13)]),
+  [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
+);
+
+describe("New Voting Round", () => {
   let deployer: Signer;
+  let user1: Signer;
+  let user2: Signer;
+  let user3: Signer;
+  let user4: Signer;
+  let user5: Signer;
+  let user6: Signer;
+  let user7: Signer;
+  let user8: Signer;
+  let user9: Signer;
+  let user10: Signer;
+  
+  let project1: Signer;
+  let project2: Signer;
+  let project3: Signer;
   let deployerAddress: string;
   let PoseidonT3Factory: PoseidonT3__factory;
   let PoseidonT4Factory: PoseidonT4__factory;
@@ -99,9 +132,43 @@ describe("Voting Period", () => {
   let pollProcessorAndTallyer: PollProcessorAndTallyer;
   let mockVerifier: MockVerifier;
   let qfi: QFI;
+  let coordinator: Keypair;
+  let poll: Poll;
+  let users: {
+    maciKey: Keypair;
+    signer: Signer;
+  }[] = [];
+  const duration = 15;
+  const maxValues = {
+    maxUsers: 25,
+    maxMessages: 25,
+    maxVoteOptions: 25,
+  };
+  const treeDepths = {
+    intStateTreeDepth: 1,
+    messageTreeDepth: 4,
+    messageTreeSubDepth: 2,
+    voteOptionTreeDepth: 2,
+  };
+  const intStateTreeDepth = 1;
+  const messageBatchSize = 25;
+  const tallyBatchSize = 5 ** intStateTreeDepth;
 
   beforeEach(async () => {
-    [deployer] = await ethers.getSigners();
+    [
+      deployer,
+      user1,
+      user2,
+      user3,
+      user4,
+      user5,
+      user6,
+      user7,
+      user8,
+      user9,
+      user10,
+     
+    ] = await ethers.getSigners();
     deployerAddress = await deployer.getAddress();
     PoseidonT3Factory = new PoseidonT3__factory(deployer);
     PoseidonT4Factory = new PoseidonT4__factory(deployer);
@@ -118,7 +185,7 @@ describe("Voting Period", () => {
       ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
       ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
     };
-    
+
     GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer);
     PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, deployer);
     MessageAqFactoryFactory = new MessageAqFactory__factory({ ...linkedLibraryAddresses }, deployer);
@@ -139,7 +206,8 @@ describe("Voting Period", () => {
     messageAqFactory = await MessageAqFactoryFactory.deploy();
     messageAqFactoryGrants = await MessageAqFactoryFactory.deploy();
     freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy();
-    constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(0);
+    //NOTE: each user recieves 100 voice credits by default
+    constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(100);
     vkRegistry = await VKRegistryFactory.deploy();
     baseERC20Token = await BaseERC20TokenFactory.deploy(100);
     mockVerifier = await MockVerifierFactory.deploy();
@@ -152,28 +220,83 @@ describe("Voting Period", () => {
       freeForAllGateKeeper.address,
       constantInitialVoiceCreditProxy.address
     );
-    await expect(pollFactory.transferOwnership(qfi.address))
-      .to.emit(pollFactory, "OwnershipTransferred")
-      .withArgs(deployerAddress, qfi.address);
+    await pollFactory.transferOwnership(qfi.address);
+    await grantRoundFactory.transferOwnership(qfi.address);
+    await messageAqFactory.transferOwnership(pollFactory.address);
+    await messageAqFactoryGrants.transferOwnership(grantRoundFactory.address);
+    await qfi.initialize(vkRegistry.address, messageAqFactory.address, messageAqFactoryGrants.address);
 
-    await expect(grantRoundFactory.transferOwnership(qfi.address))
-      .to.emit(grantRoundFactory, "OwnershipTransferred")
-      .withArgs(deployerAddress, qfi.address);
+    const stateTreeDepth = await qfi.stateTreeDepth();
+    const _stateTreeDepth = stateTreeDepth.toString();
+    const _intStateTreeDepth = 1;
+    const _messageTreeDepth = 4;
+    const _voteOptionTreeDepth = 2;
+    const _messageBatchSize = 25;
+    const _processVk = <VerifyingKeyStruct>testProcessVk.asContractParam();
+    const _tallyVk = <VerifyingKeyStruct>testTallyVk.asContractParam();
 
-    await expect(messageAqFactory.transferOwnership(pollFactory.address))
-      .to.emit(messageAqFactory, "OwnershipTransferred")
-      .withArgs(deployerAddress, pollFactory.address);
+    await vkRegistry.setVerifyingKeys(
+      _stateTreeDepth,
+      _intStateTreeDepth,
+      _messageTreeDepth,
+      _voteOptionTreeDepth,
+      _messageBatchSize,
+      _processVk,
+      _tallyVk
+    );
 
-    await expect(messageAqFactoryGrants.transferOwnership(grantRoundFactory.address))
-      .to.emit(messageAqFactoryGrants, "OwnershipTransferred")
-      .withArgs(deployerAddress, grantRoundFactory.address);
+    await vkRegistry.genProcessVkSig(_stateTreeDepth, _messageTreeDepth, _voteOptionTreeDepth, _messageBatchSize);
+    await vkRegistry.genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth);
+    coordinator = new Keypair();
+    const coordinatorPubkey = coordinator.pubKey.asContractParam();
 
-    await expect(qfi.initialize(vkRegistry.address, messageAqFactory.address, messageAqFactoryGrants.address))
-      .to.emit(qfi, "Init")
-      .withArgs(vkRegistry.address, messageAqFactory.address);
+    const userSigners = [user1, user2, user3, user4,user5];
+    for (const user of userSigners) {
+      const maciKey = new Keypair();
+      const _pubKey = maciKey.pubKey.asContractParam();
+      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
+      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
+
+      await qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData);
+      users.push({ maciKey: maciKey, signer: user });
+    }
+
+    await qfi.connect(deployer).deployPoll(duration, maxValues, treeDepths, coordinatorPubkey, { gasLimit: 30000000 });
+    const pollContractAddress = await qfi.getPoll(0);
+    poll = new Poll__factory({ ...linkedLibraryAddresses }, deployer).attach(pollContractAddress);
   });
 
-  it("", async () => {
- 
+  it("verify - users signed up successfully before poll deployed", async () => {
+    expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(5);
+    expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
+  });
+
+  it("verify - user signed up successfully after poll deployed", async () => {
+    const userSigners = [user6];
+    for (const user of userSigners) {
+      const maciKey = new Keypair();
+      const _pubKey = maciKey.pubKey.asContractParam();
+      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
+      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
+
+      await qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData);
+      users.push({ maciKey: maciKey, signer: user });
+    }
+    expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(6);
+    expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
+  });
+  it("verify - many users signed up successfully after poll deployed", async () => {
+    const userSigners = [ user6, user7, user8, user9, user10];
+    for (const user of userSigners) {
+      const maciKey = new Keypair();
+      const _pubKey = maciKey.pubKey.asContractParam();
+      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
+      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
+
+      await qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData);
+      users.push({ maciKey: maciKey, signer: user });
+    }
+    expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(10);
+    expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
   });
 });
