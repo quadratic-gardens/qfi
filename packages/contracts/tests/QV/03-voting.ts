@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-import { Keypair, VerifyingKey } from "maci-domainobjs";
+import { Command, Keypair, Message, VerifyingKey } from "maci-domainobjs";
 import { G1Point, G2Point } from "maci-crypto";
 
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
@@ -34,7 +34,7 @@ import { PollFactory } from "../../typechain/PollFactory";
 import { MessageAqFactory } from "../../typechain/MessageAqFactory";
 import { QFI } from "../../typechain/QFI";
 import { Poll__factory } from "../../typechain/factories/Poll__factory";
-import { Poll } from "../../typechain/Poll";
+import { MessageStruct, Poll } from "../../typechain/Poll";
 
 import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
 import { FreeForAllGatekeeper__factory } from "../../typechain/factories/FreeForAllGatekeeper__factory";
@@ -86,7 +86,7 @@ describe("New Voting Round", () => {
   let user8: Signer;
   let user9: Signer;
   let user10: Signer;
-  
+
   let project1: Signer;
   let project2: Signer;
   let project3: Signer;
@@ -138,7 +138,7 @@ describe("New Voting Round", () => {
     maciKey: Keypair;
     signer: Signer;
   }[] = [];
-  const duration = 15;
+  const duration = 30;
   const maxValues = {
     maxUsers: 25,
     maxMessages: 25,
@@ -155,20 +155,7 @@ describe("New Voting Round", () => {
   const tallyBatchSize = 5 ** intStateTreeDepth;
 
   beforeEach(async () => {
-    [
-      deployer,
-      user1,
-      user2,
-      user3,
-      user4,
-      user5,
-      user6,
-      user7,
-      user8,
-      user9,
-      user10,
-     
-    ] = await ethers.getSigners();
+    [deployer, user1, user2, user3, user4, user5, user6, user7, user8, user9, user10] = await ethers.getSigners();
     deployerAddress = await deployer.getAddress();
     PoseidonT3Factory = new PoseidonT3__factory(deployer);
     PoseidonT4Factory = new PoseidonT4__factory(deployer);
@@ -250,7 +237,8 @@ describe("New Voting Round", () => {
     coordinator = new Keypair();
     const coordinatorPubkey = coordinator.pubKey.asContractParam();
 
-    const userSigners = [user1, user2, user3, user4,user5];
+    const userSigners = [user1, user2, user3, user4, user5];
+    users = [];
     for (const user of userSigners) {
       const maciKey = new Keypair();
       const _pubKey = maciKey.pubKey.asContractParam();
@@ -285,8 +273,9 @@ describe("New Voting Round", () => {
     expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(6);
     expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
   });
+
   it("verify - many users signed up successfully after poll deployed", async () => {
-    const userSigners = [ user6, user7, user8, user9, user10];
+    const userSigners = [user6, user7, user8, user9, user10];
     for (const user of userSigners) {
       const maciKey = new Keypair();
       const _pubKey = maciKey.pubKey.asContractParam();
@@ -298,5 +287,63 @@ describe("New Voting Round", () => {
     }
     expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(10);
     expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
+  });
+
+  it("verify - vote triggers event with encrypted message", async () => {
+    const keypair = users[0].maciKey;
+
+    const _stateIndex = BigInt(1);
+    const _newPubKey = keypair.pubKey;
+    const _voteOptionIndex = BigInt(0);
+    const _newVoteWeight = BigInt(9);
+    const _nonce = BigInt(1);
+    const _pollId = BigInt(0);
+    const _salt = BigInt(0);
+
+    const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
+    const command = new Command(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
+    const signature = command.sign(keypair.privKey);
+    const message = command.encrypt(signature, sharedKey);
+
+    const { status, logs } = await poll
+      .publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())
+      .then((tx) => tx.wait());
+    const iface = poll.interface;
+    const event = iface.parseLog(logs[logs.length - 1]);
+
+    const expectOkStatus = 1;
+    const expectedMessage = message.data.map((data) => {
+      return BigNumber.from(data);
+    });
+    expect(status).to.equal(expectOkStatus);
+    expect(event.args[0][0]).to.deep.equal(expectedMessage);
+  });
+
+  it("verify - one user can vote", async () => {
+    const keypair = users[0].maciKey;
+
+    const command = new Command(BigInt(1), keypair.pubKey, BigInt(0), BigInt(9), BigInt(1), BigInt(0), BigInt(0));
+
+    const signature = command.sign(keypair.privKey);
+    const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
+    const message = command.encrypt(signature, sharedKey);
+
+    const _message = <MessageStruct>message.asContractParam();
+    const _encPubKey = keypair.pubKey.asContractParam();
+
+    await expect(poll.publishMessage(_message, _encPubKey)).to.emit(poll, "PublishMessage");
+  });
+  it("verify - many users can vote", async () => {
+    for (const user of users) {
+      const { maciKey, signer } = user;
+      const command = new Command(BigInt(1), maciKey.pubKey, BigInt(0), BigInt(9), BigInt(1), BigInt(0), BigInt(0));
+
+      const signature = command.sign(maciKey.privKey);
+      const sharedKey = Keypair.genEcdhSharedKey(maciKey.privKey, coordinator.pubKey);
+      const message = command.encrypt(signature, sharedKey);
+      const _message = <MessageStruct>message.asContractParam();
+      const _encPubKey = maciKey.pubKey.asContractParam();
+      await expect(poll.connect(signer).publishMessage(_message, _encPubKey)).to.emit(poll, "PublishMessage");
+    }
   });
 });
