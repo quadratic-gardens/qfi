@@ -4,7 +4,7 @@ import chai from "chai";
 import { solidity } from "ethereum-waffle";
 import { Command, Keypair, Message, VerifyingKey } from "maci-domainobjs";
 import { G1Point, G2Point } from "maci-crypto";
-
+import { MaciState, genProcessVkSig, genTallyVkSig } from "maci-core";
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
 import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
 
@@ -55,6 +55,8 @@ import { PollProcessorAndTallyer__factory } from "../../typechain/factories/Poll
 
 import { MockVerifier } from "../../typechain/MockVerifier";
 import { MockVerifier__factory } from "../../typechain/factories/MockVerifier__factory";
+import { AccQueueQuinaryMaci } from "../../typechain/AccQueueQuinaryMaci";
+import { AccQueueQuinaryMaci__factory } from "../../typechain";
 
 chai.use(solidity);
 const { expect } = chai;
@@ -74,7 +76,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Voting - Cast QV votes", () => {
+describe("Process - Tally QV poll votes", () => {
   let deployer: Signer;
   let user1: Signer;
   let user2: Signer;
@@ -104,7 +106,7 @@ describe("Voting - Cast QV votes", () => {
   let GrantRoundFactory: GrantRoundFactory__factory;
   let PollFactoryFactory: PollFactory__factory;
   let MessageAqFactoryFactory: MessageAqFactory__factory;
-
+  let MessageAq_Factory: AccQueueQuinaryMaci__factory;
   let FreeForAllGateKeeperFactory: FreeForAllGatekeeper__factory;
   let ConstantInitialVoiceCreditProxyFactory: ConstantInitialVoiceCreditProxy__factory;
   let VKRegistryFactory: VkRegistry__factory;
@@ -124,6 +126,8 @@ describe("Voting - Cast QV votes", () => {
   let pollFactory: PollFactory;
   let messageAqFactory: MessageAqFactory;
   let messageAqFactoryGrants: MessageAqFactory;
+  let messageAq: AccQueueQuinaryMaci;
+
   let vkRegistry: VkRegistry;
   let constantInitialVoiceCreditProxy: ConstantInitialVoiceCreditProxy;
   let freeForAllGateKeeper: FreeForAllGatekeeper;
@@ -138,7 +142,7 @@ describe("Voting - Cast QV votes", () => {
     maciKey: Keypair;
     signer: Signer;
   }[] = [];
-  const duration = 30;
+  const duration = 15;
   const maxValues = {
     maxUsers: 25,
     maxMessages: 25,
@@ -150,9 +154,11 @@ describe("Voting - Cast QV votes", () => {
     messageTreeSubDepth: 2,
     voteOptionTreeDepth: 2,
   };
+  const stateTreeDepth = 10;
   const intStateTreeDepth = 1;
   const messageBatchSize = 25;
   const tallyBatchSize = 5 ** intStateTreeDepth;
+  let maciState: MaciState;
 
   beforeEach(async () => {
     [deployer, user1, user2, user3, user4, user5, user6, user7, user8, user9, user10] = await ethers.getSigners();
@@ -176,8 +182,8 @@ describe("Voting - Cast QV votes", () => {
     GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer);
     PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, deployer);
     MessageAqFactoryFactory = new MessageAqFactory__factory({ ...linkedLibraryAddresses }, deployer);
+    MessageAq_Factory = new AccQueueQuinaryMaci__factory({ ...linkedLibraryAddresses }, deployer);
     QFIFactory = new QFI__factory({ ...linkedLibraryAddresses }, deployer);
-
     VKRegistryFactory = new VkRegistry__factory(deployer);
     ConstantInitialVoiceCreditProxyFactory = new ConstantInitialVoiceCreditProxy__factory(deployer);
     FreeForAllGateKeeperFactory = new FreeForAllGatekeeper__factory(deployer);
@@ -237,7 +243,11 @@ describe("Voting - Cast QV votes", () => {
     coordinator = new Keypair();
     const coordinatorPubkey = coordinator.pubKey.asContractParam();
 
-    const userSigners = [user1, user2, user3, user4, user5];
+    // NOTE: Create new local maci data structure
+    maciState = new MaciState();
+    const provider = deployer.provider ?? ethers.getDefaultProvider();
+
+    const userSigners = [user1, user2, user3];
     users = [];
     for (const user of userSigners) {
       const maciKey = new Keypair();
@@ -245,97 +255,42 @@ describe("Voting - Cast QV votes", () => {
       const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
       const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
 
-      await qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData);
+      const { logs } = await qfi
+        .connect(user)
+        .signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData)
+        .then((tx) => tx.wait());
+
+      const iface = qfi.interface;
+      const signUpEvent = iface.parseLog(logs[logs.length - 1]);
+
       users.push({ maciKey: maciKey, signer: user });
+      // NOTE: Signup users on local maci data structure
+      maciState.signUp(
+        maciKey.pubKey,
+        BigInt(signUpEvent.args._voiceCreditBalance.toString()),
+        BigInt(signUpEvent.args._timestamp.toString())
+      );
     }
 
-    await qfi.connect(deployer).deployPoll(duration, maxValues, treeDepths, coordinatorPubkey, { gasLimit: 30000000 });
+    const { blockHash } = await qfi
+      .connect(deployer)
+      .deployPoll(duration, maxValues, treeDepths, coordinatorPubkey, { gasLimit: 30000000 })
+      .then((tx) => tx.wait());
+
+    // NOTE: Deploy the poll on local maci data structure
+    const deployTime = (await provider.getBlock(blockHash)).timestamp;
+    //NOTE: this is where the coordinator key is set on the local maci data structure
+    const p = maciState.deployPoll(
+      duration,
+      BigInt(deployTime + duration),
+      maxValues,
+      treeDepths,
+      messageBatchSize,
+      coordinator
+    );
     const pollContractAddress = await qfi.getPoll(0);
     poll = new Poll__factory({ ...linkedLibraryAddresses }, deployer).attach(pollContractAddress);
-    
-  });
 
-  it("verify - users signed up successfully before poll deployed", async () => {
-    expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(5);
-    expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
-  });
-
-  it("verify - user signed up successfully after poll deployed", async () => {
-    const userSigners = [user6];
-    for (const user of userSigners) {
-      const maciKey = new Keypair();
-      const _pubKey = maciKey.pubKey.asContractParam();
-      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
-      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
-
-      await qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData);
-      users.push({ maciKey: maciKey, signer: user });
-    }
-    expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(6);
-    expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
-  });
-
-  it("verify - many users signed up successfully after poll deployed", async () => {
-    const userSigners = [user6, user7, user8, user9, user10];
-    for (const user of userSigners) {
-      const maciKey = new Keypair();
-      const _pubKey = maciKey.pubKey.asContractParam();
-      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
-      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
-
-      await qfi.connect(user).signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData);
-      users.push({ maciKey: maciKey, signer: user });
-    }
-    expect(Number((await poll.numSignUpsAndMessages())[0])).to.equal(10);
-    expect(Number((await poll.numSignUpsAndMessages())[1])).to.equal(0);
-  });
-
-  it("verify - vote triggers event with encrypted message", async () => {
-    const keypair = users[0].maciKey;
-
-    const _stateIndex = BigInt(1);
-    const _newPubKey = keypair.pubKey;
-    const _voteOptionIndex = BigInt(0);
-    const _newVoteWeight = BigInt(9);
-    const _nonce = BigInt(1);
-    const _pollId = BigInt(0);
-    const _salt = BigInt(0);
-
-    const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
-    const command = new Command(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
-    const signature = command.sign(keypair.privKey);
-    const message = command.encrypt(signature, sharedKey);
-
-    const { status, logs } = await poll
-      .publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())
-      .then((tx) => tx.wait());
-    const iface = poll.interface;
-    const event = iface.parseLog(logs[logs.length - 1]);
-
-    const expectOkStatus = 1;
-    const expectedMessage = message.data.map((data) => {
-      return BigNumber.from(data);
-    });
-    expect(status).to.equal(expectOkStatus);
-    expect(event.args[0][0]).to.deep.equal(expectedMessage);
-  });
-
-  it("verify - one user can vote", async () => {
-    const keypair = users[0].maciKey;
-
-    const command = new Command(BigInt(1), keypair.pubKey, BigInt(0), BigInt(9), BigInt(1), BigInt(0), BigInt(0));
-
-    const signature = command.sign(keypair.privKey);
-    const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
-    const message = command.encrypt(signature, sharedKey);
-
-    const _message = <MessageStruct>message.asContractParam();
-    const _encPubKey = keypair.pubKey.asContractParam();
-
-    await expect(poll.publishMessage(_message, _encPubKey)).to.emit(poll, "PublishMessage");
-  });
-
-  it("verify - many users can vote", async () => {
     for (const user of users) {
       const { maciKey, signer } = user;
       const _stateIndex = BigInt(1);
@@ -352,33 +307,160 @@ describe("Voting - Cast QV votes", () => {
       const message = command.encrypt(signature, sharedKey);
       const _message = <MessageStruct>message.asContractParam();
       const _encPubKey = maciKey.pubKey.asContractParam();
-      await expect(poll.connect(signer).publishMessage(_message, _encPubKey)).to.emit(poll, "PublishMessage");
+      const { logs } = await poll
+        .connect(signer)
+        .publishMessage(_message, _encPubKey)
+        .then((tx) => tx.wait());
+
+      // NOTE: Publish the message on local maci data structure
+      maciState.polls[_pollId].publishMessage(message, maciKey.pubKey);
     }
-  });
-  
-  it("expect revert - user cant vote after voting period", async () => {
+
     const dd = await poll.getDeployTimeAndDuration();
-    const provider = ethers.provider;
+    const hardHatProvider = ethers.provider;
+    await hardHatProvider.send("evm_increaseTime", [Number(dd[1]) + 1]);
+    await hardHatProvider.send("evm_mine", []);
 
-    const expectedTime = dd[1].add(dd[0]).toNumber();
+    const extContracts = await poll.extContracts();
 
-    expect((await provider.getBlock("latest")).timestamp).to.be.lt(expectedTime);
+    const messageAqAddress = extContracts.messageAq;
+    messageAq = MessageAq_Factory.attach(messageAqAddress);
 
-    await provider.send("evm_increaseTime", [Number(dd[1]) + 1]);
-    await provider.send("evm_mine", []);
+    const maciPoll = maciState.polls[0];
+    maciPoll.messageAq.mergeSubRoots(0); //NOTE: 0 as input attempts to merge all subroots
+    maciPoll.messageAq.merge(treeDepths.messageTreeDepth);
 
-    expect((await provider.getBlock("latest")).timestamp).to.be.gt(expectedTime);
-    const keypair = users[0].maciKey;
+    await poll.mergeMessageAqSubRoots(0);
+    await poll.mergeMessageAq();
 
-    const command = new Command(BigInt(1), keypair.pubKey, BigInt(0), BigInt(9), BigInt(1), BigInt(0), BigInt(0));
+    const maciStateAq = maciState.stateAq;
+    maciStateAq.mergeSubRoots(0); // 0 as input attempts to merge all subroots
+    maciStateAq.merge(stateTreeDepth);
 
-    const signature = command.sign(keypair.privKey);
-    const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
-    const message = command.encrypt(signature, sharedKey);
+    await poll.mergeMaciStateAqSubRoots(0, 0);
+    await poll.mergeMaciStateAq(0);
+  });
 
-    const _message = <MessageStruct>message.asContractParam();
-    const _encPubKey = keypair.pubKey.asContractParam();
+  describe("Maci state calculations", () => {
+    it("verify - correctly packs maximumVoteOptions, numsignups, currentMessageBatchIndex, indexOfCurrentBatch into a 250-bit value", async () => {
+      const pollId = 0;
+      const maciPoll = maciState.polls[pollId];
 
-    await expect(poll.publishMessage(_message, _encPubKey)).to.be.revertedWith("PollE03");
+      //TODO: do we need large vals?
+      const expectedPackedVals = MaciState.packProcessMessageSmallVals(
+        maxValues.maxVoteOptions,
+        users.length,
+        0,
+        maciPoll.messages.length
+      );
+
+      const onChainPackedVals = await pollProcessorAndTallyer.genProcessMessagesPackedVals(
+        poll.address,
+        BigNumber.from(0),
+        users.length
+      );
+      expect(expectedPackedVals.toString()).to.equal(onChainPackedVals.toString());
+    });
+    it("verify - correctly packs the batch start index and number of signups into a 100-bit value", async () => {
+      const maciExpectedPackedVals = MaciState.packTallyVotesSmallVals(0, tallyBatchSize, users.length);
+      const onChainPackedVals = await pollProcessorAndTallyer.genTallyVotesPackedVals(users.length, 0, tallyBatchSize);
+      expect(onChainPackedVals.toString()).to.equal(maciExpectedPackedVals.toString());
+    });
+  });
+
+  describe("Process and Tally Vote messages", () => {
+    it("verify - process messages and proof", async () => {
+      const pollId = 0;
+      const maciPoll = maciState.polls[pollId];
+      //NOTE: new state root and ballot root commitment calculated off chain
+      const { newSbCommitment: maciNewSbCommitment } = maciPoll.processMessages(pollId);
+      //TODO: why does this work?
+      const dummyProof: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ] = [0, 0, 0, 0, 0, 0, 0, 0];
+      const { status } = await pollProcessorAndTallyer
+        .processMessages(poll.address, maciNewSbCommitment, dummyProof)
+        .then((tx) => tx.wait());
+      expect(status).to.equal(1);
+      expect(await pollProcessorAndTallyer.processingComplete()).to.be.true;
+
+      const onChainNewSbCommitment = await pollProcessorAndTallyer.sbCommitment();
+      expect(maciNewSbCommitment).to.equal(onChainNewSbCommitment.toString());
+    });
+
+    it("verify - tally proof is valid and updates tally commitment", async () => {
+      const pollId = 0;
+      const maciPoll = maciState.polls[pollId];
+      //NOTE: new state root and ballot root commitment calculated off chain
+      const { newSbCommitment: maciNewSbCommitment } = maciPoll.processMessages(pollId);
+      //TODO: why does this work?
+      const dummyProof: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ] = [0, 0, 0, 0, 0, 0, 0, 0];
+      const { status: processMessagesStatus } = await pollProcessorAndTallyer
+        .processMessages(poll.address, maciNewSbCommitment, dummyProof)
+        .then((tx) => tx.wait());
+      expect(processMessagesStatus).to.equal(1);
+      expect(await pollProcessorAndTallyer.processingComplete()).to.be.true;
+
+      const maciGeneratedInputs = maciPoll.tallyVotes(pollId);
+      const { status: tallyVotesStatus } = await pollProcessorAndTallyer
+        .tallyVotes(poll.address, maciGeneratedInputs.newTallyCommitment, dummyProof)
+        .then((tx) => tx.wait());
+      expect(tallyVotesStatus).to.equal(1);
+      const onChainNewTallyCommitment = await pollProcessorAndTallyer.tallyCommitment();
+
+      expect(maciGeneratedInputs.newTallyCommitment).to.equal(onChainNewTallyCommitment);
+    });
+
+    it("require fail - Fails if there are no untallied ballots left", async () => {
+      const pollId = 0;
+      const maciPoll = maciState.polls[pollId];
+      //NOTE: new state root and ballot root commitment calculated off chain
+      const { newSbCommitment: maciNewSbCommitment } = maciPoll.processMessages(pollId);
+      //TODO: why does this work?
+      const dummyProof: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ] = [0, 0, 0, 0, 0, 0, 0, 0];
+      const { status: processMessagesStatus } = await pollProcessorAndTallyer
+        .processMessages(poll.address, maciNewSbCommitment, dummyProof)
+        .then((tx) => tx.wait());
+      expect(processMessagesStatus).to.equal(1);
+      expect(await pollProcessorAndTallyer.processingComplete()).to.be.true;
+
+      const maciGeneratedInputs = maciPoll.tallyVotes(pollId);
+      const { status: tallyVotesStatus } = await pollProcessorAndTallyer
+        .tallyVotes(poll.address, maciGeneratedInputs.newTallyCommitment, dummyProof)
+        .then((tx) => tx.wait());
+      expect(tallyVotesStatus).to.equal(1);
+      const onChainNewTallyCommitment = await pollProcessorAndTallyer.tallyCommitment();
+
+      expect(maciGeneratedInputs.newTallyCommitment).to.equal(onChainNewTallyCommitment);
+
+      await expect(
+        pollProcessorAndTallyer.tallyVotes(poll.address, maciGeneratedInputs.newTallyCommitment, dummyProof)
+      ).to.be.revertedWith("PptE08");
+    });
   });
 });
