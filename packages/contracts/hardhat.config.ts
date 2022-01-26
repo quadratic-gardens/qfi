@@ -1,15 +1,15 @@
 import { task } from "hardhat/config";
-import fs from 'fs';
-import path from 'path';
-import dotenv from 'dotenv'
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
 
 import { HardhatUserConfig } from "hardhat/types";
 import { NetworkUserConfig } from "hardhat/types";
 
 import "@typechain/hardhat";
 import "@nomiclabs/hardhat-ethers";
-import "@nomiclabs/hardhat-waffle";
-import "@nomiclabs/hardhat-ganache";
+// import "@nomiclabs/hardhat-waffle";
+// import "@nomiclabs/hardhat-ganache";
 
 import "solidity-coverage";
 import "hardhat-gas-reporter";
@@ -21,7 +21,7 @@ dotenv.config();
 const WALLET_MNEMONIC =
   process.env.WALLET_MNEMONIC || "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
 const INFURA_API_KEY = process.env.INFURA_API_KEY || "";
-const GAS_LIMIT = 20000000;
+const GAS_LIMIT = 30000000;
 const CHAIN_IDS = {
   ganache: 1337,
   goerli: 5,
@@ -63,14 +63,14 @@ const config: HardhatUserConfig = {
     hardhat: {
       gas: GAS_LIMIT,
       blockGasLimit: GAS_LIMIT,
-      accounts: { mnemonic: WALLET_MNEMONIC },
+      accounts: { count: 30, mnemonic: WALLET_MNEMONIC },
       chainId: CHAIN_IDS.hardhat,
     },
     localhost: {
       url: "http://127.0.0.1:8545",
       gas: GAS_LIMIT,
       blockGasLimit: GAS_LIMIT,
-      accounts: { mnemonic: WALLET_MNEMONIC },
+      accounts: { count: 30, mnemonic: WALLET_MNEMONIC },
     },
     ganache: {
       // Workaround for https://github.com/nomiclabs/hardhat/issues/518
@@ -101,14 +101,13 @@ const config: HardhatUserConfig = {
   gasReporter: {
     currency: "USD",
     gasPrice: 100,
-    coinmarketcap: "603bd12e-d2f3-4a9f-8c82-d5e346d9d482"
-
+    coinmarketcap: "603bd12e-d2f3-4a9f-8c82-d5e346d9d482",
   },
   typechain: {
     outDir: "typechain/",
     target: "ethers-v5",
     alwaysGenerateOverloads: false,
-    externalArtifacts: ['precompiled/*.json'], 
+    externalArtifacts: ["precompiled/*.json"],
   },
   solidity: {
     version: "0.7.2",
@@ -158,6 +157,5 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 //     )
 //   }
 // });
-
 
 export default config;
