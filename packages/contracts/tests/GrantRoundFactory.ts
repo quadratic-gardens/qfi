@@ -46,8 +46,8 @@ describe('Grant Round Factory', () => {
   })
 
   it('verify - configured properly', async () => {
-    expect(await grantRoundFactory.messageAqFactory()).to.not.equal(null)
-    expect(await grantRoundFactory.recipientRegistry()).to.not.equal(null)
+    expect(await grantRoundFactory.messageAqFactory()).to.equal(ethers.constants.AddressZero)
+    expect(await grantRoundFactory.recipientRegistry()).to.equal(ethers.constants.AddressZero)
   })
 
   describe('changing recipient registry', () => {
