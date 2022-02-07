@@ -1,1 +1,305 @@
-# Add your schema here...
+# Values for the status of the QFI.
+enum Stage {
+  NotInitialized
+  WaitingForSignupsAndTopups
+  VotingPeriodOpen
+  WaitingForFinalization
+  Finalized
+  Cancelled
+}
+
+# Values for the RecipientRegistry requests.
+enum RequestType {
+  Registration
+  Removal
+}
+
+# Entity that maintains information for managing multiple Grant Rounds.
+# Works as an entry point entity for the subgraph.
+# Inherits info from QFI and MACI.
+type QFI @entity {
+    id: ID!
+
+    # Inherited from MACI.
+    stateTreeDepth: Int!
+    stateTreeSubdepth: Int!
+    stateTreeArity: Int!
+    messageTreeArity: Int!
+    nextPollId: BigInt!
+    numSignUps: BigInt!
+    isInitialized: Boolean!
+    signUpTimestamp: BigInt!
+    pollFactory: Bytes!
+    signUpGatekeeper: Bytes!
+    initialVoiceCreditProxy: Bytes!
+
+    vkRegistryAddress: Bytes!
+    pollFactoryAddress: Bytes!
+    messageAqFactoryAddress: Bytes!
+    stateAqAddress: Bytes!
+
+    # Main fields.
+    coordinator: Coordinator!
+    currentStage: Stage! # Enum.
+    voiceCreditFactor: BigInt!
+    nextGrantRoundId: BigInt!
+    contributorCount: BigInt!
+    isStateAqMerged: Boolean!
+
+    # From PPT contract.
+    sbCommitment: BigInt!
+    currentMessageBatchIndex: BigInt!
+    processingComplete: Boolean!
+    numBatchesProcessed: BigInt!
+    tallyCommitment: BigInt!
+    tallyBatchNum: BigInt!
+
+    # Links.
+    nativeERC20Token: Token!
+    messageAqFactory: messageAqFactory!
+    recipientRegistry: RecipientRegistry!
+    currentGrantRound: GrantRound!
+
+    # Useful smart contracts addresses.
+    grantRoundFactoryAddress: Bytes!
+    pollProcessorAndTallyerAddress: Bytes!
+    verifierAddress: Bytes!
+    
+    # Reverse Lookups.
+    grantRounds: [GrantRound!] @derivedFrom(field: "qfi")
+    # Specifically, those Polls are GrantRounds (polls[pollId] = g, where g is a GrantRound).
+    polls: [GrantRound!] @derivedFrom(field: "qfi")
+
+    createdAt: String
+    lastUpdatedAt: String
+}
+
+type PublicKey @entity {
+    id: ID!
+
+    # Main fields.
+    x: BigInt!
+    y: BigInt!
+
+    # Associated voting info.
+    stateIndex: BigInt!
+    voiceCreditBalance: BigInt!
+
+    # Reverse Lookup for the messages signed w/ this public key.
+    messages: [Message!] @derivedFrom(field: "publicKey")
+
+    timestamp: BigInt!
+}
+
+type Message @entity {
+    id: ID!
+    
+    data: [BigInt!]
+
+    # Links.
+    publicKey: PublicKey!
+    grantRound: GrantRound! 
+    
+    timestamp: String!
+}
+
+# nb. Mainly based on OptimisticRecipientRegistry implementation.
+type RecipientRegistry @entity {
+    id: ID!
+
+    # Main fields.
+    fundingRoundFactoryAddress: Bytes!
+    baseDeposit: BigInt
+    challengePeriodDuration: BigInt
+    controller: Bytes!
+    maxRecipients: BigInt!
+
+    # Link.
+    grantRound: GrantRound!
+
+    # Reverse Lookup for the recipients registered in this registry.
+    recipients: [Recipient!] @derivedFrom(field: "recipientRegistry")
+
+    createdAt: String
+    lastUpdatedAt: String 
+}
+
+# nb. Mainly based on OptimisticRecipientRegistry implementation.
+type Recipient @entity {
+    id: ID!
+
+    # Main fields.
+    index: BigInt! # Unique index associated to the recipient in the registry (useful as voteOptionIndex).
+    address: Bytes!
+    metadata: String!
+    requestType: RequestType! # Enum.
+    requesterAddress: Bytes!
+    submissionTime: BigInt!
+    deposit: BigInt!
+    addedAt: BigInt!
+    removedAt: BigInt!
+    voteOptionIndex: BigInt
+    # Tx hash mirror.
+    requestResolvedHash: Bytes
+    requestSubmittedHash: Bytes
+
+    # Links.
+    grantRounds: [GrantRound!] # The same recipient can be part of multiple Grant Rounds.
+    recipientRegistry: RecipientRegistry!
+
+    # Reverse Lookup of the claimed funds sent to this recipient.
+    funds: [Funds!] @derivedFrom(field: "recipient")
+
+    createdAt: String
+    lastUpdatedAt: String
+}
+
+# Represent the information for the native ERC20 token used to exchange/buy Voice Credits.
+type Token @entity {
+    id: ID!
+
+    # Main fields
+    tokenAddress: Bytes
+    symbol: String
+    decimals: BigInt
+
+    createdAt: String
+    lastUpdatedAt: String
+}
+
+type GrantRound @entity {
+    id: ID!
+
+    # Main fields (also from Poll).
+    # Max values.
+    maxUsers: BigInt!
+    maxMessages: BigInt!
+    maxVoteOptions: BigInt!
+    # Tree depths.
+    intStateTreeDepth: BigInt!
+    messageTreeSubDepth: BigInt!
+    messageTreeDepth: BigInt!
+    voteOptionTreeDepth: BigInt!
+    # Batch sizes.
+    tallyBatchSize: BigInt!
+    messageBatchSize: BigInt!
+    # Time and duration.
+    duration: BigInt!
+    deployTimestamp: BigInt! # Grant Round start time.
+    deadline: BigInt!
+    voiceCreditFactor: BigInt!
+    # Status.
+    isCancelled: Boolean!
+    isMessageAqMerged: Boolean!
+    isFinalized: Boolean!
+    stateAqMerged: Boolean!
+    # State Ballot commitment.
+    currentSbCommitment: BigInt! # Can be useful for on-chain verification.
+    mergedStateRoot: BigInt!
+    tallyHash: String!
+    # Total amounts spent, votes, and matching funds.
+    totalSpent: BigInt!
+    totalVotes: BigInt!
+    matchingPoolSize: BigInt!
+    numMessages: BigInt!
+    # Contract addresses.
+    messageAqAddress: Bytes!
+    vkRegistryAddress: Bytes!
+
+    # Links.
+    qfi: QFI!
+    recipientRegistry: RecipientRegistry!
+    nativeERC20Token: Token!
+    coordinator: Coordinator!
+
+    # Reverse Lookups.
+    # Messages related to this grant round.
+    messages: [Message!] @derivedFrom(field: "grantRound")
+    # Recipients related to this grant round.
+    recipients: [Recipient!] @derivedFrom(field: "grantRounds")
+    # Who has contributed to the grant round.
+    contributors: [Contributor!] @derivedFrom(field: "grantRounds")
+    # The contributions to the grant round.
+    contributions: [Contribution!] @derivedFrom(field: "grantRound")
+    # Who has quadratically voted (w/ VCs) in the grant round.
+    votes: [Vote!] @derivedFrom(field: "grantRound")
+    
+    createdAt: String
+    lastUpdatedAt: String
+}
+
+# The coordinator is quite empty entity but can be useful to regroup some information
+# as the address and encPubKey w/ one link on other entities.
+type Coordinator @entity {
+    id: ID!
+
+    # Main fields.
+    address: Bytes!
+    publicKey: PublicKey! 
+    publicKeyHash: String!
+
+    # Links.
+    qfi: QFI!
+    grantRound: [GrantRound!] 
+}
+
+# A contributor who has sent tokens to the matching pool in exchange of VCs.
+type Contributor @entity {
+    id: ID!
+    
+    # Main fields.
+    address: Bytes! # Eth EOA.
+    voiceCredits: BigInt!
+    isRegistered: Boolean!
+
+    # Link.
+    grantRounds: [GrantRounds!] # Different GrantRounds where it took part.
+
+    # Reverse lookups.
+    contributions: [Contribution!] @derivedFrom(field: "contributor")
+    votes: [Vote!] @derivedFrom(field: "contributor")
+    
+    createdAt: String
+    lastUpdatedAt: String
+}
+
+type Contribution @entity {
+    id: ID!
+
+    # Main fields.
+    amount: BigInt!
+    voiceCredits: BigInt!
+
+    # Links.
+    contributor: Contributor!
+    grantRound: GrantRound!
+
+    createdAt: String
+    lastUpdatedAt: String
+}
+
+# The amount of funds claimed/donated from the matching fund to 
+# each recipient based on the result of the (tally) voting process.
+type Funds @entity {
+    id: ID!
+
+    # Main fields.
+    amount: BigInt
+    voteOptionIndex: BigInt
+
+    # Links
+    recipient: Recipient
+    fundingRound: FundingRound
+
+    createdAt: String
+}
+
+# This entity is stored when a contributor cast a vote (publish a message) 
+# for the first time in a grant round.
+type Vote @entity {
+    id: ID!
+
+    # Links.
+    contributor: Contributor!
+    grantRound: GrantRound!
+}
