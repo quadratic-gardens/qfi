@@ -56,11 +56,11 @@ type QFI @entity {
 
     # Links.
     nativeERC20Token: Token!
-    messageAqFactory: messageAqFactory!
     recipientRegistry: RecipientRegistry!
     currentGrantRound: GrantRound!
 
     # Useful smart contracts addresses.
+    messageAqFactoryAddress: Bytes!
     grantRoundFactoryAddress: Bytes!
     pollProcessorAndTallyerAddress: Bytes!
     verifierAddress: Bytes!
@@ -253,7 +253,7 @@ type Contributor @entity {
     isRegistered: Boolean!
 
     # Link.
-    grantRounds: [GrantRounds!] # Different GrantRounds where it took part.
+    grantRounds: [GrantRound!] # Different GrantRounds where it took part.
 
     # Reverse lookups.
     contributions: [Contribution!] @derivedFrom(field: "contributor")
@@ -289,7 +289,7 @@ type Funds @entity {
 
     # Links
     recipient: Recipient
-    fundingRound: FundingRound
+    grantRound: GrantRound
 
     createdAt: String
 }
