@@ -1,5 +1,13 @@
-import { log } from '@graphprotocol/graph-ts'
-import { Contributor, Funds, GrantRound as GrantRoundSchema, Message, PublicKey, Recipient, Vote } from '../generated/schema'
+import { log } from "@graphprotocol/graph-ts"
+import {
+    Contributor,
+    Funds,
+    GrantRound as GrantRoundSchema,
+    Message,
+    PublicKey,
+    Recipient,
+    Vote
+} from "../generated/schema"
 import {
     OwnershipTransferred,
     PublishMessage,
@@ -8,19 +16,21 @@ import {
     FundsClaimed,
     TallyPublished,
     Voted,
-    GrantRound as GrantRoundContract,
-} from '../generated/templates/GrantRound/GrantRound'
+    GrantRound as GrantRoundContract
+} from "../generated/templates/GrantRound/GrantRound"
 
 /**
-* (e.g., Store a PublicKey in the storage).
-* @param event Ethereum event emitted when XYZ.
-*/
-export function handleOwnershipTransferred(event: OwnershipTransferred): void { }
+ * (e.g., Store a PublicKey in the storage).
+ * @param event Ethereum event emitted when XYZ.
+ */
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+    log.debug(`OwnershipTransferred event block: {}`, [event.block.number.toString()])
+}
 
 /**
-* Handle the publishing of a message by a registered user.
-* @param event Ethereum event emitted when a user publishes a message.
-*/
+ * Handle the publishing of a message by a registered user.
+ * @param event Ethereum event emitted when a user publishes a message.
+ */
 export function handlePublishMessage(event: PublishMessage): void {
     log.debug(`PublishMessage event block: {}`, [event.block.number.toString()])
 
@@ -62,9 +72,9 @@ export function handlePublishMessage(event: PublishMessage): void {
 }
 
 /**
-* Handle the merge of the message AQ used by the Grant Round.
-* @param event Ethereum event emitted when the Grant Round message AQ is merged.
-*/
+ * Handle the merge of the message AQ used by the Grant Round.
+ * @param event Ethereum event emitted when the Grant Round message AQ is merged.
+ */
 export function handleMergeMessageAq(event: MergeMessageAq): void {
     log.debug(`MergeMessageAq event block: {}`, [event.block.number.toString()])
 
@@ -78,13 +88,12 @@ export function handleMergeMessageAq(event: MergeMessageAq): void {
     } else {
         log.error(`GrantRound entity not found!`, [])
     }
-
 }
 
 /**
-* Handle the cancellation of the Grant Round.
-* @param event Ethereum event emitted when the Grant Round message AQ is merged.
-*/
+ * Handle the cancellation of the Grant Round.
+ * @param event Ethereum event emitted when the Grant Round message AQ is merged.
+ */
 export function handleGrantRoundCancelled(event: GrantRoundCancelled): void {
     log.debug(`GrantRoundCancelled event block: {}`, [event.block.number.toString()])
 
@@ -99,18 +108,17 @@ export function handleGrantRoundCancelled(event: GrantRoundCancelled): void {
     } else {
         log.error(`GrantRound entity not found!`, [])
     }
-
 }
 
 /**
-* Handle the claiming of the funds from the matching pool of the GrantRound.
-* @param event Ethereum event emitted when a recipient claim the funds from the matching pool of the GrantRound.
-*/
+ * Handle the claiming of the funds from the matching pool of the GrantRound.
+ * @param event Ethereum event emitted when a recipient claim the funds from the matching pool of the GrantRound.
+ */
 export function handleFundsClaimed(event: FundsClaimed): void {
     log.debug(`FundsClaimed event block: {}`, [event.block.number.toString()])
 
     const timestamp = event.block.timestamp.toString()
-    
+
     // Get GrantRound.
     const grantRoundAddress = event.address
     const grantRoundId = grantRoundAddress.toHexString()
@@ -145,7 +153,7 @@ export function handleFundsClaimed(event: FundsClaimed): void {
             recipient.save()
         } else {
             const grantRounds = recipient.grantRounds
-            if (grantRounds !== null && !(grantRounds.find(grantRound => grantRound === grantRoundId))) {
+            if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
                 // Add the new GrantRound to the array.
                 grantRounds.push(grantRoundId)
                 recipient.grantRounds = grantRounds
@@ -178,7 +186,7 @@ export function handleFundsClaimed(event: FundsClaimed): void {
 
         // Update recipients for GrantRound.
         const grantRounds = grantRound.recipients
-        if (grantRounds !== null && !(grantRounds.find(recipient => recipient === recipientId))) {
+        if (grantRounds !== null && !grantRounds.find((recipient) => recipient === recipientId)) {
             // Add the new Recipient to the array.
             grantRounds.push(grantRoundId)
             grantRound.recipients = grantRounds
@@ -193,9 +201,9 @@ export function handleFundsClaimed(event: FundsClaimed): void {
 }
 
 /**
-* Handle the publishing of the tally on IPFS.
-* @param event Ethereum event emitted when the tally hash is published on IPFS.
-*/
+ * Handle the publishing of the tally on IPFS.
+ * @param event Ethereum event emitted when the tally hash is published on IPFS.
+ */
 export function handleTallyPublished(event: TallyPublished): void {
     log.debug(`TallyPublished event block: {}`, [event.block.number.toString()])
 
@@ -213,9 +221,9 @@ export function handleTallyPublished(event: TallyPublished): void {
 }
 
 /**
-* Handle the vote registration when someone publish a message.
-* @param event Ethereum event emitted when someone publish a message to vote in a GrantRound.
-*/
+ * Handle the vote registration when someone publish a message.
+ * @param event Ethereum event emitted when someone publish a message to vote in a GrantRound.
+ */
 export function handleVoted(event: Voted): void {
     log.debug(`Voted event block: {}`, [event.block.number.toString()])
 
@@ -244,8 +252,7 @@ export function handleVoted(event: Voted): void {
             if (grVotes) {
                 grVotes.push(voteId)
                 grantRound.votes = grVotes
-            } else
-                grantRound.votes = [voteId]
+            } else grantRound.votes = [voteId]
 
             // Update the Contributor.
 
@@ -253,8 +260,7 @@ export function handleVoted(event: Voted): void {
             if (cVotes) {
                 cVotes.push(voteId)
                 voter.votes = grVotes
-            } else
-                voter.votes = [voteId]
+            } else voter.votes = [voteId]
 
             grantRound.lastUpdatedAt = timestamp
             voter.lastUpdatedAt = timestamp

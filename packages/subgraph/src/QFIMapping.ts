@@ -1,11 +1,14 @@
-import { BigInt, log, store } from '@graphprotocol/graph-ts'
-import { OwnershipTransferred } from '../generated/GrantRoundFactory/GrantRoundFactory'
+import { BigInt, log, store } from "@graphprotocol/graph-ts"
+import { OwnershipTransferred } from "../generated/GrantRoundFactory/GrantRoundFactory"
 import {
     QFI as QFIContract,
     ContributionWithdrawn,
     DeployGrantRound,
     GrantRoundFinalized,
-    Init, InitQfi, MergeStateAq, SignUp,
+    Init,
+    InitQfi,
+    MergeStateAq,
+    SignUp,
     Contribution as ContributionEvent,
     VotingPeriodClosed,
     PreRoundContributionPeriodStarted,
@@ -14,11 +17,17 @@ import {
     QfiDeployed,
     FundingSourceAdded,
     FundingSourceRemoved
-} from '../generated/QFI/QFI'
+} from "../generated/QFI/QFI"
+import { GrantRound as GrantRoundContract } from "../generated/templates/GrantRound/GrantRound"
 import {
-    GrantRound as GrantRoundContract
-} from '../generated/templates/GrantRound/GrantRound'
-import { QFI as QFISchema, GrantRound, PublicKey, Coordinator, Contribution, Contributor, FundingSource } from "../generated/schema"
+    QFI as QFISchema,
+    GrantRound,
+    PublicKey,
+    Coordinator,
+    Contribution,
+    Contributor,
+    FundingSource
+} from "../generated/schema"
 
 /**
  * Handle a smart contract based on MACI (constructor event).
@@ -117,9 +126,9 @@ export function handleInitQfi(event: InitQfi): void {
 }
 
 /**
-* Handle the signup of a new user to QFI/MACI.
-* @param event Ethereum event emitted when someone do signup on QFI/MACI.
-*/
+ * Handle the signup of a new user to QFI/MACI.
+ * @param event Ethereum event emitted when someone do signup on QFI/MACI.
+ */
 export function handleSignUp(event: SignUp): void {
     log.debug(`SignUp event block: {}`, [event.block.number.toString()])
 
@@ -143,7 +152,6 @@ export function handleSignUp(event: SignUp): void {
             publicKey.save()
 
             log.info("A new PublicKey with ID '{}' has been created!", [publicKeyId])
-
         }
 
         // Update QFI.
@@ -156,13 +164,12 @@ export function handleSignUp(event: SignUp): void {
     } else {
         log.error("QFI is not initialized!", [])
     }
-
 }
 
 /**
  * Handle the merge of the state message AQ.
  * @param event Ethereum event emitted when the state message AQ is merged.
-*/
+ */
 export function handleMergeStateAq(event: MergeStateAq): void {
     log.debug(`MergeStateAq event block: {}`, [event.block.number.toString()])
 
@@ -196,7 +203,7 @@ export function handleMergeStateAq(event: MergeStateAq): void {
 /**
  * Handle the contribution in native ERC20 token to matching pool from a user.
  * @param event Ethereum event emitted when someone donates/fund the matching pool in exchange of VCs.
-*/
+ */
 export function handleContribution(event: ContributionEvent): void {
     log.debug(`Contribution event block: {}`, [event.block.number.toString()])
 
@@ -218,7 +225,7 @@ export function handleContribution(event: ContributionEvent): void {
         contributor.save()
     } else {
         const grantRounds = contributor.grantRounds
-        if (grantRounds !== null && !(grantRounds.find(grantRound => grantRound === grantRoundId))) {
+        if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
             // Add the new GrantRound to the array.
             grantRounds.push(grantRoundId)
             contributor.grantRounds = grantRounds
@@ -253,9 +260,7 @@ export function handleContribution(event: ContributionEvent): void {
 
     // Update QFI.
     if (qfi !== null) {
-        qfi.contributorCount = qfi.contributorCount.plus(
-            BigInt.fromI32(1)
-        )
+        qfi.contributorCount = qfi.contributorCount.plus(BigInt.fromI32(1))
         qfi.lastUpdatedAt = event.block.timestamp.toString()
 
         qfi.save()
@@ -267,7 +272,7 @@ export function handleContribution(event: ContributionEvent): void {
 /**
  * Handle the withdrawn of a user contribution.
  * @param event Ethereum event emitted when someone withdraw a contribution.
-*/
+ */
 export function handleContributionWithdrawn(event: ContributionWithdrawn): void {
     log.debug(`ContributionWithdrawn event block: {}`, [event.block.number.toString()])
 
@@ -277,7 +282,7 @@ export function handleContributionWithdrawn(event: ContributionWithdrawn): void 
     const contributionId = grantRoundId.concat(contributorId)
 
     // Remove the Contribution from the store.
-    store.remove('Contribution', contributionId)
+    store.remove("Contribution", contributionId)
 
     // Get QFI.
     const qfiAddress = event.address
@@ -286,9 +291,7 @@ export function handleContributionWithdrawn(event: ContributionWithdrawn): void 
 
     // Update QFI.
     if (qfi !== null) {
-        qfi.contributorCount = qfi.contributorCount.minus(
-            BigInt.fromI32(1)
-        )
+        qfi.contributorCount = qfi.contributorCount.minus(BigInt.fromI32(1))
         qfi.lastUpdatedAt = event.block.timestamp.toString()
 
         qfi.save()
@@ -300,7 +303,7 @@ export function handleContributionWithdrawn(event: ContributionWithdrawn): void 
 /**
  * Handle the deploy of a new Grant Round.
  * @param event Ethereum event emitted when a new GrantRound smart contract instance is deployed.
-*/
+ */
 export function handleDeployGrantRound(event: DeployGrantRound): void {
     log.debug(`DeployGrantRound event block: {}`, [event.block.number.toString()])
 
@@ -350,7 +353,7 @@ export function handleDeployGrantRound(event: DeployGrantRound): void {
             coordinator.save()
         } else {
             const grantRounds = coordinator.grantRounds
-            if (grantRounds !== null && !(grantRounds.find(grantRound => grantRound === grantRoundId))) {
+            if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
                 // Add the new GrantRound to the array.
                 grantRounds.push(grantRoundId)
                 coordinator.grantRounds = grantRounds
@@ -382,7 +385,7 @@ export function handleDeployGrantRound(event: DeployGrantRound): void {
 /**
  * Handle the finalization step for a Grant Round.
  * @param event Ethereum event emitted when a Grant Round is finalized.
-*/
+ */
 export function handleGrantRoundFinalized(event: GrantRoundFinalized): void {
     log.debug(`GrantRoundFinalized event block: {}`, [event.block.number.toString()])
 
@@ -429,13 +432,15 @@ export function handleGrantRoundFinalized(event: GrantRoundFinalized): void {
 /**
  * (e.g., Add a Group in the storage).
  * @param event Ethereum event emitted when XYZ.
-*/
-export function handleOwnershipTransferred(event: OwnershipTransferred): void { }
+ */
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+    log.debug(`OwnershipTransferred event block: {}`, [event.block.number.toString()])
+}
 
 /**
  * Handle the closing of the voting period for a Grant Round.
  * @param event Ethereum event emitted when a voting period for a Grant Round is over.
-*/
+ */
 export function handleVotingPeriodClosed(event: VotingPeriodClosed): void {
     log.debug(`VotingPeriodClosed event block: {}`, [event.block.number.toString()])
 
@@ -456,7 +461,7 @@ export function handleVotingPeriodClosed(event: VotingPeriodClosed): void {
 /**
  * Handle the pre round contribution period start for a Grant Round.
  * @param event Ethereum event emitted when a pre round contribution period for a Grant Round is starting.
-*/
+ */
 export function handlePreRoundContributionPeriodStarted(event: PreRoundContributionPeriodStarted): void {
     log.debug(`PreRoundContributionPeriodStarted event block: {}`, [event.block.number.toString()])
 
@@ -477,7 +482,7 @@ export function handlePreRoundContributionPeriodStarted(event: PreRoundContribut
 /**
  * Handle the update of the PPT contract used for a Grant Round.
  * @param event Ethereum event emitted when a PPT contract is set for a Grant Round.
-*/
+ */
 export function handlePollProcessorAndTallyerChanged(event: PollProcessorAndTallyerChanged): void {
     log.debug(`PollProcessorAndTallyerChanged event block: {}`, [event.block.number.toString()])
 
@@ -498,7 +503,7 @@ export function handlePollProcessorAndTallyerChanged(event: PollProcessorAndTall
 /**
  * Handle the addition of a Funding Source.
  * @param event Ethereum event emitted when a Funding Source is added.
-*/
+ */
 export function handleFundingSourceAdded(event: FundingSourceAdded): void {
     log.debug(`FundingSourceAdded event block: {}`, [event.block.number.toString()])
 
@@ -528,7 +533,7 @@ export function handleFundingSourceAdded(event: FundingSourceAdded): void {
 /**
  * Handle the removal of a Funding Source.
  * @param event Ethereum event emitted when a Funding Source is removed.
-*/
+ */
 export function handleFundingSourceRemoved(event: FundingSourceRemoved): void {
     log.debug(`FundingSourceRemoved event block: {}`, [event.block.number.toString()])
 
@@ -554,4 +559,3 @@ export function handleFundingSourceRemoved(event: FundingSourceRemoved): void {
         log.error(`QFI entity not found!`, [])
     }
 }
-

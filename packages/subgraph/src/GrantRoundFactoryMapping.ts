@@ -1,24 +1,24 @@
-import { log } from '@graphprotocol/graph-ts'
+import { log } from "@graphprotocol/graph-ts"
 import {
     OwnershipTransferred,
     MessageAqFactoryChanged,
-    RecipientRegistryChanged,
-} from '../generated/GrantRoundFactory/GrantRoundFactory'
-import {
-    OptimisticRecipientRegistry as RecipientRegistryContract
-} from '../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry'
-import { QFI as QFISchema, GrantRound, PublicKey, Coordinator, Contribution, Contributor, FundingSource, RecipientRegistry } from "../generated/schema"
+    RecipientRegistryChanged
+} from "../generated/GrantRoundFactory/GrantRoundFactory"
+import { OptimisticRecipientRegistry as RecipientRegistryContract } from "../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
+import { QFI as QFISchema, GrantRound, RecipientRegistry } from "../generated/schema"
 
 /**
-* (e.g., Store a PublicKey in the storage).
-* @param event Ethereum event emitted when XYZ.
-*/
-export function handleOwnershipTransferred(event: OwnershipTransferred): void { }
+ * (e.g., Store a PublicKey in the storage).
+ * @param event Ethereum event emitted when XYZ.
+ */
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+    log.debug(`OwnershipTransferred event block: {}`, [event.block.number.toString()])
+}
 
 /**
-* Handle the change of the MessageAqFactory contract for the GrantRound Factory.
-* @param event Ethereum event emitted when a new MessageAqFactory contract is used by the GrantRound Factory.
-*/
+ * Handle the change of the MessageAqFactory contract for the GrantRound Factory.
+ * @param event Ethereum event emitted when a new MessageAqFactory contract is used by the GrantRound Factory.
+ */
 export function handleMessageAqFactoryChanged(event: MessageAqFactoryChanged): void {
     log.debug(`MessageAqFactoryChanged event block: {}`, [event.block.number.toString()])
 
@@ -32,16 +32,15 @@ export function handleMessageAqFactoryChanged(event: MessageAqFactoryChanged): v
         qfi.lastUpdatedAt = event.block.timestamp.toString()
 
         qfi.save()
-
     } else {
         log.error(`QFI entity not found!`, [])
     }
 }
 
 /**
-* (e.g., Store a PublicKey in the storage).
-* @param event Ethereum event emitted when XYZ.
-*/
+ * (e.g., Store a PublicKey in the storage).
+ * @param event Ethereum event emitted when XYZ.
+ */
 export function handleRecipientRegistryChanged(event: RecipientRegistryChanged): void {
     log.debug(`RecipientRegistryChanged event block: {}`, [event.block.number.toString()])
 
@@ -105,7 +104,7 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
         } else {
             log.error(`GrantRound entity not found!`, [])
         }
-
     } else {
         log.error(`QFI entity not found!`, [])
-    }}
+    }
+}
