@@ -29,24 +29,27 @@ dataSources:
         - name: GrantRoundFactory
           file: ./abis/GrantRoundFactory.json
       eventHandlers:
-        # To be added to MACI contract.
-        #        - event: DeployMaciInstance(address, uint256)
-        #          handler: handleDeployMaciInstance
+        - event: MaciDeployed(indexed address,indexed address,indexed address,indexed address,uint256)
+          handler: handleMaciDeployed
+        - event: QfiDeployed(indexed address,indexed address,indexed uint256)
+          handler: handleQfiDeployed
         - event: Init(address,address)
           handler: handleInitMaci
         - event: SignUp(uint256,(uint256,uint256),uint256,uint256)
           handler: handleSignUp
-        - event: DeployPoll(uint256,address,(uint256,uint256))
-          handler: handleDeployPoll
+        - event: FundingSourceAdded(address)
+          handler: handleFundingSourceAdded
+        - event: FundingSourceRemoved(address)
+          handler: handleFundingSourceRemoved
         - event: MergeStateAq(uint256)
           handler: handleMergeStateAq
         - event: InitQfi(address)
           handler: handleInitQfi
-        - event: Contribution(indexed address,uint256,uint256)
+        - event: Contribution(indexed address,indexed address,uint256,uint256)
           handler: handleContribution
-        - event: ContributionWithdrawn(indexed address,uint256)
+        - event: ContributionWithdrawn(indexed address,indexed address)
           handler: handleContributionWithdrawn
-        - event: DeployGrantRound(uint256,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint256,uint256))
+        - event: DeployGrantRound(uint256,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256))
           handler: handleDeployGrantRound
         - event: GrantRoundFinalized(address)
           handler: handleGrantRoundFinalized
