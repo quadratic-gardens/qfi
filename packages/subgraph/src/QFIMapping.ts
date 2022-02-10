@@ -36,6 +36,7 @@ import {
 export function handleMaciDeployed(event: MaciDeployed): void {
     log.debug(`MACI Deployed event block: {}`, [event.block.number.toString()])
 
+    const timestamp = event.block.timestamp.toString()
     // Get the QFI/MACI instance.
     const qfiAddress = event.address
     const qfiContract = QFIContract.bind(qfiAddress)
@@ -47,7 +48,10 @@ export function handleMaciDeployed(event: MaciDeployed): void {
     qfi.initialVoiceCreditProxyAddress = event.params._initialVoiceCreditProxy
     qfi.signUpGatekeeperAddress = event.params._signUpGatekeeper
     qfi.signUpTimestamp = event.params._timestamp
-    qfi.createdAt = event.block.timestamp.toString()
+    qfi.numSignUps = new BigInt(0)
+    qfi.nextGrantRoundId = new BigInt(0)
+    qfi.createdAt = timestamp
+    qfi.lastUpdatedAt = timestamp
 
     // External call to contract instance (one time event - good trade-off for sync time).
     qfi.stateTreeDepth = qfiContract.stateTreeDepth()
@@ -147,7 +151,7 @@ export function handleSignUp(event: SignUp): void {
             publicKey.y = event.params._userPubKey.y
             publicKey.stateIndex = event.params._stateIndex
             publicKey.voiceCreditBalance = event.params._voiceCreditBalance
-            publicKey.timestamp = event.params._timestamp
+            publicKey.timestamp = event.params._timestamp.toString()
 
             publicKey.save()
 
@@ -184,16 +188,20 @@ export function handleMergeStateAq(event: MergeStateAq): void {
 
         qfi.save()
 
-        // Update GrantRound.
-        const grantRound = GrantRound.load(qfi.currentGrantRound)
+        if (qfi.currentGrantRound !== null) {
+            // Update GrantRound.
+            const grantRound = GrantRound.load(qfi.currentGrantRound)
 
-        if (grantRound !== null) {
-            grantRound.stateAqMerged = true
-            grantRound.lastUpdatedAt = timestamp
+            if (grantRound !== null) {
+                grantRound.stateAqMerged = true
+                grantRound.lastUpdatedAt = timestamp
 
-            grantRound.save()
+                grantRound.save()
+            } else {
+                log.error("GrantRound is not initialized!", [])
+            }
         } else {
-            log.error("GrantRound is not initialized!", [])
+            log.error("QFI current GrantRound is not initialized!", [])
         }
     } else {
         log.error("QFI is not initialized!", [])
@@ -218,55 +226,57 @@ export function handleContribution(event: ContributionEvent): void {
     const grantRoundId = qfi.currentGrantRound
     const timestamp = event.block.timestamp.toString()
 
-    if (contributor === null) {
-        const contributor = new Contributor(contributorId)
-        contributor.address = event.params._contributor
-        contributor.voiceCredits = event.params._voiceCredits
-        contributor.isRegistered = false // TODO: To be checked.
-        contributor.grantRounds = [grantRoundId]
-        contributor.createdAt = timestamp
-        contributor.lastUpdatedAt = timestamp
+    if (grantRoundId) {
+        if (contributor === null) {
+            const contributor = new Contributor(contributorId)
+            contributor.address = event.params._contributor
+            contributor.voiceCredits = event.params._voiceCredits
+            contributor.isRegistered = false // TODO: To be checked.
+            contributor.grantRounds = [grantRoundId]
+            contributor.createdAt = timestamp
+            contributor.lastUpdatedAt = timestamp
 
-        contributor.save()
-    } else {
-        const grantRounds = contributor.grantRounds
-        if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
-            // Add the new GrantRound to the array.
-            grantRounds.push(grantRoundId)
-            contributor.grantRounds = grantRounds
+            contributor.save()
+        } else {
+            const grantRounds = contributor.grantRounds
+            if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
+                // Add the new GrantRound to the array.
+                grantRounds.push(grantRoundId)
+                contributor.grantRounds = grantRounds
+            }
+            contributor.voiceCredits = event.params._voiceCredits
+            contributor.isRegistered = true // TODO: To be checked.
+            contributor.lastUpdatedAt = timestamp
+
+            contributor.save()
         }
-        contributor.voiceCredits = event.params._voiceCredits
-        contributor.isRegistered = true // TODO: To be checked.
-        contributor.lastUpdatedAt = timestamp
 
-        contributor.save()
-    }
+        // Get the VoiceCreditFactor from QFI contract (for each contribution - trade off to be considered).
+        const qfiContract = QFIContract.bind(qfiAddress)
+        const voiceCreditFactor = qfiContract.voiceCreditFactor()
 
-    // Get the VoiceCreditFactor from QFI contract (for each contribution - trade off to be considered).
-    const qfiContract = QFIContract.bind(qfiAddress)
-    const voiceCreditFactor = qfiContract.voiceCreditFactor()
+        // Create a new Contribution.
+        const contributionId = grantRoundId.concat(contributorId)
+        const contribution = new Contribution(contributionId)
 
-    // Create a new Contribution.
-    const contributionId = grantRoundId.concat(contributorId)
-    const contribution = new Contribution(contributionId)
+        contribution.contributor = contributorId
+        contribution.grantRound = grantRoundId
+        contribution.amount = event.params._amount
+        contribution.voiceCredits = event.params._amount.div(voiceCreditFactor)
+        contribution.createdAt = timestamp
+        contribution.lastUpdatedAt = timestamp
 
-    contribution.contributor = contributorId
-    contribution.grantRound = grantRoundId
-    contribution.amount = event.params._amount
-    contribution.voiceCredits = event.params._amount.div(voiceCreditFactor)
-    contribution.createdAt = timestamp
-    contribution.lastUpdatedAt = timestamp
+        contribution.save()
 
-    contribution.save()
+        // Update QFI.
+        if (qfi !== null) {
+            qfi.contributorCount = qfi.contributorCount.plus(BigInt.fromI32(1))
+            qfi.lastUpdatedAt = event.block.timestamp.toString()
 
-    // Update QFI.
-    if (qfi !== null) {
-        qfi.contributorCount = qfi.contributorCount.plus(BigInt.fromI32(1))
-        qfi.lastUpdatedAt = event.block.timestamp.toString()
-
-        qfi.save()
-    } else {
-        log.error(`QFI entity not found!`, [])
+            qfi.save()
+        } else {
+            log.error(`QFI entity not found!`, [])
+        }
     }
 }
 
@@ -284,10 +294,15 @@ export function handleContributionWithdrawn(event: ContributionWithdrawn): void 
     // Get Contributor.
     const contributorId = event.params._contributor.toHexString()
     const grantRoundId = qfi.currentGrantRound
-    const contributionId = grantRoundId.concat(contributorId)
 
-    // Remove the Contribution from the store.
-    store.remove("Contribution", contributionId)
+    if (grantRoundId !== null) {
+        const contributionId = grantRoundId.concat(contributorId)
+
+        // Remove the Contribution from the store.
+        store.remove("Contribution", contributionId)
+    } else {
+        log.error(`QFI current GrantRound is not initialized!`, [])
+    }
 
     // Update QFI.
     if (qfi !== null) {
@@ -349,6 +364,7 @@ export function handleDeployGrantRound(event: DeployGrantRound): void {
             coordinator.publicKey = event.params._coordinatorPubKey.toString()
             coordinator.qfi = qfiAddress.toHexString()
             coordinator.grantRounds = [grantRoundId]
+            coordinator.timestamp = timestamp
 
             coordinator.save()
         } else {

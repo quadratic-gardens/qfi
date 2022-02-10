@@ -53,7 +53,7 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
     if (qfi !== null) {
         const recipientRegistryAddress = event.params._recipientRegistryNew
         const recipientRegistryId = recipientRegistryAddress.toHexString()
-        const recipientRegistry = RecipientRegistry.load(recipientRegistryId)
+        let recipientRegistry = RecipientRegistry.load(recipientRegistryId)
         const recipientRegistryContract = RecipientRegistryContract.bind(recipientRegistryAddress)
 
         // Read from contract (trade-off, only when changing registry. May not be changed for multiple rounds).
@@ -62,47 +62,43 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
         const controller = recipientRegistryContract.controller()
         const maxRecipients = recipientRegistryContract.maxRecipients()
 
-        if (recipientRegistry === null) {
-            // Create a new RecipientRegistry.
-            const recipientRegistry = new RecipientRegistry(recipientRegistryId)
+        const grantRoundId = qfi.currentGrantRound
 
+        if (recipientRegistry === null) {
+            recipientRegistry = new RecipientRegistry(recipientRegistryId)
+        }
+
+        if (grantRoundId !== null) {
             recipientRegistry.grantRoundFactoryAddress = event.address
             recipientRegistry.baseDeposit = baseDeposit
             recipientRegistry.challengePeriodDuration = challengePeriodDuration
             recipientRegistry.controller = controller
             recipientRegistry.maxRecipients = maxRecipients
-            recipientRegistry.grantRound = qfi.currentGrantRound
+            recipientRegistry.grantRound = grantRoundId
             recipientRegistry.createdAt = timestamp
             recipientRegistry.lastUpdatedAt = timestamp
 
             recipientRegistry.save()
+
+            // Update QFI.
+            qfi.recipientRegistry = recipientRegistryId
+            qfi.lastUpdatedAt = event.block.timestamp.toString()
+
+            qfi.save()
+
+            // Update GrantRound.
+            const grantRound = GrantRound.load(grantRoundId)
+
+            if (grantRound !== null) {
+                grantRound.recipientRegistry = recipientRegistryId
+                grantRound.lastUpdatedAt = timestamp
+
+                grantRound.save()
+            } else {
+                log.error(`GrantRound entity not found!`, [])
+            }
         } else {
-            recipientRegistry.grantRoundFactoryAddress = event.address
-            recipientRegistry.grantRound = qfi.currentGrantRound
-            recipientRegistry.baseDeposit = baseDeposit
-            recipientRegistry.challengePeriodDuration = challengePeriodDuration
-            recipientRegistry.maxRecipients = maxRecipients
-            recipientRegistry.lastUpdatedAt = timestamp
-
-            recipientRegistry.save()
-        }
-
-        // Update QFI.
-        qfi.recipientRegistry = recipientRegistryId
-        qfi.lastUpdatedAt = event.block.timestamp.toString()
-
-        qfi.save()
-
-        // Update GrantRound.
-        const grantRound = GrantRound.load(qfi.currentGrantRound)
-
-        if (grantRound !== null) {
-            grantRound.recipientRegistry = recipientRegistryId
-            grantRound.lastUpdatedAt = timestamp
-
-            grantRound.save()
-        } else {
-            log.error(`GrantRound entity not found!`, [])
+            log.error(`QFI current GrantRound is not initialized!`, [])
         }
     } else {
         log.error(`QFI entity not found!`, [])

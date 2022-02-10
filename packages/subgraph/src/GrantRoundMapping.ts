@@ -63,7 +63,7 @@ export function handlePublishMessage(event: PublishMessage): void {
         message.data = event.params._message.data
         message.publicKey = publicKeyId
         message.grantRound = grantRoundId
-        message.timestamp = event.block.timestamp
+        message.timestamp = event.block.timestamp.toString()
 
         message.save()
     } else {
@@ -148,6 +148,7 @@ export function handleFundsClaimed(event: FundsClaimed): void {
             recipient.rejected = false
             recipient.voteOptionIndex = event.params._voteOptionIndex
             recipient.funds = [fundsId]
+            recipient.createdAt = timestamp
             recipient.lastUpdatedAt = timestamp
 
             recipient.save()

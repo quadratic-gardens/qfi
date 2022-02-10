@@ -19,33 +19,33 @@ type QFI @entity {
     id: ID!
 
     # Main fields.
-    coordinator: Coordinator!
+    coordinator: Coordinator
     currentStage: Stage! # Enum.
     voiceCreditFactor: BigInt!
     nextGrantRoundId: BigInt!
     contributorCount: BigInt!
-    isStateAqMerged: Boolean!
+    isStateAqMerged: Boolean
 
     # Inherited from MACI.
-    stateTreeDepth: Int!
+    stateTreeDepth: Int
     numSignUps: BigInt!
-    isInitialized: Boolean!
+    isInitialized: Boolean
     signUpTimestamp: BigInt!
     # Useful smart contracts addresses.
     signUpGatekeeperAddress: Bytes!
     initialVoiceCreditProxyAddress: Bytes!
-    vkRegistryAddress: Bytes!
+    vkRegistryAddress: Bytes
     pollFactoryAddress: Bytes!
-    messageAqFactoryPollAddress: Bytes!
-    stateAqAddress: Bytes!
+    messageAqFactoryPollAddress: Bytes
+    stateAqAddress: Bytes
     nativeERC20TokenAddress: Bytes!
-    messageAqFactoryGrantRoundAddress: Bytes!
+    messageAqFactoryGrantRoundAddress: Bytes
     grantRoundFactoryAddress: Bytes!
-    pollProcessorAndTallyerAddress: Bytes!
+    pollProcessorAndTallyerAddress: Bytes
 
     # Links.
-    recipientRegistry: RecipientRegistry!
-    currentGrantRound: GrantRound!
+    recipientRegistry: RecipientRegistry
+    currentGrantRound: GrantRound
 
     # Reverse Lookups.
     grantRounds: [GrantRound!] @derivedFrom(field: "qfi")
@@ -54,8 +54,8 @@ type QFI @entity {
     
     fundingSources: [FundingSource!] @derivedFrom(field: "qfi")
 
-    createdAt: String
-    lastUpdatedAt: String
+    createdAt: String!
+    lastUpdatedAt: String!
 }
 
 # Represents a PublicKey used during the subscription/forwarding of a message. 
@@ -67,8 +67,8 @@ type PublicKey @entity {
     y: BigInt!
 
     # Associated voting info.
-    stateIndex: BigInt!
-    voiceCreditBalance: BigInt!
+    stateIndex: BigInt
+    voiceCreditBalance: BigInt
     
     # Links.
     grantRound: GrantRound # Can be present if the PublicKey is used in addition to send a message.
@@ -76,20 +76,20 @@ type PublicKey @entity {
     # Reverse Lookup for the messages signed w/ this public key.
     messages: [Message!] @derivedFrom(field: "publicKey")
 
-    timestamp: BigInt!
+    timestamp: String!
 }
 
 # A message sent from a public key by a voter.
 type Message @entity {
     id: ID!
     
-    data: [BigInt!]
+    data: [BigInt!]!
 
     # Links.
     publicKey: PublicKey!
     grantRound: GrantRound!
     
-    timestamp: BigInt!
+    timestamp: String!
 }
 
 # The registry where the recipient for the GrantRound are recorded
@@ -110,8 +110,8 @@ type RecipientRegistry @entity {
     # Reverse Lookup for the recipients registered in this registry.
     recipients: [Recipient!] @derivedFrom(field: "recipientRegistry")
 
-    createdAt: String
-    lastUpdatedAt: String 
+    createdAt: String!
+    lastUpdatedAt: String!
 }
 
 # Represent a Recipient for the GrantRound w/ requests info for add/remove.
@@ -121,13 +121,13 @@ type Recipient @entity {
 
     # Main fields.
     address: Bytes!
-    metadata: String!
-    requestType: RequestType! # Enum.
-    requesterAddress: Bytes!
-    submissionTime: BigInt!
-    deposit: BigInt!
-    addedAt: BigInt!
-    removedAt: BigInt!
+    metadata: String
+    requestType: RequestType # Enum.
+    requesterAddress: Bytes
+    submissionTime: BigInt
+    deposit: BigInt
+    addedAt: BigInt
+    removedAt: BigInt
     voteOptionIndex: BigInt
     rejected: Boolean!
     # Tx hash mirror.
@@ -141,8 +141,8 @@ type Recipient @entity {
     # Reverse Lookup of the claimed funds sent to this recipient.
     funds: [Funds!] @derivedFrom(field: "recipient")
 
-    createdAt: String
-    lastUpdatedAt: String
+    createdAt: String!
+    lastUpdatedAt: String!
 }
 
 type GrantRound @entity {
@@ -165,18 +165,17 @@ type GrantRound @entity {
     deployTimestamp: BigInt! # Grant Round start time.
     voiceCreditFactor: BigInt!
     # Status.
-    isCancelled: Boolean!
-    isMessageAqMerged: Boolean!
-    isFinalized: Boolean!
-    stateAqMerged: Boolean!
+    isCancelled: Boolean
+    isMessageAqMerged: Boolean
+    isFinalized: Boolean
+    stateAqMerged: Boolean
     # State Ballot commitment.
-    currentSbCommitment: BigInt! # Can be useful for on-chain verification.
-    mergedStateRoot: BigInt!
-    tallyHash: String!
+    mergedStateRoot: BigInt
+    tallyHash: String
     # Total amounts spent, votes, and matching funds.
-    totalSpent: BigInt!
-    totalVotes: BigInt!
-    matchingPoolSize: BigInt!
+    totalSpent: BigInt
+    totalVotes: BigInt
+    matchingPoolSize: BigInt
 
     # Links.
     qfi: QFI!
@@ -195,8 +194,8 @@ type GrantRound @entity {
     # Who has quadratically voted (w/ VCs) in the grant round.
     votes: [Vote!] @derivedFrom(field: "grantRound")
     
-    createdAt: String
-    lastUpdatedAt: String
+    createdAt: String!
+    lastUpdatedAt: String!
 }
 
 # MACI/QFI Coordinator.
@@ -210,6 +209,8 @@ type Coordinator @entity {
     # Links.
     qfi: QFI!
     grantRounds: [GrantRound!]
+
+    timestamp: String!
 }
 
 # A contributor who has sent tokens to the matching pool in exchange of VCs.
@@ -228,8 +229,8 @@ type Contributor @entity {
     contributions: [Contribution!] @derivedFrom(field: "contributor")
     votes: [Vote!] @derivedFrom(field: "contributor")
     
-    createdAt: String
-    lastUpdatedAt: String
+    createdAt: String!
+    lastUpdatedAt: String!
 }
 
 type Contribution @entity {
@@ -243,8 +244,8 @@ type Contribution @entity {
     contributor: Contributor!
     grantRound: GrantRound!
 
-    createdAt: String
-    lastUpdatedAt: String
+    createdAt: String!
+    lastUpdatedAt: String!
 }
 
 # An amount of funds claimed/donated.
@@ -252,14 +253,14 @@ type Funds @entity {
     id: ID!
 
     # Main fields.
-    amount: BigInt
-    voteOptionIndex: BigInt
+    amount: BigInt!
+    voteOptionIndex: BigInt!
 
     # Links
-    recipient: Recipient
-    grantRound: GrantRound
+    recipient: Recipient!
+    grantRound: GrantRound!
 
-    createdAt: String
+    createdAt: String!
 }
 
 # This entity is stored when a contributor cast a vote (publish a message).
