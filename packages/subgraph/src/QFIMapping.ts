@@ -29,6 +29,7 @@ import {
     FundingSource,
     GrantRoundContributor
 } from "../generated/schema"
+import { GrantRound as GrantRoundTemplate } from '../generated/templates'
 
 /**
  * Handle a smart contract based on MACI (constructor event).
@@ -333,7 +334,9 @@ export function handleDeployGrantRound(event: DeployGrantRound): void {
     const voiceCreditFactor = qfiContract.voiceCreditFactor()
 
     if (grantRound === null) {
-        // Create a new GrantRound instance.
+        // Start indexing the GrantRound.
+        GrantRoundTemplate.create(event.params._currentGrantRound)
+        // Create a new GrantRound entity.
         const grantRound = new GrantRound(grantRoundId)
 
         grantRound.duration = event.params._duration
