@@ -135,7 +135,7 @@ type Recipient @entity {
     requestSubmittedHash: Bytes
 
     # Links.
-    grantRounds: [GrantRound!] # The same recipient can be part of multiple Grant Rounds.
+    grantRounds: [GrantRoundRecipient!] @derivedFrom(field: "recipient")
     recipientRegistry: RecipientRegistry!
 
     # Reverse Lookup of the claimed funds sent to this recipient.
@@ -143,6 +143,14 @@ type Recipient @entity {
 
     createdAt: String!
     lastUpdatedAt: String!
+}
+
+# Mapping table to handle efficiently the GrantRound-Recipient many-to-many relationship.
+type GrantRoundRecipient @entity {
+  id: ID! # Set to `${grantRound.id}-${recipient.id}`
+
+  grantRound: GrantRound!
+  recipient: Recipient!
 }
 
 type GrantRound @entity {
@@ -186,9 +194,9 @@ type GrantRound @entity {
     # Messages related to this grant round.
     messages: [Message!] @derivedFrom(field: "grantRound")
     # Recipients related to this grant round.
-    recipients: [Recipient!] @derivedFrom(field: "grantRounds")
+    recipients: [GrantRoundRecipient!] @derivedFrom(field: "grantRound")
     # Who has contributed to the grant round.
-    contributors: [Contributor!] @derivedFrom(field: "grantRounds")
+    contributors: [GrantRoundContributor!] @derivedFrom(field: "grantRound")
     # The contributions to the grant round.
     contributions: [Contribution!] @derivedFrom(field: "grantRound")
     # Who has quadratically voted (w/ VCs) in the grant round.
@@ -208,7 +216,7 @@ type Coordinator @entity {
 
     # Links.
     qfi: QFI!
-    grantRounds: [GrantRound!]
+    grantRounds: [GrantRound!] @derivedFrom(field: "coordinator")
 
     timestamp: String!
 }
@@ -223,7 +231,7 @@ type Contributor @entity {
     isRegistered: Boolean!
 
     # Link.
-    grantRounds: [GrantRound!] # Different GrantRounds where it took part.
+    grantRounds: [GrantRoundContributor!] @derivedFrom(field: "contributor")
 
     # Reverse lookups.
     contributions: [Contribution!] @derivedFrom(field: "contributor")
@@ -231,6 +239,14 @@ type Contributor @entity {
     
     createdAt: String!
     lastUpdatedAt: String!
+}
+
+# Mapping table to handle efficiently the GrantRound-Contributor many-to-many relationship.
+type GrantRoundContributor @entity {
+  id: ID! # Set to `${grantRound.id}-${contributor.id}`
+
+  grantRound: GrantRound!
+  contributor: Contributor!
 }
 
 type Contribution @entity {

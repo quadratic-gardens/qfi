@@ -26,7 +26,8 @@ import {
     Coordinator,
     Contribution,
     Contributor,
-    FundingSource
+    FundingSource,
+    GrantRoundContributor
 } from "../generated/schema"
 
 /**
@@ -222,34 +223,34 @@ export function handleContribution(event: ContributionEvent): void {
 
     // Get Contributor.
     const contributorId = event.params._contributor.toHexString()
-    const contributor = Contributor.load(contributorId)
+    let contributor = Contributor.load(contributorId)
     const grantRoundId = qfi.currentGrantRound
     const timestamp = event.block.timestamp.toString()
 
     if (grantRoundId) {
+        // Create a new mapping table for GrantRound-Contribution relationship.
+        const mappingTableGRCId = grantRoundId.concat("-").concat(contributorId)
+        let mappingTableGRC = GrantRoundContributor.load(mappingTableGRCId)
+
         if (contributor === null) {
-            const contributor = new Contributor(contributorId)
-            contributor.address = event.params._contributor
-            contributor.voiceCredits = event.params._voiceCredits
-            contributor.isRegistered = false // TODO: To be checked.
-            contributor.grantRounds = [grantRoundId]
-            contributor.createdAt = timestamp
-            contributor.lastUpdatedAt = timestamp
-
-            contributor.save()
-        } else {
-            const grantRounds = contributor.grantRounds
-            if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
-                // Add the new GrantRound to the array.
-                grantRounds.push(grantRoundId)
-                contributor.grantRounds = grantRounds
-            }
-            contributor.voiceCredits = event.params._voiceCredits
-            contributor.isRegistered = true // TODO: To be checked.
-            contributor.lastUpdatedAt = timestamp
-
-            contributor.save()
+            contributor = new Contributor(contributorId)
         }
+
+        if (mappingTableGRC === null) {
+            mappingTableGRC = new GrantRoundContributor(mappingTableGRCId)
+        }
+
+        contributor.address = event.params._contributor
+        contributor.voiceCredits = event.params._voiceCredits
+        contributor.isRegistered = false // TODO: To be checked.
+        contributor.createdAt = timestamp
+        contributor.lastUpdatedAt = timestamp
+
+        mappingTableGRC.grantRound = grantRoundId
+        mappingTableGRC.contributor = contributorId
+
+        contributor.save()
+        mappingTableGRC.save()
 
         // Get the VoiceCreditFactor from QFI contract (for each contribution - trade off to be considered).
         const qfiContract = QFIContract.bind(qfiAddress)
@@ -365,15 +366,6 @@ export function handleDeployGrantRound(event: DeployGrantRound): void {
             coordinator.qfi = qfiAddress.toHexString()
             coordinator.grantRounds = [grantRoundId]
             coordinator.timestamp = timestamp
-
-            coordinator.save()
-        } else {
-            const grantRounds = coordinator.grantRounds
-            if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
-                // Add the new GrantRound to the array.
-                grantRounds.push(grantRoundId)
-                coordinator.grantRounds = grantRounds
-            }
 
             coordinator.save()
         }

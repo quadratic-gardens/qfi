@@ -3,6 +3,7 @@ import {
     Contributor,
     Funds,
     GrantRound as GrantRoundSchema,
+    GrantRoundRecipient,
     Message,
     PublicKey,
     Recipient,
@@ -135,46 +136,34 @@ export function handleFundsClaimed(event: FundsClaimed): void {
         // Get Recipient.
         const recipientAddress = event.params._recipient
         const recipientId = recipientAddress.toHexString()
-        const recipient = Recipient.load(recipientId)
-        const fundsId = grantRoundId.concat(recipientId)
+        let recipient = Recipient.load(recipientId)
+        const fundsId = grantRoundId.concat("-").concat(recipientId)
+
+        // Get the mapping table for GrantRound and Recipient.
+        const mappingTableGRRId = grantRoundId.concat("-").concat(recipientId)
+        let mappingTableGRR = GrantRoundRecipient.load(mappingTableGRRId)
 
         if (recipient === null) {
-            // Create a new Recipient
-            const recipient = new Recipient(recipientId)
-
-            recipient.address = recipientAddress
-            recipient.grantRounds = [grantRoundId]
-            recipient.recipientRegistry = recipientRegistryId
-            recipient.rejected = false
-            recipient.voteOptionIndex = event.params._voteOptionIndex
-            recipient.funds = [fundsId]
-            recipient.createdAt = timestamp
-            recipient.lastUpdatedAt = timestamp
-
-            recipient.save()
-        } else {
-            const grantRounds = recipient.grantRounds
-            if (grantRounds !== null && !grantRounds.find((grantRound) => grantRound === grantRoundId)) {
-                // Add the new GrantRound to the array.
-                grantRounds.push(grantRoundId)
-                recipient.grantRounds = grantRounds
-            }
-
-            recipient.recipientRegistry = recipientRegistryId
-            recipient.rejected = false
-            recipient.voteOptionIndex = event.params._voteOptionIndex
-            recipient.lastUpdatedAt = timestamp
-
-            const rFunds = recipient.funds
-            if (rFunds) {
-                rFunds.push(fundsId)
-                recipient.funds = rFunds
-            } else {
-                recipient.funds = [fundsId]
-            }
-
-            recipient.save()
+            recipient = new Recipient(recipientId)
         }
+
+        if (mappingTableGRR === null) {
+            mappingTableGRR = new GrantRoundRecipient(mappingTableGRRId)
+        }
+
+        recipient.address = recipientAddress
+        recipient.recipientRegistry = recipientRegistryId
+        recipient.rejected = false
+        recipient.voteOptionIndex = event.params._voteOptionIndex
+        recipient.funds = [fundsId]
+        recipient.createdAt = timestamp
+        recipient.lastUpdatedAt = timestamp
+
+        mappingTableGRR.grantRound = grantRoundId
+        mappingTableGRR.recipient = recipientId
+
+        recipient.save()
+        mappingTableGRR.save()
 
         // Create a new Funds entity.
         const funds = new Funds(fundsId)
@@ -185,16 +174,6 @@ export function handleFundsClaimed(event: FundsClaimed): void {
         funds.voteOptionIndex = event.params._voteOptionIndex
         funds.createdAt = event.block.timestamp.toString()
 
-        // Update recipients for GrantRound.
-        const grantRounds = grantRound.recipients
-        if (grantRounds !== null && !grantRounds.find((recipient) => recipient === recipientId)) {
-            // Add the new Recipient to the array.
-            grantRounds.push(grantRoundId)
-            grantRound.recipients = grantRounds
-        }
-        grantRound.lastUpdatedAt = event.block.timestamp.toString()
-
-        grantRound.save()
         funds.save()
     } else {
         log.error(`GrantRound entity not found!`, [])
@@ -230,7 +209,6 @@ export function handleVoted(event: Voted): void {
 
     const grantRoundId = event.address.toHexString()
     const grantRound = GrantRoundSchema.load(grantRoundId)
-    const timestamp = event.block.timestamp.toString()
 
     if (grantRound !== null) {
         // Get Voter (Contributor).
@@ -247,27 +225,6 @@ export function handleVoted(event: Voted): void {
             vote.grantRound = grantRoundId
 
             vote.save()
-
-            // Update the GrantRound.
-            const grVotes = grantRound.votes
-            if (grVotes) {
-                grVotes.push(voteId)
-                grantRound.votes = grVotes
-            } else grantRound.votes = [voteId]
-
-            // Update the Contributor.
-
-            const cVotes = voter.votes
-            if (cVotes) {
-                cVotes.push(voteId)
-                voter.votes = grVotes
-            } else voter.votes = [voteId]
-
-            grantRound.lastUpdatedAt = timestamp
-            voter.lastUpdatedAt = timestamp
-
-            grantRound.save()
-            voter.save()
         } else {
             log.error(`Contributor (Voter) entity not found!`, [])
         }
