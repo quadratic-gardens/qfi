@@ -590,7 +590,7 @@ describe("Process - Tally QV poll votes", function () {
       ).to.be.true;
     });
 
-    it("verify - poll contract can verifyPerVOSpentVoiceCredits", async () => {
+    it("TODO FIX - poll contract SHOULD verifyPerVOSpentVoiceCredits", async () => {
       const recipientIndex = 1;
 
       const perVOspentTree = new IncrementalQuinTree( treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5); // prettier-ignore
