@@ -44,7 +44,7 @@ export function handleMaciDeployed(event: MaciDeployed): void {
 
     qfi.stateAqAddress = event.params._stateAq
     qfi.pollFactoryAddress = event.params._pollFactory
-    qfi.initialVoiceCreditProxyAddress = event.params._intialVoiceCreditProxy
+    qfi.initialVoiceCreditProxyAddress = event.params._initialVoiceCreditProxy
     qfi.signUpGatekeeperAddress = event.params._signUpGatekeeper
     qfi.signUpTimestamp = event.params._timestamp
     qfi.createdAt = event.block.timestamp.toString()
