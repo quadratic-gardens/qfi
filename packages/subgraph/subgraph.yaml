@@ -29,9 +29,9 @@ dataSources:
         - name: GrantRoundFactory
           file: ./abis/GrantRoundFactory.json
       eventHandlers:
-        - event: MaciDeployed(indexed address,indexed address,indexed address,indexed address,uint256)
+        - event: MaciDeployed(address,address,address,address,uint256)
           handler: handleMaciDeployed
-        - event: QfiDeployed(indexed address,indexed address,indexed uint256)
+        - event: QfiDeployed(address,address,uint256)
           handler: handleQfiDeployed
         - event: Init(address,address)
           handler: handleInitMaci
@@ -45,11 +45,11 @@ dataSources:
           handler: handleMergeStateAq
         - event: InitQfi(address)
           handler: handleInitQfi
-        - event: Contribution(indexed address,indexed address,uint256,uint256)
+        - event: Contribution(address,uint256,uint256)
           handler: handleContribution
-        - event: ContributionWithdrawn(indexed address,indexed address)
+        - event: ContributionWithdrawn(address)
           handler: handleContributionWithdrawn
-        - event: DeployGrantRound(uint256,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256))
+        - event: DeployGrantRound(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256))
           handler: handleDeployGrantRound
         - event: GrantRoundFinalized(address)
           handler: handleGrantRoundFinalized
@@ -139,7 +139,7 @@ templates:
           handler: handleMergeMessageAq
         - event: GrantRoundCancelled(bool,bool)
           handler: handleGrantRoundCancelled
-        - event: FundsClaimed(indexed uint256,indexed address,uint256)
+        - event: FundsClaimed(uint256,address,uint256)
           handler: handleFundsClaimed
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred

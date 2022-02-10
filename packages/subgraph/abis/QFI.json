@@ -34,15 +34,9 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "_contributor",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_currentGrantRound",
         "type": "address"
       },
       {
@@ -91,15 +85,9 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "_contributor",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_currentGrantRound",
         "type": "address"
       }
     ],
@@ -110,19 +98,19 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "_grantRoundFactory",
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "_nativeToken",
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint256",
         "name": "_voiceCreditFactor",
         "type": "uint256"
@@ -135,27 +123,27 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "_stateAq",
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "_pollFactory",
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "_signUpGatekeeper",
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
-        "name": "_intialVoiceCreditProxy",
+        "name": "_initialVoiceCreditProxy",
         "type": "address"
       },
       {
@@ -173,9 +161,9 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "_grantRoundId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_currentGrantRound",
+        "type": "address"
       },
       {
         "indexed": false,

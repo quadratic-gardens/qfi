@@ -207,10 +207,15 @@ export function handleMergeStateAq(event: MergeStateAq): void {
 export function handleContribution(event: ContributionEvent): void {
     log.debug(`Contribution event block: {}`, [event.block.number.toString()])
 
+    // Get QFI.
+    const qfiAddress = event.address
+    const qfiId = qfiAddress.toHexString()
+    const qfi = new QFISchema(qfiId)
+
     // Get Contributor.
     const contributorId = event.params._contributor.toHexString()
     const contributor = Contributor.load(contributorId)
-    const grantRoundId = event.params._currentGrantRound.toHexString()
+    const grantRoundId = qfi.currentGrantRound
     const timestamp = event.block.timestamp.toString()
 
     if (contributor === null) {
@@ -237,10 +242,6 @@ export function handleContribution(event: ContributionEvent): void {
         contributor.save()
     }
 
-    // Get QFI.
-    const qfiAddress = event.address
-    const qfiId = qfiAddress.toHexString()
-    const qfi = new QFISchema(qfiId)
     // Get the VoiceCreditFactor from QFI contract (for each contribution - trade off to be considered).
     const qfiContract = QFIContract.bind(qfiAddress)
     const voiceCreditFactor = qfiContract.voiceCreditFactor()
@@ -276,18 +277,17 @@ export function handleContribution(event: ContributionEvent): void {
 export function handleContributionWithdrawn(event: ContributionWithdrawn): void {
     log.debug(`ContributionWithdrawn event block: {}`, [event.block.number.toString()])
 
-    // Get Contributor.
-    const contributorId = event.params._contributor.toHexString()
-    const grantRoundId = event.params._currentGrantRound.toHexString()
-    const contributionId = grantRoundId.concat(contributorId)
-
-    // Remove the Contribution from the store.
-    store.remove("Contribution", contributionId)
-
     // Get QFI.
     const qfiAddress = event.address
     const qfiId = qfiAddress.toHexString()
     const qfi = new QFISchema(qfiId)
+    // Get Contributor.
+    const contributorId = event.params._contributor.toHexString()
+    const grantRoundId = qfi.currentGrantRound
+    const contributionId = grantRoundId.concat(contributorId)
+
+    // Remove the Contribution from the store.
+    store.remove("Contribution", contributionId)
 
     // Update QFI.
     if (qfi !== null) {
@@ -307,7 +307,7 @@ export function handleContributionWithdrawn(event: ContributionWithdrawn): void 
 export function handleDeployGrantRound(event: DeployGrantRound): void {
     log.debug(`DeployGrantRound event block: {}`, [event.block.number.toString()])
 
-    const grantRoundId = event.params._grantRoundId.toString()
+    const grantRoundId = event.params._currentGrantRound.toHexString()
     const grantRound = GrantRound.load(grantRoundId)
 
     const timestamp = event.block.timestamp.toString()
