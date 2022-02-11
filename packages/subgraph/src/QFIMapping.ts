@@ -266,7 +266,7 @@ export function handleContribution(event: ContributionEvent): void {
             const voiceCreditFactor = qfiContract.voiceCreditFactor()
 
             // Create a new Contribution.
-            const contributionId = grantRoundId.concat(contributorId)
+            const contributionId = grantRoundId.concat("-").concat(contributorId)
             const contribution = new Contribution(contributionId)
 
             contribution.contributor = contributorId

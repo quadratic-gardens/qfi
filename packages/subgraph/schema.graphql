@@ -16,6 +16,7 @@ enum RequestType {
 
 # QFI Core entity.
 type QFI @entity {
+    # Set to the HEX string representation of the QFI smart contract address.
     id: ID!
 
     # Main fields.
@@ -60,6 +61,8 @@ type QFI @entity {
 
 # Represents a PublicKey used during the subscription/forwarding of a message. 
 type PublicKey @entity {
+    # Set to the HEX string representation of the ETH address of the owner of the key.
+    # (i.e., can be derived from the tx sender or an address event parameter).
     id: ID!
 
     # Main fields.
@@ -81,6 +84,7 @@ type PublicKey @entity {
 
 # A message sent from a public key by a voter.
 type Message @entity {
+    # Set to the HEX string representation of the tx hash where the message has been sent.
     id: ID!
     
     # Main fields.
@@ -98,6 +102,7 @@ type Message @entity {
 # The registry where the recipient for the GrantRound are recorded
 # (nb. Mainly based on OptimisticRecipientRegistry implementation.)
 type RecipientRegistry @entity {
+    # Set to the HEX string representation of the OptimisticRecipientRegistry smart contract address.
     id: ID!
 
     # Main fields.
@@ -120,6 +125,8 @@ type RecipientRegistry @entity {
 # Represent a Recipient for the GrantRound w/ requests info for add/remove.
 # (nb. Mainly based on OptimisticRecipientRegistry implementation.)
 type Recipient @entity {
+    # Set to the HEX string representation of the ETH address of the recipient.
+    # (i.e., can be derived from the tx sender or an address event parameter).
     id: ID!
 
     # Main fields.
@@ -150,13 +157,15 @@ type Recipient @entity {
 
 # Mapping table to handle efficiently the GrantRound-Recipient many-to-many relationship.
 type GrantRoundRecipient @entity {
-  id: ID! # Set to `${grantRound.id}-${recipient.id}`
+    # Set to the concatenation of `${grantRound.id}-${recipient.id}`.
+    id: ID!
 
-  grantRound: GrantRound!
-  recipient: Recipient!
+    grantRound: GrantRound!
+    recipient: Recipient!
 }
 
 type GrantRound @entity {
+    # Set to the HEX string representation of the numeric unique index of the Grant Round.
     id: ID!
 
     # Main fields (also from Poll).
@@ -211,6 +220,8 @@ type GrantRound @entity {
 
 # MACI/QFI Coordinator.
 type Coordinator @entity {
+    # Set to the HEX string representation of the ETH address of the coordinator.
+    # (i.e., can be derived from the tx sender or an address event parameter).
     id: ID!
 
     # Main fields.
@@ -226,6 +237,8 @@ type Coordinator @entity {
 
 # A contributor who has sent tokens to the matching pool in exchange of VCs.
 type Contributor @entity {
+    # Set to the HEX string representation of the ETH address of the contributor.
+    # (i.e., can be derived from the tx sender or an address event parameter).
     id: ID!
     
     # Main fields.
@@ -233,7 +246,7 @@ type Contributor @entity {
     voiceCredits: BigInt!
     isRegistered: Boolean!
     txHash: Bytes!
-    
+
     # Link.
     publicKey: PublicKey!
     grantRounds: [GrantRoundContributor!] @derivedFrom(field: "contributor")
@@ -248,13 +261,15 @@ type Contributor @entity {
 
 # Mapping table to handle efficiently the GrantRound-Contributor many-to-many relationship.
 type GrantRoundContributor @entity {
-  id: ID! # Set to `${grantRound.id}-${contributor.id}`
+    # Set to the concatenation of `${grantRound.id}-${contributor.id}`.
+    id: ID!
 
-  grantRound: GrantRound!
-  contributor: Contributor!
+    grantRound: GrantRound!
+    contributor: Contributor!
 }
 
 type Contribution @entity {
+    # Set to the concatenation of `${grantRound.id}-${contributor.id}`.
     id: ID!
 
     # Main fields.
@@ -271,6 +286,7 @@ type Contribution @entity {
 
 # An amount of funds donated.
 type Donation @entity {
+    # Set to the concatenation of `${grantRound.id}-${recipient.id}`.
     id: ID!
 
     # Main fields.
@@ -286,6 +302,7 @@ type Donation @entity {
 
 # This entity is stored when a contributor cast a vote (publish a message).
 type Vote @entity {
+    # Set to the concatenation of `${grantRound.id}-${contributor.id}`.
     id: ID!
 
     # Links.
@@ -295,6 +312,8 @@ type Vote @entity {
 
 # Represent a funding source to the match poll for a Grant Round.
 type FundingSource @entity {
+    # Set to the HEX string representation of the ETH address of the Funding Source.
+    # (i.e., can be derived from an address event parameter).
     id: ID!
 
     qfi: QFI!

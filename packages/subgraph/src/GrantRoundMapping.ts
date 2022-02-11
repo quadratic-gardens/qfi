@@ -221,7 +221,7 @@ export function handleVoted(event: Voted): void {
 
         if (voter !== null) {
             // Create a new Vote.
-            const voteId = grantRoundId.concat(voterId)
+            const voteId = grantRoundId.concat("-").concat(voterId)
             const vote = new Vote(voteId)
 
             vote.contributor = voterAddress.toHexString()
