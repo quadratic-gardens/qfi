@@ -70,14 +70,17 @@ type PublicKey @entity {
     y: BigInt!
 
     # Associated voting info.
+    lifetimeAmountContributed: BigInt!
+    voiceCreditBalance: BigInt!
     stateIndex: BigInt
-    voiceCreditBalance: BigInt
     
     # Links.
     grantRound: GrantRound # Can be present if the PublicKey is used in addition to send a message.
 
     # Reverse Lookup for the messages signed w/ this public key.
     messages: [Message!] @derivedFrom(field: "publicKey")
+    # Reverse Lookup for the contribution made w/ this public key.
+    contributions: [Contribution!] @derivedFrom(field: "publicKey")
 
     timestamp: String!
 }
@@ -279,6 +282,7 @@ type Contribution @entity {
     # Links.
     contributor: Contributor!
     grantRound: GrantRound!
+    publicKey: PublicKey!
 
     createdAt: String!
     lastUpdatedAt: String!

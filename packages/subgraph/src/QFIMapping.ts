@@ -271,12 +271,23 @@ export function handleContribution(event: ContributionEvent): void {
 
             contribution.contributor = contributorId
             contribution.grantRound = grantRoundId
+            contribution.publicKey = publicKeyId
             contribution.amount = event.params._amount
             contribution.voiceCredits = event.params._amount.div(voiceCreditFactor)
             contribution.createdAt = timestamp
             contribution.lastUpdatedAt = timestamp
 
             contribution.save()
+
+            // Update PublicKey.
+            publicKey.voiceCreditBalance = publicKey.voiceCreditBalance.plus(
+                event.params._amount.div(voiceCreditFactor)
+            )
+            publicKey.lifetimeAmountContributed = publicKey.lifetimeAmountContributed.plus(
+                BigInt.fromI32(event.params._amount)
+            )
+
+            publicKey.save()
 
             // Update QFI.
             if (qfi !== null) {
