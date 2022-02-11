@@ -141,8 +141,8 @@ type Recipient @entity {
     grantRounds: [GrantRoundRecipient!] @derivedFrom(field: "recipient")
     recipientRegistry: RecipientRegistry!
 
-    # Reverse Lookup of the claimed funds sent to this recipient.
-    funds: [Funds!] @derivedFrom(field: "recipient")
+    # Reverse Lookup of the claimed donations sent to this recipient.
+    donations: [Donation!] @derivedFrom(field: "recipient")
 
     createdAt: String!
     lastUpdatedAt: String!
@@ -267,8 +267,8 @@ type Contribution @entity {
     lastUpdatedAt: String!
 }
 
-# An amount of funds claimed/donated.
-type Funds @entity {
+# An amount of funds donated.
+type Donation @entity {
     id: ID!
 
     # Main fields.

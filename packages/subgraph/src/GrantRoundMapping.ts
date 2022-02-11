@@ -1,7 +1,7 @@
 import { log } from "@graphprotocol/graph-ts"
 import {
     Contributor,
-    Funds,
+    Donation,
     GrantRound as GrantRoundSchema,
     GrantRoundRecipient,
     Message,
@@ -140,7 +140,7 @@ export function handleFundsClaimed(event: FundsClaimed): void {
         const recipientAddress = event.params._recipient
         const recipientId = recipientAddress.toHexString()
         let recipient = Recipient.load(recipientId)
-        const fundsId = grantRoundId.concat("-").concat(recipientId)
+        const donationId = grantRoundId.concat("-").concat(recipientId)
 
         // Get the mapping table for GrantRound and Recipient.
         const mappingTableGRRId = grantRoundId.concat("-").concat(recipientId)
@@ -158,7 +158,7 @@ export function handleFundsClaimed(event: FundsClaimed): void {
         recipient.recipientRegistry = recipientRegistryId
         recipient.rejected = false
         recipient.voteOptionIndex = event.params._voteOptionIndex
-        recipient.funds = [fundsId]
+        recipient.donations = [donationId]
         recipient.createdAt = timestamp
         recipient.lastUpdatedAt = timestamp
 
@@ -168,16 +168,16 @@ export function handleFundsClaimed(event: FundsClaimed): void {
         recipient.save()
         mappingTableGRR.save()
 
-        // Create a new Funds entity.
-        const funds = new Funds(fundsId)
+        // Create a new Donation entity.
+        const donation = new Donation(donationId)
 
-        funds.grantRound = grantRoundId
-        funds.recipient = recipientId
-        funds.amount = event.params._amount
-        funds.voteOptionIndex = event.params._voteOptionIndex
-        funds.createdAt = event.block.timestamp.toString()
+        donation.grantRound = grantRoundId
+        donation.recipient = recipientId
+        donation.amount = event.params._amount
+        donation.voteOptionIndex = event.params._voteOptionIndex
+        donation.createdAt = event.block.timestamp.toString()
 
-        funds.save()
+        donation.save()
     } else {
         log.error(`GrantRound entity not found!`, [])
     }
