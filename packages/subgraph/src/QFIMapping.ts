@@ -251,6 +251,7 @@ export function handleContribution(event: ContributionEvent): void {
             contributor.voiceCredits = event.params._voiceCredits
             contributor.isRegistered = false // TODO: To be checked.
             contributor.publicKey = publicKeyId
+            contributor.txHash = event.transaction.hash
             contributor.createdAt = timestamp
             contributor.lastUpdatedAt = timestamp
 

@@ -232,7 +232,8 @@ type Contributor @entity {
     address: Bytes! # Eth EOA.
     voiceCredits: BigInt!
     isRegistered: Boolean!
-
+    txHash: Bytes!
+    
     # Link.
     publicKey: PublicKey!
     grantRounds: [GrantRoundContributor!] @derivedFrom(field: "contributor")
