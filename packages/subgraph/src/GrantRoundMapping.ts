@@ -35,6 +35,7 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 export function handlePublishMessage(event: PublishMessage): void {
     log.debug(`PublishMessage event block: {}`, [event.block.number.toString()])
 
+    const txSender = event.transaction.from
     // Get Grant Round.
     const grantRoundId = event.address.toHexString()
     const grantRound = GrantRoundSchema.load(grantRoundId)
@@ -44,7 +45,7 @@ export function handlePublishMessage(event: PublishMessage): void {
         const messageId = event.transaction.hash.toHexString()
         const message = new Message(messageId)
 
-        const publicKeyId = event.transaction.from.toHexString()
+        const publicKeyId = txSender.toHexString()
         const publicKey = PublicKey.load(publicKeyId)
 
         if (publicKey === null) {
@@ -61,7 +62,9 @@ export function handlePublishMessage(event: PublishMessage): void {
             log.error(`PublicKey entity not found!`, [])
         }
 
+        message.sender = txSender
         message.data = event.params._message.data
+        message.txHash = event.transaction.hash
         message.publicKey = publicKeyId
         message.grantRound = grantRoundId
         message.timestamp = event.block.timestamp.toString()

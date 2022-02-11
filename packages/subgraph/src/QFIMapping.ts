@@ -29,7 +29,7 @@ import {
     FundingSource,
     GrantRoundContributor
 } from "../generated/schema"
-import { GrantRound as GrantRoundTemplate } from '../generated/templates'
+import { GrantRound as GrantRoundTemplate } from "../generated/templates"
 
 /**
  * Handle a smart contract based on MACI (constructor event).

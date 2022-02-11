@@ -83,8 +83,11 @@ type PublicKey @entity {
 type Message @entity {
     id: ID!
     
+    # Main fields.
+    sender: Bytes!
     data: [BigInt!]!
-
+    txHash: Bytes!
+    
     # Links.
     publicKey: PublicKey!
     grantRound: GrantRound!
