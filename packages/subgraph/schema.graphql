@@ -234,6 +234,7 @@ type Contributor @entity {
     isRegistered: Boolean!
 
     # Link.
+    publicKey: PublicKey!
     grantRounds: [GrantRoundContributor!] @derivedFrom(field: "contributor")
 
     # Reverse lookups.

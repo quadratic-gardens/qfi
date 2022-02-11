@@ -223,7 +223,8 @@ export function handleContribution(event: ContributionEvent): void {
     const qfi = new QFISchema(qfiId)
 
     // Get Contributor.
-    const contributorId = event.params._contributor.toHexString()
+    const contributorAddress = event.params._contributor
+    const contributorId = contributorAddress.toHexString()
     let contributor = Contributor.load(contributorId)
     const grantRoundId = qfi.currentGrantRound
     const timestamp = event.block.timestamp.toString()
@@ -233,52 +234,63 @@ export function handleContribution(event: ContributionEvent): void {
         const mappingTableGRCId = grantRoundId.concat("-").concat(contributorId)
         let mappingTableGRC = GrantRoundContributor.load(mappingTableGRCId)
 
-        if (contributor === null) {
-            contributor = new Contributor(contributorId)
-        }
+        // Associate a new PublicKey to the Contributor.
+        const publicKeyId = contributorId
+        const publicKey = PublicKey.load(publicKeyId)
 
-        if (mappingTableGRC === null) {
-            mappingTableGRC = new GrantRoundContributor(mappingTableGRCId)
-        }
+        if (publicKey !== null) {
+            if (contributor === null) {
+                contributor = new Contributor(contributorId)
+            }
 
-        contributor.address = event.params._contributor
-        contributor.voiceCredits = event.params._voiceCredits
-        contributor.isRegistered = false // TODO: To be checked.
-        contributor.createdAt = timestamp
-        contributor.lastUpdatedAt = timestamp
+            if (mappingTableGRC === null) {
+                mappingTableGRC = new GrantRoundContributor(mappingTableGRCId)
+            }
 
-        mappingTableGRC.grantRound = grantRoundId
-        mappingTableGRC.contributor = contributorId
+            contributor.address = event.params._contributor
+            contributor.voiceCredits = event.params._voiceCredits
+            contributor.isRegistered = false // TODO: To be checked.
+            contributor.publicKey = publicKeyId
+            contributor.createdAt = timestamp
+            contributor.lastUpdatedAt = timestamp
 
-        contributor.save()
-        mappingTableGRC.save()
+            mappingTableGRC.grantRound = grantRoundId
+            mappingTableGRC.contributor = contributorId
 
-        // Get the VoiceCreditFactor from QFI contract (for each contribution - trade off to be considered).
-        const qfiContract = QFIContract.bind(qfiAddress)
-        const voiceCreditFactor = qfiContract.voiceCreditFactor()
+            contributor.save()
+            mappingTableGRC.save()
 
-        // Create a new Contribution.
-        const contributionId = grantRoundId.concat(contributorId)
-        const contribution = new Contribution(contributionId)
+            // Get the VoiceCreditFactor from QFI contract (for each contribution - trade off to be considered).
+            const qfiContract = QFIContract.bind(qfiAddress)
+            const voiceCreditFactor = qfiContract.voiceCreditFactor()
 
-        contribution.contributor = contributorId
-        contribution.grantRound = grantRoundId
-        contribution.amount = event.params._amount
-        contribution.voiceCredits = event.params._amount.div(voiceCreditFactor)
-        contribution.createdAt = timestamp
-        contribution.lastUpdatedAt = timestamp
+            // Create a new Contribution.
+            const contributionId = grantRoundId.concat(contributorId)
+            const contribution = new Contribution(contributionId)
 
-        contribution.save()
+            contribution.contributor = contributorId
+            contribution.grantRound = grantRoundId
+            contribution.amount = event.params._amount
+            contribution.voiceCredits = event.params._amount.div(voiceCreditFactor)
+            contribution.createdAt = timestamp
+            contribution.lastUpdatedAt = timestamp
 
-        // Update QFI.
-        if (qfi !== null) {
-            qfi.contributorCount = qfi.contributorCount.plus(BigInt.fromI32(1))
-            qfi.lastUpdatedAt = event.block.timestamp.toString()
+            contribution.save()
 
-            qfi.save()
+            // Update QFI.
+            if (qfi !== null) {
+                qfi.contributorCount = qfi.contributorCount.plus(BigInt.fromI32(1))
+                qfi.lastUpdatedAt = event.block.timestamp.toString()
+
+                qfi.save()
+            } else {
+                log.error(`QFI entity not found!`, [])
+            }
         } else {
-            log.error(`QFI entity not found!`, [])
+            log.error(`Contributor PublicKey not found!`, [])
         }
+    } else {
+        log.error(`GrantRound is not initialized!`, [])
     }
 }
 
