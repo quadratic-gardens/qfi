@@ -20,6 +20,12 @@ import {IRecipientRegistry} from "./recipientRegistry/IRecipientRegistry.sol";
  * @dev Inherits from Poll Contract and uses the Poll Contract interface to manage the voting.
  */
 contract GrantRound is Poll {
+    /**
+     * Event issued when a registered user posts a (batch of) message(s) to vote.
+     * @param _voter The address of the person who published a (batch of) message(s).
+     */
+    event Voted(address indexed _voter);
+
     using SafeERC20 for ERC20;
 
     uint256 public voiceCreditFactor;
@@ -91,6 +97,8 @@ contract GrantRound is Poll {
         for (uint8 i = 0; i < batchSize; i++) {
             publishMessage(_messages[i], _encPubKeys[i]);
         }
+
+        emit Voted(msg.sender);
     }
 
     /**
