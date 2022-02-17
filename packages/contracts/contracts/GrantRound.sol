@@ -26,6 +26,12 @@ contract GrantRound is Poll {
      */
     event Voted(address indexed _voter);
 
+    /**
+     * Event issued when the coordinator publishes the IPFS hash for the vote tally.
+     * @param _tallyHash The IPFS hash of the vote tally.
+     */
+    event TallyPublished(string _tallyHash);
+
     using SafeERC20 for ERC20;
 
     uint256 public voiceCreditFactor;
@@ -116,7 +122,8 @@ contract GrantRound is Poll {
             "GrantRound: Tally hash is empty string"
         );
         tallyHash = _tallyHash;
-        // emit TallyPublished(_tallyHash);
+
+        emit TallyPublished(_tallyHash);
     }
 
     /*
