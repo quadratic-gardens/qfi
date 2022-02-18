@@ -26,6 +26,27 @@ import {GrantRoundFactory} from "./GrantRoundFactory.sol";
  * @dev Special type of MACI that allows for a quadratic funding scheme.
  */
 contract QFI is MACI, FundsManager {
+    /**
+     * Event issued when the QFI contract is deployed.
+     * @param _grantRoundFactory The Ethereum smart contract address of the current Grant Round Factory.
+     * @param _nativeToken The Ethereum smart contract address of the ERC20 Token used for the current Grant Round.
+     * @param _voiceCreditFactor Constant used to handle VCs / Tokens conversions (e.g., reconstruct the exact contribution amount in Token from VCs).
+     */
+    event QfiDeployed(address _grantRoundFactory, address _nativeToken, uint256 _voiceCreditFactor);
+
+    // TODO: reflect the change of the event name for the subgraph. 
+    /**
+     * Event issued when the owner (deployer) initialize the QFI contract.
+     * @param _messageAqFactoryGrantRounds The Ethereum smart contract address of the Message AQ Factory for the current Grant Round.
+     */
+    event QfiInitialized(address _messageAqFactoryGrantRounds);
+
+    /**
+     * Event issued when the owner finalizes the current Grant Round.
+     * @param _currentGrantRound The Ethereum smart contract address of the current Grant Round.
+     */
+    event GrantRoundFinalized(address _currentGrantRound);
+
     using SafeERC20 for ERC20;
     enum Stage {
         // The contract is not yet initialized
@@ -90,6 +111,12 @@ contract QFI is MACI, FundsManager {
             (MAX_CONTRIBUTION_AMOUNT * uint256(10)**nativeToken.decimals()) /
             MAX_VOICE_CREDITS;
         voiceCreditFactor = voiceCreditFactor > 0 ? voiceCreditFactor : 1;
+
+        emit QfiDeployed(
+            address(_grantRoundFactory),
+            address(_nativeToken),
+            voiceCreditFactor
+        );
     }
 
     /*
@@ -120,7 +147,8 @@ contract QFI is MACI, FundsManager {
             "MACI: MessageAqFactory owner incorrectly set"
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
-        // emit InitGrantsMessageAQ(_vkRegistry, _messageAqFactory);
+
+        emit QfiInitialized(address(_messageAqFactoryGrantRounds));
     }
 
     /**
@@ -328,6 +356,8 @@ contract QFI is MACI, FundsManager {
         g.finalize(_totalSpent, _totalSpentSalt);
 
         currentStage = Stage.FINALIZED;
+
+        emit GrantRoundFinalized(address(g));
     }
 
     function acceptContributionsAndTopUpsBeforeNewRound() public onlyOwner {
