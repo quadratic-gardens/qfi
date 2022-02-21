@@ -32,9 +32,13 @@ contract QFI is MACI, FundsManager {
      * @param _nativeToken The Ethereum smart contract address of the ERC20 Token used for the current Grant Round.
      * @param _voiceCreditFactor Constant used to handle VCs / Tokens conversions (e.g., reconstruct the exact contribution amount in Token from VCs).
      */
-    event QfiDeployed(address _grantRoundFactory, address _nativeToken, uint256 _voiceCreditFactor);
+    event QfiDeployed(
+        address _grantRoundFactory,
+        address _nativeToken,
+        uint256 _voiceCreditFactor
+    );
 
-    // TODO: reflect the change of the event name for the subgraph. 
+    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when the owner (deployer) initialize the QFI contract.
      * @param _messageAqFactoryGrantRounds The Ethereum smart contract address of the Message AQ Factory for the current Grant Round.
@@ -42,10 +46,68 @@ contract QFI is MACI, FundsManager {
     event QfiInitialized(address _messageAqFactoryGrantRounds);
 
     /**
+     * Event issued when the owner (deployer) set the PollProcessorAndTallyer contract.
+     * @param _pollProcessorAndTallyer The Ethereum smart contract address of the PollProcessorAndTallyer contract for the current Grant Round.
+     */
+    event PollProcessorAndTallyerChanged(address _pollProcessorAndTallyer);
+
+    // TODO: reflect the change of the event name for the subgraph.
+    /**
+     * Event issued when an unregistered user signs up and contributes to the current Grant Round.
+     * @param _contributor The Ethereum address of who sends the contribution.
+     * @param _amount The amount in native ERC20 tokens submitted as contribution.
+     * @param _voiceCredits The amount of Voice Credits obtained according to the contribution amount.
+     */
+    event ContributionSent(
+        address _contributor,
+        uint256 _amount,
+        uint256 _voiceCredits
+    );
+
+    // TODO: reflect the change of the event name for the subgraph.
+    /**
+     * Event issued when a contributor decides to withdraw his/her contribution for the current Grant Round.
+     * @param _contributor The Ethereum address of who withdraws the contribution.
+     */
+    event ContributionWithdrew(address _contributor);
+
+    // TODO: reflect the change of the event name for the subgraph.
+    /**
+     * Event issued when the owner (deployer) deploy a new Grant Round.
+     * @param _currentGrantRound The Ethereum smart contract address of the current Grant Round.
+     * @param _duration The duration of the current Grant Round.
+     * @param _maxValues The maximum amount of messages and vote options of the current Grant Round.
+     * @param _treeDepths The intStateTreeDepth, messageTreeSubDepth, messageTreeDepth, and voteOptionTreeDepth.
+     * @param _batchSizes The message and vote tally batch sizes.
+     * @param _coordinatorPubKey The MACI public key of the coordinator of the current Grant Round.
+     */
+    event GrantRoundDeployed (
+        address _currentGrantRound, 
+        uint256 _duration, 
+        MaxValues _maxValues, 
+        TreeDepths _treeDepths, 
+        BatchSizes _batchSizes, 
+        PubKey _coordinatorPubKey
+    );
+
+    /**
+     * Event issued when the owner (deployer) decides to close the voting period for the current Grant Round.
+     * @param _currentStage The updated value for the current QFI stage.
+     */
+    event VotingPeriodClosed(Stage _currentStage);
+
+    /**
+     * Event issued when the owner (deployer) decides to start accepting contribution/signup period for the next Grant Round.
+     * @param _currentStage The updated value for the current QFI stage.
+     */
+    event PreRoundContributionPeriodStarted(Stage _currentStage);
+
+    /**
      * Event issued when the owner finalizes the current Grant Round.
      * @param _currentGrantRound The Ethereum smart contract address of the current Grant Round.
+     * @param _currentStage The updated value for the current QFI stage.
      */
-    event GrantRoundFinalized(address _currentGrantRound);
+    event GrantRoundFinalized(address _currentGrantRound, Stage _currentStage);
 
     using SafeERC20 for ERC20;
     enum Stage {
@@ -160,6 +222,8 @@ contract QFI is MACI, FundsManager {
         PollProcessorAndTallyer _pollProcessorAndTallyer
     ) public onlyOwner {
         pollProcessorAndTallyer = _pollProcessorAndTallyer;
+
+        emit PollProcessorAndTallyerChanged(address(_pollProcessorAndTallyer));
     }
 
     /**
@@ -204,7 +268,8 @@ contract QFI is MACI, FundsManager {
         nativeToken.safeTransferFrom(msg.sender, address(this), amount);
 
         signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
-        // emit Contribution(msg.sender, amount);
+
+        emit ContributionSent(msg.sender, amount, voiceCredits);
     }
 
     /**
@@ -236,7 +301,8 @@ contract QFI is MACI, FundsManager {
         require(amount > 0, "FundingRound: Nothing to withdraw");
         contributors[msg.sender].voiceCredits = 0;
         nativeToken.safeTransfer(msg.sender, amount);
-        // emit ContributionWithdrawn(msg.sender);
+        
+        emit ContributionWithdrew(msg.sender);
     }
 
     /**
@@ -290,8 +356,8 @@ contract QFI is MACI, FundsManager {
         nextPollId++;
 
         currentStage = Stage.VOTING_PERIOD_OPEN;
-        emit DeployPoll(pollId, address(g), _coordinatorPubKey);
-        // emit deployGrantRound( grantRoundId, _duration, _maxValues, _treeDepths, _coordinatorPubKey);
+
+        emit GrantRoundDeployed(address(currentGrantRound), _duration, _maxValues, _treeDepths, batchSizes, _coordinatorPubKey);
     }
 
     /**
@@ -337,6 +403,8 @@ contract QFI is MACI, FundsManager {
         );
         //TODO: ACTUALLY CLOSE THE VOTING PERIOD on the grant round contract
         currentStage = Stage.WAITING_FOR_FINALIZATION;
+
+        emit VotingPeriodClosed(currentStage);
     }
 
     function finalizeCurrentRound(uint256 _totalSpent, uint256 _totalSpentSalt)
@@ -357,7 +425,7 @@ contract QFI is MACI, FundsManager {
 
         currentStage = Stage.FINALIZED;
 
-        emit GrantRoundFinalized(address(g));
+        emit GrantRoundFinalized(address(g), currentStage);
     }
 
     function acceptContributionsAndTopUpsBeforeNewRound() public onlyOwner {
@@ -366,5 +434,7 @@ contract QFI is MACI, FundsManager {
             "QFI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
+
+        emit PreRoundContributionPeriodStarted(currentStage);
     }
 }
