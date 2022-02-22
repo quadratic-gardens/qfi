@@ -1,19 +1,32 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.7.2;
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
-import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
-import '@openzeppelin/contracts/utils/EnumerableSet.sol';
-import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/EnumerableSet.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-import {GrantRound} from './GrantRound.sol';
+import {GrantRound} from "./GrantRound.sol";
+
 /**
  * @title Funds Manager
  * @author Q
  * @notice Handles funding sources and donations for Grant rounds
  * @dev Responsible for sending matching funds to the Grant round contract
  */
-contract FundsManager is Ownable{
+contract FundsManager is Ownable {
+    /**
+     * Event issued when a funding source is correctly added to the set.
+     * @param _source The address of the funding source.
+     */
+    event FundingSourceAdded(address _source);
+
+    /**
+     * Event issued when a funding source is correctly removed from the set.
+     * @param _source The address of the funding source.
+     */
+    event FundingSourceRemoved(address _source);
+
     using EnumerableSet for EnumerableSet.AddressSet;
     using SafeERC20 for ERC20;
 
@@ -27,8 +40,9 @@ contract FundsManager is Ownable{
      */
     function addFundingSource(address _source) external {
         bool result = fundingSources.add(_source);
-        require(result, 'Factory: Funding source already added');
-        // emit FundingSourceAdded(_source);
+        require(result, "Factory: Funding source already added");
+
+        emit FundingSourceAdded(_source);
     }
 
     /**
@@ -37,8 +51,9 @@ contract FundsManager is Ownable{
      */
     function removeFundingSource(address _source) external {
         bool result = fundingSources.remove(_source);
-        require(result, 'Factory: Funding source not found');
-        // emit FundingSourceRemoved(_source);
+        require(result, "Factory: Funding source not found");
+
+        emit FundingSourceRemoved(_source);
     }
 
     /**
@@ -68,7 +83,7 @@ contract FundsManager is Ownable{
     ) internal {
         require(
             address(currentRound) != address(0),
-            'Factory: Funding round has not been deployed'
+            "Factory: Funding round has not been deployed"
         );
         ERC20 roundToken = currentRound.nativeToken();
         // Factory contract is the default funding source

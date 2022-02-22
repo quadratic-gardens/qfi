@@ -1,94 +1,154 @@
-import { ethers } from 'hardhat';
-import chai from 'chai';
-import { solidity } from 'ethereum-waffle';
+import { ethers } from "hardhat";
+import chai from "chai";
+import { deployMockContract, MockContract, solidity } from "ethereum-waffle";
+import { ContractTransaction, Signer } from "ethers";
+import { FundsManager, FundsManager__factory } from "../typechain";
+import BaseERC20TokenAbi from "../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('Grant Round Factory', () => {
-  
+// Unit tests for Funds Manager smart contract.
+describe("Funds Manager", () => {
+  // Signers.
+  let deployer: Signer;
+  let fundingSource: Signer;
+  let deployerAddress: string;
+  let fundingSourceAddress: string;
+
+  // Funds Manager instance.
+  let fundsManager: FundsManager;
+
+  // Mocked contracts.
+  let mockBaseERC20Token: MockContract;
+
   beforeEach(async () => {
-    
-  })
+    // Get signers.
+    [deployer, fundingSource] = await ethers.getSigners();
+    deployerAddress = await deployer.getAddress();
+    fundingSourceAddress = await fundingSource.getAddress();
 
-  it('verify - initializes properly', async () => {
-    
-  })
+    // Mocked contracts.
+    mockBaseERC20Token = await deployMockContract(deployer, BaseERC20TokenAbi);
 
-  it('verify - configured properly', async () => {
-  
-  })
+    // nb. workaround due it's not possible to use Waffle library for linking libraries.
+    // ISSUE -> https://github.com/EthWorks/Waffle/issues/429.
+    const FundsManagerFactory = new FundsManager__factory(deployer);
 
-  describe('managing funding sources', () => {
-    it('verify - allows owner to add funding source', async () => {
-      
-    })
+    // Deploy Funds Manager.
+    fundsManager = await FundsManagerFactory.deploy();
+  });
 
-    it('require fail - allows only owner to add funding source', async () => {
-      
-    })
+  it("verify - initializes properly", async () => {
+    // Wait for the deploy tx.
+    const fundsManagerDeployTransaction: ContractTransaction =
+      fundsManager.deployTransaction;
+    const txReceipt = await fundsManagerDeployTransaction.wait();
 
-    it('require fail - reverts if funding source is already added', async () => {
-      
-    })
+    expect(txReceipt.status).to.not.equal(0);
+    expect(txReceipt.contractAddress).to.equal(fundsManager.address);
+  });
 
-    it('verify - allows owner to remove funding source', async () => {
-      
-    })
+  it("verify - configured properly", async () => {
+    expect(await fundsManager.owner()).to.be.equal(deployerAddress);
+  });
 
-    it('require fail - allows only owner to remove funding source', async () => {
-      
-    })
+  describe("addFundingSource()", async () => {
+    it("allow to add a funding source", async () => {
+      await expect(
+        fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
+      )
+        .to.emit(fundsManager, "FundingSourceAdded")
+        .withArgs(fundingSourceAddress);
+    });
 
-    it('require fail - reverts if funding source is already removed', async () => {
-      
-    })
-  })
+    it("revert - funding source already added", async () => {
+      // Add the funding source.
+      await expect(
+        fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
+      )
+        .to.emit(fundsManager, "FundingSourceAdded")
+        .withArgs(fundingSourceAddress);
 
-  it('allows direct contributions to the matching pool', async () => {
-    
-  })
+      // Should revert.
+      await expect(
+        fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
+      ).to.be.revertedWith("Factory: Funding source already added");
+    });
+  });
 
-  describe('withdrawing funds', () => {
-      
-  
-    it('allows contributors to withdraw funds', async () => {
-     
-    })
+  describe("removeFundingSource()", async () => {
+    it("allow to remove a funding source", async () => {
+      // Add.
+      await expect(
+        fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
+      )
+        .to.emit(fundsManager, "FundingSourceAdded")
+        .withArgs(fundingSourceAddress);
 
-    it('disallows withdrawal if round is not cancelled', async () => {
-      
-    })
+      // Should remove.
+      await expect(
+        fundsManager.connect(deployer).removeFundingSource(fundingSourceAddress)
+      )
+        .to.emit(fundsManager, "FundingSourceRemoved")
+        .withArgs(fundingSourceAddress);
+    });
 
-    it('reverts if user did not contribute to the round', async () => {
-     
-    })
+    it("revert - funding source not found", async () => {
+      // Should revert.
+      await expect(
+        fundsManager.connect(deployer).removeFundingSource(fundingSourceAddress)
+      ).to.be.revertedWith("Factory: Funding source not found");
+    });
+  });
 
-    it('reverts if funds are already withdrawn', async () => {
-      
-    })
-  })
+  describe("getMatchingFunds()", async () => {
+    // Expected values.
+    const fundingAmount = 100;
+    const expectedMatchingPoolSizeNoFundingSources = 100;
+    const expectedMatchingPoolSizeWithFundingSources = 200;
 
+    it("allow to retrieve the total amount of matching funds when there are no funding sources", async () => {
+      // Mocks.
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(fundsManager.address)
+        .returns(expectedMatchingPoolSizeNoFundingSources);
 
+      const matchingPoolSize = await fundsManager.getMatchingFunds(
+        mockBaseERC20Token.address
+      );
 
-  describe('transferring matching funds', () => {
-    
+      expect(Number(matchingPoolSize)).to.be.equal(
+        expectedMatchingPoolSizeNoFundingSources
+      );
+    });
 
-    it('returns the amount of available matching funding', async () => {
-      
-    })
+    it("allow to retrieve the total amount of matching funds when there are other funding sources", async () => {
+      // Add funding source.
+      await expect(
+        fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
+      )
+        .to.emit(fundsManager, "FundingSourceAdded")
+        .withArgs(fundingSourceAddress);
 
-    it('pulls funds from funding source', async () => {
-      
-    })
+      // Mocks.
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(fundsManager.address)
+        .returns(expectedMatchingPoolSizeNoFundingSources);
+      await mockBaseERC20Token.mock.allowance
+        .withArgs(fundingSourceAddress, fundsManager.address)
+        .returns(fundingAmount);
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(fundingSourceAddress)
+        .returns(fundingAmount);
 
-    it('pulls funds from funding source if allowance is greater than balance', async () => {
-      
-    })
+      const matchingPoolSize = await fundsManager.getMatchingFunds(
+        mockBaseERC20Token.address
+      );
 
-    
-  })
-
-
-
-})
+      expect(Number(matchingPoolSize)).to.be.equal(
+        expectedMatchingPoolSizeWithFundingSources
+      );
+    });
+  });
+});
