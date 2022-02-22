@@ -244,12 +244,13 @@ describe("Grant Round Factory", () => {
   describe("deployGrantRound()", async () => {
     // Input parameters.
     const coordinatorKeys = new Keypair();
-    // nb. workaround to dinamically mock the
+    // TODO: workaround to dinamically mock the
     // 'messageAq.transferOwnership(address(grantRound));' call in deployGrantRound().
+    // THIS ONLY WORKS WHEN RUNNING 'yarn coverage'.
     // This address has been obtained throungh hardhat console.log() debugging feature because
     // cannot be predicted/mocked in other ways (i.e., it's a new not a method, so cannot be mocked out).
     const expectedGrantRoundAddress =
-      "0x97d6f692f3375e543177831f3c439a894fdc8005";
+      "0x33cdaa704a16ac6c83bc90e751623b67d5182993";
 
     beforeEach(async () => {
       // Mocks.
