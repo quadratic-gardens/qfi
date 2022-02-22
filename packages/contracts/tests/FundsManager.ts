@@ -125,11 +125,9 @@ describe("Funds Manager", () => {
 
     it("allow to retrieve the total amount of matching funds when there are other funding sources", async () => {
       // Add funding source.
-      await expect(
-        fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
-      )
-        .to.emit(fundsManager, "FundingSourceAdded")
-        .withArgs(fundingSourceAddress);
+      await fundsManager
+        .connect(deployer)
+        .addFundingSource(fundingSourceAddress);
 
       // Mocks.
       await mockBaseERC20Token.mock.balanceOf

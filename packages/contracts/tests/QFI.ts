@@ -37,6 +37,8 @@ describe("QFI", () => {
   let contributorAddress: string;
   let coordinator: Signer;
   let coordinatorAddress: string;
+  let fundingSource: Signer;
+  let fundingSourceAddress: string;
   const coordinatorMaciPublicKey = new Keypair().pubKey.asContractParam();
 
   // QFI instance.
@@ -98,10 +100,12 @@ describe("QFI", () => {
 
   beforeEach(async () => {
     // Get signers.
-    [deployer, contributor, coordinator] = await ethers.getSigners();
+    [deployer, contributor, coordinator, fundingSource] =
+      await ethers.getSigners();
     deployerAddress = await deployer.getAddress();
     contributorAddress = await contributor.getAddress();
     coordinatorAddress = await coordinator.getAddress();
+    fundingSourceAddress = await fundingSource.getAddress();
 
     // Mocked contracts.
     mockBaseERC20Token = await deployMockContract(deployer, BaseERC20TokenAbi);
@@ -1631,6 +1635,107 @@ describe("QFI", () => {
       await mockGrantRound.mock.finalize
         .withArgs(tallyResults.totalSpent, tallyResults.totalSpentSalt)
         .returns();
+
+      await expect(
+        qfi
+          .connect(deployer)
+          .finalizeCurrentRound(
+            tallyResults.totalSpent,
+            tallyResults.totalSpentSalt
+          )
+      )
+        .to.emit(qfi, "GrantRoundFinalized")
+        .withArgs(mockGrantRound.address, 4);
+    });
+
+    it("allow owner to finalize current grant round with other funding sources", async () => {
+      // Add a funding source.
+      await expect(qfi.connect(deployer).addFundingSource(fundingSourceAddress))
+        .to.emit(qfi, "FundingSourceAdded")
+        .withArgs(fundingSourceAddress);
+
+      // Mocks.
+      await mockGrantRoundFactory.mock.deployGrantRound
+        .withArgs(
+          voiceCreditFactor,
+          coordinatorAddress,
+          mockBaseERC20Token.address,
+          duration,
+          maxValues,
+          treeDepths,
+          batchSizes,
+          coordinatorMaciPublicKey,
+          mockVkRegistry.address,
+          qfi.address,
+          await qfi.owner()
+        )
+        .returns(mockGrantRound.address);
+
+      // Should deploy a new Grant Round.
+      await expect(
+        qfi
+          .connect(deployer)
+          .deployGrantRound(
+            duration,
+            maxValues,
+            treeDepths,
+            coordinatorMaciPublicKey,
+            coordinatorAddress
+          )
+      )
+        .to.emit(qfi, "GrantRoundDeployed")
+        .withArgs(
+          mockGrantRound.address,
+          duration,
+          Object.values(maxValues),
+          Object.values(treeDepths),
+          Object.values(batchSizes),
+          Object.values(coordinatorMaciPublicKey)
+        );
+
+      expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
+      expect(Number(await qfi.currentStage())).to.equal(2);
+      expect(await qfi.currentGrantRound()).to.equal(mockGrantRound.address);
+
+      // Close voting period and prepare for finalization.
+      await expect(qfi.connect(deployer).closeVotingAndWaitForDeadline())
+        .to.emit(qfi, "VotingPeriodClosed")
+        .withArgs(3);
+
+      // Set PPT contract.
+      await expect(
+        qfi.connect(deployer).setPollProcessorAndTallyer(mockPPT.address)
+      )
+        .to.emit(qfi, "PollProcessorAndTallyerChanged")
+        .withArgs(mockPPT.address);
+
+      // Mocks.
+      await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockGrantRound.mock.nativeToken
+        .withArgs()
+        .returns(mockBaseERC20Token.address);
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(qfi.address)
+        .returns(contributionAmount);
+      await mockBaseERC20Token.mock.transfer
+        .withArgs(mockGrantRound.address, contributionAmount)
+        .returns(true);
+      await mockGrantRound.mock.finalize
+        .withArgs(tallyResults.totalSpent, tallyResults.totalSpentSalt)
+        .returns();
+      await mockBaseERC20Token.mock.allowance
+        .withArgs(fundingSourceAddress, qfi.address)
+        .returns(contributionAmount);
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(fundingSourceAddress)
+        .returns(contributionAmount);
+      await mockBaseERC20Token.mock.transferFrom
+        .withArgs(
+          fundingSourceAddress,
+          mockGrantRound.address,
+          contributionAmount
+        )
+        .returns(true);
 
       await expect(
         qfi
