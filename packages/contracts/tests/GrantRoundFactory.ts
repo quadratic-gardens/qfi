@@ -1,85 +1,353 @@
-import { ethers } from 'hardhat';
-import { Signer } from "ethers";
-import chai from 'chai';
-import { solidity } from 'ethereum-waffle';
+import { ethers } from "hardhat";
+import { ContractTransaction, Signer, constants } from "ethers";
+import chai from "chai";
+import {
+  deployContract,
+  deployMockContract,
+  MockContract,
+  solidity,
+} from "ethereum-waffle";
 import { GrantRoundFactory } from "../typechain/GrantRoundFactory";
-
+import {
+  GrantRoundFactory__factory,
+  PoseidonT3__factory,
+  PoseidonT4__factory,
+  PoseidonT5__factory,
+  PoseidonT6__factory,
+} from "../typechain";
+import MessageAqFactoryAbi from "../abi/maci-contracts/contracts/Poll.sol/MessageAqFactory.json";
+import MessageAqAbi from "../abi/maci-contracts/contracts/trees/AccQueue.sol/AccQueue.json";
+import RecipientRegistryAbi from "../abi/contracts/recipientRegistry/OptimisticRecipientRegistry.sol/OptimisticRecipientRegistry.json";
+import QfiAbi from "../abi/contracts/QFI.sol/QFI.json";
+import BaseERC20TokenAbi from "../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
+import VkRegistryAbi from "../abi/maci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
+import GrantRoundAbi from "../abi/contracts/GrantRound.sol/GrantRound.json";
+import { Keypair } from "maci-domainobjs";
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('Grant Round Factory', () => {
+// Unit tests for Grant Round Factory smart contract.
+describe("Grant Round Factory", () => {
+  // Signers.
   let deployer: Signer;
-  let addr1: Signer;
+  let coordinator: Signer;
+  let coordinatorAddress: string;
+
+  // Grant Round Factory instance.
   let grantRoundFactory: GrantRoundFactory;
 
+  // Mock contracts.
+  let mockMessageAqFactory: MockContract;
+  let mockRecipientRegistry: MockContract;
+  let mockBaseERC20Token: MockContract;
+  let mockQfi: MockContract;
+  let mockVkRegistry: MockContract;
+  let mockGrantRound: MockContract;
+  let mockMessageAq: MockContract;
+
+  // Pre-computed data.
+  const decimals = 5;
+  const voiceCreditFactor =
+    (BigInt(10 ** 4) * BigInt(10 ** decimals)) / BigInt(10 ** 9);
+
+  // Input parameters for GrantRound methods.
+  // Deploy Grant Round.
+  const duration = 30;
+  const maxValues = {
+    maxMessages: 25,
+    maxVoteOptions: 25,
+  };
+  const treeDepths = {
+    intStateTreeDepth: 2,
+    messageTreeDepth: 2,
+    messageTreeSubDepth: 2,
+    voteOptionTreeDepth: 2,
+  };
+  const defaultMessageTreeArity = 5;
+  const defaultStateTreeArity = 5;
+  const batchSizes = {
+    messageBatchSize: defaultMessageTreeArity ** treeDepths.messageTreeSubDepth,
+    tallyBatchSize: defaultStateTreeArity ** treeDepths.intStateTreeDepth,
+  };
+
   beforeEach(async () => {
-    [deployer, addr1] = await ethers.getSigners();
-    const PoseidonT3Factory =await  ethers.getContractFactory("PoseidonT3", deployer)
-    const PoseidonT4Factory = await ethers.getContractFactory("PoseidonT4", deployer)
-    const PoseidonT5Factory = await ethers.getContractFactory("PoseidonT5", deployer)
-    const PoseidonT6Factory = await ethers.getContractFactory("PoseidonT6", deployer)
+    // Get signers.
+    [deployer, coordinator] = await ethers.getSigners();
+    coordinatorAddress = await coordinator.getAddress();
 
-    const poseidonT3 = await PoseidonT3Factory.deploy();
-    const poseidonT4 = await PoseidonT4Factory.deploy();
-    const poseidonT5 = await PoseidonT5Factory.deploy();
-    const poseidonT6 = await PoseidonT6Factory.deploy();
+    // Poseidon libraries.
+    const poseidonT3 = await deployContract(deployer, PoseidonT3__factory, []);
+    const poseidonT4 = await deployContract(deployer, PoseidonT4__factory, []);
+    const poseidonT5 = await deployContract(deployer, PoseidonT5__factory, []);
+    const poseidonT6 = await deployContract(deployer, PoseidonT6__factory, []);
 
-    const linkedLibraryAddresses = {
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: poseidonT5.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: poseidonT3.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: poseidonT6.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: poseidonT4.address,
-    }
-    const GrantRoundFactory = await ethers.getContractFactory( "GrantRoundFactory", {
-      signer: deployer,
-      libraries: { ...linkedLibraryAddresses }
-    })
-    grantRoundFactory = await GrantRoundFactory.deploy();
+    // nb. workaround due it's not possible to use Waffle library for linking libraries.
+    // ISSUE -> https://github.com/EthWorks/Waffle/issues/429.
+    const GrantRoundFactoryFactory = new GrantRoundFactory__factory(
+      {
+        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
+          poseidonT5.address,
+        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]:
+          poseidonT3.address,
+        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]:
+          poseidonT6.address,
+        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]:
+          poseidonT4.address,
+      },
+      deployer
+    );
 
-  })
+    // Deploy Grant Round Factory.
+    grantRoundFactory = await GrantRoundFactoryFactory.deploy();
+  });
 
-  it('verify - initializes properly', async () => {
-    const deployTransaction = await grantRoundFactory.deployTransaction.wait()
-    expect(deployTransaction.status).to.not.equal(0);
-    expect(deployTransaction.contractAddress).to.equal(grantRoundFactory.address);
-  })
+  it("verify - initializes properly", async () => {
+    // Wait for the deploy tx.
+    const grantRoundFactoryDeployTransaction: ContractTransaction =
+      grantRoundFactory.deployTransaction;
+    const txReceipt = await grantRoundFactoryDeployTransaction.wait();
 
-  it('verify - configured properly', async () => {
-    expect(await grantRoundFactory.messageAqFactory()).to.equal(ethers.constants.AddressZero)
-    expect(await grantRoundFactory.recipientRegistry()).to.equal(ethers.constants.AddressZero)
-  })
+    expect(txReceipt.status).to.not.equal(0);
+    expect(txReceipt.contractAddress).to.equal(grantRoundFactory.address);
+  });
 
-  describe('changing recipient registry', () => {
-    it('verify - allows owner to set recipient registry', async () => { 
-      const RecipientRegistryFactory = await ethers.getContractFactory("OptimisticRecipientRegistry")
-      const recipientRegistry = await RecipientRegistryFactory.deploy(0, 0, await deployer.getAddress());
-      grantRoundFactory.setRecipientRegistry(recipientRegistry.address);
-      const contractRecipientRegistry = await grantRoundFactory.recipientRegistry()
-      expect(contractRecipientRegistry).to.equal(recipientRegistry.address)
-    })
+  it("verify - configured properly", async () => {
+    expect(await grantRoundFactory.messageAqFactory()).to.equal(
+      constants.AddressZero
+    );
+    expect(await grantRoundFactory.recipientRegistry()).to.equal(
+      constants.AddressZero
+    );
+  });
 
-    it('require fail - allows only owner to set recipient registry', async () => {
-      const RecipientRegistryFactory = await ethers.getContractFactory("OptimisticRecipientRegistry")
-      const recipientRegistry = await RecipientRegistryFactory.deploy(0, 0, await deployer.getAddress());
-     expect(
-        grantRoundFactory.connect(addr1).setRecipientRegistry(recipientRegistry.address)
+  describe("setMessageAqFactory()", async () => {
+    beforeEach(async () => {
+      // Mocks.
+      mockMessageAqFactory = await deployMockContract(
+        deployer,
+        MessageAqFactoryAbi
+      );
+    });
+
+    it("allow owner to set message aq factory contract", async () => {
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .setMessageAqFactory(mockMessageAqFactory.address)
+      )
+        .to.emit(grantRoundFactory, "MessageAqFactoryChanged")
+        .withArgs(mockMessageAqFactory.address);
+    });
+
+    it("allow owner to change message aq factory contract", async () => {
+      // Set.
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .setMessageAqFactory(mockMessageAqFactory.address)
+      )
+        .to.emit(grantRoundFactory, "MessageAqFactoryChanged")
+        .withArgs(mockMessageAqFactory.address);
+
+      mockMessageAqFactory = await deployMockContract(
+        deployer,
+        MessageAqFactoryAbi
+      );
+
+      expect(await grantRoundFactory.messageAqFactory()).to.be.not.equal(
+        constants.AddressZero
+      );
+      expect(await grantRoundFactory.messageAqFactory()).to.be.not.equal(
+        mockMessageAqFactory.address
+      );
+
+      // Should change.
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .setMessageAqFactory(mockMessageAqFactory.address)
+      )
+        .to.emit(grantRoundFactory, "MessageAqFactoryChanged")
+        .withArgs(mockMessageAqFactory.address);
+    });
+
+    it("revert - sender is not owner", async () => {
+      await expect(
+        grantRoundFactory
+          .connect(coordinator)
+          .setMessageAqFactory(mockMessageAqFactory.address)
       ).to.be.revertedWith("Ownable: caller is not the owner");
-    })
+    });
+  });
 
-    it('verify - allows owner to change recipient registry', async () => {
-      const RecipientRegistryFactory = await ethers.getContractFactory("OptimisticRecipientRegistry")
-      let recipientRegistry = await RecipientRegistryFactory.deploy(0, 0, await deployer.getAddress());
-      grantRoundFactory.setRecipientRegistry(recipientRegistry.address);
-      let contractRecipientRegistry = await grantRoundFactory.recipientRegistry()
-      expect(contractRecipientRegistry).to.equal(recipientRegistry.address)
+  describe("setRecipientRegistry()", async () => {
+    beforeEach(async () => {
+      // Mocks.
+      mockRecipientRegistry = await deployMockContract(
+        deployer,
+        RecipientRegistryAbi
+      );
+    });
 
-      recipientRegistry = await RecipientRegistryFactory.deploy(0, 0, await addr1.getAddress());
-      grantRoundFactory.setRecipientRegistry(recipientRegistry.address);
-      contractRecipientRegistry = await grantRoundFactory.recipientRegistry()
-      expect(contractRecipientRegistry).to.equal(recipientRegistry.address)
-    })
-  })
+    it("allow owner to set recipient registry contract", async () => {
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .setRecipientRegistry(mockRecipientRegistry.address)
+      )
+        .to.emit(grantRoundFactory, "RecipientRegistryChanged")
+        .withArgs(mockRecipientRegistry.address);
+    });
 
-  
-})
+    it("allow owner to change recipient registry contract", async () => {
+      // Set.
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .setRecipientRegistry(mockRecipientRegistry.address)
+      )
+        .to.emit(grantRoundFactory, "RecipientRegistryChanged")
+        .withArgs(mockRecipientRegistry.address);
+
+      mockRecipientRegistry = await deployMockContract(
+        deployer,
+        RecipientRegistryAbi
+      );
+
+      expect(await grantRoundFactory.recipientRegistry()).to.be.not.equal(
+        constants.AddressZero
+      );
+      expect(await grantRoundFactory.recipientRegistry()).to.be.not.equal(
+        mockRecipientRegistry.address
+      );
+
+      // Should change.
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .setRecipientRegistry(mockRecipientRegistry.address)
+      )
+        .to.emit(grantRoundFactory, "RecipientRegistryChanged")
+        .withArgs(mockRecipientRegistry.address);
+    });
+
+    it("revert - sender is not owner", async () => {
+      await expect(
+        grantRoundFactory
+          .connect(coordinator)
+          .setRecipientRegistry(mockRecipientRegistry.address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+  });
+
+  describe("deployGrantRound()", async () => {
+    // Input parameters.
+    const coordinatorKeys = new Keypair();
+    // nb. workaround to dinamically mock the
+    // 'messageAq.transferOwnership(address(grantRound));' call in deployGrantRound().
+    // This address has been obtained throungh hardhat console.log() debugging feature because
+    // cannot be predicted/mocked in other ways (i.e., it's a new not a method, so cannot be mocked out).
+    const expectedGrantRoundAddress =
+      "0x97d6f692f3375e543177831f3c439a894fdc8005";
+
+    beforeEach(async () => {
+      // Mocks.
+      mockQfi = await deployMockContract(deployer, QfiAbi);
+
+      mockBaseERC20Token = await deployMockContract(
+        deployer,
+        BaseERC20TokenAbi
+      );
+
+      mockVkRegistry = await deployMockContract(deployer, VkRegistryAbi);
+
+      mockGrantRound = await deployMockContract(deployer, GrantRoundAbi);
+
+      mockMessageAq = await deployMockContract(deployer, MessageAqAbi);
+    });
+
+    it("allow owner to deploy a grant round", async () => {
+      // Set MessageAqFactory.
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .setMessageAqFactory(mockMessageAqFactory.address)
+      )
+        .to.emit(grantRoundFactory, "MessageAqFactoryChanged")
+        .withArgs(mockMessageAqFactory.address);
+
+      // Mocks.
+      await mockMessageAqFactory.mock.deploy
+        .withArgs(treeDepths.messageTreeSubDepth)
+        .returns(mockMessageAq.address);
+      await mockMessageAq.mock.transferOwnership
+        .withArgs(expectedGrantRoundAddress)
+        .returns();
+      await mockGrantRound.mock.transferOwnership
+        .withArgs(coordinatorAddress)
+        .returns();
+
+      await grantRoundFactory
+        .connect(deployer)
+        .deployGrantRound(
+          voiceCreditFactor,
+          coordinatorAddress,
+          mockBaseERC20Token.address,
+          duration,
+          maxValues,
+          treeDepths,
+          batchSizes,
+          coordinatorKeys.pubKey.asContractParam(),
+          mockVkRegistry.address,
+          mockQfi.address,
+          coordinatorAddress
+        );
+    });
+
+    it("revert - sender is not owner", async () => {
+      await expect(
+        grantRoundFactory
+          .connect(coordinator)
+          .deployGrantRound(
+            voiceCreditFactor,
+            coordinatorAddress,
+            mockBaseERC20Token.address,
+            duration,
+            maxValues,
+            treeDepths,
+            batchSizes,
+            coordinatorKeys.pubKey.asContractParam(),
+            mockVkRegistry.address,
+            mockQfi.address,
+            coordinatorAddress
+          )
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
+    it("revert - invalid max values", async () => {
+      const invalidMaxValues = {
+        maxMessages: 1,
+        maxVoteOptions: 1,
+      };
+
+      await expect(
+        grantRoundFactory
+          .connect(deployer)
+          .deployGrantRound(
+            voiceCreditFactor,
+            coordinatorAddress,
+            mockBaseERC20Token.address,
+            duration,
+            invalidMaxValues,
+            treeDepths,
+            batchSizes,
+            coordinatorKeys.pubKey.asContractParam(),
+            mockVkRegistry.address,
+            mockQfi.address,
+            coordinatorAddress
+          )
+      ).to.be.revertedWith("PollFactory: invalid _maxValues");
+    });
+  });
+});
