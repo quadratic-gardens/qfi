@@ -30,6 +30,18 @@ contract GrantRoundFactory is
     Hasher,
     PollDeploymentParams
 {
+    /**
+     * Event issued when the owner sets/changes the address of the MessageAqFactory smart contract.
+     * @param _messageAqFactory The Ethereum address of the new MessageAqFactory smart contract.
+     */
+    event MessageAqFactoryChanged(address _messageAqFactory);
+
+    /**
+     * Event issued when the owner sets/changes the address of the RecipientRegistry smart contract.
+     * @param _recipientRegistry The Ethereum address of the new RecipientRegistry smart contract.
+     */
+    event RecipientRegistryChanged(address _recipientRegistry);
+
     using SafeERC20 for ERC20;
 
     MessageAqFactory public messageAqFactory;
@@ -47,6 +59,8 @@ contract GrantRoundFactory is
         onlyOwner
     {
         messageAqFactory = _messageAqFactory;
+
+        emit MessageAqFactoryChanged(address(_messageAqFactory));
     }
 
     /**
@@ -59,6 +73,8 @@ contract GrantRoundFactory is
         onlyOwner
     {
         recipientRegistry = _recipientRegistry;
+
+        emit RecipientRegistryChanged(address(_recipientRegistry));
     }
 
     /**
