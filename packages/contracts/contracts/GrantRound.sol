@@ -20,6 +20,34 @@ import {IRecipientRegistry} from "./recipientRegistry/IRecipientRegistry.sol";
  * @dev Inherits from Poll Contract and uses the Poll Contract interface to manage the voting.
  */
 contract GrantRound is Poll {
+    /**
+     * Event issued when a registered user posts a (batch of) message(s) to vote.
+     * @param _voter The address of the person who published a (batch of) message(s).
+     */
+    event Voted(address indexed _voter);
+
+    /**
+     * Event issued when the coordinator publishes the IPFS hash for the vote tally.
+     * @param _tallyHash The IPFS hash of the vote tally.
+     */
+    event TallyPublished(string _tallyHash);
+
+    /**
+     * Event issued when the owner (deployer) cancel the Grant Round.
+     * @param _isFinalized True when the Grant Round is finalized, otherwise false.
+     * @param _isCancelled True when the Grant Round is cancelled, otherwise false.
+     */
+    event GrantRoundCancelled(bool _isFinalized, bool _isCancelled);
+
+    // TODO: reflect the change of the event name for the subgraph.
+    /**
+     * Event issued when the beneficiary (recipient) claims the corresponding Grant Round funds.
+     * @param _recipient The address of the recipient.
+     * @param _voteOptionIndex The index of the voting option associated with the recipient.
+     * @param _allocatedAmount The amount to be claimed.
+     */
+    event FundsClaimed(address _recipient, uint256 _voteOptionIndex, uint256 _allocatedAmount);
+
     using SafeERC20 for ERC20;
 
     uint256 public voiceCreditFactor;
@@ -91,6 +119,8 @@ contract GrantRound is Poll {
         for (uint8 i = 0; i < batchSize; i++) {
             publishMessage(_messages[i], _encPubKeys[i]);
         }
+
+        emit Voted(msg.sender);
     }
 
     /**
@@ -108,7 +138,8 @@ contract GrantRound is Poll {
             "GrantRound: Tally hash is empty string"
         );
         tallyHash = _tallyHash;
-        // emit TallyPublished(_tallyHash);
+
+        emit TallyPublished(_tallyHash);
     }
 
     /*
@@ -160,6 +191,8 @@ contract GrantRound is Poll {
         require(!isFinalized, "GrantRound: Already finalized");
         isFinalized = true;
         isCancelled = true;
+
+        emit GrantRoundCancelled(isFinalized, isCancelled);
     }
 
     /**
@@ -241,5 +274,7 @@ contract GrantRound is Poll {
         }
         uint256 allocatedAmount = getAllocatedAmount(_tallyResult, _spent);
         nativeToken.safeTransfer(recipient, allocatedAmount);
+
+        emit FundsClaimed(recipient, _voteOptionIndex, allocatedAmount);
     }
 }

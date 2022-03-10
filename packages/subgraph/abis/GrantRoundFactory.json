@@ -1,0 +1,383 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_messageAqFactoryNew",
+        "type": "address"
+      }
+    ],
+    "name": "MessageAqFactoryChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_recipientRegistryNew",
+        "type": "address"
+      }
+    ],
+    "name": "RecipientRegistryChanged",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_voiceCreditFactor",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_coordinator",
+        "type": "address"
+      },
+      {
+        "internalType": "contract ERC20",
+        "name": "_nativeToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_duration",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "maxMessages",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxVoteOptions",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Params.MaxValues",
+        "name": "_maxValues",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "intStateTreeDepth",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "messageTreeSubDepth",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "messageTreeDepth",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "voteOptionTreeDepth",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct Params.TreeDepths",
+        "name": "_treeDepths",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "messageBatchSize",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "tallyBatchSize",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct Params.BatchSizes",
+        "name": "_batchSizes",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "x",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "y",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IPubKey.PubKey",
+        "name": "_coordinatorPubKey",
+        "type": "tuple"
+      },
+      {
+        "internalType": "contract VkRegistry",
+        "name": "_vkRegistry",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IMACI",
+        "name": "_maci",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_grantRoundOwner",
+        "type": "address"
+      }
+    ],
+    "name": "deployGrantRound",
+    "outputs": [
+      {
+        "internalType": "contract GrantRound",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[2]",
+        "name": "array",
+        "type": "uint256[2]"
+      }
+    ],
+    "name": "hash2",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[3]",
+        "name": "array",
+        "type": "uint256[3]"
+      }
+    ],
+    "name": "hash3",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[4]",
+        "name": "array",
+        "type": "uint256[4]"
+      }
+    ],
+    "name": "hash4",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[5]",
+        "name": "array",
+        "type": "uint256[5]"
+      }
+    ],
+    "name": "hash5",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_left",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_right",
+        "type": "uint256"
+      }
+    ],
+    "name": "hashLeftRight",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "messageAqFactory",
+    "outputs": [
+      {
+        "internalType": "contract MessageAqFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "recipientRegistry",
+    "outputs": [
+      {
+        "internalType": "contract IRecipientRegistry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract MessageAqFactory",
+        "name": "_messageAqFactory",
+        "type": "address"
+      }
+    ],
+    "name": "setMessageAqFactory",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IRecipientRegistry",
+        "name": "_recipientRegistry",
+        "type": "address"
+      }
+    ],
+    "name": "setRecipientRegistry",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "array",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "sha256Hash",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

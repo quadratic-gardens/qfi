@@ -11,8 +11,8 @@ import { PoseidonT5__factory } from "../../typechain/factories/PoseidonT5__facto
 import { PoseidonT6 } from "../../typechain/PoseidonT6";
 import { PoseidonT6__factory } from "../../typechain/factories/PoseidonT6__factory";
 
-import {MACI} from '../../typechain/MACI'
-import {MACI__factory} from '../../typechain/factories/MACI__factory'
+import { MACI } from "../../typechain/MACI";
+import { MACI__factory } from "../../typechain/factories/MACI__factory";
 
 import {
   GrantRoundFactoryLibraryAddresses,
@@ -50,7 +50,7 @@ import { PollProcessorAndTallyer__factory } from "../../typechain/factories/Poll
 chai.use(solidity);
 const { expect } = chai;
 
-describe("Quadratic Funding Infrastructure Deploy", () => {
+describe("Deploy - QV Infrastructure Smart Contracts", () => {
   let deployer: Signer;
   let deployerAddress: string;
   let PoseidonT3Factory: PoseidonT3__factory;
@@ -81,7 +81,7 @@ describe("Quadratic Funding Infrastructure Deploy", () => {
   let poseidonT3: PoseidonT3;
   let poseidonT4: PoseidonT4;
   let poseidonT5: PoseidonT5;
-  let poseidonT6:  PoseidonT6;
+  let poseidonT6: PoseidonT6;
   let grantRoundFactory: GrantRoundFactory;
   let pollFactory: PollFactory;
   let messageAqFactory: MessageAqFactory;
@@ -94,7 +94,6 @@ describe("Quadratic Funding Infrastructure Deploy", () => {
   let pollProcessorAndTallyer: PollProcessorAndTallyer;
   let qfi: QFI;
   let maci: MACI;
-
 
   beforeEach(async () => {
     [deployer] = await ethers.getSigners();
@@ -134,15 +133,26 @@ describe("Quadratic Funding Infrastructure Deploy", () => {
     expect(poseidonT5.address).to.not.equal(ethers.constants.AddressZero);
     expect(poseidonT6.address).to.not.equal(ethers.constants.AddressZero);
     //NOTE: These should be correct as they are from precompiled contracts
-    expect( await poseidonT3["poseidon(uint256[2])"]([BigNumber.from(0), BigNumber.from(0)]) ).to.be.equal(BigNumber.from('0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864'));
-    expect( await poseidonT6["poseidon(uint256[5])"]([BigNumber.from(0), BigNumber.from(0),BigNumber.from(0), BigNumber.from(0),BigNumber.from(0)]) ).to.be.equal(BigNumber.from('0x2066be41bebe6caf7e079360abe14fbf9118c62eabc42e2fe75e342b160a95bc'));
-    //NOTE: These should be incorrect as they are not from precompiled contracts
-    expect( await poseidonT4.poseidon([BigNumber.from(0), BigNumber.from(0),BigNumber.from(0)])).to.be.equal(BigNumber.from('0x00'));
-    expect( await poseidonT5.poseidon([BigNumber.from(0), BigNumber.from(0),BigNumber.from(0),BigNumber.from(0)])).to.be.equal(BigNumber.from('0x00'));
+    expect(await poseidonT3.poseidon([BigNumber.from(0), BigNumber.from(0)])).to.be.equal(
+      BigNumber.from("0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864")
+    );
+    expect(await poseidonT4.poseidon([BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)])).to.be.equal(
+      BigNumber.from("0x0bc188d27dcceadc1dcfb6af0a7af08fe2864eecec96c5ae7cee6db31ba599aa")
+    );
+    expect(
+      await poseidonT5.poseidon([BigNumber.from(0), BigNumber.from(0), BigNumber.from(0), BigNumber.from(0)])
+    ).to.be.equal(BigNumber.from("0x0532fd436e19c70e51209694d9c215250937921b8b79060488c1206db73e9946"));
+    expect(
+      await poseidonT6.poseidon([
+        BigNumber.from(0),
+        BigNumber.from(0),
+        BigNumber.from(0),
+        BigNumber.from(0),
+        BigNumber.from(0),
+      ])
+    ).to.be.equal(BigNumber.from("0x2066be41bebe6caf7e079360abe14fbf9118c62eabc42e2fe75e342b160a95bc"));
     
   });
-
-
 
   it("deploys GrantRoundFactory Contracts", async () => {
     grantRoundFactory = await GrantRoundFactory.deploy();
@@ -211,7 +221,7 @@ describe("Quadratic Funding Infrastructure Deploy", () => {
       freeForAllGateKeeper.address,
       constantInitialVoiceCreditProxy.address
     );
-    
+
     await expect((await maci.deployTransaction.wait()).status).to.not.equal(0);
   });
 

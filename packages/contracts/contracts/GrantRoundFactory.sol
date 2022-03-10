@@ -5,7 +5,7 @@ pragma solidity ^0.7.2;
 import {PollFactory, Poll, MessageAqFactory, PollDeploymentParams} from "maci-contracts/contracts/Poll.sol";
 import {VkRegistry} from "maci-contracts/contracts/VkRegistry.sol";
 import {Params} from "maci-contracts/contracts/Params.sol";
-import {Hasher} from "maci-contracts/contracts/crypto/Hasher.sol";
+import {Hasher, PoseidonT3, PoseidonT4, PoseidonT5, PoseidonT6} from "maci-contracts/contracts/crypto/Hasher.sol";
 import {IMACI} from "maci-contracts/contracts/IMACI.sol";
 import {AccQueue} from "maci-contracts/contracts/trees/AccQueue.sol";
 import {DomainObjs, IPubKey, IMessage} from "maci-contracts/contracts/DomainObjs.sol";
@@ -30,13 +30,24 @@ contract GrantRoundFactory is
     Hasher,
     PollDeploymentParams
 {
+    /**
+     * Event issued when the owner sets/changes the address of the MessageAqFactory smart contract.
+     * @param _messageAqFactory The Ethereum address of the new MessageAqFactory smart contract.
+     */
+    event MessageAqFactoryChanged(address _messageAqFactory);
+
+    /**
+     * Event issued when the owner sets/changes the address of the RecipientRegistry smart contract.
+     * @param _recipientRegistry The Ethereum address of the new RecipientRegistry smart contract.
+     */
+    event RecipientRegistryChanged(address _recipientRegistry);
+
     using SafeERC20 for ERC20;
 
     MessageAqFactory public messageAqFactory;
     IRecipientRegistry public recipientRegistry;
- 
-    constructor() {
-    }
+
+    constructor() {}
 
     /**
      * @notice Sets the MessageAqFactory to use for the grant rounds
@@ -48,11 +59,13 @@ contract GrantRoundFactory is
         onlyOwner
     {
         messageAqFactory = _messageAqFactory;
+
+        emit MessageAqFactoryChanged(address(_messageAqFactory));
     }
 
-      /**
+    /**
      * @notice Sets the recipientRegistry to use for the grant rounds
-     * @dev public function, 
+     * @dev public function,
      * @param _recipientRegistry IRecipientRegistry stored in memory
      */
     function setRecipientRegistry(IRecipientRegistry _recipientRegistry)
@@ -60,6 +73,8 @@ contract GrantRoundFactory is
         onlyOwner
     {
         recipientRegistry = _recipientRegistry;
+
+        emit RecipientRegistryChanged(address(_recipientRegistry));
     }
 
     /**
