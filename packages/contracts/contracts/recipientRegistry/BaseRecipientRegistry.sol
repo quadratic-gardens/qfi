@@ -3,6 +3,7 @@
 pragma solidity ^0.7.2;
 
 import './IRecipientRegistry.sol';
+import "hardhat/console.sol";
 
 /**
  * @dev Abstract contract containing common methods for recipient registries.
