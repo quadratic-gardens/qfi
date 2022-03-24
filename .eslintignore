@@ -1,0 +1,4 @@
+node_modules
+
+# solidity coverage config
+solcover.js
