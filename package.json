@@ -25,7 +25,8 @@
     "build:hooks": "yarn workspace @qfi/hooks run build",
     "lint": "npm-run-all lint:*",
     "lint:eslint": "eslint packages",
-    "lint:prettier": "prettier --check ./**/*.ts",
+    "lint:prettier": "prettier --check **/*.ts",
+    "prettier:fix": "prettier --write **/*.ts",
     "test": "yarn workspaces run test",
     "test:contracts": "yarn workspace @qfi/contracts run test",
     "deploy:subgraph": "yarn workspace @qfi/subgraph run deploy"
