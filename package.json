@@ -1,5 +1,5 @@
 {
-  "name": "@qfi/qfi",
+  "name": "@quadratic-funding/qfi",
   "description": "Quadratic Funding Infrastructure",
   "version": "0.0.1",
   "repository": {
@@ -19,17 +19,18 @@
   },
   "scripts": {
     "build": "yarn workspaces run build",
-    "build:contracts": "yarn workspace @qfi/contracts run build",
-    "build:subgraph": "yarn workspace @qfi/subgraph run build",
-    "build:ui": "yarn workspace @qfi/ui run build",
-    "build:hooks": "yarn workspace @qfi/hooks run build",
+    "build:contracts": "yarn workspace @quadratic-funding/contracts run build",
+    "build:subgraph": "yarn workspace @quadratic-funding/subgraph run build",
+    "build:ui": "yarn workspace @quadratic-funding/ui run build",
+    "build:hooks": "yarn workspace @quadratic-funding/hooks run build",
     "lint": "npm-run-all lint:*",
     "lint:eslint": "eslint packages",
     "lint:prettier": "prettier --check **/*.ts",
+    "lint:solidity": "yarn workspace @quadratic-funding/contracts run lint:solidity",
     "prettier:fix": "prettier --write **/*.ts",
     "test": "yarn workspaces run test",
-    "test:contracts": "yarn workspace @qfi/contracts run test",
-    "deploy:subgraph": "yarn workspace @qfi/subgraph run deploy"
+    "test:contracts": "yarn workspace @quadratic-funding/contracts run test",
+    "deploy:subgraph": "yarn workspace @quadratic-funding/subgraph run deploy"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.10.2",
