@@ -2,9 +2,9 @@
 
 pragma solidity ^0.7.2;
 
-import '@openzeppelin/contracts/access/Ownable.sol';
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-import './BaseRecipientRegistry.sol';
+import "./BaseRecipientRegistry.sol";
 
 /**
  * @dev A simple recipient registry managed by a trusted entity.
@@ -45,8 +45,8 @@ contract SimpleRecipientRegistry is Ownable, BaseRecipientRegistry {
     external
     onlyOwner
   {
-    require(_recipient != address(0), 'RecipientRegistry: Recipient address is zero');
-    require(bytes(_metadata).length != 0, 'RecipientRegistry: Metadata info is empty string');
+    require(_recipient != address(0), "RecipientRegistry: Recipient address is zero");
+    require(bytes(_metadata).length != 0, "RecipientRegistry: Metadata info is empty string");
     bytes32 recipientId = keccak256(abi.encodePacked(_recipient, _metadata));
     uint256 recipientIndex = _addRecipient(recipientId, _recipient);
     emit RecipientAdded(recipientId, _recipient, _metadata, recipientIndex, block.timestamp);

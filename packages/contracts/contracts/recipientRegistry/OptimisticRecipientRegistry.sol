@@ -2,9 +2,9 @@
 
 pragma solidity ^0.7.2;
 
-import '@openzeppelin/contracts/access/Ownable.sol';
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-import './BaseRecipientRegistry.sol';
+import "./BaseRecipientRegistry.sol";
 
 /**
  * @dev Recipient registry with optimistic execution of registrations and removals.
@@ -95,12 +95,12 @@ contract OptimisticRecipientRegistry is Ownable, BaseRecipientRegistry {
     external
     payable
   {
-    require(_recipient != address(0), 'RecipientRegistry: Recipient address is zero');
-    require(bytes(_metadata).length != 0, 'RecipientRegistry: Metadata info is empty string');
+    require(_recipient != address(0), "RecipientRegistry: Recipient address is zero");
+    require(bytes(_metadata).length != 0, "RecipientRegistry: Metadata info is empty string");
     bytes32 recipientId = keccak256(abi.encodePacked(_recipient, _metadata));
-    require(recipients[recipientId].index == 0, 'RecipientRegistry: Recipient already registered');
-    require(requests[recipientId].submissionTime == 0, 'RecipientRegistry: Request already submitted');
-    require(msg.value == baseDeposit, 'RecipientRegistry: Incorrect deposit amount');
+    require(recipients[recipientId].index == 0, "RecipientRegistry: Recipient already registered");
+    require(requests[recipientId].submissionTime == 0, "RecipientRegistry: Request already submitted");
+    require(msg.value == baseDeposit, "RecipientRegistry: Incorrect deposit amount");
     requests[recipientId] = Request(
       RequestType.Registration,
       msg.sender,
@@ -126,23 +126,23 @@ contract OptimisticRecipientRegistry is Ownable, BaseRecipientRegistry {
     external
     payable
   {
-    require(recipients[_recipientId].index != 0, 'RecipientRegistry: Recipient is not in the registry');
-    require(recipients[_recipientId].removedAt == 0, 'RecipientRegistry: Recipient already removed');
-    require(requests[_recipientId].submissionTime == 0, 'RecipientRegistry: Request already submitted');
-    require(msg.value == baseDeposit, 'RecipientRegistry: Incorrect deposit amount');
+    require(recipients[_recipientId].index != 0, "RecipientRegistry: Recipient is not in the registry");
+    require(recipients[_recipientId].removedAt == 0, "RecipientRegistry: Recipient already removed");
+    require(requests[_recipientId].submissionTime == 0, "RecipientRegistry: Request already submitted");
+    require(msg.value == baseDeposit, "RecipientRegistry: Incorrect deposit amount");
     requests[_recipientId] = Request(
       RequestType.Removal,
       msg.sender,
       block.timestamp,
       msg.value,
       address(0),
-      ''
+      ""
     );
     emit RequestSubmitted(
       _recipientId,
       RequestType.Removal,
       address(0),
-      '',
+      "",
       block.timestamp
     );
   }
@@ -158,7 +158,7 @@ contract OptimisticRecipientRegistry is Ownable, BaseRecipientRegistry {
     returns (bool)
   {
     Request memory request = requests[_recipientId];
-    require(request.submissionTime != 0, 'RecipientRegistry: Request does not exist');
+    require(request.submissionTime != 0, "RecipientRegistry: Request does not exist");
     delete requests[_recipientId];
     bool isSent = _beneficiary.send(request.deposit);
     emit RequestResolved(
@@ -180,11 +180,11 @@ contract OptimisticRecipientRegistry is Ownable, BaseRecipientRegistry {
     returns (bool)
   {
     Request memory request = requests[_recipientId];
-    require(request.submissionTime != 0, 'RecipientRegistry: Request does not exist');
+    require(request.submissionTime != 0, "RecipientRegistry: Request does not exist");
     if (msg.sender != owner()) {
       require(
         block.timestamp - request.submissionTime >= challengePeriodDuration,
-        'RecipientRegistry: Challenge period is not over'
+        "RecipientRegistry: Challenge period is not over"
       );
     }
     uint256 recipientIndex = 0;

@@ -2,7 +2,7 @@
 
 pragma solidity ^0.7.2;
 
-import './IRecipientRegistry.sol';
+import "./IRecipientRegistry.sol";
 
 /**
  * @dev Abstract contract containing common methods for recipient registries.
@@ -38,7 +38,7 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
   {
     require(
       _maxRecipients >= maxRecipients,
-      'RecipientRegistry: Max number of recipients can not be decreased'
+      "RecipientRegistry: Max number of recipients can not be decreased"
     );
     if (controller != msg.sender) {
       // This allows other clrfund instances to use the registry
@@ -59,8 +59,8 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
     internal
     returns (uint256)
   {
-    require(maxRecipients > 0, 'RecipientRegistry: Recipient limit is not set');
-    require(recipients[_recipientId].index == 0, 'RecipientRegistry: Recipient already registered');
+    require(maxRecipients > 0, "RecipientRegistry: Recipient limit is not set");
+    require(recipients[_recipientId].index == 0, "RecipientRegistry: Recipient already registered");
     uint256 recipientIndex = 0;
     uint256 nextRecipientIndex = slots.length + 1;
     if (nextRecipientIndex <= maxRecipients) {
@@ -71,7 +71,7 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
       slots.push(history);
     } else {
       // Assign one of the vacant recipient indexes
-      require(removed.length > 0, 'RecipientRegistry: Recipient limit reached');
+      require(removed.length > 0, "RecipientRegistry: Recipient limit reached");
       bytes32 removedRecipient = removed[removed.length - 1];
       removed.pop();
       recipientIndex = recipients[removedRecipient].index;
@@ -88,8 +88,8 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
   function _removeRecipient(bytes32 _recipientId)
     internal
   {
-    require(recipients[_recipientId].index != 0, 'RecipientRegistry: Recipient is not in the registry');
-    require(recipients[_recipientId].removedAt == 0, 'RecipientRegistry: Recipient already removed');
+    require(recipients[_recipientId].index != 0, "RecipientRegistry: Recipient is not in the registry");
+    require(recipients[_recipientId].removedAt == 0, "RecipientRegistry: Recipient already removed");
     recipients[_recipientId].removedAt = block.timestamp;
     removed.push(_recipientId);
   }

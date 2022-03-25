@@ -3,7 +3,7 @@
   "rules": {
     "compiler-version": ["error", "^0.7.2"],
     "not-rely-on-time": "off",
-    "quotes": ["error", "single"],
+    "quotes": ["error", "double"],
     "reason-string": ["warn", { "maxLength": 64 }],
     "max-states-count": ["warn", 18],
     "check-send-result": "off"
