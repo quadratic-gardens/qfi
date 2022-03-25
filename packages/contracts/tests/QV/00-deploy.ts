@@ -108,10 +108,10 @@ describe("Deploy - QV Infrastructure Smart Contracts", () => {
     poseidonT6 = await PoseidonT6Factory.deploy();
 
     linkedLibraryAddresses = {
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: poseidonT5.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: poseidonT3.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: poseidonT6.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: poseidonT4.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: poseidonT5.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: poseidonT3.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: poseidonT6.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: poseidonT4.address,
     };
     GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer);
     PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, deployer);

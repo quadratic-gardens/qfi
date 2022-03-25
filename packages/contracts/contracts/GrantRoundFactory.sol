@@ -1,17 +1,17 @@
 //SPDX-License-Identifier: MIT
 pragma experimental ABIEncoderV2;
-pragma solidity ^0.7.2;
+pragma solidity ^0.8.1;
 
-import {PollFactory, Poll, MessageAqFactory, PollDeploymentParams} from "maci-contracts/contracts/Poll.sol";
-import {VkRegistry} from "maci-contracts/contracts/VkRegistry.sol";
-import {Params} from "maci-contracts/contracts/Params.sol";
-import {Hasher, PoseidonT3, PoseidonT4, PoseidonT5, PoseidonT6} from "maci-contracts/contracts/crypto/Hasher.sol";
-import {IMACI} from "maci-contracts/contracts/IMACI.sol";
-import {AccQueue} from "maci-contracts/contracts/trees/AccQueue.sol";
-import {DomainObjs, IPubKey, IMessage} from "maci-contracts/contracts/DomainObjs.sol";
+import {PollFactory, Poll, MessageAqFactory, PollDeploymentParams} from "qaci-contracts/contracts/Poll.sol";
+import {VkRegistry} from "qaci-contracts/contracts/VkRegistry.sol";
+import {Params} from "qaci-contracts/contracts/Params.sol";
+import {Hasher, PoseidonT3, PoseidonT4, PoseidonT5, PoseidonT6} from "qaci-contracts/contracts/crypto/Hasher.sol";
+import {IMACI} from "qaci-contracts/contracts/IMACI.sol";
+import {AccQueue} from "qaci-contracts/contracts/trees/AccQueue.sol";
+import {DomainObjs, IPubKey, IMessage} from "qaci-contracts/contracts/DomainObjs.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import {GrantRound} from "./GrantRound.sol";
 import {IRecipientRegistry} from "./recipientRegistry/IRecipientRegistry.sol";
