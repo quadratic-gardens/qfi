@@ -8,7 +8,7 @@ chai.use(solidity);
 const { expect } = chai;
 
 
-describe.only("Optimistic Recipient Registry", () => {
+describe("Optimistic Recipient Registry", () => {
 
   let deployer : Signer
   let controller : Signer
