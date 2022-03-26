@@ -196,7 +196,107 @@ describe.only("Optimistic Recipient Registry", () => {
     })
 
   })
-  describe("challengeRequest()", async () => {})
-  describe("executeRequest()", async () => {})
 
+  describe("challengeRequest()", async () => {
+
+    it("Reverts if request does not exist", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      const beneficiary = ethers.Wallet.createRandom()
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+      expect(optimisticRecipientRegistry.challengeRequest(recipientId, beneficiary.address)).
+        to.be.revertedWith("RecipientRegistry: Request does not exist")
+    })
+
+    it("Succesfully challenges request", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
+
+      const beneficiary = ethers.Wallet.createRandom()
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+
+      let tx: ContractTransaction = await optimisticRecipientRegistry.challengeRequest(recipientId, beneficiary.address)
+      let receipt: ContractReceipt = await tx.wait();
+      const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
+      expect(event.event).to.equal("RequestResolved")
+      expect(event.args._recipientId).to.equal(recipientId)
+      //0 is enum value for Registration
+      expect(event.args._type).to.equal(0)
+      expect(event.args._recipientIndex).to.equal(0)
+    })
+  })
+
+  describe("executeRequest()", async () => {
+    it("Reverts if request does not exist", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+      expect(optimisticRecipientRegistry.executeRequest(recipientId)).
+        to.be.revertedWith("RecipientRegistry: Request does not exist")
+    })
+
+    it("Reverts non owner request if challenge period is not over", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
+
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+      expect(optimisticRecipientRegistry.connect(addr1).executeRequest(recipientId)).
+        to.be.revertedWith('RecipientRegistry: Challenge period is not over')
+    })
+
+    it("Succesfully executes request as non owner is challenge period is over", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      await optimisticRecipientRegistry.connect(controller).setMaxRecipients(2)
+      await ethers.provider.send("evm_increaseTime", [61]);
+
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+
+      let tx: ContractTransaction = await optimisticRecipientRegistry.connect(addr1).executeRequest(recipientId)
+      let receipt: ContractReceipt = await tx.wait();
+      const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
+      expect(event.args._recipientId).to.equal(recipientId)
+      //0 is enum value for Registration
+      expect(event.args._type).to.equal(0)
+      expect(event.args._recipientIndex).to.equal(1)
+    })
+
+    it("Succesfully executes request as owner before challenge period is over", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      await optimisticRecipientRegistry.connect(controller).setMaxRecipients(2)
+
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+
+      let tx: ContractTransaction = await optimisticRecipientRegistry.executeRequest(recipientId)
+      let receipt: ContractReceipt = await tx.wait();
+      const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
+      expect(event.args._recipientId).to.equal(recipientId)
+      //0 is enum value for Registration
+      expect(event.args._type).to.equal(0)
+      expect(event.args._recipientIndex).to.equal(1)
+    })
+
+    it("Succesfully executes request as owner after challenge period is over", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      await optimisticRecipientRegistry.connect(controller).setMaxRecipients(2)
+      await ethers.provider.send("evm_increaseTime", [61]);
+
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+
+      let tx: ContractTransaction = await optimisticRecipientRegistry.executeRequest(recipientId)
+      let receipt: ContractReceipt = await tx.wait();
+      const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
+      expect(event.args._recipientId).to.equal(recipientId)
+      //0 is enum value for Registration
+      expect(event.args._type).to.equal(0)
+      expect(event.args._recipientIndex).to.equal(1)
+    })
+  })
 }) 
