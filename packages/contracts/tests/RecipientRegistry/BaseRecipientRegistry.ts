@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { ContractTransaction, Signer, constants } from "ethers";
+import { ContractTransaction, ContractReceipt, Signer, constants } from "ethers";
 import chai from "chai";
 import { deployContract, deployMockContract, MockContract, solidity, } from "ethereum-waffle";
 import FundsManagerAbi from "../../abi/contracts/FundsManager.sol/FundsManager.json"
@@ -80,13 +80,14 @@ describe.only("Base Recipient Registry", () => {
 
     it("reverts if recipient limit reached", async () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
-
       let recipient = ethers.Wallet.createRandom()
-      await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
 
-      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
-      const recipient_id = ethers.utils.keccak256(packed)
-      await simpleRecipientRegistry.removeRecipient(recipient_id)
+      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      let receipt: ContractReceipt = await tx.wait();
+
+      const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientId = event.args._recipientId
+      await simpleRecipientRegistry.removeRecipient(recipientId)
 
       recipient = ethers.Wallet.createRandom()
       await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
@@ -94,7 +95,6 @@ describe.only("Base Recipient Registry", () => {
       recipient = ethers.Wallet.createRandom()
       expect(simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")).
         to.be.revertedWith('RecipientRegistry: Recipient limit reached')
-
     })
 
     it("succesfully adds a recipient", async () => {
@@ -115,8 +115,120 @@ describe.only("Base Recipient Registry", () => {
       expect(await simpleRecipientRegistry.callStatic.getRecipientAddress(1, 100, 110)).to.equal(ethers.constants.AddressZero)
     })
 
+    it("Does not select recipients added after endTime", async () => {
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(3)
+      let recipient = ethers.Wallet.createRandom()
+      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      let receipt: ContractReceipt = await tx.wait();
+      const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientIndex = event.args._index
+      const timeStamp = event.args._timestamp.toNumber()
+
+      expect(await simpleRecipientRegistry.callStatic.getRecipientAddress(recipientIndex, 0, timeStamp - 100)).to.equal(ethers.constants.AddressZero)
+    })
+
+    it("Returns recipient added before start time if only once recipient in index", async () => {
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(2)
+      const recipient = ethers.Wallet.createRandom()
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
+      const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientIndex = event.args._index
+      const timeStamp = event.args._timestamp.toNumber()
+
+      expect(await simpleRecipientRegistry.callStatic.getRecipientAddress(recipientIndex, timeStamp + 100, timeStamp + 200)).to.equal(recipient.address)
+    })
+
+    it("succesfully returns recipient address", async () => {
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(3)
+      let recipient = ethers.Wallet.createRandom()
+      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      let receipt: ContractReceipt = await tx.wait();
+      const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientIndex = event.args._index
+      const timeStamp = event.args._timestamp.toNumber()
+
+      expect(await simpleRecipientRegistry.callStatic.getRecipientAddress(recipientIndex, 0, timeStamp + 100)).to.equal(recipient.address)
+    })
 
   })
 
-  describe("getRecipientCount()", async () => { })
+  describe("getRecipientCount()", async () => { 
+
+    it("Returns number of recipients", async () => {
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(5)
+      let recipient = ethers.Wallet.createRandom()
+      await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      expect(await simpleRecipientRegistry.getRecipientCount()).to.equal(1)
+
+      recipient = ethers.Wallet.createRandom()
+      await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      expect(await simpleRecipientRegistry.getRecipientCount()).to.equal(2)
+
+    })
+
+    it("Tests removal decreases recipient count", async () => {
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(2)
+
+      let recipient = ethers.Wallet.createRandom()
+      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      let receipt: ContractReceipt = await tx.wait();
+
+      expect(await simpleRecipientRegistry.getRecipientCount()).to.equal(1)
+
+      const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientId = event.args._recipientId
+      await simpleRecipientRegistry.removeRecipient(recipientId)
+
+      expect(await simpleRecipientRegistry.getRecipientCount()).to.equal(0)
+
+      recipient = ethers.Wallet.createRandom()
+      await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      recipient = ethers.Wallet.createRandom()
+      await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      expect(await simpleRecipientRegistry.getRecipientCount()).to.equal(2)
+    })
+
+
+  })
+
+  describe("_removeRecipient()", async () => { 
+    it("Reverts if recipient is not in the registry", async () => {
+      const recipient = ethers.Wallet.createRandom()
+      const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
+      const recipientId = ethers.utils.keccak256(packed)
+
+      expect(simpleRecipientRegistry.removeRecipient(recipientId)).
+        to.be.revertedWith("RecipientRegistry: Recipient is not in the registry")
+
+    })
+
+    it("Reverts if recipient already removed", async () => {
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
+      let recipient = ethers.Wallet.createRandom()
+      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      let receipt: ContractReceipt = await tx.wait();
+
+      const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientId = event.args._recipientId
+
+      await simpleRecipientRegistry.removeRecipient(recipientId)
+      expect(simpleRecipientRegistry.removeRecipient(recipientId)).
+        to.be.revertedWith("RecipientRegistry: Recipient already removed")
+    })
+
+    it("Succesfully removes recipient from registry", async () => {
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
+      let recipient = ethers.Wallet.createRandom()
+      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      let receipt: ContractReceipt = await tx.wait();
+
+      const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientId = event.args._recipientId
+
+      await simpleRecipientRegistry.removeRecipient(recipientId)
+      expect(await simpleRecipientRegistry.getRecipientCount()).to.equal(0)
+    })
+  })
+
 })

@@ -112,6 +112,7 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
     view
     returns (address)
   {
+
     if (_index == 0 || _index > slots.length) {
       return address(0);
     }
@@ -120,6 +121,7 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
       // Slot is not occupied
       return address(0);
     }
+
     address prevRecipientAddress = address(0);
     for (uint256 idx = history.length; idx > 0; idx--) {
       bytes32 recipientId = history[idx - 1];
