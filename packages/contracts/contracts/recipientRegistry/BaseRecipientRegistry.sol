@@ -3,7 +3,6 @@
 pragma solidity ^0.7.2;
 
 import './IRecipientRegistry.sol';
-import "hardhat/console.sol";
 
 /**
  * @dev Abstract contract containing common methods for recipient registries.
@@ -112,7 +111,6 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
     view
     returns (address)
   {
-
     if (_index == 0 || _index > slots.length) {
       return address(0);
     }
@@ -121,7 +119,6 @@ abstract contract BaseRecipientRegistry is IRecipientRegistry {
       // Slot is not occupied
       return address(0);
     }
-
     address prevRecipientAddress = address(0);
     for (uint256 idx = history.length; idx > 0; idx--) {
       bytes32 recipientId = history[idx - 1];

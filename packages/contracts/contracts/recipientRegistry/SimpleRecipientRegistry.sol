@@ -5,7 +5,6 @@ pragma solidity ^0.7.2;
 import '@openzeppelin/contracts/access/Ownable.sol';
 
 import './BaseRecipientRegistry.sol';
-import "hardhat/console.sol";
 
 /**
  * @dev A simple recipient registry managed by a trusted entity.
