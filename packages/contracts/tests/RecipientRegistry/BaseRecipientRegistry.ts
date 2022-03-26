@@ -2,24 +2,21 @@ import { ethers } from "hardhat";
 import { ContractTransaction, ContractReceipt, Signer, constants } from "ethers";
 import chai from "chai";
 import { deployContract, deployMockContract, MockContract, solidity, } from "ethereum-waffle";
-import FundsManagerAbi from "../../abi/contracts/FundsManager.sol/FundsManager.json"
 import { SimpleRecipientRegistry } from "../../typechain";
 
 chai.use(solidity);
 const { expect } = chai;
 
 
-describe.only("Base Recipient Registry", () => {
+describe("Base Recipient Registry", () => {
   let deployer : Signer
   let controller : Signer
   let controllerAddress : string
   let simpleRecipientRegistry : SimpleRecipientRegistry
-  let mockFundsManager: MockContract;
   
   beforeEach(async () => {
     [deployer, controller] = await ethers.getSigners();
     controllerAddress = await controller.getAddress()
-    mockFundsManager = await deployMockContract(deployer, FundsManagerAbi);
 
     const simpleRecipientRegistryFactory = await ethers.getContractFactory("SimpleRecipientRegistry", deployer)
     simpleRecipientRegistry = await simpleRecipientRegistryFactory.deploy(controllerAddress)
