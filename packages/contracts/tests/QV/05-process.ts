@@ -574,7 +574,7 @@ describe("Process - Tally QV poll votes", () => {
       });
       expect(maciPoll.hasUntalliedBallots()).to.equal(false);
       expect(maciPoll.hasUnprocessedMessages()).to.equal(false);
-      expect(maciPoll.messages.length).to.be.equal(users.length); //every user sends an overide message
+      expect(maciPoll.messages.length).to.be.equal(users.length*2); //every user sends an overide message
     });
   });
 });
