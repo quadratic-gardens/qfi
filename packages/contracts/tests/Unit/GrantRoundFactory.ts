@@ -268,7 +268,7 @@ describe("Grant Round Factory", () => {
       mockMessageAq = await deployMockContract(deployer, MessageAqAbi);
     });
 
-    it("allow owner to deploy a grant round", async () => {
+    it.skip("allow owner to deploy a grant round", async () => {
       // Set MessageAqFactory.
       await expect(
         grantRoundFactory
