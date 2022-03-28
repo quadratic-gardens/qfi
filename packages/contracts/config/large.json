@@ -1,0 +1,11 @@
+{
+  "stateTreeDepth": 12,
+  "intStateTreeDepth": 3,
+  "msgTreeDepth": 12,
+  "voteOptionTreeDepth": 5,
+  "msgBatchDepth": 3,
+  "circomPath": "\"/Users/Q/.cargo/bin/circom\"",
+  "snarkjsPath": "\"../../node_modules/snarkjs/build/cli.cjs\"",
+  "processMessagesCircom": "\"../../node_modules/qaci-circuits/circom/processMessages.circom\"",
+  "tallyVotesCircom": "\"../../node_modules/qaci-circuits/circom/tallyVotes.circom\""
+}

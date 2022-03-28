@@ -4,23 +4,34 @@
   "description": "quadratic-funding Contracts",
   "main": "index.js",
   "scripts": {
+    "build": "hardhat compile",
     "clean": "shx rm -rf ./build ./cache ./coverage ./typechain ./coverage.json ./abi",
     "hardhat": "hardhat",
-    "build": "hardhat compile",
-    "coverage": "yarn typechain && hardhat coverage --solcoverjs ./.solcover.js --temp build/contracts --testfiles \"./tests/**/*.ts\"",
     "node": "hardhat node --port 18545",
-    "test": "hardhat test",
+    "prepare:small-circuits": "mustache config/small.json zkeys.config.template.yaml > zkeys.config.yml",
+    "prepare:medium-circuits": "mustache config/medium.json zkeys.config.template.yaml > zkeys.config.yml",
+    "prepare:large-circuits": "mustache config/large.json zkeys.config.template.yaml > zkeys.config.yml",
+    "prepare:prod-circuits": "mustache config/prod.json zkeys.config.template.yaml > zkeys.config.yml",
+    "generate:zkeys": "npx zkey-manager compile -c zkeys.config.yml",
+    "generate:abis": "yarn hardhat export-abi",
+    "test:unit": "yarn test tests/unit/**.ts",
+    "test:qv": "yarn test tests/QV/**.ts",
+    "test:qf": "yarn test tests/QF/**.ts",
+    "test:integration": "yarn test tests/QV/**.ts tests/QF/**.ts",
+    "test:regression": "yarn test tests/e2e/**.ts",
+    "test:coverage": "yarn typechain && hardhat coverage --solcoverjs ./.solcover.js --temp build/contracts --testfiles \"./tests/**/*.ts\"",
     "lint:js": "eslint '{tests,scripts}/**/*.ts'",
     "lint:solidity": "solhint 'contracts/**/*.sol'",
     "lint": "yarn lint:solidity",
     "typechain": "hardhat typechain",
-    "docs:generate": "npx solidity-docgen --solc-module solc-0.7 -t ./docs/templates/ -i ./contracts -o ./docs"
+    "docs:generate": "npx solidity-docgen --solc-module solc-0.8.1 -t ./docs/templates/ -i ./contracts -o ./docs"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^3.3.0-solc-0.7",
+    "@openzeppelin/contracts": ">=4.5.0-solc-0.8.1",
     "argparse": "^1.0.10",
     "circomlib": "0.5.1",
-    "maci-contracts": "^1.0.4"
+    "qaci-contracts": "^1.1.5",
+    "mustache": "^4.2.0"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
@@ -45,21 +56,32 @@
     "hardhat-abi-exporter": "^2.2.1",
     "hardhat-contract-sizer": "^2.0.3",
     "hardhat-gas-reporter": "^1.0.4",
-    "maci-circuits": "^1.0.4",
-    "maci-cli": "^1.0.4",
-    "maci-core": "^1.0.4",
-    "maci-crypto": "^1.0.4",
-    "maci-domainobjs": "^1.0.4",
+    "qaci-circuits": "^1.1.5",
+    "qaci-cli": "^1.1.5",
+    "qaci-core": "^1.1.5",
+    "qaci-crypto": "^1.1.0",
+    "qaci-domainobjs": "^1.1.0",
     "mocha": "^9.2.0",
     "shelljs": "^0.8.4",
     "shx": "^0.3.3",
-    "solc-0.7": "npm:solc@^0.7.2",
+    "snarkjs": "0.4.10",
+    "solc-0.8.1": "npm:solc@^0.8.1",
     "solhint": "^3.3.6",
     "solidity-coverage": "^0.7.17",
     "ts-node": "^10.4.0",
     "typechain": "^6.0.2",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "zkey-manager": "^0.1.2"
   },
+  "resolutions": {
+    "zkey-manager": "^0.1.2",
+    "qaci-contracts/@openzeppelin/contracts": ">=4.5.0-solc-0.8.1"
+  },
+  "nohoist": [
+    "**/snarkjs",
+    "**/zkey-manager/**",
+    "zkey-manager/**"
+  ],
   "author": "",
   "license": "GPL-3.0"
 }

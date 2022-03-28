@@ -2,8 +2,8 @@ import { ethers } from "hardhat";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-import { Keypair, VerifyingKey } from "maci-domainobjs";
-import { G1Point, G2Point } from "maci-crypto";
+import { Keypair, VerifyingKey } from "qaci-domainobjs";
+import { G1Point, G2Point } from "qaci-crypto";
 
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
 import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
@@ -216,10 +216,10 @@ describe("Poll - New QV Voting Round", () => {
     PoseidonT6 = await PoseidonT6Factory.deploy();
 
     linkedLibraryAddresses = {
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: PoseidonT5.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: PoseidonT3.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: PoseidonT5.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: PoseidonT3.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
     };
 
     GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer);

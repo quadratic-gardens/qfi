@@ -13,17 +13,17 @@ import {
   PoseidonT6__factory,
   QFI,
   QFI__factory,
-} from "../typechain";
-import GrantRoundFactoryAbi from "../abi/contracts/GrantRoundFactory.sol/GrantRoundFactory.json";
-import BaseERC20TokenAbi from "../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
-import PollFactoryAbi from "../abi/maci-contracts/contracts/Poll.sol/PollFactory.json";
-import SignUpGateKeeperAbi from "../abi/maci-contracts/contracts/gatekeepers/FreeForAllSignUpGatekeeper.sol/FreeForAllGatekeeper.json";
-import ConstantInitialVoiceCreditProxyAbi from "../abi/maci-contracts/contracts/initialVoiceCreditProxy/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy.json";
-import VkRegistryAbi from "../abi/maci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
-import MessageAqFactoryAbi from "../abi/maci-contracts/contracts/Poll.sol/MessageAqFactory.json";
-import PollProcessorAndTallyerAbi from "../abi/maci-contracts/contracts/Poll.sol/PollProcessorAndTallyer.json";
-import GrantRoundAbi from "../abi/contracts/GrantRound.sol/GrantRound.json";
-import { Keypair } from "maci-domainobjs";
+} from "../../typechain";
+import GrantRoundFactoryAbi from "../../abi/contracts/GrantRoundFactory.sol/GrantRoundFactory.json";
+import BaseERC20TokenAbi from "../../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
+import PollFactoryAbi from "../../abi/qaci-contracts/contracts/Poll.sol/PollFactory.json";
+import SignUpGateKeeperAbi from "../../abi/qaci-contracts/contracts/gatekeepers/FreeForAllSignUpGatekeeper.sol/FreeForAllGatekeeper.json";
+import ConstantInitialVoiceCreditProxyAbi from "../../abi/qaci-contracts/contracts/initialVoiceCreditProxy/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy.json";
+import VkRegistryAbi from "../../abi/qaci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
+import MessageAqFactoryAbi from "../../abi/qaci-contracts/contracts/Poll.sol/MessageAqFactory.json";
+import PollProcessorAndTallyerAbi from "../../abi/qaci-contracts/contracts/Poll.sol/PollProcessorAndTallyer.json";
+import GrantRoundAbi from "../../abi/contracts/GrantRound.sol/GrantRound.json";
+import { Keypair } from "qaci-domainobjs";
 
 chai.use(solidity);
 const { expect } = chai;
@@ -133,13 +133,13 @@ describe("QFI", () => {
     // ISSUE -> https://github.com/EthWorks/Waffle/issues/429.
     const QFIFactory = new QFI__factory(
       {
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
           poseidonT5.address,
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]:
           poseidonT3.address,
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]:
           poseidonT6.address,
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]:
           poseidonT4.address,
       },
       deployer

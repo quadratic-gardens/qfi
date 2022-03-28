@@ -2,9 +2,9 @@ import { ethers } from "hardhat";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-import { Command, Keypair, Message, VerifyingKey } from "maci-domainobjs";
-import { G1Point, G2Point } from "maci-crypto";
-import { MaciState, genProcessVkSig, genTallyVkSig } from "maci-core";
+import { Command, Keypair, Message, VerifyingKey } from "qaci-domainobjs";
+import { G1Point, G2Point } from "qaci-crypto";
+import { MaciState, genProcessVkSig, genTallyVkSig } from "qaci-core";
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
 import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
 
@@ -192,10 +192,10 @@ describe("Process - Tally QV poll votes", () => {
     PoseidonT6 = await PoseidonT6Factory.deploy();
 
     linkedLibraryAddresses = {
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: PoseidonT5.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: PoseidonT3.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: PoseidonT5.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: PoseidonT3.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
     };
 
     GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer);
@@ -313,9 +313,10 @@ describe("Process - Tally QV poll votes", () => {
     for (const user of users) {
       const { maciKey, signer, stateIndex } = user;
       const _stateIndex = BigInt(stateIndex);
+
       const _newPubKey = maciKey.pubKey;
-      const _voteOptionIndex = BigInt(1);
-      const _newVoteWeight = BigInt(1);
+      const _voteOptionIndex = BigInt(index);
+      const _newVoteWeight = BigInt(index);
       const _nonce = BigInt(1);
       const _pollId = BigInt(0);
       const _salt = BigInt(1);
@@ -334,30 +335,30 @@ describe("Process - Tally QV poll votes", () => {
         .then((tx) => tx.wait());
     }
     let overwrite = [...users];
-    for (const user of overwrite) {
-      const { maciKey, signer, stateIndex } = user;
-      const _stateIndex = BigInt(stateIndex);
-      const _newPubKey = maciKey.pubKey;
-      const _voteOptionIndex = BigInt(index);
-      const _newVoteWeight = BigInt(index);
-      const _nonce = BigInt(1);
-      const _pollId = BigInt(0);
-      const _salt = BigInt(2);
-      const command = new Command(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
-      index++;
+    // for (const user of overwrite) {
+    //   const { maciKey, signer, stateIndex } = user;
+    //   const _stateIndex = BigInt(stateIndex);
+    //   const _newPubKey = maciKey.pubKey;
+    //   const _voteOptionIndex = BigInt(index);
+    //   const _newVoteWeight = BigInt(index);
+    //   const _nonce =  BigInt(2);
+    //   const _pollId = BigInt(0);
+    //   const _salt = BigInt(2);
+    //   const command = new Command(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
+    //   index++;
 
-      const signature = command.sign(maciKey.privKey);
-      const sharedKey = Keypair.genEcdhSharedKey(maciKey.privKey, coordinator.pubKey);
-      const message = command.encrypt(signature, sharedKey);
-      const _message = <MessageStruct>message.asContractParam();
-      const _encPubKey = maciKey.pubKey.asContractParam();
-      // NOTE: Publish the message on local maci data structure
-      maciState.polls[0].publishMessage(message, maciKey.pubKey);
-      const { logs } = await poll
-        .connect(signer)
-        .publishMessage(_message, _encPubKey)
-        .then((tx) => tx.wait());
-    }
+    //   const signature = command.sign(maciKey.privKey);
+    //   const sharedKey = Keypair.genEcdhSharedKey(maciKey.privKey, coordinator.pubKey);
+    //   const message = command.encrypt(signature, sharedKey);
+    //   const _message = <MessageStruct>message.asContractParam();
+    //   const _encPubKey = maciKey.pubKey.asContractParam();
+    //   // NOTE: Publish the message on local maci data structure
+    //   maciState.polls[0].publishMessage(message, maciKey.pubKey);
+    //   const { logs } = await poll
+    //     .connect(signer)
+    //     .publishMessage(_message, _encPubKey)
+    //     .then((tx) => tx.wait());
+    // }
 
     const dd = await poll.getDeployTimeAndDuration();
     const hardHatProvider = ethers.provider;
@@ -573,8 +574,7 @@ describe("Process - Tally QV poll votes", () => {
       });
       expect(maciPoll.hasUntalliedBallots()).to.equal(false);
       expect(maciPoll.hasUnprocessedMessages()).to.equal(false);
-      expect(maciPoll.messages.length).to.be.equal(users.length * 2); //every user sends an overide message
+      expect(maciPoll.messages.length).to.be.equal(users.length); //every user sends an overide message
     });
-    
   });
 });
