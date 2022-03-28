@@ -2,16 +2,16 @@
 pragma experimental ABIEncoderV2;
 pragma solidity ^0.8.1;
 
-import {PollFactory, Poll, PollProcessorAndTallyer} from "qaci-contracts/contracts/Poll.sol";
-import {VkRegistry} from "qaci-contracts/contracts/VkRegistry.sol";
-import {Params} from "qaci-contracts/contracts/Params.sol";
-import {IMACI} from "qaci-contracts/contracts/IMACI.sol";
-import {AccQueue} from "qaci-contracts/contracts/trees/AccQueue.sol";
+import {PollFactory, Poll, PollProcessorAndTallyer} from 'qaci-contracts/contracts/Poll.sol';
+import {VkRegistry} from 'qaci-contracts/contracts/VkRegistry.sol';
+import {Params} from 'qaci-contracts/contracts/Params.sol';
+import {IMACI} from 'qaci-contracts/contracts/IMACI.sol';
+import {AccQueue} from 'qaci-contracts/contracts/trees/AccQueue.sol';
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
-import {IRecipientRegistry} from "./recipientRegistry/IRecipientRegistry.sol";
+import {IRecipientRegistry} from './recipientRegistry/IRecipientRegistry.sol';
 
 /**
  * @title Quadratic Funding Round Contract
@@ -130,12 +130,12 @@ contract GrantRound is Poll {
     function publishTallyHash(string calldata _tallyHash) external {
         require(
             msg.sender == coordinator,
-            "GrantRound: Sender is not the coordinator"
+            'GrantRound: Sender is not the coordinator'
         );
-        require(!isFinalized, "GrantRound: Round finalized");
+        require(!isFinalized, 'GrantRound: Round finalized');
         require(
             bytes(_tallyHash).length != 0,
-            "GrantRound: Tally hash is empty string"
+            'GrantRound: Tally hash is empty string'
         );
         tallyHash = _tallyHash;
 
@@ -154,24 +154,24 @@ contract GrantRound is Poll {
         onlyOwner
         isAfterVotingDeadline
     {
-        require(!isFinalized, "GrantRound: Already finalized");
-        require(stateAqMerged, "GrantRound: State AQ not merged");
+        require(!isFinalized, 'GrantRound: Already finalized');
+        require(stateAqMerged, 'GrantRound: State AQ not merged');
         require(
             address(extContracts.maci) != address(0),
-            "GrantRound: MACI not deployed"
+            'GrantRound: MACI not deployed'
         );
         require(
             bytes(tallyHash).length != 0,
-            "GrantRound: Tally hash has not been published"
+            'GrantRound: Tally hash has not been published'
         );
         // If nobody voted, the round should be cancelled to avoid locking of matching funds
-        require(numMessages > 0, "GrantRound: No votes");
+        require(numMessages > 0, 'GrantRound: No votes');
 
         //TODO: Actually verify using new decorators
         bool verified = verifySpentVoiceCredits(_totalSpent, _totalSpentSalt);
         require(
             verified,
-            "GrantRound: Incorrect total amount of spent voice credits"
+            'GrantRound: Incorrect total amount of spent voice credits'
         );
         totalSpent = _totalSpent;
         // Total amount of spent voice credits is the size of the pool of direct rewards.
@@ -188,7 +188,7 @@ contract GrantRound is Poll {
      * @dev Cancel funding round.
      */
     function cancel() external onlyOwner {
-        require(!isFinalized, "GrantRound: Already finalized");
+        require(!isFinalized, 'GrantRound: Already finalized');
         isFinalized = true;
         isCancelled = true;
 
@@ -233,11 +233,11 @@ contract GrantRound is Poll {
         uint256[][] memory _spentProof,
         uint256 _spentSalt
     ) external {
-        require(isFinalized, "GrantRound: Round not finalized");
-        require(!isCancelled, "GrantRound: Round has been cancelled");
+        require(isFinalized, 'GrantRound: Round not finalized');
+        require(!isCancelled, 'GrantRound: Round has been cancelled');
         require(
             !recipients[_voteOptionIndex],
-            "FundingRound: Funds already claimed"
+            'FundingRound: Funds already claimed'
         );
         {
             bool resultVerified = verifyTallyResult(
@@ -248,7 +248,7 @@ contract GrantRound is Poll {
                 _perVOSpentVoiceCreditsHash,
                 _tallyCommitment
             );
-            require(resultVerified, "FundingRound: Incorrect tally result");
+            require(resultVerified, 'FundingRound: Incorrect tally result');
 
             bool spentVerified = verifyPerVOSpentVoiceCredits(
                 _voteOptionIndex,
@@ -258,7 +258,7 @@ contract GrantRound is Poll {
             );
             require(
                 spentVerified,
-                "FundingRound: Incorrect amount of spent voice credits"
+                'FundingRound: Incorrect amount of spent voice credits'
             );
         }
         recipients[_voteOptionIndex] = true;
