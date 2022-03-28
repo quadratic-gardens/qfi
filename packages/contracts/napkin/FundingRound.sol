@@ -7,10 +7,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
-import "maci-contracts/sol/MACI.sol";
-import "maci-contracts/sol/MACISharedObjs.sol";
-import "maci-contracts/sol/gatekeepers/SignUpGatekeeper.sol";
-import "maci-contracts/sol/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
+import "qaci-contracts/sol/MACI.sol";
+import "qaci-contracts/sol/MACISharedObjs.sol";
+import "qaci-contracts/sol/gatekeepers/SignUpGatekeeper.sol";
+import "qaci-contracts/sol/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
 
 import "./userRegistry/IUserRegistry.sol";
 import "./recipientRegistry/IRecipientRegistry.sol";

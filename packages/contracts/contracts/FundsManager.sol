@@ -1,12 +1,12 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.7.2;
+pragma solidity ^0.8.1;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/EnumerableSet.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import '@openzeppelin/contracts/utils/structs/EnumerableSet.sol';
+import {Ownable} from '@openzeppelin/contracts/access/Ownable.sol';
 
-import {GrantRound} from "./GrantRound.sol";
+import {GrantRound} from './GrantRound.sol';
 
 /**
  * @title Funds Manager
@@ -40,7 +40,7 @@ contract FundsManager is Ownable {
      */
     function addFundingSource(address _source) external {
         bool result = fundingSources.add(_source);
-        require(result, "Factory: Funding source already added");
+        require(result, 'Factory: Funding source already added');
 
         emit FundingSourceAdded(_source);
     }
@@ -51,7 +51,7 @@ contract FundsManager is Ownable {
      */
     function removeFundingSource(address _source) external {
         bool result = fundingSources.remove(_source);
-        require(result, "Factory: Funding source not found");
+        require(result, 'Factory: Funding source not found');
 
         emit FundingSourceRemoved(_source);
     }
@@ -83,7 +83,7 @@ contract FundsManager is Ownable {
     ) internal {
         require(
             address(currentRound) != address(0),
-            "Factory: Funding round has not been deployed"
+            'Factory: Funding round has not been deployed'
         );
         ERC20 roundToken = currentRound.nativeToken();
         // Factory contract is the default funding source
