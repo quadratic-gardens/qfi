@@ -8,12 +8,12 @@ circomFlags: "--c --r1cs --sym --wasm --wat"
 circuits:
 - template: "../../node_modules/qaci-circuits/circom/processMessages.circom"
   component: "ProcessMessages"
-  params: [12,12,3,5] #stateTreeDepth, msgTreeDepth, msgBatchDepth, voteOptionTreeDepth 10,2,1,2 to test
+  params: [10,2,1,2] #stateTreeDepth, msgTreeDepth, msgBatchDepth, voteOptionTreeDepth 10,2,1,2 to test
   pubInputs: ["inputHash"]
   type: "test"
 - template: "../../node_modules/qaci-circuits/circom/tallyVotes.circom"
   component: "TallyVotes"
-  params: [12,3,5] #stateTreeDepth, intStateTreeDepth, voteOptionTreeDepth
+  params: [10,1,2] #stateTreeDepth, intStateTreeDepth, voteOptionTreeDepth
   pubInputs: ["inputHash"]
   type: "test"
   
