@@ -1,23 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma experimental ABIEncoderV2;
-pragma solidity ^0.7.2;
+pragma solidity ^0.8.1;
 
-import {MACI} from "maci-contracts/contracts/MACI.sol";
-import {Params} from "maci-contracts/contracts/Params.sol";
+import {MACI} from 'qaci-contracts/contracts/MACI.sol';
+import {Params} from 'qaci-contracts/contracts/Params.sol';
 
-import {PollFactory, Poll, PollProcessorAndTallyer, MessageAqFactory} from "maci-contracts/contracts/Poll.sol";
-import {VkRegistry} from "maci-contracts/contracts/VkRegistry.sol";
-import {InitialVoiceCreditProxy} from "maci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
-import {SignUpGatekeeper} from "maci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
-import {ConstantInitialVoiceCreditProxy} from "maci-contracts/contracts/initialVoiceCreditProxy/ConstantInitialVoiceCreditProxy.sol";
-import {FreeForAllGatekeeper} from "maci-contracts/contracts/gatekeepers/FreeForAllSignUpGatekeeper.sol";
+import {PollFactory, Poll, PollProcessorAndTallyer, MessageAqFactory} from 'qaci-contracts/contracts/Poll.sol';
+import {VkRegistry} from 'qaci-contracts/contracts/VkRegistry.sol';
+import {InitialVoiceCreditProxy} from 'qaci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol';
+import {SignUpGatekeeper} from 'qaci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol';
+import {ConstantInitialVoiceCreditProxy} from 'qaci-contracts/contracts/initialVoiceCreditProxy/ConstantInitialVoiceCreditProxy.sol';
+import {FreeForAllGatekeeper} from 'qaci-contracts/contracts/gatekeepers/FreeForAllSignUpGatekeeper.sol';
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
-import {GrantRound} from "./GrantRound.sol";
-import {FundsManager} from "./FundsManager.sol";
-import {GrantRoundFactory} from "./GrantRoundFactory.sol";
+import {GrantRound} from './GrantRound.sol';
+import {FundsManager} from './FundsManager.sol';
+import {GrantRoundFactory} from './GrantRoundFactory.sol';
 
 /**
  * @title Quadratic Funding Infrastructure
@@ -197,7 +197,7 @@ contract QFI is MACI, FundsManager {
 
         require(
             grantRoundFactory.owner() == address(this),
-            "MACI: GrantFactory owner incorrectly set"
+            'MACI: GrantFactory owner incorrectly set'
         );
 
         // The PollFactory needs to store the MessageAqFactory address
@@ -206,7 +206,7 @@ contract QFI is MACI, FundsManager {
         // The MessageAQFactory owner must be the PollFactory contract
         require(
             messageAqFactoryGrants.owner() == address(grantRoundFactory),
-            "MACI: MessageAqFactory owner incorrectly set"
+            'MACI: MessageAqFactory owner incorrectly set'
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 
@@ -235,24 +235,24 @@ contract QFI is MACI, FundsManager {
     function contribute(PubKey calldata pubKey, uint256 amount) external {
         require(
             numSignUps < STATE_TREE_ARITY**stateTreeDepth,
-            "MACI: maximum number of signups reached"
+            'MACI: maximum number of signups reached'
         );
         require(
             currentStage == Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS,
-            "QFI: Not accepting signups or top ups"
+            'QFI: Not accepting signups or top ups'
         );
         require(
             amount > 0,
-            "QFI: Contribution amount must be greater than zero"
+            'QFI: Contribution amount must be greater than zero'
         );
         require(
             amount <= MAX_VOICE_CREDITS * voiceCreditFactor,
-            "QFI: Contribution amount is too large"
+            'QFI: Contribution amount is too large'
         );
         // TODO: TOP UP CHECK
         require(
             contributors[msg.sender].voiceCredits == 0,
-            "QFI: top ups not supported, donate to matching pool instead"
+            'QFI: top ups not supported, donate to matching pool instead'
         );
         uint256 voiceCredits = amount / voiceCreditFactor;
         contributors[msg.sender] = ContributorStatus(voiceCredits, false);
@@ -285,7 +285,7 @@ contract QFI is MACI, FundsManager {
         uint256 initialVoiceCredits = contributors[user].voiceCredits;
         require(
             initialVoiceCredits > 0,
-            "FundingRound: User does not have any voice credits"
+            'FundingRound: User does not have any voice credits'
         );
         return initialVoiceCredits;
     }
@@ -298,7 +298,7 @@ contract QFI is MACI, FundsManager {
         // Reconstruction of exact contribution amount from VCs may not be possible due to a loss of precision
         uint256 amount = contributors[msg.sender].voiceCredits *
             voiceCreditFactor;
-        require(amount > 0, "FundingRound: Nothing to withdraw");
+        require(amount > 0, 'FundingRound: Nothing to withdraw');
         contributors[msg.sender].voiceCredits = 0;
         nativeToken.safeTransfer(msg.sender, amount);
         
@@ -322,15 +322,15 @@ contract QFI is MACI, FundsManager {
     ) public afterInit onlyOwner {
         require(
             currentStage == Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS,
-            "MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
+            'MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage'
         );
         uint256 pollId = nextPollId;
         uint256 grantRoundId = nextGrantRoundId;
 
         // The message batch size and the tally batch size
         BatchSizes memory batchSizes = BatchSizes(
-            MESSAGE_TREE_ARITY**uint8(_treeDepths.messageTreeSubDepth),
-            STATE_TREE_ARITY**uint8(_treeDepths.intStateTreeDepth)
+            uint8(MESSAGE_TREE_ARITY)**uint8(_treeDepths.messageTreeSubDepth),
+            uint8(STATE_TREE_ARITY)**uint8(_treeDepths.intStateTreeDepth)
         );
 
         GrantRound g = grantRoundFactory.deployGrantRound(
@@ -373,7 +373,7 @@ contract QFI is MACI, FundsManager {
     {
         require(
             _grantRoundId < nextGrantRoundId,
-            "MACI: grantRound with _grantRoundId does not exist"
+            'MACI: grantRound with _grantRoundId does not exist'
         );
         return grantRounds[_grantRoundId];
     }
@@ -399,7 +399,7 @@ contract QFI is MACI, FundsManager {
     function closeVotingAndWaitForDeadline() public onlyOwner {
         require(
             currentStage == Stage.VOTING_PERIOD_OPEN,
-            "MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
+            'MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage'
         );
         //TODO: ACTUALLY CLOSE THE VOTING PERIOD on the grant round contract
         currentStage = Stage.WAITING_FOR_FINALIZATION;
@@ -413,10 +413,10 @@ contract QFI is MACI, FundsManager {
     {
         require(
             currentStage == Stage.WAITING_FOR_FINALIZATION,
-            "QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage"
+            'QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage'
         );
         bool proccesingComplete = pollProcessorAndTallyer.processingComplete();
-        require(proccesingComplete, "QFI: messages have not been proccessed");
+        require(proccesingComplete, 'QFI: messages have not been proccessed');
         GrantRound g = currentGrantRound;
         //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
@@ -431,7 +431,7 @@ contract QFI is MACI, FundsManager {
     function acceptContributionsAndTopUpsBeforeNewRound() public onlyOwner {
         require(
             currentStage == Stage.FINALIZED,
-            "QFI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
+            'QFI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage'
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 

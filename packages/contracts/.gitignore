@@ -9,6 +9,7 @@
 /docs/_book
 # dependencies
 /node_modules
+/zkeys
 /.pnp
 .pnp.js
 
