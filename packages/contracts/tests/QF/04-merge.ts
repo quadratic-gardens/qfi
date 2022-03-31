@@ -2,9 +2,9 @@ import { ethers } from "hardhat";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-import { Command, Keypair, Message, VerifyingKey } from "maci-domainobjs";
-import { G1Point, G2Point } from "maci-crypto";
-import { MaciState, genProcessVkSig, genTallyVkSig } from "maci-core";
+import { Command, Keypair, Message, VerifyingKey } from "qaci-domainobjs";
+import { G1Point, G2Point } from "qaci-crypto";
+import { MaciState, genProcessVkSig, genTallyVkSig } from "qaci-core";
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
 import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
 
@@ -173,10 +173,10 @@ describe("Merge - Merge Signup and Message leaves", () => {
     PoseidonT6 = await PoseidonT6Factory.deploy();
 
     linkedLibraryAddresses = {
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: PoseidonT5.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: PoseidonT3.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
-      ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: PoseidonT5.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: PoseidonT3.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
+      ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
     };
 
     GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer);

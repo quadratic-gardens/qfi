@@ -1,11 +1,12 @@
 {
   "extends": "solhint:recommended",
   "rules": {
-    "compiler-version": ["error", "^0.7.2"],
+    "compiler-version": ["error", "^0.8.1"],
     "not-rely-on-time": "off",
-    "quotes": ["error", "single"],
+    "quotes": ["warn", "single"],
     "reason-string": ["warn", { "maxLength": 64 }],
     "max-states-count": ["warn", 18],
-    "check-send-result": "off"
+    "check-send-result": "off",
+    "func-visibility": ["warn",{"ignoreConstructors":true}]
   }
 }

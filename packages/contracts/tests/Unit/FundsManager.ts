@@ -2,8 +2,8 @@ import { ethers } from "hardhat";
 import chai from "chai";
 import { deployMockContract, MockContract, solidity } from "ethereum-waffle";
 import { ContractTransaction, Signer } from "ethers";
-import { FundsManager, FundsManager__factory } from "../typechain";
-import BaseERC20TokenAbi from "../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
+import { FundsManager, FundsManager__factory } from "../../typechain";
+import BaseERC20TokenAbi from "../../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
 
 chai.use(solidity);
 const { expect } = chai;
