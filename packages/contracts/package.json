@@ -14,7 +14,7 @@
     "prepare:prod-circuits": "mustache config/prod.json zkeys.config.template.yaml > zkeys.config.yml",
     "generate:zkeys": "npx zkey-manager compile -c zkeys.config.yml",
     "generate:abis": "yarn hardhat export-abi",
-    "test:unit": "yarn test tests/unit/**.ts",
+    "test:unit": "yarn test tests/Unit/**.ts",
     "test:qv": "yarn test tests/QV/**.ts",
     "test:qf": "yarn test tests/QF/**.ts",
     "test:integration": "yarn test tests/QV/**.ts tests/QF/**.ts",
