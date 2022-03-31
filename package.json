@@ -24,7 +24,6 @@
     "build": "yarn workspaces run build",
     "build:contracts": "yarn workspace @qfi/contracts run build",
     "build:subgraph": "yarn workspace @qfi/subgraph run build",
-    "build:ui": "yarn workspace @qfi/ui run build",
     "build:hooks": "yarn workspace @qfi/hooks run build",
     "test": "yarn workspaces run test",
     "test:contracts": "yarn workspace @qfi/contracts run test",
