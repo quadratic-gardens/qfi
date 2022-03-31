@@ -333,7 +333,7 @@ describe("Process - Tally QV poll votes", () => {
         .publishMessage(_message, _encPubKey)
         .then((tx) => tx.wait());
     }
-    let overwrite = [...users];
+    const overwrite = [...users];
     for (const user of overwrite) {
       const { maciKey, signer, stateIndex } = user;
       const _stateIndex = BigInt(stateIndex);
