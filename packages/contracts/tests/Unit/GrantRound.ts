@@ -405,6 +405,7 @@ describe("Grant Round", () => {
 
   describe("finalize()", async () => {
     //TODO: fix broken test and merge maci verifier bugfix
+    //TODO fix later
     it.skip("allow owner to finalize the grant round", async () => {
       await mockMessageAq.mock.enqueue
         .withArgs(hashMessangeAndEncPubKey)

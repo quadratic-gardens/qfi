@@ -4,6 +4,7 @@ pragma solidity ^0.8.1;
 
 import './IRecipientRegistry.sol';
 
+
 /**
  * @dev Abstract contract containing common methods for recipient registries.
  */

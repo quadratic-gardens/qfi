@@ -13,6 +13,7 @@ import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
 import {IRecipientRegistry} from './recipientRegistry/IRecipientRegistry.sol';
 
+
 /**
  * @title Quadratic Funding Round Contract
  * @author Q
@@ -132,7 +133,9 @@ contract GrantRound is Poll {
             msg.sender == coordinator,
             'GrantRound: Sender is not the coordinator'
         );
+
         require(!isFinalized, 'GrantRound: Round finalized');
+
         require(
             bytes(_tallyHash).length != 0,
             'GrantRound: Tally hash is empty string'

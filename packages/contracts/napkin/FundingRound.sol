@@ -234,6 +234,11 @@ contract FundingRound is
             );
             //NOTE: Verify voice credits spent on the recipient trying to claim
             require(resultVerified, "FundingRound: Incorrect tally result");
+            // did user spend what they are trying to withdraw?
+            // did everyone's spend add up to total tally?
+            //TODO add test for this once Cory finished fix
+
+
             //NOTE: stubout or add extra functions to poll ABI 
             // bool spentVerified = poll.verifyPerVOSpentVoiceCredits(
             //     voteOptionTreeDepth,

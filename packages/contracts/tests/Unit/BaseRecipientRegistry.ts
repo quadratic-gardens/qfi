@@ -8,7 +8,7 @@ chai.use(solidity);
 const { expect } = chai;
 
 
-describe("Base Recipient Registry", () => {
+describe.only("Base Recipient Registry", () => {
   let deployer : Signer
   let controller : Signer
   let controllerAddress : string
@@ -105,7 +105,7 @@ describe("Base Recipient Registry", () => {
 
 
 
-  describe("getRecipientAddress()", async () => {
+  describe.only("getRecipientAddress()", async () => {
     it("returns 0 address when index is 0, index is greater than number of slots", async () => {
       expect(await simpleRecipientRegistry.callStatic.getRecipientAddress(0, 100, 110)).to.equal(ethers.constants.AddressZero)
       //Since slots should be of size 0 initially
@@ -134,6 +134,29 @@ describe("Base Recipient Registry", () => {
       const timeStamp = event.args._timestamp.toNumber()
 
       expect(await simpleRecipientRegistry.callStatic.getRecipientAddress(recipientIndex, timeStamp + 100, timeStamp + 200)).to.equal(recipient.address)
+    })
+
+    it.only("succesfully returns recipient address when recipient in history has been removed", async () => {
+      
+      await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
+      let recipient = ethers.Wallet.createRandom()
+      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      let receipt: ContractReceipt = await tx.wait();
+      let event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      let recipientId = event.args._recipientId
+      tx = await simpleRecipientRegistry.removeRecipient(recipientId)
+      receipt = await tx.wait();
+      const block = await ethers.provider.getBlock(receipt.blockNumber)
+      const removalTimeStamp = block.timestamp
+
+      recipient = ethers.Wallet.createRandom()
+      tx = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      receipt = await tx.wait();
+      event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
+      const recipientIndex = event.args._index
+      const timeStamp = event.args._timestamp.toNumber()
+
+      expect(await simpleRecipientRegistry.callStatic.getRecipientAddress(recipientIndex, removalTimeStamp + 10, timeStamp + 100)).to.equal(recipient.address)
     })
 
     it("succesfully returns recipient address", async () => {
