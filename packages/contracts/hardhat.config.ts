@@ -110,7 +110,7 @@ const config: HardhatUserConfig = {
     externalArtifacts: ["precompiled/*.json"],
   },
   solidity: {
-    version: "0.7.2",
+    version: "0.8.1",
     settings: {
       optimizer: {
         enabled: true,
@@ -119,7 +119,7 @@ const config: HardhatUserConfig = {
     },
     overrides: {
       "contracts/GrantRound.sol": {
-        version: "0.7.2",
+        version: "0.8.1",
         settings: {
           optimizer: {
             enabled: true,
@@ -157,5 +157,4 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 //     )
 //   }
 // });
-
 export default config;

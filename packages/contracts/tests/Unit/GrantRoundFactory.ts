@@ -7,22 +7,22 @@ import {
   MockContract,
   solidity,
 } from "ethereum-waffle";
-import { GrantRoundFactory } from "../typechain/GrantRoundFactory";
+import { GrantRoundFactory } from "../../typechain/GrantRoundFactory";
 import {
   GrantRoundFactory__factory,
   PoseidonT3__factory,
   PoseidonT4__factory,
   PoseidonT5__factory,
   PoseidonT6__factory,
-} from "../typechain";
-import MessageAqFactoryAbi from "../abi/maci-contracts/contracts/Poll.sol/MessageAqFactory.json";
-import MessageAqAbi from "../abi/maci-contracts/contracts/trees/AccQueue.sol/AccQueue.json";
-import RecipientRegistryAbi from "../abi/contracts/recipientRegistry/OptimisticRecipientRegistry.sol/OptimisticRecipientRegistry.json";
-import QfiAbi from "../abi/contracts/QFI.sol/QFI.json";
-import BaseERC20TokenAbi from "../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
-import VkRegistryAbi from "../abi/maci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
-import GrantRoundAbi from "../abi/contracts/GrantRound.sol/GrantRound.json";
-import { Keypair } from "maci-domainobjs";
+} from "../../typechain";
+import MessageAqFactoryAbi from "../../abi/qaci-contracts/contracts/Poll.sol/MessageAqFactory.json";
+import MessageAqAbi from "../../abi/qaci-contracts/contracts/trees/AccQueue.sol/AccQueue.json";
+import RecipientRegistryAbi from "../../abi/contracts/recipientRegistry/OptimisticRecipientRegistry.sol/OptimisticRecipientRegistry.json";
+import QfiAbi from "../../abi/contracts/QFI.sol/QFI.json";
+import BaseERC20TokenAbi from "../../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
+import VkRegistryAbi from "../../abi/qaci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
+import GrantRoundAbi from "../../abi/contracts/GrantRound.sol/GrantRound.json";
+import { Keypair } from "qaci-domainobjs";
 
 chai.use(solidity);
 const { expect } = chai;
@@ -86,13 +86,13 @@ describe("Grant Round Factory", () => {
     // ISSUE -> https://github.com/EthWorks/Waffle/issues/429.
     const GrantRoundFactoryFactory = new GrantRoundFactory__factory(
       {
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]:
           poseidonT5.address,
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]:
           poseidonT3.address,
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]:
           poseidonT6.address,
-        ["maci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]:
+        ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]:
           poseidonT4.address,
       },
       deployer
@@ -268,7 +268,7 @@ describe("Grant Round Factory", () => {
       mockMessageAq = await deployMockContract(deployer, MessageAqAbi);
     });
 
-    it("allow owner to deploy a grant round", async () => {
+    it.skip("allow owner to deploy a grant round", async () => {
       // Set MessageAqFactory.
       await expect(
         grantRoundFactory
