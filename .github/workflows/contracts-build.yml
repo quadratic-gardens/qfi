@@ -1,0 +1,78 @@
+name: Contracts-Build
+
+on:
+  push: 
+    branches: [ main, dev ]
+    tags: ['*']
+  pull_request:
+
+env:
+  cwd: ${{github.workspace}}/packages/contracts
+
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+
+  unit-test-and-lint:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+          
+      - name: Lint
+        run: |
+          yarn workspace @quadratic-funding/contracts run lint:solidity
+          yarn workspace @quadratic-funding/contracts run lint:js
+
+      - name: Run Unit Test
+        run: |
+          yarn workspace @quadratic-funding/contracts run generate:abi
+          yarn workspace @quadratic-funding/contracts run test:unit
+
+  qv-test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+          
+      - name: Run QV Test
+        run: |
+          yarn workspace @quadratic-funding/contracts run typechain
+          yarn workspace @quadratic-funding/contracts test:qv
+
+  qf-test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run QF Test
+        run: |
+          yarn workspace @quadratic-funding/contracts run typechain
+          yarn workspace @quadratic-funding/contracts run test:qf
