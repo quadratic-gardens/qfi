@@ -1,7 +1,9 @@
 QFI (Quadratic Funding Infrastructure)
 ---
 
-## Pre-commit hook
+## Development
+
+### Pre-commit hook
 
 pre-commit hook is a custom git script triggered by commit operation. It's used to see if you've forgotten something and to make sure tests run. Failure from this hook aborts the commit.
 
@@ -12,6 +14,10 @@ e.g.:
 ```
 git commit --no-verify
 ```
+
+### CI/CD pipeline
+
+CI/CD pipeline ensures that we have automated tests that constantly validate that we are in a deployable state. For more information about pipeline workflows, see https://hackmd.io/@mdhackmdkakao/rkoVmtr75.
 
 ## Protocol Diagrams
 
