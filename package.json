@@ -8,7 +8,9 @@
   },
   "private": true,
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "husky": "^7.0.0",
+    "lerna": "^4.0.0",
+    "lint-staged": "^12.3.7"
   },
   "workspaces": {
     "packages": [
@@ -27,7 +29,8 @@
     "build:hooks": "yarn workspace @qfi/hooks run build",
     "test": "yarn workspaces run test",
     "test:contracts": "yarn workspace @qfi/contracts run test",
-    "deploy:subgraph":"yarn workspace @qfi/subgraph run deploy"
+    "deploy:subgraph":"yarn workspace @qfi/subgraph run deploy",
+    "prepare": "husky install"
   },
   "keywords": [
     "RxC"
