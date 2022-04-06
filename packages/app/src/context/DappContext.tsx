@@ -133,7 +133,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T
 
   // this is a custom event, triggered in writeValueToLocalStorage
   // See: useLocalStorage()
-  useEventListener("local-storage", handleStorageChange);
+  useEventListener("local-storage" as keyof WindowEventMap, handleStorageChange);
 
   return [storedValue, setValue];
 }

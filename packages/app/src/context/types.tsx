@@ -7,8 +7,8 @@ export type DappStateType = {
 };
 
 export type DappContextType = {
-  dappState: DappStateType;
-  setDappState: SetValue<DappStateType>;
+  dappState?: DappStateType;
+  setDappState?: SetValue<DappStateType>;
 };
 
 export type Props = PropsWithChildren<{}>;
