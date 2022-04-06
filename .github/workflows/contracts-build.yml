@@ -29,15 +29,15 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
           
-      - name: Lint
-        run: |
-          yarn workspace @quadratic-funding/contracts run lint:solidity
-          yarn workspace @quadratic-funding/contracts run lint:js
-
       - name: Run Unit Test
         run: |
           yarn workspace @quadratic-funding/contracts run generate:abi
           yarn workspace @quadratic-funding/contracts run test:unit
+
+      - name: Lint
+        run: |
+          yarn workspace @quadratic-funding/contracts run lint:solidity
+          yarn workspace @quadratic-funding/contracts run lint:js
 
   qv-test:
     runs-on: ubuntu-20.04
