@@ -29,6 +29,6 @@ jobs:
           
       - name: Build
         run: |
-          CI=false yarn workspace @qfi/app build
           CI=false yarn workspace @qfi/hooks build
           CI=false yarn workspace @qfi/ui build
+          CI=false yarn workspace @qfi/app build
