@@ -58,7 +58,7 @@ describe("Grant Round", () => {
 
   // Input parameters for GrantRound methods.
   // Deploy Grant Round.
-  const duration = 30;
+  const duration = 300;
   const maxValues = {
     maxMessages: 25,
     maxVoteOptions: 25,
