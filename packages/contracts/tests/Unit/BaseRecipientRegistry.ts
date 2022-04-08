@@ -79,8 +79,8 @@ describe("Base Recipient Registry", () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
       let recipient = ethers.Wallet.createRandom()
 
-      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
 
       const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
       const recipientId = event.args._recipientId
@@ -96,7 +96,7 @@ describe("Base Recipient Registry", () => {
 
     it("succesfully adds a recipient", async () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
-      let recipient = ethers.Wallet.createRandom()
+      const recipient = ethers.Wallet.createRandom()
       const tx = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
       const txReceipt = await tx.wait()
       expect(txReceipt.status).to.not.equal(0);
@@ -114,9 +114,9 @@ describe("Base Recipient Registry", () => {
 
     it("Does not select recipients added after endTime", async () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(3)
-      let recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const recipient = ethers.Wallet.createRandom()
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
       const recipientIndex = event.args._index
       const timeStamp = event.args._timestamp.toNumber()
@@ -138,9 +138,9 @@ describe("Base Recipient Registry", () => {
 
     it("succesfully returns recipient address", async () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(3)
-      let recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const recipient = ethers.Wallet.createRandom()
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
       const recipientIndex = event.args._index
       const timeStamp = event.args._timestamp.toNumber()
@@ -168,8 +168,8 @@ describe("Base Recipient Registry", () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(2)
 
       let recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
 
       expect(await simpleRecipientRegistry.getRecipientCount()).to.equal(1)
 
@@ -202,9 +202,9 @@ describe("Base Recipient Registry", () => {
 
     it("Reverts if recipient already removed", async () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
-      let recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const recipient = ethers.Wallet.createRandom()
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
 
       const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
       const recipientId = event.args._recipientId
@@ -216,9 +216,9 @@ describe("Base Recipient Registry", () => {
 
     it("Succesfully removes recipient from registry", async () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
-      let recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const recipient = ethers.Wallet.createRandom()
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
 
       const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
       const recipientId = event.args._recipientId
