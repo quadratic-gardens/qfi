@@ -249,9 +249,6 @@ describe("Grant Round Factory", () => {
     // THIS ONLY WORKS WHEN RUNNING 'yarn coverage'.
     // This address has been obtained throungh hardhat console.log() debugging feature because
     // cannot be predicted/mocked in other ways (i.e., it's a new not a method, so cannot be mocked out).
-    const expectedGrantRoundAddress =
-      "0x33cdaa704a16ac6c83bc90e751623b67d5182993";
-
     beforeEach(async () => {
       // Mocks.
       mockQfi = await deployMockContract(deployer, QfiAbi);
@@ -268,8 +265,13 @@ describe("Grant Round Factory", () => {
       mockMessageAq = await deployMockContract(deployer, MessageAqAbi);
     });
 
-    it.skip("allow owner to deploy a grant round", async () => {
+    it("allow owner to deploy a grant round", async () => {
       // Set MessageAqFactory.
+      mockMessageAqFactory = await deployMockContract(
+        deployer,
+        MessageAqFactoryAbi
+      );
+
       await expect(
         grantRoundFactory
           .connect(deployer)
@@ -282,9 +284,7 @@ describe("Grant Round Factory", () => {
       await mockMessageAqFactory.mock.deploy
         .withArgs(treeDepths.messageTreeSubDepth)
         .returns(mockMessageAq.address);
-      await mockMessageAq.mock.transferOwnership
-        .withArgs(expectedGrantRoundAddress)
-        .returns();
+      await mockMessageAq.mock.transferOwnership.returns();
       await mockGrantRound.mock.transferOwnership
         .withArgs(coordinatorAddress)
         .returns();
