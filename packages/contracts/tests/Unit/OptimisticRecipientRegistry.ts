@@ -81,8 +81,8 @@ describe("Optimistic Recipient Registry", () => {
 
     it("Reverts if recipient already registered", async () => {
       const recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RequestSubmitted")[0]
       const recipientId = event.args._recipientId
       await optimisticRecipientRegistry.executeRequest(recipientId)
@@ -110,8 +110,8 @@ describe("Optimistic Recipient Registry", () => {
 
     it("Succesfully adds recipient", async () => {
       const recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await optimisticRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RequestSubmitted")[0]
       const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
       const recipientId = ethers.utils.keccak256(packed)
@@ -183,8 +183,8 @@ describe("Optimistic Recipient Registry", () => {
       await optimisticRecipientRegistry.executeRequest(recipientId)
 
 
-      let tx: ContractTransaction = await optimisticRecipientRegistry.removeRecipient(recipientId)
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await optimisticRecipientRegistry.removeRecipient(recipientId)
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RequestSubmitted")[0]
       
       expect(event.event).to.equal("RequestSubmitted")
@@ -216,8 +216,8 @@ describe("Optimistic Recipient Registry", () => {
       const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
       const recipientId = ethers.utils.keccak256(packed)
 
-      let tx: ContractTransaction = await optimisticRecipientRegistry.challengeRequest(recipientId, beneficiary.address)
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await optimisticRecipientRegistry.challengeRequest(recipientId, beneficiary.address)
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
       expect(event.event).to.equal("RequestResolved")
       expect(event.args._recipientId).to.equal(recipientId)
@@ -255,8 +255,8 @@ describe("Optimistic Recipient Registry", () => {
       const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
       const recipientId = ethers.utils.keccak256(packed)
 
-      let tx: ContractTransaction = await optimisticRecipientRegistry.connect(addr1).executeRequest(recipientId)
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await optimisticRecipientRegistry.connect(addr1).executeRequest(recipientId)
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
       expect(event.args._recipientId).to.equal(recipientId)
       //0 is enum value for Registration
@@ -272,8 +272,8 @@ describe("Optimistic Recipient Registry", () => {
       const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
       const recipientId = ethers.utils.keccak256(packed)
 
-      let tx: ContractTransaction = await optimisticRecipientRegistry.executeRequest(recipientId)
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await optimisticRecipientRegistry.executeRequest(recipientId)
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
       expect(event.args._recipientId).to.equal(recipientId)
       //0 is enum value for Registration
@@ -290,8 +290,8 @@ describe("Optimistic Recipient Registry", () => {
       const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
       const recipientId = ethers.utils.keccak256(packed)
 
-      let tx: ContractTransaction = await optimisticRecipientRegistry.executeRequest(recipientId)
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await optimisticRecipientRegistry.executeRequest(recipientId)
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RequestResolved")[0]
       expect(event.args._recipientId).to.equal(recipientId)
       //0 is enum value for Registration
