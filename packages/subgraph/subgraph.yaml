@@ -61,7 +61,7 @@ dataSources:
           handler: handlePreRoundContributionPeriodStarted
         - event: PollProcessorAndTallyerChanged(address)
           handler: handlePollProcessorAndTallyerChanged
-      file: ./src/QFIMapping.ts
+      file: ./src/mapping/QFIMapping.ts
   - kind: ethereum/contract
     name: OptimisticRecipientRegistry
     #    network: { { network } }
@@ -86,7 +86,7 @@ dataSources:
           handler: handleRequestSubmitted
         - event: RequestResolved(indexed bytes32,indexed uint8,indexed bool,uint256,uint256)
           handler: handleRequestResolved
-      file: ./src/RecipientRegistryMapping.ts
+      file: ./src/mapping/RecipientRegistryMapping.ts
   - kind: ethereum/contract
     name: GrantRoundFactory
     #    network: { { network } }
@@ -110,7 +110,7 @@ dataSources:
           handler: handleMessageAqFactoryChanged
         - event: RecipientRegistryChanged(address)
           handler: handleRecipientRegistryChanged
-      file: ./src/GrantRoundFactoryMapping.ts
+      file: ./src/mapping/GrantRoundFactoryMapping.ts
 templates:
   - name: GrantRound
     kind: ethereum/contract
@@ -147,4 +147,4 @@ templates:
           handler: handleTallyPublished
         - event: Voted(indexed address)
           handler: handleVoted
-      file: ./src/GrantRoundMapping.ts
+      file: ./src/mapping/GrantRoundMapping.ts

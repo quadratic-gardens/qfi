@@ -1,5 +1,5 @@
 import { BigInt, log, store } from "@graphprotocol/graph-ts"
-import { OwnershipTransferred } from "../generated/GrantRoundFactory/GrantRoundFactory"
+import { OwnershipTransferred } from "../../generated/GrantRoundFactory/GrantRoundFactory"
 import {
     QFI as QFIContract,
     ContributionWithdrew,
@@ -17,8 +17,8 @@ import {
     QfiDeployed,
     FundingSourceAdded,
     FundingSourceRemoved
-} from "../generated/QFI/QFI"
-import { GrantRound as GrantRoundContract } from "../generated/templates/GrantRound/GrantRound"
+} from "../../generated/QFI/QFI"
+import { GrantRound as GrantRoundContract } from "../../generated/templates/GrantRound/GrantRound"
 import {
     QFI as QFISchema,
     GrantRound,
@@ -28,8 +28,9 @@ import {
     Contributor,
     FundingSource,
     GrantRoundContributor
-} from "../generated/schema"
-import { GrantRound as GrantRoundTemplate } from "../generated/templates"
+} from "../../generated/schema"
+import { GrantRound as GrantRoundTemplate } from "../../generated/templates"
+import { currentStageConverter } from "../utils/converter"
 
 /**
  * Handle a smart contract based on MACI (constructor event).
@@ -56,7 +57,7 @@ export function handleMaciDeployed(event: MaciDeployed): void {
     qfi.lastUpdatedAt = timestamp
 
     // External call to contract instance (one time event - good trade-off for sync time).
-    qfi.stateTreeDepth = qfiContract.stateTreeDepth()
+    qfi.stateTreeDepth = qfiContract.stateTreeDepth().toI32()
     qfi.numSignUps = qfiContract.numSignUps()
 
     qfi.save()
@@ -78,7 +79,7 @@ export function handleQfiDeployed(event: QfiDeployed): void {
         qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
         qfi.nativeERC20TokenAddress = event.params._nativeToken
         qfi.voiceCreditFactor = event.params._voiceCreditFactor
-        qfi.currentStage = event.params._currentStage
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
 
@@ -123,7 +124,7 @@ export function handleQfiInitialized(event: QfiInitialized): void {
 
     if (qfi !== null) {
         qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactoryGrantRounds
-        qfi.currentStage = event.params._currentStage
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
 
@@ -190,9 +191,10 @@ export function handleMergeStateAq(event: MergeStateAq): void {
 
         qfi.save()
 
-        if (qfi.currentGrantRound !== null) {
+        const currentGrantRound = qfi.currentGrantRound
+        if (currentGrantRound) {
             // Update GrantRound.
-            const grantRound = GrantRound.load(qfi.currentGrantRound)
+            const grantRound = GrantRound.load(currentGrantRound)
 
             if (grantRound !== null) {
                 grantRound.stateAqMerged = true
@@ -284,7 +286,7 @@ export function handleContributionSent(event: ContributionSent): void {
                 event.params._amount.div(voiceCreditFactor)
             )
             publicKey.lifetimeAmountContributed = publicKey.lifetimeAmountContributed.plus(
-                BigInt.fromI32(event.params._amount)
+                event.params._amount
             )
 
             publicKey.save()
@@ -366,13 +368,13 @@ export function handleGrantRoundDeployed(event: GrantRoundDeployed): void {
         grantRound.duration = event.params._duration
         grantRound.maxMessages = event.params._maxValues.maxMessages
         grantRound.maxVoteOptions = event.params._maxValues.maxVoteOptions
-        grantRound.messageTreeDepth = event.params._treeDepths.messageTreeDepth
-        grantRound.messageTreeSubDepth = event.params._treeDepths.messageTreeSubDepth
-        grantRound.voteOptionTreeDepth = event.params._treeDepths.voteOptionTreeDepth
-        grantRound.intStateTreeDepth = event.params._treeDepths.intStateTreeDepth
+        grantRound.messageTreeDepth = new BigInt(event.params._treeDepths.messageTreeDepth)
+        grantRound.messageTreeSubDepth = new BigInt(event.params._treeDepths.messageTreeSubDepth)
+        grantRound.voteOptionTreeDepth = new BigInt(event.params._treeDepths.voteOptionTreeDepth)
+        grantRound.intStateTreeDepth = new BigInt(event.params._treeDepths.intStateTreeDepth)
         grantRound.deployTimestamp = event.block.timestamp
-        grantRound.messageBatchSize = event.params._batchSizes.messageBatchSize
-        grantRound.tallyBatchSize = event.params._batchSizes.tallyBatchSize
+        grantRound.messageBatchSize = new BigInt(event.params._batchSizes.messageBatchSize)
+        grantRound.tallyBatchSize = new BigInt(event.params._batchSizes.tallyBatchSize)
         grantRound.voiceCreditFactor = voiceCreditFactor
         grantRound.qfi = qfiAddress.toHexString()
         grantRound.coordinator = coordinatorAddress.toHexString()
@@ -405,7 +407,7 @@ export function handleGrantRoundDeployed(event: GrantRoundDeployed): void {
             qfi.coordinator = coordinatorId
             qfi.currentGrantRound = grantRoundId.toString()
             qfi.nextGrantRoundId = qfi.nextGrantRoundId.plus(BigInt.fromI32(1))
-            qfi.currentStage = event.params._currentStage
+            qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
             qfi.lastUpdatedAt = event.block.timestamp.toString()
 
             qfi.save()
@@ -456,7 +458,7 @@ export function handleGrantRoundFinalized(event: GrantRoundFinalized): void {
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = event.params._currentStage
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
     } else {
@@ -485,7 +487,7 @@ export function handleVotingPeriodClosed(event: VotingPeriodClosed): void {
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = event.params._currentStage
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
     } else {
@@ -506,7 +508,7 @@ export function handlePreRoundContributionPeriodStarted(event: PreRoundContribut
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = event.params._currentStage
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
     } else {

@@ -8,7 +8,7 @@ import {
     PublicKey,
     Recipient,
     Vote
-} from "../generated/schema"
+} from "../../generated/schema"
 import {
     OwnershipTransferred,
     PublishMessage,
@@ -18,7 +18,7 @@ import {
     TallyPublished,
     Voted,
     GrantRound as GrantRoundContract
-} from "../generated/templates/GrantRound/GrantRound"
+} from "../../generated/templates/GrantRound/GrantRound"
 
 /**
  * (e.g., Store a PublicKey in the storage).

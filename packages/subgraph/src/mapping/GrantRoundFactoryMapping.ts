@@ -3,9 +3,9 @@ import {
     OwnershipTransferred,
     MessageAqFactoryChanged,
     RecipientRegistryChanged
-} from "../generated/GrantRoundFactory/GrantRoundFactory"
-import { OptimisticRecipientRegistry as RecipientRegistryContract } from "../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
-import { QFI as QFISchema, GrantRound, RecipientRegistry } from "../generated/schema"
+} from "../../generated/GrantRoundFactory/GrantRoundFactory"
+import { OptimisticRecipientRegistry as RecipientRegistryContract } from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
+import { QFI as QFISchema, GrantRound, RecipientRegistry } from "../../generated/schema"
 
 /**
  * (e.g., Store a PublicKey in the storage).
