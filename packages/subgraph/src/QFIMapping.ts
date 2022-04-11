@@ -2,14 +2,14 @@ import { BigInt, log, store } from "@graphprotocol/graph-ts"
 import { OwnershipTransferred } from "../generated/GrantRoundFactory/GrantRoundFactory"
 import {
     QFI as QFIContract,
-    ContributionWithdrawn,
-    DeployGrantRound,
+    ContributionWithdrew,
+    GrantRoundDeployed,
     GrantRoundFinalized,
     Init,
-    InitQfi,
+    QfiInitialized,
     MergeStateAq,
     SignUp,
-    Contribution as ContributionEvent,
+    ContributionSent,
     VotingPeriodClosed,
     PreRoundContributionPeriodStarted,
     PollProcessorAndTallyerChanged,
@@ -113,8 +113,8 @@ export function handleInitMaci(event: Init): void {
  * Handle the initialization of the QFI smart contract.
  * @param event Ethereum event emitted when initializing the QFI smart contract.
  */
-export function handleInitQfi(event: InitQfi): void {
-    log.debug(`Init QFI event block: {}`, [event.block.number.toString()])
+export function handleQfiInitialized(event: QfiInitialized): void {
+    log.debug(`QfiInitialized event block: {}`, [event.block.number.toString()])
 
     // Get the QFI/MACI instance.
     const qfiAddress = event.address
@@ -214,8 +214,8 @@ export function handleMergeStateAq(event: MergeStateAq): void {
  * Handle the contribution in native ERC20 token to matching pool from a user.
  * @param event Ethereum event emitted when someone donates/fund the matching pool in exchange of VCs.
  */
-export function handleContribution(event: ContributionEvent): void {
-    log.debug(`Contribution event block: {}`, [event.block.number.toString()])
+export function handleContributionSent(event: ContributionSent): void {
+    log.debug(`ContributionSent event block: {}`, [event.block.number.toString()])
 
     // Get QFI.
     const qfiAddress = event.address
@@ -310,8 +310,8 @@ export function handleContribution(event: ContributionEvent): void {
  * Handle the withdrawn of a user contribution.
  * @param event Ethereum event emitted when someone withdraw a contribution.
  */
-export function handleContributionWithdrawn(event: ContributionWithdrawn): void {
-    log.debug(`ContributionWithdrawn event block: {}`, [event.block.number.toString()])
+export function handleContributionWithdrew(event: ContributionWithdrew): void {
+    log.debug(`ContributionWithdrew event block: {}`, [event.block.number.toString()])
 
     // Get QFI.
     const qfiAddress = event.address
@@ -345,8 +345,8 @@ export function handleContributionWithdrawn(event: ContributionWithdrawn): void 
  * Handle the deploy of a new Grant Round.
  * @param event Ethereum event emitted when a new GrantRound smart contract instance is deployed.
  */
-export function handleDeployGrantRound(event: DeployGrantRound): void {
-    log.debug(`DeployGrantRound event block: {}`, [event.block.number.toString()])
+export function handleGrantRoundDeployed(event: GrantRoundDeployed): void {
+    log.debug(`GrantRoundDeployed event block: {}`, [event.block.number.toString()])
 
     const grantRoundId = event.params._currentGrantRound.toHexString()
     const grantRound = GrantRound.load(grantRoundId)
@@ -527,7 +527,7 @@ export function handlePollProcessorAndTallyerChanged(event: PollProcessorAndTall
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.pollProcessorAndTallyerAddress = event.params._pollProcessorAndTallyerNew
+        qfi.pollProcessorAndTallyerAddress = event.params._pollProcessorAndTallyer
 
         qfi.save()
     } else {

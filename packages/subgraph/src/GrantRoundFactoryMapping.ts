@@ -28,7 +28,7 @@ export function handleMessageAqFactoryChanged(event: MessageAqFactoryChanged): v
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactoryNew
+        qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactory
         qfi.lastUpdatedAt = event.block.timestamp.toString()
 
         qfi.save()
@@ -51,7 +51,7 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        const recipientRegistryAddress = event.params._recipientRegistryNew
+        const recipientRegistryAddress = event.params._recipientRegistry
         const recipientRegistryId = recipientRegistryAddress.toHexString()
         let recipientRegistry = RecipientRegistry.load(recipientRegistryId)
         const recipientRegistryContract = RecipientRegistryContract.bind(recipientRegistryAddress)

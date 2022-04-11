@@ -43,15 +43,15 @@ dataSources:
           handler: handleFundingSourceRemoved
         - event: MergeStateAq(uint256)
           handler: handleMergeStateAq
-        - event: InitQfi(address)
-          handler: handleInitQfi
-        - event: Contribution(address,uint256,uint256)
-          handler: handleContribution
-        - event: ContributionWithdrawn(address)
-          handler: handleContributionWithdrawn
-        - event: DeployGrantRound(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256))
-          handler: handleDeployGrantRound
-        - event: GrantRoundFinalized(address)
+        - event: QfiInitialized(address)
+          handler: handleQfiInitialized
+        - event: ContributionSent(address,uint256,uint256)
+          handler: handleContributionSent
+        - event: ContributionWithdrew(address)
+          handler: handleContributionWithdrew
+        - event: GrantRoundDeployed(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256))
+          handler: handleGrantRoundDeployed
+        - event: GrantRoundFinalized(address,uint8)
           handler: handleGrantRoundFinalized
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
@@ -139,7 +139,7 @@ templates:
           handler: handleMergeMessageAq
         - event: GrantRoundCancelled(bool,bool)
           handler: handleGrantRoundCancelled
-        - event: FundsClaimed(uint256,address,uint256)
+        - event: FundsClaimed(address,uint256,uint256)
           handler: handleFundsClaimed
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred

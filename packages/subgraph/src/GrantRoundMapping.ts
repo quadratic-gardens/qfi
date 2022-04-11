@@ -173,7 +173,7 @@ export function handleFundsClaimed(event: FundsClaimed): void {
 
         donation.grantRound = grantRoundId
         donation.recipient = recipientId
-        donation.amount = event.params._amount
+        donation.amount = event.params._allocatedAmount
         donation.voteOptionIndex = event.params._voteOptionIndex
         donation.createdAt = event.block.timestamp.toString()
 
@@ -215,7 +215,7 @@ export function handleVoted(event: Voted): void {
 
     if (grantRound !== null) {
         // Get Voter (Contributor).
-        const voterAddress = event.params._contributor
+        const voterAddress = event.params._voter
         const voterId = voterAddress.toHexString()
         const voter = Contributor.load(voterId)
 
