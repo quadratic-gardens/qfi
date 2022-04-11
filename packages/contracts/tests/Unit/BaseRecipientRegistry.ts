@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
-import { ContractTransaction, ContractReceipt, Signer, constants } from "ethers";
+import { ContractTransaction, ContractReceipt, Signer } from "ethers";
 import chai from "chai";
-import { deployContract, deployMockContract, MockContract, solidity, } from "ethereum-waffle";
+import { solidity } from "ethereum-waffle";
 import { SimpleRecipientRegistry } from "../../typechain";
 
 chai.use(solidity);

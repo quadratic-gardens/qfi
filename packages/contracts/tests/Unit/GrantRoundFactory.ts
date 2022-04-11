@@ -14,14 +14,14 @@ import {
   PoseidonT4__factory,
   PoseidonT5__factory,
   PoseidonT6__factory,
+  MessageAqFactory__factory,
+  AccQueue__factory,
+  OptimisticRecipientRegistry__factory,
+  QFI__factory,
+  VkRegistry__factory,
+  GrantRound__factory,
+  BaseERC20Token__factory
 } from "../../typechain";
-import MessageAqFactoryAbi from "../../abi/qaci-contracts/contracts/Poll.sol/MessageAqFactory.json";
-import MessageAqAbi from "../../abi/qaci-contracts/contracts/trees/AccQueue.sol/AccQueue.json";
-import RecipientRegistryAbi from "../../abi/contracts/recipientRegistry/OptimisticRecipientRegistry.sol/OptimisticRecipientRegistry.json";
-import QfiAbi from "../../abi/contracts/QFI.sol/QFI.json";
-import BaseERC20TokenAbi from "../../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
-import VkRegistryAbi from "../../abi/qaci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
-import GrantRoundAbi from "../../abi/contracts/GrantRound.sol/GrantRound.json";
 import { Keypair } from "qaci-domainobjs";
 
 chai.use(solidity);
@@ -126,7 +126,7 @@ describe("Grant Round Factory", () => {
       // Mocks.
       mockMessageAqFactory = await deployMockContract(
         deployer,
-        MessageAqFactoryAbi
+        MessageAqFactory__factory.abi
       );
     });
 
@@ -152,7 +152,7 @@ describe("Grant Round Factory", () => {
 
       mockMessageAqFactory = await deployMockContract(
         deployer,
-        MessageAqFactoryAbi
+        MessageAqFactory__factory.abi
       );
 
       expect(await grantRoundFactory.messageAqFactory()).to.be.not.equal(
@@ -186,7 +186,7 @@ describe("Grant Round Factory", () => {
       // Mocks.
       mockRecipientRegistry = await deployMockContract(
         deployer,
-        RecipientRegistryAbi
+        OptimisticRecipientRegistry__factory.abi
       );
     });
 
@@ -212,7 +212,7 @@ describe("Grant Round Factory", () => {
 
       mockRecipientRegistry = await deployMockContract(
         deployer,
-        RecipientRegistryAbi
+        OptimisticRecipientRegistry__factory.abi
       );
 
       expect(await grantRoundFactory.recipientRegistry()).to.be.not.equal(
@@ -254,18 +254,18 @@ describe("Grant Round Factory", () => {
 
     beforeEach(async () => {
       // Mocks.
-      mockQfi = await deployMockContract(deployer, QfiAbi);
+      mockQfi = await deployMockContract(deployer, QFI__factory.abi);
 
       mockBaseERC20Token = await deployMockContract(
         deployer,
-        BaseERC20TokenAbi
+        BaseERC20Token__factory.abi
       );
 
-      mockVkRegistry = await deployMockContract(deployer, VkRegistryAbi);
+      mockVkRegistry = await deployMockContract(deployer, VkRegistry__factory.abi);
 
-      mockGrantRound = await deployMockContract(deployer, GrantRoundAbi);
+      mockGrantRound = await deployMockContract(deployer, GrantRound__factory.abi);
 
-      mockMessageAq = await deployMockContract(deployer, MessageAqAbi);
+      mockMessageAq = await deployMockContract(deployer, AccQueue__factory.abi);
     });
 
     it.skip("allow owner to deploy a grant round", async () => {
