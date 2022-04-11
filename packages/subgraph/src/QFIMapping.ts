@@ -248,7 +248,7 @@ export function handleContributionSent(event: ContributionSent): void {
             }
 
             contributor.address = event.params._contributor
-            contributor.voiceCredits = event.params._voiceCredits
+            contributor.voiceCredits = publicKey.voiceCreditBalance
             contributor.isRegistered = false // TODO: To be checked.
             contributor.publicKey = publicKeyId
             contributor.txHash = event.transaction.hash

@@ -40,7 +40,6 @@ contract QFI is MACI, FundsManager {
         Stage _currentStage
     );
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when the owner (deployer) initialize the QFI contract.
      * @param _messageAqFactoryGrantRounds The Ethereum smart contract address of the Message AQ Factory for the current Grant Round.
@@ -54,27 +53,22 @@ contract QFI is MACI, FundsManager {
      */
     event PollProcessorAndTallyerChanged(address _pollProcessorAndTallyer);
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when an unregistered user signs up and contributes to the current Grant Round.
      * @param _contributor The Ethereum address of who sends the contribution.
      * @param _amount The amount in native ERC20 tokens submitted as contribution.
-     * @param _voiceCredits The amount of Voice Credits obtained according to the contribution amount.
      */
     event ContributionSent(
         address _contributor,
-        uint256 _amount,
-        uint256 _voiceCredits
+        uint256 _amount
     );
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when a contributor decides to withdraw his/her contribution for the current Grant Round.
      * @param _contributor The Ethereum address of who withdraws the contribution.
      */
     event ContributionWithdrew(address _contributor);
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when the owner (deployer) deploy a new Grant Round.
      * @param _currentGrantRound The Ethereum smart contract address of the current Grant Round.
@@ -275,7 +269,7 @@ contract QFI is MACI, FundsManager {
 
         signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
 
-        emit ContributionSent(msg.sender, amount, voiceCredits);
+        emit ContributionSent(msg.sender, amount);
     }
 
     /**

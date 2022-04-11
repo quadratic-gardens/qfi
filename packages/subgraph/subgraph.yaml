@@ -45,7 +45,7 @@ dataSources:
           handler: handleMergeStateAq
         - event: QfiInitialized(address,uint8)
           handler: handleQfiInitialized
-        - event: ContributionSent(address,uint256,uint256)
+        - event: ContributionSent(address,uint256)
           handler: handleContributionSent
         - event: ContributionWithdrew(address)
           handler: handleContributionWithdrew
