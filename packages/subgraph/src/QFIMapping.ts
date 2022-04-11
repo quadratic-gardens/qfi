@@ -78,7 +78,7 @@ export function handleQfiDeployed(event: QfiDeployed): void {
         qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
         qfi.nativeERC20TokenAddress = event.params._nativeToken
         qfi.voiceCreditFactor = event.params._voiceCreditFactor
-        qfi.currentStage = "NotInitialized"
+        qfi.currentStage = event.params._currentStage
 
         qfi.save()
 
@@ -123,7 +123,7 @@ export function handleQfiInitialized(event: QfiInitialized): void {
 
     if (qfi !== null) {
         qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactoryGrantRounds
-        qfi.currentStage = "WaitingForSignupsAndTopups"
+        qfi.currentStage = event.params._currentStage
 
         qfi.save()
 
@@ -405,7 +405,7 @@ export function handleGrantRoundDeployed(event: GrantRoundDeployed): void {
             qfi.coordinator = coordinatorId
             qfi.currentGrantRound = grantRoundId.toString()
             qfi.nextGrantRoundId = qfi.nextGrantRoundId.plus(BigInt.fromI32(1))
-            qfi.currentStage = "VotingPeriodOpen"
+            qfi.currentStage = event.params._currentStage
             qfi.lastUpdatedAt = event.block.timestamp.toString()
 
             qfi.save()
@@ -456,7 +456,7 @@ export function handleGrantRoundFinalized(event: GrantRoundFinalized): void {
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = "Finalized"
+        qfi.currentStage = event.params._currentStage
 
         qfi.save()
     } else {

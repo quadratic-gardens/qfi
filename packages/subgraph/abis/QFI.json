@@ -227,6 +227,12 @@
         "internalType": "struct IPubKey.PubKey",
         "name": "_coordinatorPubKey",
         "type": "tuple"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum QFI.Stage",
+        "name": "_currentStage",
+        "type": "uint8"
       }
     ],
     "name": "GrantRoundDeployed",
@@ -367,6 +373,12 @@
         "internalType": "uint256",
         "name": "_voiceCreditFactor",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum QFI.Stage",
+        "name": "_currentStage",
+        "type": "uint8"
       }
     ],
     "name": "QfiDeployed",
@@ -417,6 +429,12 @@
         "internalType": "address",
         "name": "_messageAqFactoryGrantRounds",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum QFI.Stage",
+        "name": "_currentStage",
+        "type": "uint8"
       }
     ],
     "name": "QfiInitialized",

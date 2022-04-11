@@ -31,7 +31,7 @@ dataSources:
       eventHandlers:
         - event: MaciDeployed(address,address,address,address,uint256)
           handler: handleMaciDeployed
-        - event: QfiDeployed(address,address,uint256)
+        - event: QfiDeployed(address,address,uint256,uint8)
           handler: handleQfiDeployed
         - event: Init(address,address)
           handler: handleInitMaci
@@ -43,13 +43,13 @@ dataSources:
           handler: handleFundingSourceRemoved
         - event: MergeStateAq(uint256)
           handler: handleMergeStateAq
-        - event: QfiInitialized(address)
+        - event: QfiInitialized(address,uint8)
           handler: handleQfiInitialized
         - event: ContributionSent(address,uint256,uint256)
           handler: handleContributionSent
         - event: ContributionWithdrew(address)
           handler: handleContributionWithdrew
-        - event: GrantRoundDeployed(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256))
+        - event: GrantRoundDeployed(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256),uint8)
           handler: handleGrantRoundDeployed
         - event: GrantRoundFinalized(address,uint8)
           handler: handleGrantRoundFinalized
