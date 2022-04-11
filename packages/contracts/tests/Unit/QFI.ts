@@ -13,16 +13,16 @@ import {
   PoseidonT6__factory,
   QFI,
   QFI__factory,
+  GrantRoundFactory__factory,
+  BaseERC20Token__factory,
+  PollFactory__factory,
+  SignUpGatekeeper__factory,
+  ConstantInitialVoiceCreditProxy__factory,
+  VkRegistry__factory,
+  MessageAqFactory__factory,
+  PollProcessorAndTallyer__factory,
+  GrantRound__factory
 } from "../../typechain";
-import GrantRoundFactoryAbi from "../../abi/contracts/GrantRoundFactory.sol/GrantRoundFactory.json";
-import BaseERC20TokenAbi from "../../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
-import PollFactoryAbi from "../../abi/qaci-contracts/contracts/Poll.sol/PollFactory.json";
-import SignUpGateKeeperAbi from "../../abi/qaci-contracts/contracts/gatekeepers/FreeForAllSignUpGatekeeper.sol/FreeForAllGatekeeper.json";
-import ConstantInitialVoiceCreditProxyAbi from "../../abi/qaci-contracts/contracts/initialVoiceCreditProxy/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy.json";
-import VkRegistryAbi from "../../abi/qaci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
-import MessageAqFactoryAbi from "../../abi/qaci-contracts/contracts/Poll.sol/MessageAqFactory.json";
-import PollProcessorAndTallyerAbi from "../../abi/qaci-contracts/contracts/Poll.sol/PollProcessorAndTallyer.json";
-import GrantRoundAbi from "../../abi/contracts/GrantRound.sol/GrantRound.json";
 import { Keypair } from "qaci-domainobjs";
 
 chai.use(solidity);
@@ -108,19 +108,19 @@ describe("QFI", () => {
     fundingSourceAddress = await fundingSource.getAddress();
 
     // Mocked contracts.
-    mockBaseERC20Token = await deployMockContract(deployer, BaseERC20TokenAbi);
+    mockBaseERC20Token = await deployMockContract(deployer, BaseERC20Token__factory.abi);
     mockGrantRoundFactory = await deployMockContract(
       deployer,
-      GrantRoundFactoryAbi
+      GrantRoundFactory__factory.abi
     );
-    mockPollFactory = await deployMockContract(deployer, PollFactoryAbi);
+    mockPollFactory = await deployMockContract(deployer, PollFactory__factory.abi);
     mockFreeForAllGateKeeper = await deployMockContract(
       deployer,
-      SignUpGateKeeperAbi
+      SignUpGatekeeper__factory.abi
     );
     mockConstantInitialVoiceCreditProxy = await deployMockContract(
       deployer,
-      ConstantInitialVoiceCreditProxyAbi
+      ConstantInitialVoiceCreditProxy__factory.abi
     );
 
     // Poseidon libraries.
@@ -231,16 +231,16 @@ describe("QFI", () => {
   describe("initialize()", () => {
     before(async () => {
       // Mocked contracts.
-      mockVkRegistry = await deployMockContract(deployer, VkRegistryAbi);
+      mockVkRegistry = await deployMockContract(deployer, VkRegistry__factory.abi);
 
       mockMessageAqFactoryPolls = await deployMockContract(
         deployer,
-        MessageAqFactoryAbi
+        MessageAqFactory__factory.abi
       );
 
       mockMessageAqFactoryGrantRounds = await deployMockContract(
         deployer,
-        MessageAqFactoryAbi
+        MessageAqFactory__factory.abi
       );
     });
 
@@ -445,7 +445,7 @@ describe("QFI", () => {
   describe("setPollProcessorAndTallyer()", () => {
     before(async () => {
       // Mocked contracts.
-      mockPPT = await deployMockContract(deployer, PollProcessorAndTallyerAbi);
+      mockPPT = await deployMockContract(deployer, PollProcessorAndTallyer__factory.abi);
     });
 
     it("allows owner to set the PollProcessorAndTallyer", async () => {
@@ -468,7 +468,7 @@ describe("QFI", () => {
         .withArgs(mockPPT.address);
 
       // New PPT mock.
-      mockPPT = await deployMockContract(deployer, PollProcessorAndTallyerAbi);
+      mockPPT = await deployMockContract(deployer, PollProcessorAndTallyer__factory.abi);
       expect(firstMockedPPT).to.be.not.equal(mockPPT.address);
 
       // Should change the PPT correctly.
@@ -933,7 +933,7 @@ describe("QFI", () => {
   describe("deployGrantRound()", async () => {
     beforeEach(async () => {
       // Mocked contracts.
-      mockGrantRound = await deployMockContract(deployer, GrantRoundAbi);
+      mockGrantRound = await deployMockContract(deployer, GrantRound__factory.abi);
     });
 
     it("allow owner to deploy a grant round", async () => {
