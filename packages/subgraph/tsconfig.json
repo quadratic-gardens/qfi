@@ -9,5 +9,6 @@
         "skipLibCheck": true,
         "declaration": true,
         "allowSyntheticDefaultImports": true
-    }
+    },
+    "include": ["src/**/*"]
 }
