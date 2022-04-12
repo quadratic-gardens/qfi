@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
-import { ContractTransaction, ContractReceipt, Signer, constants } from "ethers";
+import { ContractTransaction, ContractReceipt, Signer } from "ethers";
 import chai from "chai";
-import { deployContract, deployMockContract, MockContract, solidity, } from "ethereum-waffle";
+import { solidity, } from "ethereum-waffle";
 import { SimpleRecipientRegistry } from "../../typechain";
 
 chai.use(solidity);
@@ -52,8 +52,8 @@ describe("Simple Recipient Registry", () => {
       await simpleRecipientRegistry.connect(controller).setMaxRecipients(1)
 
       const recipient = ethers.Wallet.createRandom()
-      let tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await simpleRecipientRegistry.addRecipient(recipient.address, "metadata info")
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events.filter((e) => e.event === "RecipientAdded")[0]
 
       const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
@@ -75,8 +75,8 @@ describe("Simple Recipient Registry", () => {
       const packed = ethers.utils.solidityPack(["address", "string"], [recipient.address, "metadata info"])
       const recipientId = ethers.utils.keccak256(packed)
 
-      let tx: ContractTransaction = await simpleRecipientRegistry.removeRecipient(recipientId)
-      let receipt: ContractReceipt = await tx.wait();
+      const tx: ContractTransaction = await simpleRecipientRegistry.removeRecipient(recipientId)
+      const receipt: ContractReceipt = await tx.wait();
       const event = receipt.events[0]
       expect(event.event).to.equal("RecipientRemoved")
       expect(event.args._recipientId).to.equal(recipientId)
