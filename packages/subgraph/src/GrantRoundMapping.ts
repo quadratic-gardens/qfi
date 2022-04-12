@@ -8,7 +8,7 @@ import {
     PublicKey,
     Recipient,
     Vote
-} from "../../generated/schema"
+} from "../generated/schema"
 import {
     OwnershipTransferred,
     PublishMessage,
@@ -18,7 +18,7 @@ import {
     TallyPublished,
     Voted,
     GrantRound as GrantRoundContract
-} from "../../generated/templates/GrantRound/GrantRound"
+} from "../generated/templates/GrantRound/GrantRound"
 
 /**
  * (e.g., Store a PublicKey in the storage).
@@ -173,7 +173,7 @@ export function handleFundsClaimed(event: FundsClaimed): void {
 
         donation.grantRound = grantRoundId
         donation.recipient = recipientId
-        donation.amount = event.params._allocatedAmount
+        donation.amount = event.params._amount
         donation.voteOptionIndex = event.params._voteOptionIndex
         donation.createdAt = event.block.timestamp.toString()
 
@@ -215,7 +215,7 @@ export function handleVoted(event: Voted): void {
 
     if (grantRound !== null) {
         // Get Voter (Contributor).
-        const voterAddress = event.params._voter
+        const voterAddress = event.params._contributor
         const voterId = voterAddress.toHexString()
         const voter = Contributor.load(voterId)
 

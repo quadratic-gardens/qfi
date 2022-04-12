@@ -31,7 +31,7 @@ dataSources:
       eventHandlers:
         - event: MaciDeployed(address,address,address,address,uint256)
           handler: handleMaciDeployed
-        - event: QfiDeployed(address,address,uint256,uint8)
+        - event: QfiDeployed(address,address,uint256)
           handler: handleQfiDeployed
         - event: Init(address,address)
           handler: handleInitMaci
@@ -43,15 +43,15 @@ dataSources:
           handler: handleFundingSourceRemoved
         - event: MergeStateAq(uint256)
           handler: handleMergeStateAq
-        - event: QfiInitialized(address,uint8)
-          handler: handleQfiInitialized
-        - event: ContributionSent(address,uint256)
-          handler: handleContributionSent
-        - event: ContributionWithdrew(address)
-          handler: handleContributionWithdrew
-        - event: GrantRoundDeployed(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256),uint8)
-          handler: handleGrantRoundDeployed
-        - event: GrantRoundFinalized(address,uint8)
+        - event: InitQfi(address)
+          handler: handleInitQfi
+        - event: Contribution(address,uint256,uint256)
+          handler: handleContribution
+        - event: ContributionWithdrawn(address)
+          handler: handleContributionWithdrawn
+        - event: DeployGrantRound(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256))
+          handler: handleDeployGrantRound
+        - event: GrantRoundFinalized(address)
           handler: handleGrantRoundFinalized
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
@@ -61,7 +61,7 @@ dataSources:
           handler: handlePreRoundContributionPeriodStarted
         - event: PollProcessorAndTallyerChanged(address)
           handler: handlePollProcessorAndTallyerChanged
-      file: ./src/mapping/QFIMapping.ts
+      file: ./src/QFIMapping.ts
   - kind: ethereum/contract
     name: OptimisticRecipientRegistry
     #    network: { { network } }
@@ -86,7 +86,7 @@ dataSources:
           handler: handleRequestSubmitted
         - event: RequestResolved(indexed bytes32,indexed uint8,indexed bool,uint256,uint256)
           handler: handleRequestResolved
-      file: ./src/mapping/RecipientRegistryMapping.ts
+      file: ./src/RecipientRegistryMapping.ts
   - kind: ethereum/contract
     name: GrantRoundFactory
     #    network: { { network } }
@@ -110,7 +110,7 @@ dataSources:
           handler: handleMessageAqFactoryChanged
         - event: RecipientRegistryChanged(address)
           handler: handleRecipientRegistryChanged
-      file: ./src/mapping/GrantRoundFactoryMapping.ts
+      file: ./src/GrantRoundFactoryMapping.ts
 templates:
   - name: GrantRound
     kind: ethereum/contract
@@ -139,7 +139,7 @@ templates:
           handler: handleMergeMessageAq
         - event: GrantRoundCancelled(bool,bool)
           handler: handleGrantRoundCancelled
-        - event: FundsClaimed(address,uint256,uint256)
+        - event: FundsClaimed(uint256,address,uint256)
           handler: handleFundsClaimed
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
@@ -147,4 +147,4 @@ templates:
           handler: handleTallyPublished
         - event: Voted(indexed address)
           handler: handleVoted
-      file: ./src/mapping/GrantRoundMapping.ts
+      file: ./src/GrantRoundMapping.ts

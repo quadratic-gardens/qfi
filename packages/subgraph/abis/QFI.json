@@ -44,59 +44,15 @@
         "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
-      }
-    ],
-    "name": "ContributionSent",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_contributor",
-        "type": "address"
-      }
-    ],
-    "name": "ContributionWithdrew",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+      },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_pollId",
+        "name": "_voiceCredits",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_pollAddr",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "x",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "y",
-            "type": "uint256"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct IPubKey.PubKey",
-        "name": "_pubKey",
-        "type": "tuple"
       }
     ],
-    "name": "DeployPoll",
+    "name": "Contribution",
     "type": "event"
   },
   {
@@ -123,6 +79,81 @@
       }
     ],
     "name": "FundingSourceRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_contributor",
+        "type": "address"
+      }
+    ],
+    "name": "ContributionWithdrawn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_grantRoundFactory",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_nativeToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_voiceCreditFactor",
+        "type": "uint256"
+      }
+    ],
+    "name": "QfiDeployed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_stateAq",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_pollFactory",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_signUpGatekeeper",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_initialVoiceCreditProxy",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "MaciDeployed",
     "type": "event"
   },
   {
@@ -221,15 +252,46 @@
         "internalType": "struct IPubKey.PubKey",
         "name": "_coordinatorPubKey",
         "type": "tuple"
+      }
+    ],
+    "name": "DeployGrantRound",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_pollId",
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "enum QFI.Stage",
-        "name": "_currentStage",
-        "type": "uint8"
+        "internalType": "address",
+        "name": "_pollAddr",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "x",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "y",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IPubKey.PubKey",
+        "name": "_pubKey",
+        "type": "tuple"
       }
     ],
-    "name": "GrantRoundDeployed",
+    "name": "DeployPoll",
     "type": "event"
   },
   {
@@ -240,12 +302,6 @@
         "internalType": "address",
         "name": "_currentGrantRound",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "enum QFI.Stage",
-        "name": "_currentStage",
-        "type": "uint8"
       }
     ],
     "name": "GrantRoundFinalized",
@@ -268,6 +324,19 @@
       }
     ],
     "name": "Init",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "contract MessageAqFactory",
+        "name": "_messageAqFactoryGrantRounds",
+        "type": "address"
+      }
+    ],
+    "name": "InitQfi",
     "type": "event"
   },
   {
@@ -327,7 +396,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_pollProcessorAndTallyer",
+        "name": "_pollProcessorAndTallyerNew",
         "type": "address"
       }
     ],
@@ -345,93 +414,6 @@
       }
     ],
     "name": "PreRoundContributionPeriodStarted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_grantRoundFactory",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_nativeToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_voiceCreditFactor",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "enum QFI.Stage",
-        "name": "_currentStage",
-        "type": "uint8"
-      }
-    ],
-    "name": "QfiDeployed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_stateAq",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_pollFactory",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_signUpGatekeeper",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_initialVoiceCreditProxy",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "MaciDeployed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_messageAqFactoryGrantRounds",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "enum QFI.Stage",
-        "name": "_currentStage",
-        "type": "uint8"
-      }
-    ],
-    "name": "QfiInitialized",
     "type": "event"
   },
   {
@@ -1427,9 +1409,9 @@
     "name": "stateTreeDepth",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",

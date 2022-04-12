@@ -9,24 +9,38 @@ import { CSSReset } from "@chakra-ui/react";
 import { WalletProvider, web3modalOptions, SUPPORTED_NETWORKS, nameToChainId } from "@qfi/hooks";
 
 import { App } from "./App";
-import { DappProvider } from "./context/DappContext";
 
 const DEFAULT_CHAIN_ID = nameToChainId("Mainnet"); // Used to switch to if the user is on an unsupported network
-
-declare global {
-  interface WindowEventMap {
-    "local-storage": CustomEvent;
-  }
-}
 
 ReactDOM.render(
   <React.StrictMode>
     <CSSReset />
-    <DappProvider>
-      <HashRouter>
+    <HashRouter>
+      <WalletProvider
+        web3modalOptions={web3modalOptions}
+        networks={SUPPORTED_NETWORKS}
+        // Optional if you want to auto switch the network
+        defaultChainId={DEFAULT_CHAIN_ID}
+        // Optional but useful to handle events.
+        handleAccountsChangedEvent={(accounts: string[]) => {
+          console.log("Accounts changed");
+        }}
+        handleChainChangedEvent={(chainId: number) => {
+          console.log("ChainId changed to: " + chainId);
+        }}
+        handleConnectEvent={(info: { chainId: number }) => {
+          console.log(info);
+        }}
+        handleDisconnectEvent={(error: { code: number; message: string }) => {
+          if (error) console.log(error);
+          else console.log("Disconnected");
+        }}
+        handleErrorEvent={(error: { code: string; message: string }) => {
+          console.log("Error", error);
+        }}>
         <App />
-      </HashRouter>
-    </DappProvider>
+      </WalletProvider>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

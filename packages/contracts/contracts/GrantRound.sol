@@ -39,6 +39,7 @@ contract GrantRound is Poll {
      */
     event GrantRoundCancelled(bool _isFinalized, bool _isCancelled);
 
+    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when the beneficiary (recipient) claims the corresponding Grant Round funds.
      * @param _recipient The address of the recipient.

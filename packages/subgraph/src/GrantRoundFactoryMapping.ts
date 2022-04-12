@@ -3,9 +3,9 @@ import {
     OwnershipTransferred,
     MessageAqFactoryChanged,
     RecipientRegistryChanged
-} from "../../generated/GrantRoundFactory/GrantRoundFactory"
-import { OptimisticRecipientRegistry as RecipientRegistryContract } from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
-import { QFI as QFISchema, GrantRound, RecipientRegistry } from "../../generated/schema"
+} from "../generated/GrantRoundFactory/GrantRoundFactory"
+import { OptimisticRecipientRegistry as RecipientRegistryContract } from "../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
+import { QFI as QFISchema, GrantRound, RecipientRegistry } from "../generated/schema"
 
 /**
  * (e.g., Store a PublicKey in the storage).
@@ -28,7 +28,7 @@ export function handleMessageAqFactoryChanged(event: MessageAqFactoryChanged): v
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactory
+        qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactoryNew
         qfi.lastUpdatedAt = event.block.timestamp.toString()
 
         qfi.save()
@@ -51,7 +51,7 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        const recipientRegistryAddress = event.params._recipientRegistry
+        const recipientRegistryAddress = event.params._recipientRegistryNew
         const recipientRegistryId = recipientRegistryAddress.toHexString()
         let recipientRegistry = RecipientRegistry.load(recipientRegistryId)
         const recipientRegistryContract = RecipientRegistryContract.bind(recipientRegistryAddress)

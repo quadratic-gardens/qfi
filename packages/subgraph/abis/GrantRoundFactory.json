@@ -10,7 +10,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_messageAqFactory",
+        "name": "_messageAqFactoryNew",
         "type": "address"
       }
     ],
@@ -42,7 +42,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "_recipientRegistry",
+        "name": "_recipientRegistryNew",
         "type": "address"
       }
     ],

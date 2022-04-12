@@ -112,5 +112,3 @@ export const LandingPage = () => {
     </VStack>
   );
 };
-
-export default LandingPage;

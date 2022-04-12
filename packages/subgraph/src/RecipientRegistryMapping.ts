@@ -3,9 +3,9 @@ import {
     OwnershipTransferred,
     RequestResolved,
     RequestSubmitted
-} from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
+} from "../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
 
-import { Recipient } from "../../generated/schema"
+import { Recipient } from "../generated/schema"
 
 /**
  * (e.g., Store a PublicKey in the storage).
