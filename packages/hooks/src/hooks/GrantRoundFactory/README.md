@@ -44,10 +44,10 @@ try{
 |`_coordinator` | <pre>{<br>     address<br>}</pre>  | The _coordinator param as address value|
 |`_nativeToken` | <pre>{<br>     address<br>}</pre>  | The _nativeToken param as contract ERC20 value|
 |`_duration` | <pre>{<br>     uint256<br>}</pre>  | The _duration param as uint256 value|
-|`_maxValues` | <pre>{<br>     maxMessages:uint256DELIMITERmaxVoteOptions:uint256<br>}</pre>  | The _maxValues param as struct Params.MaxValues value|
-|`_treeDepths` | <pre>{<br>     intStateTreeDepth:uint8DELIMITERmessageTreeSubDepth:uint8DELIMITERmessageTreeDepth:uint8DELIMITERvoteOptionTreeDepth:uint8<br>}</pre>  | The _treeDepths param as struct Params.TreeDepths value|
-|`_batchSizes` | <pre>{<br>     messageBatchSize:uint8DELIMITERtallyBatchSize:uint8<br>}</pre>  | The _batchSizes param as struct Params.BatchSizes value|
-|`_coordinatorPubKey` | <pre>{<br>     x:uint256DELIMITERy:uint256<br>}</pre>  | The _coordinatorPubKey param as struct IPubKey.PubKey value|
+|`_maxValues` | <pre>{<br>     maxMessages:uint256<br>     maxVoteOptions:uint256<br>}</pre>  | The _maxValues param as struct Params.MaxValues value|
+|`_treeDepths` | <pre>{<br>     intStateTreeDepth:uint8<br>     messageTreeSubDepth:uint8<br>     messageTreeDepth:uint8<br>     voteOptionTreeDepth:uint8<br>}</pre>  | The _treeDepths param as struct Params.TreeDepths value|
+|`_batchSizes` | <pre>{<br>     messageBatchSize:uint8<br>     tallyBatchSize:uint8<br>}</pre>  | The _batchSizes param as struct Params.BatchSizes value|
+|`_coordinatorPubKey` | <pre>{<br>     x:uint256<br>     y:uint256<br>}</pre>  | The _coordinatorPubKey param as struct IPubKey.PubKey value|
 |`_vkRegistry` | <pre>{<br>     address<br>}</pre>  | The _vkRegistry param as contract VkRegistry value|
 |`_maci` | <pre>{<br>     address<br>}</pre>  | The _maci param as contract IMACI value|
 |`_grantRoundOwner` | <pre>{<br>     address<br>}</pre>  | The _grantRoundOwner param as address value|

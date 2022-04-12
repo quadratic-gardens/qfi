@@ -266,7 +266,7 @@ try{
 | <div style="min-width:180px">Name</div> | <div style="width:420px">Type</div>  | <div style="width:20ch; min-width:20ch">Type</div>                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
 |`_message` | <pre>{<br>     data:uint256[10]<br>}</pre>  | The _message param as struct IMessage.Message value|
-|`_encPubKey` | <pre>{<br>     x:uint256DELIMITERy:uint256<br>}</pre>  | The _encPubKey param as struct IPubKey.PubKey value|
+|`_encPubKey` | <pre>{<br>     x:uint256<br>     y:uint256<br>}</pre>  | The _encPubKey param as struct IPubKey.PubKey value|
 
 ### **Return Values**
 | <div style="min-width:150px">Name</div> | <div style="width:420px">Type</div>  | <div style="width:20ch; min-width:20ch">Type</div>                                                                  |
