@@ -267,6 +267,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
 
       // Should initialize QFI correctly.
       await expect(
@@ -281,7 +282,8 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
+        
     });
 
     it("revert - allows only owner to initialize QFI", async () => {
@@ -414,7 +416,9 @@ describe("QFI", () => {
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
 
+
       // Should initialize QFI correctly.
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -427,7 +431,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Should revert.
       await expect(
@@ -510,7 +514,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -523,7 +527,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
     });
 
     it("allows anyone to contribute", async () => {
@@ -563,7 +567,7 @@ describe("QFI", () => {
           expectedTimestamp
         )
         .to.emit(qfi, "ContributionSent")
-        .withArgs(contributorAddress, contributionAmount, expectedVoiceCredits);
+        .withArgs(contributorAddress, contributionAmount);
     });
 
     // TODO: Simulate 10**5 signups. How we could test it if the QFI is not mockable here?.
@@ -591,6 +595,7 @@ describe("QFI", () => {
         )
         .returns(expectedMockGrantRoundAddress);
 
+      const expectedThirdStage = 2
       // Should deploy a new Grant Round.
       await expect(
         qfi
@@ -610,8 +615,10 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
+       
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
       expect(Number(await qfi.currentStage())).to.equal(2);
@@ -679,7 +686,7 @@ describe("QFI", () => {
           expectedTimestamp
         )
         .to.emit(qfi, "ContributionSent")
-        .withArgs(contributorAddress, contributionAmount, expectedVoiceCredits);
+        .withArgs(contributorAddress, contributionAmount);
 
       // Should revert the second contribution correctly.
       await expect(
@@ -751,7 +758,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -764,7 +771,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       await mockBaseERC20Token.mock.balanceOf
@@ -801,7 +808,7 @@ describe("QFI", () => {
           expectedTimestamp
         )
         .to.emit(qfi, "ContributionSent")
-        .withArgs(contributorAddress, contributionAmount, expectedVoiceCredits);
+        .withArgs(contributorAddress, contributionAmount);
     });
 
     it("allow to get the amount of voice credits for a given address", async () => {
@@ -855,7 +862,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -868,7 +875,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       await mockBaseERC20Token.mock.balanceOf
@@ -905,7 +912,7 @@ describe("QFI", () => {
           expectedTimestamp
         )
         .to.emit(qfi, "ContributionSent")
-        .withArgs(contributorAddress, contributionAmount, expectedVoiceCredits);
+        .withArgs(contributorAddress, contributionAmount);
     });
 
     it("should withdraw the contribution", async () => {
@@ -959,7 +966,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -972,7 +979,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       await mockGrantRoundFactory.mock.deployGrantRound
@@ -992,6 +999,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1010,7 +1018,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1041,7 +1050,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -1054,7 +1063,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Should revert.
       await expect(
@@ -1093,7 +1102,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -1106,7 +1115,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       await mockGrantRoundFactory.mock.deployGrantRound
@@ -1126,6 +1135,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1144,7 +1154,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1227,7 +1238,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -1240,7 +1251,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       await mockGrantRoundFactory.mock.deployGrantRound
@@ -1260,6 +1271,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1278,7 +1290,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1331,7 +1344,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -1344,7 +1357,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       expectedDeployGrantRoundTimestamp =
@@ -1367,6 +1380,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1385,7 +1399,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1446,7 +1461,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -1459,7 +1474,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       await mockGrantRoundFactory.mock.deployGrantRound
@@ -1479,6 +1494,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1497,7 +1513,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1549,7 +1566,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -1562,7 +1579,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
     });
 
     it("allow owner to finalize current grant round", async () => {
@@ -1584,6 +1601,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1602,7 +1620,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1672,6 +1691,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1690,7 +1710,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1792,6 +1813,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1810,7 +1832,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1861,6 +1884,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -1879,7 +1903,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
@@ -1962,7 +1987,7 @@ describe("QFI", () => {
         .withArgs()
         .returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-
+      const expectedStage = 1 //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
           .connect(deployer)
@@ -1975,7 +2000,7 @@ describe("QFI", () => {
         .to.emit(qfi, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
-        .withArgs(mockMessageAqFactoryGrantRounds.address);
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
       // Mocks.
       await mockGrantRoundFactory.mock.deployGrantRound
@@ -1995,6 +2020,7 @@ describe("QFI", () => {
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
+      const expectedThirdStage = 2
       await expect(
         qfi
           .connect(deployer)
@@ -2013,7 +2039,8 @@ describe("QFI", () => {
           Object.values(maxValues),
           Object.values(treeDepths),
           Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey)
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
         );
 
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);

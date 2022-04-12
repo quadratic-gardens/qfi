@@ -14,6 +14,7 @@
     "prepare:large-circuits": "mustache config/large.json zkeys.config.template.yaml > zkeys.config.yml",
     "prepare:prod-circuits": "mustache config/prod.json zkeys.config.template.yaml > zkeys.config.yml",
     "generate:zkey": "npx zkey-manager compile -c zkeys.config.yml",
+    "generate:abi": "yarn hardhat export-abi",
     "generate:zkeys": "yarn prepare:small-circuits && npx zkey-manager compile -c zkeys.config.yml && yarn prepare:medium-circuits && npx zkey-manager compile -c zkeys.config.yml",
     "test": "hardhat test",
     "test:unit": "yarn test tests/Unit/**.ts",
