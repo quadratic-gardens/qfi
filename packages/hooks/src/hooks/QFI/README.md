@@ -173,7 +173,7 @@ try{
 ### **Parameters**
 | <div style="min-width:180px">Name</div> | <div style="width:420px">Type</div>  | <div style="width:20ch; min-width:20ch">Type</div>                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
-|`pubKey` | <pre>{<br>     x:uint256DELIMITERy:uint256<br>}</pre>  | The pubKey param as struct IPubKey.PubKey value|
+|`pubKey` | <pre>{<br>     x:uint256<br>     y:uint256<br>}</pre>  | The pubKey param as struct IPubKey.PubKey value|
 |`amount` | <pre>{<br>     uint256<br>}</pre>  | The amount param as uint256 value|
 
 ### **Return Values**
@@ -220,9 +220,9 @@ try{
 | <div style="min-width:180px">Name</div> | <div style="width:420px">Type</div>  | <div style="width:20ch; min-width:20ch">Type</div>                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
 |`_duration` | <pre>{<br>     uint256<br>}</pre>  | The _duration param as uint256 value|
-|`_maxValues` | <pre>{<br>     maxMessages:uint256DELIMITERmaxVoteOptions:uint256<br>}</pre>  | The _maxValues param as struct Params.MaxValues value|
-|`_treeDepths` | <pre>{<br>     intStateTreeDepth:uint8DELIMITERmessageTreeSubDepth:uint8DELIMITERmessageTreeDepth:uint8DELIMITERvoteOptionTreeDepth:uint8<br>}</pre>  | The _treeDepths param as struct Params.TreeDepths value|
-|`_coordinatorPubKey` | <pre>{<br>     x:uint256DELIMITERy:uint256<br>}</pre>  | The _coordinatorPubKey param as struct IPubKey.PubKey value|
+|`_maxValues` | <pre>{<br>     maxMessages:uint256<br>     maxVoteOptions:uint256<br>}</pre>  | The _maxValues param as struct Params.MaxValues value|
+|`_treeDepths` | <pre>{<br>     intStateTreeDepth:uint8<br>     messageTreeSubDepth:uint8<br>     messageTreeDepth:uint8<br>     voteOptionTreeDepth:uint8<br>}</pre>  | The _treeDepths param as struct Params.TreeDepths value|
+|`_coordinatorPubKey` | <pre>{<br>     x:uint256<br>     y:uint256<br>}</pre>  | The _coordinatorPubKey param as struct IPubKey.PubKey value|
 |`coordinator` | <pre>{<br>     address<br>}</pre>  | The coordinator param as address value|
 
 ### **Return Values**
@@ -269,9 +269,9 @@ try{
 | <div style="min-width:180px">Name</div> | <div style="width:420px">Type</div>  | <div style="width:20ch; min-width:20ch">Type</div>                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
 |`_duration` | <pre>{<br>     uint256<br>}</pre>  | The _duration param as uint256 value|
-|`_maxValues` | <pre>{<br>     maxMessages:uint256DELIMITERmaxVoteOptions:uint256<br>}</pre>  | The _maxValues param as struct Params.MaxValues value|
-|`_treeDepths` | <pre>{<br>     intStateTreeDepth:uint8DELIMITERmessageTreeSubDepth:uint8DELIMITERmessageTreeDepth:uint8DELIMITERvoteOptionTreeDepth:uint8<br>}</pre>  | The _treeDepths param as struct Params.TreeDepths value|
-|`_coordinatorPubKey` | <pre>{<br>     x:uint256DELIMITERy:uint256<br>}</pre>  | The _coordinatorPubKey param as struct IPubKey.PubKey value|
+|`_maxValues` | <pre>{<br>     maxMessages:uint256<br>     maxVoteOptions:uint256<br>}</pre>  | The _maxValues param as struct Params.MaxValues value|
+|`_treeDepths` | <pre>{<br>     intStateTreeDepth:uint8<br>     messageTreeSubDepth:uint8<br>     messageTreeDepth:uint8<br>     voteOptionTreeDepth:uint8<br>}</pre>  | The _treeDepths param as struct Params.TreeDepths value|
+|`_coordinatorPubKey` | <pre>{<br>     x:uint256<br>     y:uint256<br>}</pre>  | The _coordinatorPubKey param as struct IPubKey.PubKey value|
 
 ### **Return Values**
 | <div style="min-width:150px">Name</div> | <div style="width:420px">Type</div>  | <div style="width:20ch; min-width:20ch">Type</div>                                                                  |
@@ -680,7 +680,7 @@ try{
 ### **Parameters**
 | <div style="min-width:180px">Name</div> | <div style="width:420px">Type</div>  | <div style="width:20ch; min-width:20ch">Type</div>                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
-|`_pubKey` | <pre>{<br>     x:uint256DELIMITERy:uint256<br>}</pre>  | The _pubKey param as struct IPubKey.PubKey value|
+|`_pubKey` | <pre>{<br>     x:uint256<br>     y:uint256<br>}</pre>  | The _pubKey param as struct IPubKey.PubKey value|
 |`_signUpGatekeeperData` | <pre>{<br>     bytes<br>}</pre>  | The _signUpGatekeeperData param as bytes value|
 |`_initialVoiceCreditProxyData` | <pre>{<br>     bytes<br>}</pre>  | The _initialVoiceCreditProxyData param as bytes value|
 
