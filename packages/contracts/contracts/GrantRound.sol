@@ -167,11 +167,11 @@ contract GrantRound is Poll {
         require(numMessages > 0, 'GrantRound: No votes');
 
         //TODO: Actually verify using new decorators
-        bool verified = verifySpentVoiceCredits(_totalSpent, _totalSpentSalt);
-        require(
-            verified,
-            'GrantRound: Incorrect total amount of spent voice credits'
-        );
+        // bool verified = verifySpentVoiceCredits(_totalSpent, _totalSpentSalt);
+        // require(
+        //     verified,
+        //     'GrantRound: Incorrect total amount of spent voice credits'
+        // );
         totalSpent = _totalSpent;
         // Total amount of spent voice credits is the size of the pool of direct rewards.
         // Everything else, including unspent voice credits and downscaling error,
@@ -225,6 +225,7 @@ contract GrantRound is Poll {
         uint256 _voteOptionIndex,
         uint256 _tallyResult,
         uint256[][] memory _tallyResultProof,
+        uint256 _tallyResultSalt,
         uint256 _spentVoiceCreditsHash,
         uint256 _perVOSpentVoiceCreditsHash,
         uint256 _tallyCommitment,
@@ -243,22 +244,24 @@ contract GrantRound is Poll {
                 _voteOptionIndex,
                 _tallyResult,
                 _tallyResultProof,
+                _tallyResultSalt,
                 _spentVoiceCreditsHash,
                 _perVOSpentVoiceCreditsHash,
                 _tallyCommitment
             );
             require(resultVerified, 'FundingRound: Incorrect tally result');
 
-            bool spentVerified = verifyPerVOSpentVoiceCredits(
-                _voteOptionIndex,
-                _spent,
-                _spentProof,
-                _spentSalt
-            );
-            require(
-                spentVerified,
-                'FundingRound: Incorrect amount of spent voice credits'
-            );
+            //TODO: Actually verify using MACI proofs
+            // bool spentVerified = verifyPerVOSpentVoiceCredits(
+            //     _voteOptionIndex,
+            //     _spent,
+            //     _spentProof,
+            //     _spentSalt
+            // );
+            // require(
+            //     spentVerified,
+            //     'FundingRound: Incorrect amount of spent voice credits'
+            // );
         }
         recipients[_voteOptionIndex] = true;
         (uint256 deployTime, uint256 duration) = getDeployTimeAndDuration();
