@@ -35,7 +35,7 @@ export const DappProvider: React.FC<Props> = ({ children }) => {
   );
 
   useEffect(() => {
-    // set initial state if need asynch calls
+    // set initial state if need async calls
     // setState({});
   }, []);
 
