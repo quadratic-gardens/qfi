@@ -15,26 +15,27 @@ import { DappContextType, DappStateType, SetValue, Props } from "./types";
 
 const initialDappState: DappStateType = {
   address: "0x0000000000000000000000000000000000000000",
+  blockExplorer:"https://etherscan.io/tx/",
 };
 
 const DappContext = createContext<DappContextType>({
-  state: {} as DappStateType,
-  setState: () => {},
+  dappState: {} as DappStateType,
+  setDappState: () => {},
 });
 
 export const DappProvider: React.FC<Props> = ({ children }) => {
-  const [state, setState] = useLocalStorage<DappStateType>("data", initialDappState);
+  const [dappState, setDappState] = useLocalStorage<DappStateType>("data", initialDappState);
 
   const contextValue = useMemo(
     () => ({
-      state,
-      setState,
+      dappState,
+      setDappState,
     }),
-    [state, setState]
+    [dappState, setDappState]
   );
 
   useEffect(() => {
-    // set initial state if need asynch calls
+    // set initial state if need async calls
     // setState({});
   }, []);
 
@@ -132,7 +133,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T
 
   // this is a custom event, triggered in writeValueToLocalStorage
   // See: useLocalStorage()
-  useEventListener("local-storage", handleStorageChange);
+  useEventListener("local-storage" as keyof WindowEventMap, handleStorageChange);
 
   return [storedValue, setValue];
 }
