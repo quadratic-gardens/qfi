@@ -6,7 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 
 import { HashRouter } from "react-router-dom";
 import { CSSReset } from "@chakra-ui/react";
-import { WalletProvider, web3modalOptions, SUPPORTED_NETWORKS, nameToChainId } from "@qfi/hooks";
+import { nameToChainId } from "@qfi/hooks";
 
 import { App } from "./App";
 import { DappProvider } from "./context/DappContext";
