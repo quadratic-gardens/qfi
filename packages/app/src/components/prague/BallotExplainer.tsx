@@ -18,7 +18,7 @@ export const BallotExplainer = () => {
       <AccordionItem border="none">
         <VStack>
           <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
-            This is a sample ballot, try SPENDING ALL THE VOICE CREDITS! it might be less intuitive than you think. Tap
+            This is a sample ballot, try spending all the Voice Credits! it might be less intuitive than you think. Tap
             here to learn more 📖🧐.
             <AccordionIcon></AccordionIcon>
           </Text>
