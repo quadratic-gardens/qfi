@@ -1,14 +1,16 @@
 import React from "react";
 import {
-  VStack, Tooltip, Text, UnorderedList,
+  VStack,
+  Tooltip,
+  Text,
+  UnorderedList,
   ListItem,
   Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
-  AccordionPanel
+  AccordionPanel,
 } from "@chakra-ui/react";
-
 
 export const BallotExplainer = () => {
   return (
@@ -16,15 +18,16 @@ export const BallotExplainer = () => {
       <AccordionItem border="none">
         <VStack>
           <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
-            This is a sample ballot to demonstrate the voting process, try SPENDING ALL THE VOICE CREDITS! it might be
-            less intuitive than you think. Please feel free to play around on this Dummy Ballot to get a feel for it.
-            This page will be updated once the event starts to let you add projects you meet at the event. Tap here to
-            learn more 📖🧐.
+            This is a sample ballot, try SPENDING ALL THE VOICE CREDITS! it might be less intuitive than you think. Tap
+            here to learn more 📖🧐.
             <AccordionIcon></AccordionIcon>
           </Text>
         </VStack>
         <AccordionPanel pb={4}>
           <UnorderedList marginInlineStart={"1rem !important"} fontSize="xs" w="full">
+            <ListItem>
+              This page will be updated once the event starts to let you add projects you meet at the event.
+            </ListItem>
             <ListItem>
               When a voter is whitelisted they receive a{" "}
               <Tooltip label="pseudo-randomly assigned" placement="top">

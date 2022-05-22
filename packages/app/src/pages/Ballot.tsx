@@ -6,7 +6,8 @@ import {
   Heading,
   Button, PinInput,
   PinInputField,
-  Divider
+  Divider,
+  Stack
 } from "@chakra-ui/react";
 import { EaseInBottom, MagikButton } from "@qfi/ui";
 import { getProject } from "../data";
@@ -135,9 +136,11 @@ export const Ballot = () => {
                   to={`/projects/${project.id}`} />
               ))}
             </VStack>
-            <HStack spacing={8} alignItems={"flex-start"} justifyContent="space-between" w="full">
-              <VStack spacing={1} alignItems="flex-start">
-                <Heading fontSize={"sm"} fontWeight={"bold"}>
+                
+
+            <Stack spacing={3} py={8} flexDirection={{ base:"column", md:"row"} }  alignItems={"flex-end"} justifyContent={{ base:"center", md:"space-between"} } w="full">
+              <VStack spacing={1} alignItems={{ base:"center", md:"flex-start"} } >
+                <Heading fontSize={"sm"} fontWeight={"bold"} alignSelf={"flex-start"}>
                   Ballot (MACI) Passphrase
                 </Heading>
                 <Text fontSize={"xs"}>
@@ -262,6 +265,7 @@ export const Ballot = () => {
               <VStack spacing={6} alignItems="flex-start" w="full">
                 <MagikButton />
                 <Button
+                disabled ={true}
                   rounded={"full"}
                   py={6}
                   fontSize={"lg"}
@@ -275,7 +279,7 @@ export const Ballot = () => {
                   SUBMIT BALLOT
                 </Button>
               </VStack>
-            </HStack>
+            </Stack>
           </VStack>
         </Container>
       </VStack>

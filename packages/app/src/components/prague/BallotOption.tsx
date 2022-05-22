@@ -108,7 +108,8 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
                   bottom: 0,
                   zIndex: "-1",
                   filter: "blur(1px)",
-                  transform: "scale(1.1)",
+                  transform: "scale(0.9)",
+                  rounded:"full"
                 },
               }}
               bg="transparent"
@@ -121,6 +122,7 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
               boxSize="50px">
               <Center>
                 <Icon
+
                   color="white"
                   position="relative"
                   zIndex={1}
