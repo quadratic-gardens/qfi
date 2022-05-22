@@ -38,6 +38,7 @@ export function MagikButton() {
   return (
     <Show above="sm">
       <Button
+        w="full"
         onClick={() => !isConnecting && switchAction()}
         h={switchHeight}
         pl={2}

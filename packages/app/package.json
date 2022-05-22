@@ -7,6 +7,7 @@
     "@coinbase/wallet-sdk": "^3.0.4",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
+    "@fontsource/archivo": "^4.5.7",
     "@fontsource/tinos": "^4.5.4",
     "@gnosis.pm/safe-apps-web3modal": "^12.0.0",
     "@qfi/hooks": "^0.1.0",
