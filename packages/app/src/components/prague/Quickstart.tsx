@@ -13,7 +13,22 @@ import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
 export const Quickstart = () => {
   return (
-    <Container h="full" w="full" overflowY={"scroll"} right="-24px" top={0} left={0} position="absolute">
+    <Container h="full" w="full" overflowY={"scroll"} right="-24px" top={0} left={0} position="absolute" sx={{
+      scrollbarColor: "green",
+      "::-webkit-scrollbar": {
+        width: "0px"
+      },
+      
+      "::-webkit-scrollbar-track": {
+        boxShadow: "inset 0 0 0px grey",
+        borderRadius: "0px"
+      },
+      
+      "::-webkit-scrollbar-thumb": {
+        background: "transparent",
+        borderRadius: "0px"
+      }
+    }}>
       <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Voter Quickstart Guide</Heading>

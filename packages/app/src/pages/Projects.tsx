@@ -1,29 +1,54 @@
 import React from "react";
 import {
   VStack,
-  Container, HStack,
+  Container,
+  HStack,
   Flex,
   Image,
   AspectRatio,
-  Tooltip, Text,
-  Heading, Box, UnorderedList,
+  Tooltip,
+  Text,
+  Heading,
+  Box,
+  UnorderedList,
   ListItem,
   Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Link, Outlet } from "react-router-dom";
 import { getProjects } from "../data";
-
 
 export const Projects = () => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
   return (
     <>
-      <Flex as="main" h="full" flex={1} borderRightColor="gray.100" borderRightWidth={1} overflowY={"scroll"}>
+      <Flex
+        as="main"
+        h="full"
+        flex={1}
+        borderRightColor="gray.100"
+        borderRightWidth={1}
+        overflowY={"scroll"}
+        sx={{
+          scrollbarColor: "green",
+          "::-webkit-scrollbar": {
+            width: "0px",
+          },
+
+          "::-webkit-scrollbar-track": {
+            boxShadow: "inset 0 0 0px grey",
+            borderRadius: "0px",
+          },
+
+          "::-webkit-scrollbar-thumb": {
+            background: "transparent",
+            borderRadius: "0px",
+          },
+        }}>
         <VStack spacing={0} w="full">
           <Container
             h="full"
@@ -105,7 +130,7 @@ export const Projects = () => {
                     alignItems={"stretch"}
                     as={Link}
                     to={`/projects/${project.id}`}
-                    color= { fontColor}
+                    color={fontColor}
                     key={project.id}
                     pt={3}
                     pb={3}
@@ -123,12 +148,7 @@ export const Projects = () => {
                         mt={1}>
                         <Image borderRadius="full" src={project.image} alt={project.name} />
                       </AspectRatio>
-                      <VStack
-                        alignItems="flex-start"
-                        w="full"
-                        spacing={1.5}
-                        px={{ base: "4", md: "3" }}
-                        >
+                      <VStack alignItems="flex-start" w="full" spacing={1.5} px={{ base: "4", md: "3" }}>
                         <VStack alignItems="flex-start" w="full" spacing={0}>
                           <Heading my={0.5} fontSize={"lg"} lineHeight={"24px"} fontWeight="700">
                             {project.name}

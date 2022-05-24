@@ -1,20 +1,22 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import {
   VStack,
-  Container, HStack,
-  Flex, Text,
+  Container,
+  HStack,
+  Flex,
+  Text,
   Heading,
-  Button, PinInput,
+  Button,
+  PinInput,
   PinInputField,
   Divider,
-  Stack
+  Stack,
 } from "@chakra-ui/react";
 import { EaseInBottom, MagikButton } from "@qfi/ui";
 import { getProject } from "../data";
 import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
-
 
 export const Ballot = () => {
   const [ballotOptions, setBallotOptions] = useState<number[]>([]);
@@ -108,7 +110,29 @@ export const Ballot = () => {
   }, [votes]);
 
   return (
-    <Flex as="main" h="full" flex={1} borderRightColor="gray.100" borderRightWidth={1} overflowY={"scroll"}>
+    <Flex
+      as="main"
+      h="full"
+      flex={1}
+      borderRightColor="gray.100"
+      borderRightWidth={1}
+      overflowY={"scroll"}
+      sx={{
+        scrollbarColor: "green",
+        "::-webkit-scrollbar": {
+          width: "0px"
+        },
+        
+        "::-webkit-scrollbar-track": {
+          boxShadow: "inset 0 0 0px grey",
+          borderRadius: "0px"
+        },
+        
+        "::-webkit-scrollbar-thumb": {
+          background: "transparent",
+          borderRadius: "0px"
+        }
+      }}>
       <VStack spacing={0} w="full">
         <Container h="full" w="full" maxWidth="container.sm">
           <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
@@ -133,13 +157,19 @@ export const Ballot = () => {
                   ballotOption={project}
                   votes={votes[index]}
                   onClick={updateVotes[index]}
-                  to={`/projects/${project.id}`} />
+                  to={`/projects/${project.id}`}
+                />
               ))}
             </VStack>
-                
 
-            <Stack spacing={3} py={8} flexDirection={{ base:"column", md:"row"} }  alignItems={"flex-end"} justifyContent={{ base:"center", md:"space-between"} } w="full">
-              <VStack spacing={1} alignItems={{ base:"center", md:"flex-start"} } >
+            <Stack
+              spacing={3}
+              py={8}
+              flexDirection={{ base: "column", md: "row" }}
+              alignItems={"flex-end"}
+              justifyContent={{ base: "center", md: "space-between" }}
+              w="full">
+              <VStack spacing={1} alignItems={{ base: "center", md: "flex-start" }}>
                 <Heading fontSize={"sm"} fontWeight={"bold"} alignSelf={"flex-start"}>
                   Ballot (MACI) Passphrase
                 </Heading>
@@ -265,7 +295,7 @@ export const Ballot = () => {
               <VStack spacing={6} alignItems="flex-start" w="full">
                 <MagikButton />
                 <Button
-                disabled ={true}
+                  disabled={true}
                   rounded={"full"}
                   py={6}
                   fontSize={"lg"}

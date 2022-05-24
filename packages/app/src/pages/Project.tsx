@@ -1,14 +1,18 @@
 import React from "react";
 import {
   VStack,
-  Container, HStack,
+  Container,
+  HStack,
   Flex,
   Image,
-  AspectRatio, IconButton,
+  AspectRatio,
+  IconButton,
   Icon,
   Text,
   Heading,
-  Button, Box, useColorModeValue
+  Button,
+  Box,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { HiArrowLeft } from "react-icons/hi";
 import { Link, useParams } from "react-router-dom";
@@ -19,7 +23,29 @@ export function Project() {
   let project = getProject(projectId ?? "0");
   const color = useColorModeValue("gray.100", "gray.700");
   return (
-    <Flex as="main" h="full" flex={1} borderRightColor={color} borderRightWidth={1} overflowY={"scroll"}>
+    <Flex
+      as="main"
+      h="full"
+      flex={1}
+      borderRightColor={color}
+      borderRightWidth={1}
+      overflowY={"scroll"}
+      sx={{
+        scrollbarColor: "green",
+        "::-webkit-scrollbar": {
+          width: "0px",
+        },
+
+        "::-webkit-scrollbar-track": {
+          boxShadow: "inset 0 0 0px grey",
+          borderRadius: "0px",
+        },
+
+        "::-webkit-scrollbar-thumb": {
+          background: "transparent",
+          borderRadius: "0px",
+        },
+      }}>
       <VStack spacing={0} w="full">
         <Container
           paddingInlineStart={0}
@@ -28,7 +54,7 @@ export function Project() {
           w="full"
           maxWidth={{ xs: "full", sm: "full", md: "full", lg: "lg", xl: "xl" }}>
           <VStack
-            borderColor={color} 
+            borderColor={color}
             borderLeftWidth={1}
             borderRightWidth={1}
             my={0}
@@ -51,7 +77,8 @@ export function Project() {
                   to="/projects"
                   as={Link}
                   icon={<Icon as={HiArrowLeft} />}
-                  aria-label="Home" />
+                  aria-label="Home"
+                />
               </VStack>
               <VStack alignItems="flex-start" w="full" spacing={0} overflow="hidden">
                 <Heading my={0.5} px={2} fontSize={"lg"} lineHeight={"24px"} fontWeight="700">

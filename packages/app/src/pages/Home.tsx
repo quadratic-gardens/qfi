@@ -9,6 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { animateText, MagikText } from "@qfi/ui";
 import { Hero } from "../components/Hero";
+import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+
 
 export type HomeProps = {
   isOpen: boolean;
@@ -23,7 +25,7 @@ export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
       as="main"
       h="full"
       flex={1}
-      borderRightColor="gray.100"
+      borderRightColor={color}
       borderRightWidth={1}
       position={"relative"}
       overflow="hidden">
@@ -36,6 +38,9 @@ export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
         top={{ base: "100px", md: "0px", lg: "0px", xl: "160px" }} />
 
       <Container maxWidth={{ lg: "container.md", md: "container.md" }} py={100}>
+        <VStack spacing={0} w="full" alignItems={"flex-end"}>
+        <ColorModeSwitcher position="absolute" top={0} right={0} m={4} zIndex={1} />
+      </VStack>
         <VStack spacing={2} h="full" alignItems={"flex-start"}>
           <VStack
             spacing={6}
