@@ -4,7 +4,8 @@ import {
   Container, Flex, Text,
   Heading,
   Button,
-  Link
+  Link,
+  useColorModeValue
 } from "@chakra-ui/react";
 import { animateText, MagikText } from "@qfi/ui";
 import { Hero } from "../components/Hero";
@@ -16,6 +17,7 @@ export type HomeProps = {
 
 
 export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
+  const color = useColorModeValue("gray.800", "gray.700");
   return (
     <Flex
       as="main"
@@ -59,7 +61,7 @@ export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
 
             <VStack display={{ base: "flex", xl: "none" }} pt="0" alignItems={"flex-start"} w="full">
               <Button as={Link} href="https://cf23uhv4kuq.typeform.com/to/VodVOdg9" isExternal h="60px" w="full" background="#FFFF00" color="black" variant={"solid"}>
-                <Text fontSize="lg" fontWeight={"black"}>
+                <Text fontSize="lg"  color={color} fontWeight={"black"}>
                   REGISTER YOUR PROJECT
                 </Text>
               </Button>
@@ -77,7 +79,7 @@ export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
             </VStack>
 
             <VStack w="full" display={{ base: "none", xl: "flex" }} pt="10" justifyContent={"center"}>
-              <Button h="80px" w="full" background="#FFFF00" variant={"solid"}>
+              <Button h="80px" w="full" background="#FFFF00"color={color} variant={"solid"}>
                 <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
                   {" "}
                   Register your Project{" "}

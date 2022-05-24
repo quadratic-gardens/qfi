@@ -8,7 +8,7 @@ import {
   Icon,
   Text,
   Heading,
-  Button, Box
+  Button, Box, useColorModeValue
 } from "@chakra-ui/react";
 import { HiArrowLeft } from "react-icons/hi";
 import { Link, useParams } from "react-router-dom";
@@ -17,8 +17,9 @@ import { getProject } from "../data";
 export function Project() {
   let { projectId } = useParams();
   let project = getProject(projectId ?? "0");
+  const color = useColorModeValue("gray.100", "gray.700");
   return (
-    <Flex as="main" h="full" flex={1} borderRightColor="gray.100" borderRightWidth={1} overflowY={"scroll"}>
+    <Flex as="main" h="full" flex={1} borderRightColor={color} borderRightWidth={1} overflowY={"scroll"}>
       <VStack spacing={0} w="full">
         <Container
           paddingInlineStart={0}
@@ -27,7 +28,7 @@ export function Project() {
           w="full"
           maxWidth={{ xs: "full", sm: "full", md: "full", lg: "lg", xl: "xl" }}>
           <VStack
-            borderColor={"gray.100"}
+            borderColor={color} 
             borderLeftWidth={1}
             borderRightWidth={1}
             my={0}

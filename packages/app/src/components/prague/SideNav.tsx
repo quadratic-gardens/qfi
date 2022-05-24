@@ -2,7 +2,8 @@ import React from "react";
 import {
   VStack, Tooltip,
   IconButton,
-  Icon
+  Icon,
+  useColorModeValue
 } from "@chakra-ui/react";
 import { MdDashboard, MdSettings } from "react-icons/md";
 import { HiCollection } from "react-icons/hi";
@@ -11,10 +12,11 @@ import { Logo } from "../Hero";
 import { SideNavProps } from "../../propTypes";
 
 export const SideNav = ({ onSettingsOpen }: SideNavProps) => {
+  const backgroundColor = useColorModeValue("gray.100", "gray.700");
   return (
     <VStack p={4} justifyContent="space-between" alignItems="center" w="full">
       <VStack>
-        <IconButton to="/" as={Link} mb={6} icon={<Logo />} aria-label="Home" />
+        <IconButton bg = {backgroundColor }to="/" as={Link} mb={6} icon={<Logo />} aria-label="Home" />
 
         <Tooltip label="Home" placement="right">
           <IconButton

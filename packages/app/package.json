@@ -2,6 +2,7 @@
   "name": "@qfi/app",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@chakra-ui/react": "^1.8.6",
     "@coinbase/wallet-sdk": "^3.0.4",
