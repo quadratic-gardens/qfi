@@ -24,13 +24,14 @@ import { getProjects } from "../data";
 
 export const Projects = () => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
+  const color = useColorModeValue("gray.800", "gray.700");
   return (
     <>
       <Flex
         as="main"
         h="full"
         flex={1}
-        borderRightColor="gray.100"
+        borderRightColor={color}
         borderRightWidth={1}
         overflowY={"scroll"}
         sx={{

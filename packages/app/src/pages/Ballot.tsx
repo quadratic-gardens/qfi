@@ -11,6 +11,7 @@ import {
   PinInputField,
   Divider,
   Stack,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { EaseInBottom, MagikButton } from "@qfi/ui";
 import { getProject } from "../data";
@@ -19,6 +20,8 @@ import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
 
 export const Ballot = () => {
+
+  const color = useColorModeValue("gray.800", "gray.700");
   const [ballotOptions, setBallotOptions] = useState<number[]>([]);
   const [ballotData, setBallotData] = useState<Option[]>([]);
   const [voiceCreditBalance, setVoiceCreditBBalance] = useState(0);
@@ -114,7 +117,7 @@ export const Ballot = () => {
       as="main"
       h="full"
       flex={1}
-      borderRightColor="gray.100"
+      borderRightColor={color}
       borderRightWidth={1}
       overflowY={"scroll"}
       sx={{
