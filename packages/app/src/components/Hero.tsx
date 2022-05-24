@@ -9,8 +9,6 @@ import {
 
 import logo from "./assets/logo.png";
 import hero from "./assets/hero.png";
-import hero2 from "./assets/hero2.png";
-import hero3 from "./assets/hero3.png";
 import hero4 from "./assets/hero4.png";
 
 const spin = keyframes`
@@ -38,22 +36,22 @@ export const Hero = forwardRef<ImageProps, "img">((props, ref) => {
       case 3:
         return hero4;
       case 6:
-        return hero;
+        return hero4;
       case 7:
-        return hero;
+        return hero4;
       default:
-        return hero;
+        return hero4;
     }
   };
   const RandomHeroDark = () => {
     const rand = Math.floor(Math.random() * 6) + 2;
     switch (rand) {
       case 2:
-        return hero3;
+        return hero4;
       case 3:
-        return hero3;
+        return hero4;
       case 6:
-        return hero3;
+        return hero4;
       case 7:
         return hero4;
       default:

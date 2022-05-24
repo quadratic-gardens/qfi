@@ -31,7 +31,7 @@ let projects = [
     url: "https://hack.ethprague.com",
     description:
     "Cool Hackathon project at ethPrague, that won some prizes and could use some funding to make it a reality.",
-    image: "https://ipfs.io/ipfs/QmXRGpfpKAx2fZCW4REEgtmExFjSzmxEf6u7pyc8YYhexk",
+    image: "https://c.gitcoin.co/grants/879baf14dbc03514b7f7ea0d64725866/RxC.jpg",
     tagline: "This is a tagline",
     problemSpace:
     "The problem we are trying to solve is to create public goods -- in the form of this hack -- for people who need them.",
