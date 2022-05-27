@@ -1,4 +1,4 @@
-import { BigInt, log, store } from "@graphprotocol/graph-ts"
+import { BigInt } from "@graphprotocol/graph-ts"
 
 // Relates to schema.graphql Stage enum.
 export const NOT_INITIALIZED = 'NotInitialized';
@@ -7,6 +7,10 @@ export const VOTING_PERIOD_OPEN = 'VotingPeriodOpen';
 export const WAITING_FOR_FINALIZATION = 'WaitingForFinalization';
 export const FINALIZED = 'Finalized';
 export const CANCELLED = 'Cancelled';
+
+// Relates to schema.graphql RequestType enum.
+export const REGISTRATION = 'Registration';
+export const REMOVAL = 'Removal';
 
 /**
  * Current stage value converter.
@@ -24,5 +28,20 @@ export function currentStageConverter(_stage: BigInt): string {
     case 4: return FINALIZED
     case 5: return CANCELLED
     default: throw new Error('Invalid current stage value');
+  }
+}
+
+/**
+ * Request type value converter.
+ * @param _requestType <BigInt>: request type to be converted from BigInt to String.
+ * @returns <string>
+ */
+export function requestTypeConverter(_requestType: BigInt): string {
+  let requestType = _requestType.toI32()
+
+  switch (requestType) {
+    case 0: return REGISTRATION
+    case 1: return REMOVAL
+    default: throw new Error('Invalid request type value');
   }
 }
