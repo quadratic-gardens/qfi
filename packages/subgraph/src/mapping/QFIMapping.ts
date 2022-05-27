@@ -27,7 +27,9 @@ import {
     Contribution,
     Contributor,
     FundingSource,
-    GrantRoundContributor
+    GrantRoundContributor,
+    GrantRoundFactory,
+    RecipientRegistry
 } from "../../generated/schema"
 import { GrantRound as GrantRoundTemplate } from "../../generated/templates"
 import { currentStageConverter } from "../utils/converter"
@@ -40,6 +42,7 @@ export function handleMaciDeployed(event: MaciDeployed): void {
     log.debug(`MACI Deployed event block: {}`, [event.block.number.toString()])
 
     const timestamp = event.block.timestamp.toString()
+
     // Get the QFI/MACI instance.
     const qfiAddress = event.address
     const qfiContract = QFIContract.bind(qfiAddress)
@@ -84,7 +87,18 @@ export function handleQfiDeployed(event: QfiDeployed): void {
     qfi.voiceCreditFactor = event.params._voiceCreditFactor
     qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
     qfi.isInitialized = false
-    
+
+    // Check if the Grant Round Factory contract has Recipient Registry set.
+    const grantRoundFactoryAddress = event.params._grantRoundFactory
+    const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
+    const grantRoundFactory = GrantRoundFactory.load(grantRoundFactoryId)
+
+    if (grantRoundFactory !== null) {
+        const recipientRegistryId = grantRoundFactory.recipientRegistryAddress.toHexString()
+
+        qfi.recipientRegistry = recipientRegistryId
+    }
+
     qfi.save()
 
     log.info("QFI has been correctly deployed!", [])
@@ -108,6 +122,8 @@ export function handleInitMaci(event: Init): void {
         qfi.isInitialized = true
 
         qfi.save()
+    } else {
+        log.error("QFI is not initialized!", [])
     }
 }
 
@@ -415,6 +431,8 @@ export function handleGrantRoundDeployed(event: GrantRoundDeployed): void {
         } else {
             log.error(`QFI entity not found!`, [])
         }
+
+        // Update Recipient Registry
     } else {
         log.error(`Grant Round already exists!`, [])
     }
