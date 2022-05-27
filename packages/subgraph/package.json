@@ -9,6 +9,8 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
+    "build:prod-xdai": "graph build --network xdai --network-file ./config/prodNetworks.json",
+    "build:test-arbRinkeby": "graph build --network arbitrum-rinkeby --network-file ./config/testNetworks.json",
     "auth": "graph auth --product hosted-service",
     "deploy": "yarn codegen && graph deploy --product hosted-service",
     "lint": "eslint ./src --ext js,ts",
@@ -17,16 +19,16 @@
     "prettier:write": "prettier --write ./src"
   },
   "dependencies": {
-    "@graphprotocol/graph-ts": "^0.26.0"
+    "@graphprotocol/graph-ts": "^0.27.0"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.26.0",
-    "@types/node": "^17.0.23",
-    "@typescript-eslint/eslint-plugin": "^5.18.0",
-    "@typescript-eslint/parser": "^5.18.0",
-    "eslint": "^8.13.0",
+    "@graphprotocol/graph-cli": "^0.30.1",
+    "@types/node": "^17.0.35",
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "prettier": "^2.6.2",
-    "typescript": "^4.6.3"
+    "typescript": "^4.7.2"
   }
 }

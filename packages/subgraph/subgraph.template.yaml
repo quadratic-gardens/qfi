@@ -1,0 +1,150 @@
+specVersion: 0.0.4
+description: Quadratic-Funding Infrastructure w/ collusion-resistance.
+repository: https://github.com/quadratic-funding/qfi
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: QFI
+    #    network: { { network } }
+    source:
+      #      address: { { address } }
+      #      startBlock: { { startBlock } }
+      abi: QFI
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - QFI
+        - RecipientRegistry
+        - GrantRound
+      abis:
+        - name: QFI
+          file: ./abis/QFI.json
+        - name: OptimisticRecipientRegistry
+          file: ./abis/OptimisticRecipientRegistry.json
+        - name: GrantRound
+          file: ./abis/GrantRound.json
+        - name: GrantRoundFactory
+          file: ./abis/GrantRoundFactory.json
+      eventHandlers:
+        - event: MaciDeployed(address,address,address,address,uint256)
+          handler: handleMaciDeployed
+        - event: QfiDeployed(address,address,uint256,uint8)
+          handler: handleQfiDeployed
+        - event: Init(address,address)
+          handler: handleInitMaci
+        - event: SignUp(uint256,(uint256,uint256),uint256,uint256)
+          handler: handleSignUp
+        - event: FundingSourceAdded(address)
+          handler: handleFundingSourceAdded
+        - event: FundingSourceRemoved(address)
+          handler: handleFundingSourceRemoved
+        - event: MergeStateAq(uint256)
+          handler: handleMergeStateAq
+        - event: QfiInitialized(address,uint8)
+          handler: handleQfiInitialized
+        - event: ContributionSent(address,uint256)
+          handler: handleContributionSent
+        - event: ContributionWithdrew(address)
+          handler: handleContributionWithdrew
+        - event: GrantRoundDeployed(address,uint256,(uint256,uint256),(uint8,uint8,uint8,uint8),(uint8,uint8),(uint256,uint256),uint8)
+          handler: handleGrantRoundDeployed
+        - event: GrantRoundFinalized(address,uint8)
+          handler: handleGrantRoundFinalized
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: VotingPeriodClosed(uint8)
+          handler: handleVotingPeriodClosed
+        - event: PreRoundContributionPeriodStarted(uint8)
+          handler: handlePreRoundContributionPeriodStarted
+        - event: PollProcessorAndTallyerChanged(address)
+          handler: handlePollProcessorAndTallyerChanged
+      file: ./src/mapping/QFIMapping.ts
+  - kind: ethereum/contract
+    name: OptimisticRecipientRegistry
+    #    network: { { network } }
+    source:
+      #      address: { { address } }
+      #      startBlock: { { startBlock } }
+      abi: OptimisticRecipientRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - RecipientRegistry
+        - Recipient
+      abis:
+        - name: OptimisticRecipientRegistry
+          file: ./abis/OptimisticRecipientRegistry.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RequestSubmitted(indexed bytes32,indexed uint8,address,string,uint256)
+          handler: handleRequestSubmitted
+        - event: RequestResolved(indexed bytes32,indexed uint8,indexed bool,uint256,uint256)
+          handler: handleRequestResolved
+      file: ./src/mapping/RecipientRegistryMapping.ts
+  - kind: ethereum/contract
+    name: GrantRoundFactory
+    #    network: { { network } }
+    source:
+      #      address: { { address } }
+      #      startBlock: { { startBlock } }
+      abi: GrantRoundFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - QFI
+      abis:
+        - name: GrantRoundFactory
+          file: ./abis/GrantRoundFactory.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: MessageAqFactoryChanged(address)
+          handler: handleMessageAqFactoryChanged
+        - event: RecipientRegistryChanged(address)
+          handler: handleRecipientRegistryChanged
+      file: ./src/mapping/GrantRoundFactoryMapping.ts
+templates:
+  - name: GrantRound
+    kind: ethereum/contract
+    #   network: { { network } }
+    source:
+      abi: GrantRound
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - GrantRound
+        - Contribution
+        - Funds
+        - Recipient
+        - Contributor
+      abis:
+        - name: GrantRound
+          file: ./abis/GrantRound.json
+        - name: OptimisticRecipientRegistry
+          file: ./abis/OptimisticRecipientRegistry.json
+      eventHandlers:
+        - event: PublishMessage((uint256[10]),(uint256,uint256))
+          handler: handlePublishMessage
+        - event: MergeMessageAq(uint256)
+          handler: handleMergeMessageAq
+        - event: GrantRoundCancelled(bool,bool)
+          handler: handleGrantRoundCancelled
+        - event: FundsClaimed(address,uint256,uint256)
+          handler: handleFundsClaimed
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: TallyPublished(string)
+          handler: handleTallyPublished
+        - event: Voted(indexed address)
+          handler: handleVoted
+      file: ./src/mapping/GrantRoundMapping.ts
