@@ -73,8 +73,7 @@ export function handleRequestResolved(event: RequestResolved): void {
         }
 
         recipient.save()
-    }
-    {
+    } else {
         log.error(`Recipient entity not found!`, [])
     }
 }

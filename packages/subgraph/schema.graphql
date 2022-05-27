@@ -28,9 +28,9 @@ type QFI @entity {
     isStateAqMerged: Boolean
 
     # Inherited from MACI.
-    stateTreeDepth: Int
+    stateTreeDepth: BigInt!
     numSignUps: BigInt!
-    isInitialized: Boolean
+    isInitialized: Boolean!
     signUpTimestamp: BigInt!
     # Useful smart contracts addresses.
     signUpGatekeeperAddress: Bytes!
@@ -39,9 +39,9 @@ type QFI @entity {
     pollFactoryAddress: Bytes!
     messageAqFactoryPollAddress: Bytes
     stateAqAddress: Bytes
-    nativeERC20TokenAddress: Bytes!
+    nativeERC20TokenAddress: Bytes
     messageAqFactoryGrantRoundAddress: Bytes
-    grantRoundFactoryAddress: Bytes!
+    grantRoundFactoryAddress: Bytes
     pollProcessorAndTallyerAddress: Bytes
 
     # Links.

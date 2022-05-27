@@ -1,16 +1,16 @@
 {
     "arbitrum-rinkeby": {
         "QFI": {
-            "address": "0xabc...",
-            "startBlock": 123456
+            "address": "0x20f127CF2573a691C2dDF290760f12A608B84358",
+            "startBlock": 12093300
         },
         "OptimisticRecipientRegistry": {
-            "address": "0x123...",
-            "startBlock": 123444
+            "address": "0x77473bCbaA81620fe0B2f4c04581AC9d62045815",
+            "startBlock": 12093300
         },
         "GrantRoundFactory": {
-            "address": "0x123...",
-            "startBlock": 123444
+            "address": "0x3b73B401A4F552ae0187d2B5DE53E24448E992aA",
+            "startBlock": 12093300
         }
     },
     "test-network2": {

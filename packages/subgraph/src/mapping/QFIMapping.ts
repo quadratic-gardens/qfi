@@ -51,14 +51,18 @@ export function handleMaciDeployed(event: MaciDeployed): void {
     qfi.initialVoiceCreditProxyAddress = event.params._initialVoiceCreditProxy
     qfi.signUpGatekeeperAddress = event.params._signUpGatekeeper
     qfi.signUpTimestamp = event.params._timestamp
-    qfi.numSignUps = new BigInt(0)
-    qfi.nextGrantRoundId = new BigInt(0)
     qfi.createdAt = timestamp
     qfi.lastUpdatedAt = timestamp
 
     // External call to contract instance (one time event - good trade-off for sync time).
-    qfi.stateTreeDepth = qfiContract.stateTreeDepth().toI32()
+    qfi.stateTreeDepth = qfiContract.stateTreeDepth()
     qfi.numSignUps = qfiContract.numSignUps()
+    qfi.nextGrantRoundId = qfiContract.nextGrantRoundId()
+    qfi.contributorCount = qfiContract.contributorCount()
+    qfi.voiceCreditFactor = qfiContract.voiceCreditFactor()
+    qfi.isInitialized = qfiContract.isInitialised()
+    qfi.stateTreeDepth = qfiContract.stateTreeDepth()
+    qfi.currentStage = currentStageConverter(new BigInt(qfiContract.currentStage()))
 
     qfi.save()
 }
@@ -75,18 +79,15 @@ export function handleQfiDeployed(event: QfiDeployed): void {
     const qfiId = qfiAddress.toHexString()
     const qfi = new QFISchema(qfiId)
 
-    if (qfi !== null) {
-        qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
-        qfi.nativeERC20TokenAddress = event.params._nativeToken
-        qfi.voiceCreditFactor = event.params._voiceCreditFactor
-        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+    qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
+    qfi.nativeERC20TokenAddress = event.params._nativeToken
+    qfi.voiceCreditFactor = event.params._voiceCreditFactor
+    qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+    qfi.isInitialized = false
+    
+    qfi.save()
 
-        qfi.save()
-
-        log.info("QFI has been correctly deployed!", [])
-    } else {
-        log.error(`QFI entity not found!`, [])
-    }
+    log.info("QFI has been correctly deployed!", [])
 }
 
 /**

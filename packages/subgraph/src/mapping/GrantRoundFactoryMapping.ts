@@ -50,23 +50,24 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
     const qfiId = qfiAddress.toHexString()
     const qfi = new QFISchema(qfiId)
 
+    const recipientRegistryAddress = event.params._recipientRegistry
+    const recipientRegistryId = recipientRegistryAddress.toHexString()
+    let recipientRegistry = RecipientRegistry.load(recipientRegistryId)
+    const recipientRegistryContract = RecipientRegistryContract.bind(recipientRegistryAddress)
+
+    // Read from contract (trade-off, only when changing registry. May not be changed for multiple rounds).
+    const baseDeposit = recipientRegistryContract.baseDeposit()
+    const challengePeriodDuration = recipientRegistryContract.challengePeriodDuration()
+    const controller = recipientRegistryContract.controller()
+    const maxRecipients = recipientRegistryContract.maxRecipients()
+
+
+    if (recipientRegistry === null) {
+        recipientRegistry = new RecipientRegistry(recipientRegistryId)
+    }
+
     if (qfi !== null) {
-        const recipientRegistryAddress = event.params._recipientRegistry
-        const recipientRegistryId = recipientRegistryAddress.toHexString()
-        let recipientRegistry = RecipientRegistry.load(recipientRegistryId)
-        const recipientRegistryContract = RecipientRegistryContract.bind(recipientRegistryAddress)
-
-        // Read from contract (trade-off, only when changing registry. May not be changed for multiple rounds).
-        const baseDeposit = recipientRegistryContract.baseDeposit()
-        const challengePeriodDuration = recipientRegistryContract.challengePeriodDuration()
-        const controller = recipientRegistryContract.controller()
-        const maxRecipients = recipientRegistryContract.maxRecipients()
-
         const grantRoundId = qfi.currentGrantRound
-
-        if (recipientRegistry === null) {
-            recipientRegistry = new RecipientRegistry(recipientRegistryId)
-        }
 
         if (grantRoundId !== null) {
             recipientRegistry.grantRoundFactoryAddress = event.address
@@ -101,6 +102,6 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
             log.error(`QFI current GrantRound is not initialized!`, [])
         }
     } else {
-        log.error(`QFI entity not found!`, [])
+        log.error(`QFI not initialized yet!`, [])
     }
 }
