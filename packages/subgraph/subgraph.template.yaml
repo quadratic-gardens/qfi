@@ -77,8 +77,14 @@ dataSources:
         - RecipientRegistry
         - Recipient
       abis:
+        - name: QFI
+          file: ./abis/QFI.json
         - name: OptimisticRecipientRegistry
           file: ./abis/OptimisticRecipientRegistry.json
+        - name: GrantRound
+          file: ./abis/GrantRound.json
+        - name: GrantRoundFactory
+          file: ./abis/GrantRoundFactory.json
       eventHandlers:
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
@@ -101,6 +107,12 @@ dataSources:
       entities:
         - QFI
       abis:
+        - name: QFI
+          file: ./abis/QFI.json
+        - name: OptimisticRecipientRegistry
+          file: ./abis/OptimisticRecipientRegistry.json
+        - name: GrantRound
+          file: ./abis/GrantRound.json
         - name: GrantRoundFactory
           file: ./abis/GrantRoundFactory.json
       eventHandlers:
@@ -128,10 +140,14 @@ templates:
         - Recipient
         - Contributor
       abis:
-        - name: GrantRound
-          file: ./abis/GrantRound.json
+        - name: QFI
+          file: ./abis/QFI.json
         - name: OptimisticRecipientRegistry
           file: ./abis/OptimisticRecipientRegistry.json
+        - name: GrantRound
+          file: ./abis/GrantRound.json
+        - name: GrantRoundFactory
+          file: ./abis/GrantRoundFactory.json
       eventHandlers:
         - event: PublishMessage((uint256[10]),(uint256,uint256))
           handler: handlePublishMessage
