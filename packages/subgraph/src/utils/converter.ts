@@ -14,34 +14,38 @@ export const REMOVAL = 'Removal';
 
 /**
  * Current stage value converter.
- * @param _stage <BigInt>: current value to be converted from BigInt to String.
+ * @param _stage <BigInt>: current value to be converted.
  * @returns <string>
  */
-export function currentStageConverter(_stage: BigInt): string {
-  let stage = _stage.toI32()
-
-  switch (stage) {
-    case 0: return NOT_INITIALIZED
-    case 1: return WAITING_FOR_SIGNUPS_AND_TOPUPS
-    case 2: return VOTING_PERIOD_OPEN
-    case 3: return WAITING_FOR_FINALIZATION
-    case 4: return FINALIZED
-    case 5: return CANCELLED
-    default: throw new Error('Invalid current stage value');
+export function currentStageConverterFromEnumIndexToString(_stage: string): string {
+  if (_stage == "0") {
+    return NOT_INITIALIZED;
+  } else if (_stage == "1") {
+    return WAITING_FOR_SIGNUPS_AND_TOPUPS;
+  } else if (_stage == "2") {
+    return VOTING_PERIOD_OPEN;
+  } else if (_stage == "3") {
+    return WAITING_FOR_FINALIZATION
+  } else if (_stage == "4") {
+    return FINALIZED
+  } else if (_stage == "5") {
+    return CANCELLED
   }
+
+  throw new Error('Invalid current stage value');
 }
 
 /**
  * Request type value converter.
- * @param _requestType <BigInt>: request type to be converted from BigInt to String.
+ * @param _requestType <string>: request type to be converted.
  * @returns <string>
  */
-export function requestTypeConverter(_requestType: BigInt): string {
-  let requestType = _requestType.toI32()
-
-  switch (requestType) {
-    case 0: return REGISTRATION
-    case 1: return REMOVAL
-    default: throw new Error('Invalid request type value');
+export function requestTypeConverterFromEnumIndexToString(_requestType: string): string {
+  if (_requestType == "0") {
+    return REGISTRATION;
+  } else if (_requestType == "1") {
+    return REMOVAL;
   }
+
+  throw new Error('Invalid current stage value');
 }

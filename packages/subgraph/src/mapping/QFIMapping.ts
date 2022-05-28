@@ -32,7 +32,7 @@ import {
     RecipientRegistry
 } from "../../generated/schema"
 import { GrantRound as GrantRoundTemplate } from "../../generated/templates"
-import { currentStageConverter } from "../utils/converter"
+import { currentStageConverterFromEnumIndexToString } from "../utils/converter"
 
 /**
  * Handle a smart contract based on MACI (constructor event).
@@ -65,7 +65,8 @@ export function handleMaciDeployed(event: MaciDeployed): void {
     qfi.voiceCreditFactor = qfiContract.voiceCreditFactor()
     qfi.isInitialized = qfiContract.isInitialised()
     qfi.stateTreeDepth = qfiContract.stateTreeDepth()
-    qfi.currentStage = currentStageConverter(new BigInt(qfiContract.currentStage()))
+    qfi.isStateAqMerged = false
+    qfi.currentStage = currentStageConverterFromEnumIndexToString(qfiContract.currentStage().toString())
 
     qfi.save()
 }
@@ -85,7 +86,7 @@ export function handleQfiDeployed(event: QfiDeployed): void {
     qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
     qfi.nativeERC20TokenAddress = event.params._nativeToken
     qfi.voiceCreditFactor = event.params._voiceCreditFactor
-    qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+    qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
     qfi.isInitialized = false
 
     // Check if the Grant Round Factory contract has Recipient Registry set.
@@ -141,7 +142,7 @@ export function handleQfiInitialized(event: QfiInitialized): void {
 
     if (qfi !== null) {
         qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactoryGrantRounds
-        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+        qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
 
         qfi.save()
 
@@ -424,7 +425,7 @@ export function handleGrantRoundDeployed(event: GrantRoundDeployed): void {
             qfi.coordinator = coordinatorId
             qfi.currentGrantRound = grantRoundId.toString()
             qfi.nextGrantRoundId = qfi.nextGrantRoundId.plus(BigInt.fromI32(1))
-            qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+            qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
             qfi.lastUpdatedAt = event.block.timestamp.toString()
 
             qfi.save()
@@ -477,7 +478,7 @@ export function handleGrantRoundFinalized(event: GrantRoundFinalized): void {
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+        qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
 
         qfi.save()
     } else {
@@ -506,7 +507,7 @@ export function handleVotingPeriodClosed(event: VotingPeriodClosed): void {
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+        qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
 
         qfi.save()
     } else {
@@ -527,7 +528,7 @@ export function handlePreRoundContributionPeriodStarted(event: PreRoundContribut
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
+        qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
 
         qfi.save()
     } else {

@@ -6,7 +6,7 @@ import {
 } from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
 
 import { Recipient } from "../../generated/schema"
-import { requestTypeConverter } from "../utils/converter"
+import { requestTypeConverterFromEnumIndexToString } from "../utils/converter"
 
 /**
  * (e.g., Store a PublicKey in the storage).
@@ -31,7 +31,7 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
     const recipient = new Recipient(recipientId)
 
     recipient.address = event.params._recipient
-    recipient.requestType = requestTypeConverter(new BigInt(event.params._type))
+    recipient.requestType = requestTypeConverterFromEnumIndexToString(event.params._type.toString())
     recipient.requesterAddress = event.transaction.from
     recipient.submissionTime = event.params._timestamp
     recipient.deposit = event.transaction.value
@@ -58,7 +58,7 @@ export function handleRequestResolved(event: RequestResolved): void {
     const recipient = Recipient.load(recipientId)
 
     if (recipient !== null) {
-        recipient.requestType = requestTypeConverter(new BigInt(event.params._type))
+        recipient.requestType = requestTypeConverterFromEnumIndexToString(event.params._type.toString())
         recipient.requesterAddress = event.transaction.from
         recipient.submissionTime = event.params._timestamp
         recipient.deposit = event.transaction.value

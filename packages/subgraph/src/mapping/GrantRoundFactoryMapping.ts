@@ -37,21 +37,6 @@ export function handleMessageAqFactoryChanged(event: MessageAqFactoryChanged): v
     } else {
         log.error(`GrantRoundFactory entity not found!`, [])
     }
-
-    // nb. this TX must be sent from QFI contract.
-    // Update QFI.
-    const qfiAddress = event.transaction.from
-    const qfiId = qfiAddress.toHexString()
-    const qfi = new QFISchema(qfiId)
-
-    if (qfi !== null) {
-        qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactory
-        qfi.lastUpdatedAt = timestamp
-
-        qfi.save()
-    } else {
-        log.error(`QFI entity not found!`, [])
-    }
 }
 
 /**
