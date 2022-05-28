@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+package-lock.json
+yarn.lock
+yarn-error.log
+
+# environment
+env.json
+
+# build
+dist/
+
+# ceremony
+transcripts/
+contributions/
+circuits/
+zkeys/
+attestation/
