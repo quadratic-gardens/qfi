@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { createCommand } from "commander"
-import { readLocalJsonFile } from "./lib/utils.js"
+import { readLocalJsonFile } from "./lib/files.js"
+import genkeys from "./commands/index.js"
 
 const pkg = readLocalJsonFile("../../package.json")
 
@@ -14,5 +15,8 @@ program
   .command("genkeys")
   .description("Generate a new specified amount of MACI and ETH keypairs")
   .argument("<quantity>", "amount of MACI and ETH keypairs to be generated")
+  .action((quantity: number) => {
+    genkeys(quantity)
+  })
 
 program.parseAsync()

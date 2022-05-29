@@ -16,3 +16,6 @@ contributions/
 circuits/
 zkeys/
 attestation/
+
+# output
+generated/
