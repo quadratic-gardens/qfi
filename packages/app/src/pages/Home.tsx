@@ -13,12 +13,14 @@ import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 
 
 export type HomeProps = {
-  isOpen: boolean;
+  isSettingsOpen: boolean;
   onSettingsOpen: () => void;
+  isGuideOpen: boolean;
+  onGuideOpen: () => void;
 };
 
 
-export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
+export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
   const color = useColorModeValue("gray.800", "gray.700");
   return (
     <Flex
@@ -71,7 +73,7 @@ export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
                 </Text>
               </Button>
               <Button
-                onClick={onSettingsOpen}
+                onClick={onGuideOpen}
                 fontSize="lg"
                 fontWeight={"black"}
                 bg={"black"}
@@ -84,10 +86,9 @@ export const Home = ({ isOpen, onSettingsOpen }: HomeProps) => {
             </VStack>
 
             <VStack w="full" display={{ base: "none", xl: "flex" }} pt="10" justifyContent={"center"}>
-              <Button h="80px" w="full" background="#FFFF00"color={color} variant={"solid"}>
+              <Button as={Link} href="https://cf23uhv4kuq.typeform.com/to/VodVOdg9" isExternal h="80px" w="full" background="#FFFF00"color={color} variant={"solid"}>
                 <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
-                  {" "}
-                  Register your Project{" "}
+                  Register your Project
                 </Text>
               </Button>
             </VStack>

@@ -6,12 +6,12 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import { MdDashboard, MdSettings } from "react-icons/md";
-import { HiCollection } from "react-icons/hi";
+import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Logo } from "../Hero";
 import { SideNavProps } from "../../propTypes";
 
-export const SideNav = ({ onSettingsOpen }: SideNavProps) => {
+export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "gray.700");
   return (
     <VStack p={4} justifyContent="space-between" alignItems="center" w="full">
@@ -53,6 +53,15 @@ export const SideNav = ({ onSettingsOpen }: SideNavProps) => {
               />
             </Tooltip> */}
       </VStack>
+      <VStack>
+      
+      <Tooltip label="Guide" placement="right">
+        <IconButton
+          onClick={onGuideOpen}
+          color="gray.500"
+          icon={<Icon as={HiQuestionMarkCircle} boxSize={5} />}
+          aria-label="Guide" />
+      </Tooltip>
       <Tooltip label="Settings" placement="right">
         <IconButton
           onClick={onSettingsOpen}
@@ -60,6 +69,7 @@ export const SideNav = ({ onSettingsOpen }: SideNavProps) => {
           icon={<Icon as={MdSettings} boxSize={5} />}
           aria-label="Settings" />
       </Tooltip>
+      </VStack>
     </VStack>
   );
 };

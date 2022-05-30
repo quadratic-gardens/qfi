@@ -11,12 +11,27 @@ import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
 
 export const App = () => {
-  const { isOpen, onOpen: onSettingsOpen, onClose } = useDisclosure();
+  const { isOpen: isSettingsOpen, onOpen: onSettingsOpen, onClose: onSettingsClose } = useDisclosure();
+  const { isOpen: isGuideOpen, onOpen: onGuideOpen, onClose: onGuideClose } = useDisclosure();
   return (
     <ChakraProvider theme={theme}>
       <Routes>
-        <Route path="/" element={<Layout isOpen={isOpen} onSettingsOpen={onSettingsOpen} onClose={onClose} />}>
-          <Route index element={<Home isOpen={isOpen} onSettingsOpen={onSettingsOpen} />} />
+        <Route
+          path="/"
+          element={
+            <Layout
+              isSettingsOpen={isSettingsOpen}
+              onSettingsOpen={onSettingsOpen}
+              onSettingsClose={onSettingsClose}
+              onGuideOpen={onGuideOpen}
+              onGuideClose={onGuideClose}
+              isGuideOpen={isGuideOpen}
+            />
+          }>
+          <Route index element={<Home isSettingsOpen={isSettingsOpen} onSettingsOpen={onSettingsOpen} 
+         onGuideOpen={onGuideOpen}
+         isGuideOpen={isGuideOpen} 
+          />} />
           <Route path="ballot" element={<Ballot />} />
           <Route path="projects" element={<Projects />}></Route>
           <Route path="projects/:projectId" element={<Project />} />

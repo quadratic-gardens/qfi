@@ -23,22 +23,21 @@ const Settings = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Account Setup</Heading>
           <Text fontFamily={"archivo"}>
-            Casting a Ballot requires you to have a wallet on the xDAI chain to pay for gas as well as valid Ballot
-            (MACI) passphrase. Ballot distribution is done as an in-person sybil check that assigns a pseudo random maci
-            key to each voter. While at the event, you will be given a passphrase to use to register your ballot. (ID
-            and Signature Check required).
+          Casting a Ballot requires you to have a wallet on the xDAI chain, xDAI to pay for gas and a valid ballot key. 
           </Text>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="md">xDAI Wallet.</Heading>
           <Text fontFamily={"archivo"}>
-            You may use the key we provide or any other wallet that you have access to.
+          The wallet contained in your registration card is pre-loaded with xDAI to pay for gas, but you can also use any other wallet that you have access to. Voting is anonymous, but ballot registration happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your wallet registered.
           </Text>
           <MagikButton />
         </VStack>
         <VStack spacing={2} alignItems="flex-start">
           <Heading size="md">Ballot (MACI) passphrase</Heading>
-          <Text fontFamily={"archivo"}>Keep this safe, it is the only way to vote.</Text>
+          <Text fontFamily={"archivo"}>MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting. 
+
+Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.</Text>
         </VStack>
 
         <VStack spacing={1} alignItems="flex-start">
@@ -159,7 +158,7 @@ const Settings = () => {
         </VStack>
         <VStack spacing={2} alignItems="flex-start">
           <Heading size="md">Confused or need help?</Heading>
-          <Text fontFamily={"archivo"}>You can contact us or one of the event coordinators at qb@ethereum.org</Text>
+          <Text fontFamily={"archivo"}>You can contact us at qb@ethereum.org, or visit us at the Quadratic Funding booth in the Few sponsor area at ETHPrague.</Text>
         </VStack>
       </VStack>
     </Container>
