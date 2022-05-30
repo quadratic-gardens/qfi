@@ -2,7 +2,7 @@
   "name": "@quadratic-funding/qficli",
   "version": "0.0.1",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
-  "main": "dist/src/index.js",
+  "main": "dist/cli/src/index.js",
   "repository": "https://github.com/quadratic-funding/qfi",
   "homepage": "https://github.com/quadratic-funding/qfi",
   "bugs": "https://github.com/quadratic-funding/qfi/issues",
@@ -17,12 +17,13 @@
     "README.md"
   ],
   "bin": {
-    "qficli": "dist/src/index.js"
+    "qficli": "dist/cli/src/index.js"
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/src/index.js",
+    "start": "node dist/cli/src/index.js",
     "genkeys": "yarn start genkeys",
+    "deploy": "yarn start deploy",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "prettier": "prettier -c .",
@@ -50,6 +51,7 @@
   "dependencies": {
     "clear": "^0.1.0",
     "commander": "^9.3.0",
+    "dotenv": "^16.0.1",
     "ethers": "^5.6.8",
     "log-symbols": "^5.1.0",
     "maci-crypto": "^1.0.4",

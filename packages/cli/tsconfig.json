@@ -16,7 +16,10 @@
     "noUnusedLocals": true,
     "sourceMap": true,
     "outDir": "dist/",
-    "declarationDir": "dist/types"
+    "declarationDir": "dist/types",
+    "paths": {
+      "@quadratic-funding/contracts": ["@quadratic-funding/contracts"] 
+    }
   },
   "ts-node": {
     "compilerOptions": {

@@ -1,3 +1,4 @@
 import genkeys from "./genkeys.js"
+import deploy from "./deploy.js"
 
-export default genkeys
+export { genkeys, deploy }

@@ -42,6 +42,15 @@ export const readLocalJsonFile = (filePath: string): any => {
 }
 
 /**
+ * Write data a local .json file at a given path.
+ * @param filePath <string> 
+ * @param data <JSON>
+ */
+export const writeLocalJsonFile = (filePath: string, data: JSON) => {
+  fs.writeFileSync(filePath, JSON.stringify(data), "utf-8");
+}
+
+/**
  *
  * @param dirPath <string> - the path to the directory where the file containing the key will be stored.
  * @param fileName <string> - the name of the file.

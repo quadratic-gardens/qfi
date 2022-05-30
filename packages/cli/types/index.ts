@@ -8,3 +8,9 @@ export enum QRCodeFileType {
   SVG = "svg",
   UTF8 = "utf8"
 }
+
+export type Network = {
+  name: string,
+  rpcUrl: string,
+  chainId: number
+}
