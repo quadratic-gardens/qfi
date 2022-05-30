@@ -135,12 +135,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "_voteOptionIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
         "internalType": "address",
         "name": "_recipient",
         "type": "address"
@@ -148,7 +142,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_voteOptionIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_allocatedAmount",
         "type": "uint256"
       }
     ],
@@ -302,7 +302,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "_contributor",
+        "name": "_voter",
         "type": "address"
       }
     ],

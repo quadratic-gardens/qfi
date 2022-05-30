@@ -2,22 +2,22 @@
 pragma experimental ABIEncoderV2;
 pragma solidity ^0.8.1;
 
-import {MACI} from 'qaci-contracts/contracts/MACI.sol';
-import {Params} from 'qaci-contracts/contracts/Params.sol';
+import {MACI} from "qaci-contracts/contracts/MACI.sol";
+import {Params} from "qaci-contracts/contracts/Params.sol";
 
-import {PollFactory, Poll, PollProcessorAndTallyer, MessageAqFactory} from 'qaci-contracts/contracts/Poll.sol';
-import {VkRegistry} from 'qaci-contracts/contracts/VkRegistry.sol';
-import {InitialVoiceCreditProxy} from 'qaci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol';
-import {SignUpGatekeeper} from 'qaci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol';
-import {ConstantInitialVoiceCreditProxy} from 'qaci-contracts/contracts/initialVoiceCreditProxy/ConstantInitialVoiceCreditProxy.sol';
-import {FreeForAllGatekeeper} from 'qaci-contracts/contracts/gatekeepers/FreeForAllSignUpGatekeeper.sol';
+import {PollFactory, Poll, PollProcessorAndTallyer, MessageAqFactory} from "qaci-contracts/contracts/Poll.sol";
+import {VkRegistry} from "qaci-contracts/contracts/VkRegistry.sol";
+import {InitialVoiceCreditProxy} from "qaci-contracts/contracts/initialVoiceCreditProxy/InitialVoiceCreditProxy.sol";
+import {SignUpGatekeeper} from "qaci-contracts/contracts/gatekeepers/SignUpGatekeeper.sol";
+import {ConstantInitialVoiceCreditProxy} from "qaci-contracts/contracts/initialVoiceCreditProxy/ConstantInitialVoiceCreditProxy.sol";
+import {FreeForAllGatekeeper} from "qaci-contracts/contracts/gatekeepers/FreeForAllSignUpGatekeeper.sol";
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
-import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {GrantRound} from './GrantRound.sol';
-import {FundsManager} from './FundsManager.sol';
-import {GrantRoundFactory} from './GrantRoundFactory.sol';
+import {GrantRound} from "./GrantRound.sol";
+import {FundsManager} from "./FundsManager.sol";
+import {GrantRoundFactory} from "./GrantRoundFactory.sol";
 
 /**
  * @title Quadratic Funding Infrastructure
@@ -31,19 +31,21 @@ contract QFI is MACI, FundsManager {
      * @param _grantRoundFactory The Ethereum smart contract address of the current Grant Round Factory.
      * @param _nativeToken The Ethereum smart contract address of the ERC20 Token used for the current Grant Round.
      * @param _voiceCreditFactor Constant used to handle VCs / Tokens conversions (e.g., reconstruct the exact contribution amount in Token from VCs).
+     * @param _currentStage The updated value for the current QFI stage.
      */
     event QfiDeployed(
         address _grantRoundFactory,
         address _nativeToken,
-        uint256 _voiceCreditFactor
+        uint256 _voiceCreditFactor,
+        Stage _currentStage
     );
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when the owner (deployer) initialize the QFI contract.
      * @param _messageAqFactoryGrantRounds The Ethereum smart contract address of the Message AQ Factory for the current Grant Round.
+     * @param _currentStage The updated value for the current QFI stage.
      */
-    event QfiInitialized(address _messageAqFactoryGrantRounds);
+    event QfiInitialized(address _messageAqFactoryGrantRounds, Stage _currentStage);
 
     /**
      * Event issued when the owner (deployer) set the PollProcessorAndTallyer contract.
@@ -51,27 +53,22 @@ contract QFI is MACI, FundsManager {
      */
     event PollProcessorAndTallyerChanged(address _pollProcessorAndTallyer);
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when an unregistered user signs up and contributes to the current Grant Round.
      * @param _contributor The Ethereum address of who sends the contribution.
      * @param _amount The amount in native ERC20 tokens submitted as contribution.
-     * @param _voiceCredits The amount of Voice Credits obtained according to the contribution amount.
      */
     event ContributionSent(
         address _contributor,
-        uint256 _amount,
-        uint256 _voiceCredits
+        uint256 _amount
     );
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when a contributor decides to withdraw his/her contribution for the current Grant Round.
      * @param _contributor The Ethereum address of who withdraws the contribution.
      */
     event ContributionWithdrew(address _contributor);
 
-    // TODO: reflect the change of the event name for the subgraph.
     /**
      * Event issued when the owner (deployer) deploy a new Grant Round.
      * @param _currentGrantRound The Ethereum smart contract address of the current Grant Round.
@@ -80,14 +77,16 @@ contract QFI is MACI, FundsManager {
      * @param _treeDepths The intStateTreeDepth, messageTreeSubDepth, messageTreeDepth, and voteOptionTreeDepth.
      * @param _batchSizes The message and vote tally batch sizes.
      * @param _coordinatorPubKey The MACI public key of the coordinator of the current Grant Round.
+     * @param _currentStage The updated value for the current QFI stage.
      */
-    event GrantRoundDeployed (
-        address _currentGrantRound, 
-        uint256 _duration, 
-        MaxValues _maxValues, 
-        TreeDepths _treeDepths, 
-        BatchSizes _batchSizes, 
-        PubKey _coordinatorPubKey
+    event GrantRoundDeployed(
+        address _currentGrantRound,
+        uint256 _duration,
+        MaxValues _maxValues,
+        TreeDepths _treeDepths,
+        BatchSizes _batchSizes,
+        PubKey _coordinatorPubKey,
+        Stage _currentStage
     );
 
     /**
@@ -177,7 +176,8 @@ contract QFI is MACI, FundsManager {
         emit QfiDeployed(
             address(_grantRoundFactory),
             address(_nativeToken),
-            voiceCreditFactor
+            voiceCreditFactor,
+            currentStage
         );
     }
 
@@ -197,7 +197,7 @@ contract QFI is MACI, FundsManager {
 
         require(
             grantRoundFactory.owner() == address(this),
-            'MACI: GrantFactory owner incorrectly set'
+            "MACI: GrantFactory owner incorrectly set"
         );
 
         // The PollFactory needs to store the MessageAqFactory address
@@ -206,11 +206,11 @@ contract QFI is MACI, FundsManager {
         // The MessageAQFactory owner must be the PollFactory contract
         require(
             messageAqFactoryGrants.owner() == address(grantRoundFactory),
-            'MACI: MessageAqFactory owner incorrectly set'
+            "MACI: MessageAqFactory owner incorrectly set"
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 
-        emit QfiInitialized(address(_messageAqFactoryGrantRounds));
+        emit QfiInitialized(address(_messageAqFactoryGrantRounds), currentStage);
     }
 
     /**
@@ -235,24 +235,24 @@ contract QFI is MACI, FundsManager {
     function contribute(PubKey calldata pubKey, uint256 amount) external {
         require(
             numSignUps < STATE_TREE_ARITY**stateTreeDepth,
-            'MACI: maximum number of signups reached'
+            "MACI: maximum number of signups reached"
         );
         require(
             currentStage == Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS,
-            'QFI: Not accepting signups or top ups'
+            "QFI: Not accepting signups or top ups"
         );
         require(
             amount > 0,
-            'QFI: Contribution amount must be greater than zero'
+            "QFI: Contribution amount must be greater than zero"
         );
         require(
             amount <= MAX_VOICE_CREDITS * voiceCreditFactor,
-            'QFI: Contribution amount is too large'
+            "QFI: Contribution amount is too large"
         );
         // TODO: TOP UP CHECK
         require(
             contributors[msg.sender].voiceCredits == 0,
-            'QFI: top ups not supported, donate to matching pool instead'
+            "QFI: top ups not supported, donate to matching pool instead"
         );
         uint256 voiceCredits = amount / voiceCreditFactor;
         contributors[msg.sender] = ContributorStatus(voiceCredits, false);
@@ -269,7 +269,7 @@ contract QFI is MACI, FundsManager {
 
         signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
 
-        emit ContributionSent(msg.sender, amount, voiceCredits);
+        emit ContributionSent(msg.sender, amount);
     }
 
     /**
@@ -285,7 +285,7 @@ contract QFI is MACI, FundsManager {
         uint256 initialVoiceCredits = contributors[user].voiceCredits;
         require(
             initialVoiceCredits > 0,
-            'FundingRound: User does not have any voice credits'
+            "FundingRound: User does not have any voice credits"
         );
         return initialVoiceCredits;
     }
@@ -298,10 +298,10 @@ contract QFI is MACI, FundsManager {
         // Reconstruction of exact contribution amount from VCs may not be possible due to a loss of precision
         uint256 amount = contributors[msg.sender].voiceCredits *
             voiceCreditFactor;
-        require(amount > 0, 'FundingRound: Nothing to withdraw');
+        require(amount > 0, "FundingRound: Nothing to withdraw");
         contributors[msg.sender].voiceCredits = 0;
         nativeToken.safeTransfer(msg.sender, amount);
-        
+
         emit ContributionWithdrew(msg.sender);
     }
 
@@ -322,7 +322,7 @@ contract QFI is MACI, FundsManager {
     ) public afterInit onlyOwner {
         require(
             currentStage == Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS,
-            'MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage'
+            "MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
         );
         uint256 pollId = nextPollId;
         uint256 grantRoundId = nextGrantRoundId;
@@ -357,7 +357,15 @@ contract QFI is MACI, FundsManager {
 
         currentStage = Stage.VOTING_PERIOD_OPEN;
 
-        emit GrantRoundDeployed(address(currentGrantRound), _duration, _maxValues, _treeDepths, batchSizes, _coordinatorPubKey);
+        emit GrantRoundDeployed(
+            address(currentGrantRound),
+            _duration,
+            _maxValues,
+            _treeDepths,
+            batchSizes,
+            _coordinatorPubKey,
+            currentStage
+        );
     }
 
     /**
@@ -373,7 +381,7 @@ contract QFI is MACI, FundsManager {
     {
         require(
             _grantRoundId < nextGrantRoundId,
-            'MACI: grantRound with _grantRoundId does not exist'
+            "MACI: grantRound with _grantRoundId does not exist"
         );
         return grantRounds[_grantRoundId];
     }
@@ -399,7 +407,7 @@ contract QFI is MACI, FundsManager {
     function closeVotingAndWaitForDeadline() public onlyOwner {
         require(
             currentStage == Stage.VOTING_PERIOD_OPEN,
-            'MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage'
+            "MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
         );
         //TODO: ACTUALLY CLOSE THE VOTING PERIOD on the grant round contract
         currentStage = Stage.WAITING_FOR_FINALIZATION;
@@ -413,10 +421,10 @@ contract QFI is MACI, FundsManager {
     {
         require(
             currentStage == Stage.WAITING_FOR_FINALIZATION,
-            'QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage'
+            "QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage"
         );
         bool proccesingComplete = pollProcessorAndTallyer.processingComplete();
-        require(proccesingComplete, 'QFI: messages have not been proccessed');
+        require(proccesingComplete, "QFI: messages have not been proccessed");
         GrantRound g = currentGrantRound;
         //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
@@ -431,7 +439,7 @@ contract QFI is MACI, FundsManager {
     function acceptContributionsAndTopUpsBeforeNewRound() public onlyOwner {
         require(
             currentStage == Stage.FINALIZED,
-            'QFI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage'
+            "QFI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 

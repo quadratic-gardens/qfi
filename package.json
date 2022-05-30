@@ -8,7 +8,13 @@
   },
   "private": true,
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "husky": "^7.0.0",
+    "lerna": "^4.0.0",
+    "lint-staged": "^12.3.7"
+  },
+  "resolutions": {
+    "qaci-cli/circomlib": "https://github.com/weijiekoh/circomlib.git#24ed08eee0bb613b8c0135d66c1013bd9f78d50a",
+    "qaci-crypto/circomlib": "https://github.com/weijiekoh/circomlib.git#24ed08eee0bb613b8c0135d66c1013bd9f78d50a"
   },
   "workspaces": {
     "packages": [
@@ -27,7 +33,8 @@
     "build:hooks": "yarn workspace @qfi/hooks run build",
     "test": "yarn workspaces run test",
     "test:contracts": "yarn workspace @qfi/contracts run test",
-    "deploy:subgraph":"yarn workspace @qfi/subgraph run deploy"
+    "deploy:subgraph":"yarn workspace @qfi/subgraph run deploy",
+    "prepare": "husky install"
   },
   "keywords": [
     "RxC"

@@ -2,8 +2,7 @@ import { ethers } from "hardhat";
 import chai from "chai";
 import { deployMockContract, MockContract, solidity } from "ethereum-waffle";
 import { ContractTransaction, Signer } from "ethers";
-import { FundsManager, FundsManager__factory } from "../../typechain";
-import BaseERC20TokenAbi from "../../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
+import { FundsManager, FundsManager__factory, BaseERC20Token__factory } from "../../typechain";
 
 chai.use(solidity);
 const { expect } = chai;
@@ -29,7 +28,7 @@ describe("Funds Manager", () => {
     fundingSourceAddress = await fundingSource.getAddress();
 
     // Mocked contracts.
-    mockBaseERC20Token = await deployMockContract(deployer, BaseERC20TokenAbi);
+    mockBaseERC20Token = await deployMockContract(deployer, BaseERC20Token__factory.abi);
 
     // nb. workaround due it's not possible to use Waffle library for linking libraries.
     // ISSUE -> https://github.com/EthWorks/Waffle/issues/429.

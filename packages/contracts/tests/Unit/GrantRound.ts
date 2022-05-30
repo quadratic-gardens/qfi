@@ -13,13 +13,13 @@ import {
   PoseidonT4__factory,
   PoseidonT5__factory,
   PoseidonT6__factory,
+  BaseERC20Token__factory,
+  VkRegistry__factory,
+  OptimisticRecipientRegistry__factory,
+  QFI__factory,
+  AccQueue__factory,
+  AccQueueQuinaryBlankSl__factory
 } from "../../typechain";
-import BaseERC20TokenAbi from "../../abi/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
-import VkRegistryAbi from "../../abi/qaci-contracts/contracts/VkRegistry.sol/VkRegistry.json";
-import RecipientRegistryAbi from "../../abi/contracts/recipientRegistry/OptimisticRecipientRegistry.sol/OptimisticRecipientRegistry.json";
-import QfiAbi from "../../abi/contracts/QFI.sol/QFI.json";
-import MessageAqAbi from "../../abi/qaci-contracts/contracts/trees/AccQueue.sol/AccQueue.json";
-import AccQueueQuinaryBlankSlAbi from "../../abi/qaci-contracts/contracts/trees/AccQueue.sol/AccQueueQuinaryBlankSl.json";
 import { Command, Keypair } from "qaci-domainobjs";
 import { MessageStruct } from "../../typechain/GrantRound";
 import { hash4, hash5 } from "qaci-crypto";
@@ -58,7 +58,7 @@ describe("Grant Round", () => {
 
   // Input parameters for GrantRound methods.
   // Deploy Grant Round.
-  const duration = 30;
+  const duration = 300;
   const maxValues = {
     maxMessages: 25,
     maxVoteOptions: 25,
@@ -100,17 +100,17 @@ describe("Grant Round", () => {
     recipientAddress = await recipient.getAddress();
 
     // Mocked contracts.
-    mockBaseERC20Token = await deployMockContract(deployer, BaseERC20TokenAbi);
+    mockBaseERC20Token = await deployMockContract(deployer, BaseERC20Token__factory.abi);
     mockRecipientRegistry = await deployMockContract(
       deployer,
-      RecipientRegistryAbi
+      OptimisticRecipientRegistry__factory.abi
     );
-    mockQfi = await deployMockContract(deployer, QfiAbi);
-    mockMessageAq = await deployMockContract(deployer, MessageAqAbi);
-    mockVkRegistry = await deployMockContract(deployer, VkRegistryAbi);
+    mockQfi = await deployMockContract(deployer, QFI__factory.abi);
+    mockMessageAq = await deployMockContract(deployer, AccQueue__factory.abi);
+    mockVkRegistry = await deployMockContract(deployer, VkRegistry__factory.abi);
     mockMaciStateAq = await deployMockContract(
       deployer,
-      AccQueueQuinaryBlankSlAbi
+      AccQueueQuinaryBlankSl__factory.abi
     );
 
     // External contracts for Grant Round.

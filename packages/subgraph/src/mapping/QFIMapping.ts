@@ -1,15 +1,15 @@
 import { BigInt, log, store } from "@graphprotocol/graph-ts"
-import { OwnershipTransferred } from "../generated/GrantRoundFactory/GrantRoundFactory"
+import { OwnershipTransferred } from "../../generated/GrantRoundFactory/GrantRoundFactory"
 import {
     QFI as QFIContract,
-    ContributionWithdrawn,
-    DeployGrantRound,
+    ContributionWithdrew,
+    GrantRoundDeployed,
     GrantRoundFinalized,
     Init,
-    InitQfi,
+    QfiInitialized,
     MergeStateAq,
     SignUp,
-    Contribution as ContributionEvent,
+    ContributionSent,
     VotingPeriodClosed,
     PreRoundContributionPeriodStarted,
     PollProcessorAndTallyerChanged,
@@ -17,8 +17,8 @@ import {
     QfiDeployed,
     FundingSourceAdded,
     FundingSourceRemoved
-} from "../generated/QFI/QFI"
-import { GrantRound as GrantRoundContract } from "../generated/templates/GrantRound/GrantRound"
+} from "../../generated/QFI/QFI"
+import { GrantRound as GrantRoundContract } from "../../generated/templates/GrantRound/GrantRound"
 import {
     QFI as QFISchema,
     GrantRound,
@@ -28,8 +28,9 @@ import {
     Contributor,
     FundingSource,
     GrantRoundContributor
-} from "../generated/schema"
-import { GrantRound as GrantRoundTemplate } from "../generated/templates"
+} from "../../generated/schema"
+import { GrantRound as GrantRoundTemplate } from "../../generated/templates"
+import { currentStageConverter } from "../utils/converter"
 
 /**
  * Handle a smart contract based on MACI (constructor event).
@@ -56,7 +57,7 @@ export function handleMaciDeployed(event: MaciDeployed): void {
     qfi.lastUpdatedAt = timestamp
 
     // External call to contract instance (one time event - good trade-off for sync time).
-    qfi.stateTreeDepth = qfiContract.stateTreeDepth()
+    qfi.stateTreeDepth = qfiContract.stateTreeDepth().toI32()
     qfi.numSignUps = qfiContract.numSignUps()
 
     qfi.save()
@@ -78,7 +79,7 @@ export function handleQfiDeployed(event: QfiDeployed): void {
         qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
         qfi.nativeERC20TokenAddress = event.params._nativeToken
         qfi.voiceCreditFactor = event.params._voiceCreditFactor
-        qfi.currentStage = "NotInitialized"
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
 
@@ -113,8 +114,8 @@ export function handleInitMaci(event: Init): void {
  * Handle the initialization of the QFI smart contract.
  * @param event Ethereum event emitted when initializing the QFI smart contract.
  */
-export function handleInitQfi(event: InitQfi): void {
-    log.debug(`Init QFI event block: {}`, [event.block.number.toString()])
+export function handleQfiInitialized(event: QfiInitialized): void {
+    log.debug(`QfiInitialized event block: {}`, [event.block.number.toString()])
 
     // Get the QFI/MACI instance.
     const qfiAddress = event.address
@@ -123,7 +124,7 @@ export function handleInitQfi(event: InitQfi): void {
 
     if (qfi !== null) {
         qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactoryGrantRounds
-        qfi.currentStage = "WaitingForSignupsAndTopups"
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
 
@@ -190,9 +191,10 @@ export function handleMergeStateAq(event: MergeStateAq): void {
 
         qfi.save()
 
-        if (qfi.currentGrantRound !== null) {
+        const currentGrantRound = qfi.currentGrantRound
+        if (currentGrantRound) {
             // Update GrantRound.
-            const grantRound = GrantRound.load(qfi.currentGrantRound)
+            const grantRound = GrantRound.load(currentGrantRound)
 
             if (grantRound !== null) {
                 grantRound.stateAqMerged = true
@@ -214,8 +216,8 @@ export function handleMergeStateAq(event: MergeStateAq): void {
  * Handle the contribution in native ERC20 token to matching pool from a user.
  * @param event Ethereum event emitted when someone donates/fund the matching pool in exchange of VCs.
  */
-export function handleContribution(event: ContributionEvent): void {
-    log.debug(`Contribution event block: {}`, [event.block.number.toString()])
+export function handleContributionSent(event: ContributionSent): void {
+    log.debug(`ContributionSent event block: {}`, [event.block.number.toString()])
 
     // Get QFI.
     const qfiAddress = event.address
@@ -248,7 +250,7 @@ export function handleContribution(event: ContributionEvent): void {
             }
 
             contributor.address = event.params._contributor
-            contributor.voiceCredits = event.params._voiceCredits
+            contributor.voiceCredits = publicKey.voiceCreditBalance
             contributor.isRegistered = false // TODO: To be checked.
             contributor.publicKey = publicKeyId
             contributor.txHash = event.transaction.hash
@@ -284,7 +286,7 @@ export function handleContribution(event: ContributionEvent): void {
                 event.params._amount.div(voiceCreditFactor)
             )
             publicKey.lifetimeAmountContributed = publicKey.lifetimeAmountContributed.plus(
-                BigInt.fromI32(event.params._amount)
+                event.params._amount
             )
 
             publicKey.save()
@@ -310,8 +312,8 @@ export function handleContribution(event: ContributionEvent): void {
  * Handle the withdrawn of a user contribution.
  * @param event Ethereum event emitted when someone withdraw a contribution.
  */
-export function handleContributionWithdrawn(event: ContributionWithdrawn): void {
-    log.debug(`ContributionWithdrawn event block: {}`, [event.block.number.toString()])
+export function handleContributionWithdrew(event: ContributionWithdrew): void {
+    log.debug(`ContributionWithdrew event block: {}`, [event.block.number.toString()])
 
     // Get QFI.
     const qfiAddress = event.address
@@ -345,8 +347,8 @@ export function handleContributionWithdrawn(event: ContributionWithdrawn): void 
  * Handle the deploy of a new Grant Round.
  * @param event Ethereum event emitted when a new GrantRound smart contract instance is deployed.
  */
-export function handleDeployGrantRound(event: DeployGrantRound): void {
-    log.debug(`DeployGrantRound event block: {}`, [event.block.number.toString()])
+export function handleGrantRoundDeployed(event: GrantRoundDeployed): void {
+    log.debug(`GrantRoundDeployed event block: {}`, [event.block.number.toString()])
 
     const grantRoundId = event.params._currentGrantRound.toHexString()
     const grantRound = GrantRound.load(grantRoundId)
@@ -366,13 +368,13 @@ export function handleDeployGrantRound(event: DeployGrantRound): void {
         grantRound.duration = event.params._duration
         grantRound.maxMessages = event.params._maxValues.maxMessages
         grantRound.maxVoteOptions = event.params._maxValues.maxVoteOptions
-        grantRound.messageTreeDepth = event.params._treeDepths.messageTreeDepth
-        grantRound.messageTreeSubDepth = event.params._treeDepths.messageTreeSubDepth
-        grantRound.voteOptionTreeDepth = event.params._treeDepths.voteOptionTreeDepth
-        grantRound.intStateTreeDepth = event.params._treeDepths.intStateTreeDepth
+        grantRound.messageTreeDepth = new BigInt(event.params._treeDepths.messageTreeDepth)
+        grantRound.messageTreeSubDepth = new BigInt(event.params._treeDepths.messageTreeSubDepth)
+        grantRound.voteOptionTreeDepth = new BigInt(event.params._treeDepths.voteOptionTreeDepth)
+        grantRound.intStateTreeDepth = new BigInt(event.params._treeDepths.intStateTreeDepth)
         grantRound.deployTimestamp = event.block.timestamp
-        grantRound.messageBatchSize = event.params._batchSizes.messageBatchSize
-        grantRound.tallyBatchSize = event.params._batchSizes.tallyBatchSize
+        grantRound.messageBatchSize = new BigInt(event.params._batchSizes.messageBatchSize)
+        grantRound.tallyBatchSize = new BigInt(event.params._batchSizes.tallyBatchSize)
         grantRound.voiceCreditFactor = voiceCreditFactor
         grantRound.qfi = qfiAddress.toHexString()
         grantRound.coordinator = coordinatorAddress.toHexString()
@@ -405,7 +407,7 @@ export function handleDeployGrantRound(event: DeployGrantRound): void {
             qfi.coordinator = coordinatorId
             qfi.currentGrantRound = grantRoundId.toString()
             qfi.nextGrantRoundId = qfi.nextGrantRoundId.plus(BigInt.fromI32(1))
-            qfi.currentStage = "VotingPeriodOpen"
+            qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
             qfi.lastUpdatedAt = event.block.timestamp.toString()
 
             qfi.save()
@@ -456,7 +458,7 @@ export function handleGrantRoundFinalized(event: GrantRoundFinalized): void {
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = "Finalized"
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
     } else {
@@ -485,7 +487,7 @@ export function handleVotingPeriodClosed(event: VotingPeriodClosed): void {
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = event.params._currentStage
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
     } else {
@@ -506,7 +508,7 @@ export function handlePreRoundContributionPeriodStarted(event: PreRoundContribut
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.currentStage = event.params._currentStage
+        qfi.currentStage = currentStageConverter(new BigInt(event.params._currentStage))
 
         qfi.save()
     } else {
@@ -527,7 +529,7 @@ export function handlePollProcessorAndTallyerChanged(event: PollProcessorAndTall
     const qfi = new QFISchema(qfiId)
 
     if (qfi !== null) {
-        qfi.pollProcessorAndTallyerAddress = event.params._pollProcessorAndTallyerNew
+        qfi.pollProcessorAndTallyerAddress = event.params._pollProcessorAndTallyer
 
         qfi.save()
     } else {
