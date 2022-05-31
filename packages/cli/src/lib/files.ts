@@ -3,11 +3,18 @@ import fs from "fs"
 import path from "path"
 
 /**
+ * Create a new empty directory.
+ * @param dirPath <string> - the path where the directory must be created.
+ * @returns 
+ */
+export const makeDir = (dirPath: string) => fs.mkdirSync(dirPath)
+
+/**
  * Check a directory path
  * @param filePath <string> - the absolute or relative path.
  * @returns <boolean> true if the path exists, otherwise false.
  */
-const directoryExists = (filePath: string): boolean => fs.existsSync(filePath)
+export const directoryExists = (filePath: string): boolean => fs.existsSync(filePath)
 
 /**
  * Clean a directory specified at a given path.

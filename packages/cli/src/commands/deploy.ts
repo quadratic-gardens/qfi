@@ -18,13 +18,14 @@ import { OptimisticRecipientRegistry__factory } from "../../../contracts/typecha
 import { BaseERC20Token__factory } from "../../../contracts/typechain/factories/BaseERC20Token__factory.js"
 import { PollProcessorAndTallyer__factory } from "../../../contracts/typechain/factories/PollProcessorAndTallyer__factory.js"
 import { MockVerifier__factory } from "../../../contracts/typechain/factories/MockVerifier__factory.js"
-import { writeLocalJsonFile } from "../lib/files.js"
+import { directoryExists, makeDir, writeLocalJsonFile } from "../lib/files.js"
 
 /**
  * Deploy command.
  * @param network <string> - the network where the contracts are going to be deployed.
  */
 async function deploy(network: string) {
+    const outputDirPath = `./output`
 
     // Get the provider.
     const provider = getProvider(network)
@@ -143,7 +144,11 @@ async function deploy(network: string) {
         "PollProcessorAndTallier": \"${pollProcessorAndTallyer.address}\", 
         "QFI": \"${qfi.address}\"
     }`
-    writeLocalJsonFile(`./deployedContracts.json`, JSON.parse(contractsInJson))
+
+    if (!directoryExists(outputDirPath))
+        makeDir(outputDirPath)
+
+    writeLocalJsonFile(`./output/deployedContracts.json`, JSON.parse(contractsInJson))
 
     console.log(
         `\nYou have successfully deployed the MACI/QFI smart contracts 🎊 You can find everything inside the \`deployedContracts.json\` file!`

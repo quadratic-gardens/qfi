@@ -18,5 +18,4 @@ zkeys/
 attestation/
 
 # output
-generated/
-deployedContracts.json
+output/**/*
