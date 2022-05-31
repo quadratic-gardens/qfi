@@ -425,12 +425,25 @@ contract QFI is MACI, FundsManager {
         );
         bool proccesingComplete = pollProcessorAndTallyer.processingComplete();
         require(proccesingComplete, "QFI: messages have not been proccessed");
+
         GrantRound g = currentGrantRound;
+
+        //TODO: actually verify tally proof again with VK
+        uint256 tallyBatchNum = pollProcessorAndTallyer.tallyBatchNum();
+        ( , uint256 tallyBatchSize) = g.batchSizes(); 
+        uint256 batchStartIndex = tallyBatchNum * tallyBatchSize;
+        (uint256 numSignUps,) = g.numSignUpsAndMessages();
+        // Require that there are NO untalied ballots left
+        require(
+            batchStartIndex <= numSignUps,
+            "QFI: There are untalied ballots left"
+        );
+
         //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
+        //TODO: verifySpentVoiceCredits(_totalSpent, _totalSpentSalt) within finalize function
+        g.finalize(_totalSpent, _totalSpentSalt);
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
         transferMatchingFunds(g);
-        g.finalize(_totalSpent, _totalSpentSalt);
-
         currentStage = Stage.FINALIZED;
 
         emit GrantRoundFinalized(address(g), currentStage);
