@@ -679,8 +679,8 @@ describe("Process - Tally QV poll votes", function () {
     console.log(tallyFileData);
   });
 
-  describe("Verify tally off chain", () => {
-    it("verify - tally results are correct", async () => {
+  describe("Verify vote nullification and verify maci state", () => {
+    it("verify - sanity checks", async () => {
       // prettier-ignore
       const expectedResultsTally = [
         '20', '10', '10', '10', '10',  '10',
@@ -690,9 +690,7 @@ describe("Process - Tally QV poll votes", function () {
         '10'
       ];
       expect(tallyFileData.results.tally).to.deep.equal(expectedResultsTally);
-    });
 
-    it("verify - per vote option spent voice credits results are correct", async () => {
       // prettier-ignore
       const expectedPerVOSpentVoiceCredits = [
         '200', '100', '100', '100', '100',
@@ -702,9 +700,7 @@ describe("Process - Tally QV poll votes", function () {
         '100', '100', '100', '100', '100'
       ];
       expect(tallyFileData.perVOSpentVoiceCredits.tally).to.deep.equal(expectedPerVOSpentVoiceCredits);
-    });
 
-    it("verify - total spent voice credits is correct", async () => {
       // prettier-ignore
       const expectedTotalSpentVoiceCredits = [
         '200', '100', '100', '100', '100',
@@ -714,19 +710,13 @@ describe("Process - Tally QV poll votes", function () {
         '100', '100', '100', '100', '100'
       ].reduce(((acc, x) => acc + Number(x)), 0).toString();
       expect(tallyFileData.totalSpentVoiceCredits.spent).to.deep.equal(expectedTotalSpentVoiceCredits);
-    });
-  });
 
-  describe("Verify ZK Proof on chain", () => {
-    it("verify - stateAQ merged and processing complete", async () => {
       const stateAqMerged = await poll.stateAqMerged();
       expect(stateAqMerged).to.be.true;
 
       const processingComplete = await pollProcessorAndTallyer.processingComplete();
       expect(processingComplete).to.be.true;
-    });
 
-    it("verify - all parameters are set correctly", async () => {
       const { intStateTreeDepth, messageTreeSubDepth, messageTreeDepth, voteOptionTreeDepth } = await poll.treeDepths();
       expect(intStateTreeDepth).to.be.equal(treeDepths.intStateTreeDepth);
       expect(messageTreeDepth).to.be.equal(treeDepths.messageTreeDepth);
@@ -744,9 +734,7 @@ describe("Process - Tally QV poll votes", function () {
       const [_messageBatchSize, _tallyBatchSize] = await poll.batchSizes();
       expect(_messageBatchSize).to.be.equal(messageBatchSize);
       expect(_tallyBatchSize).to.be.equal(tallyBatchSize);
-    });
 
-    it("verify - merged state root is correct", async () => {
       const mergedStateRootPoll = await poll.mergedStateRoot();
       const mergedStateRootMACI = await qfi.getStateAqRoot();
       const expectedStateTreeRoot = maciState.polls[0].maciStateRef.stateTree.root;
@@ -755,20 +743,14 @@ describe("Process - Tally QV poll votes", function () {
       expect(expectedStateTreeRoot).to.not.be.equal(BigNumber.from(0));
       expect(mergedStateRootPoll).to.be.equal(mergedStateRootMACI); // MACI state root is the same as the poll state root
       expect(mergedStateRootPoll).to.be.equal(expectedStateTreeRoot); // MACI state root is the same as the one calculated offchain
-    });
 
-    it("verify - sbCommitment is correct on pollProcessorAndTallyer", async () => {
       const pptsbCommitment = await pollProcessorAndTallyer.sbCommitment();
       const expectedSbCommitment = maciNewSbCommitment;
       expect(pptsbCommitment).to.not.be.equal(BigNumber.from(0));
       expect(expectedSbCommitment).to.not.be.equal(BigNumber.from(0));
       expect(pptsbCommitment).to.be.equal(expectedSbCommitment); // pollProcessorAndTallyer sbCommitment is the same as the one calculated offchain
-    });
 
-    it("verify - sbCommitment correct on poll", async () => {
       const pollCurrentSbCommitment = await poll.currentSbCommitment();
-      const pptsbCommitment = await pollProcessorAndTallyer.sbCommitment();
-      const expectedSbCommitment = maciNewSbCommitment;
       console.log(`poll_SbCommitment: ${pollCurrentSbCommitment}`);
       console.log(`pollProcessorAndTallyer_SbCommitment: ${pptsbCommitment}`);
       console.log(`expectedSbCommitment: ${expectedSbCommitment}`);
@@ -777,31 +759,23 @@ describe("Process - Tally QV poll votes", function () {
       expect(expectedSbCommitment).to.not.be.equal(BigNumber.from(0));
       expect(pptsbCommitment).to.be.equal(expectedSbCommitment);
       expect(pollCurrentSbCommitment).to.not.be.equal(pptsbCommitment); // poll sbCommitment is not the same as the one calculated on state
-    });
 
-    it("verify - merged message root is correct", async () => {
       const mergedMessageRoot = await messageAq.getMainRoot(treeDepths.messageTreeDepth);
       const expectedMessageTreeRoot = maciState.polls[0].messageTree.root;
       expect(mergedMessageRoot).to.not.be.equal(BigNumber.from(0));
       expect(expectedMessageTreeRoot).to.not.be.equal(BigNumber.from(0));
       expect(mergedMessageRoot).to.be.equal(expectedMessageTreeRoot); // MACI message root is the same as the one calculated offchain
-    });
 
-    it("verify - tally commitment is correct", async () => {
       const tallyCommitment = await pollProcessorAndTallyer.tallyCommitment();
       const expectedTallyCommitment = tallyFileData.newTallyCommitment;
       expect(tallyCommitment).to.not.be.equal(BigNumber.from(0));
       expect(expectedTallyCommitment).to.not.be.equal(BigNumber.from(0));
       expect(tallyCommitment).to.be.equal(expectedTallyCommitment); // pollProcessorAndTallyer tallyCommitment is the same as the one calculated offchain
     });
+  });
 
-    it.skip("TODO FIX - poll SHOULD verify total spent voice credits", async () => {
-      const { spent: _totalSpent, salt: _totalSpentSalt } = tallyFileData.totalSpentVoiceCredits;
-
-      expect(await poll.verifySpentVoiceCredits(_totalSpent, _totalSpentSalt)).to.be.true;
-    });
-
-    it.only("verify - poll SHOULD verifyTallyResult", async () => {
+  describe("verify: claimAll", () => {
+    it("verify - poll SHOULD verifyTallyResult", async () => {
       // Setup
       const recipientIndex = 1;
       const resultTree = new IncrementalQuinTree(treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5);
@@ -858,29 +832,9 @@ describe("Process - Tally QV poll votes", function () {
         )
       ).to.be.true;
     });
-    //TODO: fix broken tests once upstream  maci decorator is fixed
-    it.skip("verify - poll contract can verifyPerVOSpentVoiceCredits", async () => {
-      const recipientIndex = 1;
-
-      const perVOspentTree = new IncrementalQuinTree( treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5); // prettier-ignore
-      for (const leaf of tallyFileData.perVOSpentVoiceCredits.tally) perVOspentTree.insert(leaf); // insert tally as leaves
-      const spentProof = perVOspentTree.genMerklePath(recipientIndex); // generate merkle path for the spent voice credits
-      expect(perVOspentTree.root).to.be.equal(spentProof.root); // verify that the root of the tree is the same as the root of the merkle path
-
-      const _voteOptionIndex = recipientIndex;
-      const _spent = tallyFileData.perVOSpentVoiceCredits.tally[recipientIndex]; // get the spent voice credits for the recipient
-      const _spentProof = spentProof.pathElements.map((x: any) => x.map((y: any) => y.toString())); // convert merkle path to string
-      const _spentSalt = tallyFileData.perVOSpentVoiceCredits.salt; // get salt from tally.json
-
-      expect(await poll.verifyPerVOSpentVoiceCredits(
-        _voteOptionIndex,
-        _spent,
-        _spentProof,
-        _spentSalt
-      )).to.be.true; // prettier-ignore
-    });
   });
 });
+
 function coordinatorServiceGenProof(circuitInputs: any, pollId: any, pubKey: PubKey, privKey: PrivKey) {
   const dummyProof: [
     BigNumberish,
