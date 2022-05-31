@@ -1,6 +1,8 @@
 import { fileURLToPath } from "url"
 import fs from "fs"
 import path from "path"
+import csv from "csvtojson"
+import { Converter } from "csvtojson/v2/Converter"
 
 /**
  * Create a new empty directory.
@@ -69,3 +71,13 @@ export const toTextFile = (dirPath: string, fileName: string, key: string): void
 
   fs.writeFileSync(file, key)
 }
+
+/**
+ * Parse a CSV file and returns an array JSON representation.
+ * @param filePath <string>
+ * @returns Promise<Converter>
+ */
+export const getCSVFileRecords = async (filePath: string): Promise<Converter> => {
+  if (!directoryExists(filePath)) throw new Error(`Oops, looks like that the provided CSV file path does not exist!`)
+  return await csv().fromFile(filePath);
+};

@@ -24,6 +24,7 @@
     "start": "node dist/cli/src/index.js",
     "genkeys": "yarn start genkeys",
     "deploy": "yarn start deploy",
+    "register-recipients": "yarn start register-recipients",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "prettier": "prettier -c .",
@@ -51,6 +52,7 @@
   "dependencies": {
     "clear": "^0.1.0",
     "commander": "^9.3.0",
+    "csvtojson": "^2.0.10",
     "dotenv": "^16.0.1",
     "ethers": "^5.6.8",
     "log-symbols": "^5.1.0",

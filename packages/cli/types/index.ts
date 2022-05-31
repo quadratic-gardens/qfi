@@ -14,3 +14,20 @@ export type Network = {
   rpcUrl: string,
   chainId: number
 }
+
+export type Recipient = {
+  name: string,
+  tagline: string,
+  description: string,
+  problemSpace: string,
+  ethereumAddress: string,
+  contactEmail: string,
+  teamName?: string,
+  teamDescription?: string,
+  radicleUrl?: string,
+  websiteUrl?: string,
+  twitterUrl?: string,
+  discordUrl?: string,
+  bannerImageHash: string,
+  thumbnailImageHash: string 
+}
