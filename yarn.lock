@@ -8731,74 +8731,46 @@
     "tmp-promise" "^2.0.2"
     "wasmbuilder" "0.0.10"
 
-"circomlib@^0.5.1":
-  "integrity" "sha512-5FUw6AnEw+65suAgEQCucVepxOm96wnIo89vBldeX1DjeSV8zpP88Tje3BLBTLz0C1U6SkRnwqULrtiA5IVtZQ=="
-  "resolved" "https://registry.npmjs.org/circomlib/-/circomlib-0.5.5.tgz"
-  "version" "0.5.5"
+circomlib@0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/circomlib/-/circomlib-0.5.1.tgz#97927e240e48028bdb8bdedd179f233de9fa7131"
+  integrity sha512-faPGgzJWhp5SCWSPYtWfnteaCS1UVhEomdLEF+QbbTy4kF4sAij5+G1z4EzC67q4sp8VYSTv7czH8z08U4haeA==
   dependencies:
-    "blake-hash" "^1.1.0"
-    "blake2b" "^2.1.3"
-    "circom" "0.5.33"
-    "ffjavascript" "0.2.38"
-    "web3-utils" "^1.3.0"
+    blake-hash "^1.1.0"
+    blake2b "^2.1.3"
+    circom "0.5.33"
+    ffjavascript "0.1.0"
+    web3-utils "^1.3.0"
 
-"circomlib@^2.0.0":
-  "integrity" "sha512-OeG1YBcqS8mnsOI1WAZePbyAVBMf398sSQfXetpPAb2HC0+1r9Q6kN/qQaHkJZ77BZmXn5dUqQTa5g6d5BDS3Q=="
-  "resolved" "https://registry.npmjs.org/circomlib/-/circomlib-2.0.3.tgz"
-  "version" "2.0.3"
-
-"circomlib@0.5.1":
-  "integrity" "sha512-faPGgzJWhp5SCWSPYtWfnteaCS1UVhEomdLEF+QbbTy4kF4sAij5+G1z4EzC67q4sp8VYSTv7czH8z08U4haeA=="
-  "resolved" "https://registry.npmjs.org/circomlib/-/circomlib-0.5.1.tgz"
-  "version" "0.5.1"
+circomlib@0.5.2, "circomlib@https://github.com/weijiekoh/circomlib.git#24ed08eee0bb613b8c0135d66c1013bd9f78d50a":
+  version "0.5.2"
+  resolved "https://github.com/weijiekoh/circomlib.git#24ed08eee0bb613b8c0135d66c1013bd9f78d50a"
   dependencies:
-    "blake-hash" "^1.1.0"
-    "blake2b" "^2.1.3"
-    "circom" "0.5.33"
-    "ffjavascript" "0.1.0"
-    "web3-utils" "^1.3.0"
+    blake-hash "^1.1.0"
+    blake2b "^2.1.3"
+    circom "0.5.45"
+    ffjavascript "0.1.0"
+    web3-utils "^1.3.0"
 
-"circomlib@0.5.2":
-  "resolved" "git+ssh://git@github.com/weijiekoh/circomlib.git"
-  "version" "0.5.2"
-  dependencies:
-    "blake-hash" "^1.1.0"
-    "blake2b" "^2.1.3"
-    "circom" "0.5.45"
-    "ffjavascript" "0.1.0"
-    "web3-utils" "^1.3.0"
-
-"circomlib@git://github.com/weijiekoh/circomlib.git#24ed08eee0bb613b8c0135d66c1013bd9f78d50a":
-  "version" "0.5.2"
-  dependencies:
-    "blake-hash" "^1.1.0"
-    "blake2b" "^2.1.3"
-    "circom" "0.5.45"
-    "ffjavascript" "0.1.0"
-    "web3-utils" "^1.3.0"
-
-"circomlib@https://github.com/weijiekoh/circomlib.git#24ed08eee0bb613b8c0135d66c1013bd9f78d50a":
-  "version" "0.5.2"
-  dependencies:
-    "blake-hash" "^1.1.0"
-    "blake2b" "^2.1.3"
-    "circom" "0.5.45"
-    "ffjavascript" "0.1.0"
-    "web3-utils" "^1.3.0"
+circomlib@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/circomlib/-/circomlib-2.0.3.tgz#88816e22f269ba491f47c825a2e238d14fd0e877"
+  integrity sha512-OeG1YBcqS8mnsOI1WAZePbyAVBMf398sSQfXetpPAb2HC0+1r9Q6kN/qQaHkJZ77BZmXn5dUqQTa5g6d5BDS3Q==
 
 "circomlib@https://github.com/weijiekoh/circomlib.git#ac85e82c1914d47789e2032fb11ceb2cfdd38a2b":
-  "version" "1.0.0"
+  version "1.0.0"
+  resolved "https://github.com/weijiekoh/circomlib.git#ac85e82c1914d47789e2032fb11ceb2cfdd38a2b"
 
-"circomlibjs@0.0.8":
-  "integrity" "sha512-oZFYapLO0mfiA+i2GU/V7bRNEEPjVcwV4M444nU5lNsdSJpqLwD57m9zxTD5m/KeY7WQ3lEAC9NNKEPQHu7s1w=="
-  "resolved" "https://registry.npmjs.org/circomlibjs/-/circomlibjs-0.0.8.tgz"
-  "version" "0.0.8"
+circomlibjs@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/circomlibjs/-/circomlibjs-0.0.8.tgz#c2d1130d2d99fbb22f3d40ac19f347d768eace76"
+  integrity sha512-oZFYapLO0mfiA+i2GU/V7bRNEEPjVcwV4M444nU5lNsdSJpqLwD57m9zxTD5m/KeY7WQ3lEAC9NNKEPQHu7s1w==
   dependencies:
-    "blake-hash" "^2.0.0"
-    "blake2b" "^2.1.3"
-    "ffjavascript" "^0.2.38"
-    "web3" "^1.6.0"
-    "web3-utils" "^1.6.0"
+    blake-hash "^2.0.0"
+    blake2b "^2.1.3"
+    ffjavascript "^0.2.38"
+    web3 "^1.6.0"
+    web3-utils "^1.6.0"
 
 "cjs-module-lexer@^0.6.0":
   "integrity" "sha512-uc2Vix1frTfnuzxxu1Hp4ktSvM3QaI4oXl4ZUqL1wjTu/BGki9TrCWoqLTg/drR1KwAEarXuRFCG2Svr1GxPFw=="
