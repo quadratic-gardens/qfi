@@ -20,8 +20,10 @@
   },
   "workspaces": {
     "packages": [
+      "packages/contracts",
+      "packages/cli",
       "packages/*"
-    ],
+      ],
     "nohoist": [
       "**/gitbook-cli/**",
       "**/fs-extra/**"
