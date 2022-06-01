@@ -30,6 +30,7 @@
   },
   "scripts": {
     "cz": "cz",
+    "release": "lerna version --conventional-commits",
     "build": "yarn workspaces run build",
     "build:contracts": "yarn workspace @qfi/contracts run build",
     "build:subgraph": "yarn workspace @qfi/subgraph run build",
