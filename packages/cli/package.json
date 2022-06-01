@@ -22,6 +22,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/cli/src/index.js",
+    "auth": "yarn start auth",
     "genkeys": "yarn start genkeys",
     "deploy": "yarn start deploy",
     "register-recipients": "yarn start register-recipients",

@@ -2,7 +2,7 @@
 import dotenv from "dotenv"
 import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
-import { genkeys, deploy, registerRecipients } from "./commands/index.js"
+import { auth, genkeys, deploy, registerRecipients } from "./commands/index.js"
 
 dotenv.config();
 
@@ -12,6 +12,14 @@ const program = createCommand()
 
 // Entry point.
 program.name(pkg.name).description(pkg.description).version(pkg.version)
+
+program
+  .command("auth")
+  .description("Allow to interact with the blockchain-related commands (e.g., deploy) with a wallet.")
+  .argument("<mnemonic>", "the secret mnemonic phrase (e.g., 12 words) separated by spaces")
+  .action((mnemonic: string) => {
+    auth(mnemonic)
+  })
 
 program
   .command("genkeys")
