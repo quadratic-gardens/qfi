@@ -1,11 +1,11 @@
 {
-  "name": "@quadratic-funding/subgraph",
-  "version": "0.0.1",
+  "name": "@qfi/subgraph",
+  "version": "0.1.0",
   "description": "quadratic-funding subgraph",
   "main": "index.js",
   "author": "",
   "license": "GPL-3.0",
-  "private": false,
+  "private": true,
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",

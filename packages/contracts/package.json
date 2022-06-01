@@ -1,8 +1,9 @@
 {
-  "name": "@quadratic-funding/contracts",
-  "version": "0.0.1",
+  "name": "@qfi/contracts",
+  "version": "0.1.0",
   "description": "quadratic-funding Contracts",
   "main": "index.js",
+  "private" : true,
   "scripts": {
     "build": "hardhat compile",
     "clean": "shx rm -rf ./build ./cache ./coverage ./typechain ./coverage.json ./abi",

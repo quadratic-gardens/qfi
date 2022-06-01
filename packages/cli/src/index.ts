@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-
+import dotenv from "dotenv"
 import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
 import { genkeys, deploy, registerRecipients } from "./commands/index.js"
-import dotenv from "dotenv"
+
 dotenv.config();
 
 const pkg = readLocalJsonFile("../../package.json")

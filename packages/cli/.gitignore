@@ -10,12 +10,5 @@ yarn-error.log
 # build
 dist/
 
-# ceremony
-transcripts/
-contributions/
-circuits/
-zkeys/
-attestation/
-
 # output
 output/**/*
