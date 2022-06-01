@@ -1,7 +1,5 @@
 # dependencies
 node_modules/
-package-lock.json
-yarn.lock
 yarn-error.log
 
 # environment
@@ -9,13 +7,6 @@ yarn-error.log
 
 # build
 dist/
-
-# ceremony
-transcripts/
-contributions/
-circuits/
-zkeys/
-attestation/
 
 # output
 output/**/*

@@ -1,6 +1,6 @@
 {
-  "name": "@quadratic-funding/qficli",
-  "version": "0.0.1",
+  "name": "@qfi/ethpraguecli",
+  "version": "0.0.4",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
   "main": "dist/cli/src/index.js",
   "repository": "https://github.com/quadratic-funding/qfi",
@@ -8,7 +8,7 @@
   "bugs": "https://github.com/quadratic-funding/qfi/issues",
   "author": "0xjei",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "type": "module",
   "types": "dist/types/index.d.ts",
   "files": [
@@ -17,7 +17,7 @@
     "README.md"
   ],
   "bin": {
-    "qficli": "dist/cli/src/index.js"
+    "ethpraguecli": "dist/cli/src/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -32,6 +32,8 @@
   },
   "devDependencies": {
     "@types/clear": "^0.1.2",
+    "@types/figlet": "^1.5.4",
+    "@types/inquirer": "^8.2.1",
     "@types/node": "^17.0.36",
     "@types/qrcode": "^1.4.2",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
@@ -54,10 +56,12 @@
     "commander": "^9.3.0",
     "csvtojson": "^2.0.10",
     "dotenv": "^16.0.1",
-    "ethers": "^5.6.8",
+    "ethers": "^5.5.1",
+    "figlet": "^1.5.2",
+    "inquirer": "^8.2.4",
     "log-symbols": "^5.1.0",
-    "maci-crypto": "^1.0.4",
-    "maci-domainobjs": "^1.0.4",
+    "qaci-crypto": "^1.1.0",
+    "qaci-domainobjs": "^1.1.0",
     "qrcode": "^1.5.0"
   }
 }

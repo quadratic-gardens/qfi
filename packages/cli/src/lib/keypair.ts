@@ -1,22 +1,24 @@
-import { ethers } from "ethers"
-import { Keypair } from "maci-domainobjs"
-import { KeyPair } from "../../types/index.js"
+import { Wallet, utils } from "ethers"
+import { Keypair as MaciKeyPair } from "qaci-domainobjs"
+import { EthKeyPair , KeyPair} from "../../types/index.js"
 
 /**
  * Generate a new Ethereum keypair.
  * @returns <KeyPair>
  */
-export const generateEthereumKeyPair = (): KeyPair => {
+export const generateEthereumKeyPair = (): EthKeyPair => {
   // Generate a new Ethereum wallet.
-  const wallet = ethers.Wallet.createRandom()
+  const wallet = Wallet.fromMnemonic(utils.entropyToMnemonic(utils.randomBytes(32)))
 
-  // Extract keys.
-  const { privateKey } = wallet
-  const { publicKey } = wallet
+  // Extract keys and mnemonic
+
+  const {address, privateKey} = wallet
+  const mnemonic = wallet.mnemonic.phrase
 
   return {
-    privateKey,
-    publicKey
+    address,
+    mnemonic,
+    privateKey
   }
 }
 
@@ -26,7 +28,7 @@ export const generateEthereumKeyPair = (): KeyPair => {
  */
 export const generateMaciKeyPair = (): KeyPair => {
   // Generate a new Ethereum wallet.
-  const wallet = new Keypair()
+  const wallet = new MaciKeyPair()
 
   // Extract keys.
   const privateKey = wallet.privKey.serialize()

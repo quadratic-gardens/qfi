@@ -1,3 +1,9 @@
+export type EthKeyPair = {
+  privateKey: string
+  address: string
+  mnemonic: string
+}
+
 export type KeyPair = {
   privateKey: string
   publicKey: string
