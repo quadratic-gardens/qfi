@@ -56,12 +56,12 @@
     "commander": "^9.3.0",
     "csvtojson": "^2.0.10",
     "dotenv": "^16.0.1",
-    "ethers": "^5.6.8",
+    "ethers": "^5.5.1",
     "figlet": "^1.5.2",
     "inquirer": "^8.2.4",
     "log-symbols": "^5.1.0",
-    "maci-crypto": "^1.0.4",
-    "maci-domainobjs": "^1.0.4",
+    "qaci-crypto": "^1.1.0",
+    "qaci-domainobjs": "^1.1.0",
     "qrcode": "^1.5.0"
   }
 }

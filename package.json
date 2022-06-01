@@ -23,7 +23,6 @@
       "packages/*"
     ],
     "nohoist": [
-      "**/@nomiclabs/**",
       "**/gitbook-cli/**",
       "**/fs-extra/**"
     ]

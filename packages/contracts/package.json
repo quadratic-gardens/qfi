@@ -84,7 +84,10 @@
   "nohoist": [
     "**/snarkjs",
     "**/zkey-manager/**",
-    "zkey-manager/**"
+    "zkey-manager/**",
+    "**/typechain",
+    "**/@typechain/*",
+    "**/@nomiclabs/**"
   ],
   "author": "",
   "license": "GPL-3.0"

@@ -1,5 +1,5 @@
 import { Wallet, utils } from "ethers"
-import { Keypair as MaciKeyPair } from "maci-domainobjs"
+import { Keypair as MaciKeyPair } from "qaci-domainobjs"
 import { EthKeyPair , KeyPair} from "../../types/index.js"
 
 /**

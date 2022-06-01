@@ -7,8 +7,9 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
+    "clean": "shx rm -rf ./build ./generated",
     "codegen": "graph codegen",
-    "build": "graph build",
+    "build": "graph codegen && graph build",
     "auth": "graph auth --product hosted-service",
     "deploy": "yarn codegen && graph deploy --product hosted-service",
     "lint": "eslint ./src --ext js,ts",
