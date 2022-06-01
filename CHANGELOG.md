@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.3](https://github.com/compare/v0.0.2...v0.0.3) (2022-06-01)
+
+
+### Bug Fixes
+
+* **all:** fix circular dependencies, changes to hoisting in monorepo, fix failing build ([1421c97](https://github.com/commit/1421c971a8dd5a85d96fbf67baf5a0dac6a7b062))
+* **ci:** build failing ([e85b744](https://github.com/commit/e85b74426f45a3b75148e82cfaf85cee62da0701))
+
+
+
+
+
 ## 0.0.2 (2022-06-01)
 
 
