@@ -1,9 +1,9 @@
 {
   "name": "@qfi/contracts",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "quadratic-funding Contracts",
   "main": "index.js",
-  "private" : true,
+  "private": true,
   "scripts": {
     "build": "hardhat compile",
     "clean": "shx rm -rf ./build ./cache ./coverage ./typechain ./coverage.json ./abi",
@@ -34,8 +34,8 @@
     "@openzeppelin/contracts": ">=4.5.0-solc-0.8.1",
     "argparse": "^1.0.10",
     "circomlib": "0.5.1",
-    "qaci-contracts": "^1.1.8",
-    "mustache": "^4.2.0"
+    "mustache": "^4.2.0",
+    "qaci-contracts": "^1.1.8"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
@@ -60,12 +60,12 @@
     "hardhat-abi-exporter": "^2.2.1",
     "hardhat-contract-sizer": "^2.0.3",
     "hardhat-gas-reporter": "^1.0.4",
+    "mocha": "^9.2.0",
     "qaci-circuits": "^1.1.8",
     "qaci-cli": "^1.1.8",
     "qaci-core": "^1.1.8",
     "qaci-crypto": "^1.1.0",
     "qaci-domainobjs": "^1.1.0",
-    "mocha": "^9.2.0",
     "shelljs": "^0.8.4",
     "shx": "^0.3.3",
     "snarkjs": "0.4.10",
