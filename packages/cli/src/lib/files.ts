@@ -28,6 +28,15 @@ export const cleanDir = (dirPath: string): void => {
 }
 
 /**
+ * Read a file at given path.
+ * @param filePath <string> - the absolute or relative path.
+ * @returns <string> 
+ */
+export const readFileSync = (filePath: string): string => {
+  return fs.readFileSync(filePath).toString()
+}
+
+/**
  * Read and return an object of a local JSON file located at a specific path.
  * @param filePath <string> - the absolute or relative path.
  * @returns <any>
@@ -35,7 +44,7 @@ export const cleanDir = (dirPath: string): void => {
 export const readJSONFile = (filePath: string): any => {
   if (!directoryExists(filePath)) throw new Error(`Oops, looks like that the provided file path does not exist!`)
 
-  return JSON.parse(fs.readFileSync(filePath).toString())
+  return JSON.parse(readFileSync(filePath))
 }
 
 /**

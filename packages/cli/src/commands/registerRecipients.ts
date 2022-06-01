@@ -66,6 +66,10 @@ async function registerRecipients(network: string, path: string) {
   try {
     const outputDirPath = `./output`
     const deployedContractsFilePath = `${outputDirPath}/deployedContracts.json`
+    const mnemonicDirPath = `${outputDirPath}/mnemonic.txt`
+
+    if (!directoryExists(mnemonicDirPath))
+      throw new Error(`missing mnemonic. Please run auth command first.`)
 
     // Get the provider.
     const provider = getProvider(network)

@@ -1,6 +1,7 @@
 import { Network } from "types";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "ethers";
+import { readFileSync } from "./files.js";
 
 // Available networks.
 // TODO: refactor with a more generic approach, just these two for EthPrague Round.
@@ -44,17 +45,24 @@ export const getProvider = (network: string): JsonRpcProvider => {
 }
 
 /**
+ * Return the related wallet associated to the given mnemonic.
+ * @param mnemonic <string> - the secret mnemonic phrase (e.g., 12 words) separated by spaces.
+ * @returns <Wallet>
+ */
+export const getWalletFromMnemonic = (mnemonic: string): Wallet => {
+    return Wallet.fromMnemonic(mnemonic)
+}
+
+/**
  * Return a new Wallet instance obtained from mnemonic connected to the given provider.
  * @param provider <JsonRpcProvider> - the provider connected to the selected network
  * @returns <Wallet>
  */
 export const connectWalletToProviderFromMnemonic = (provider: JsonRpcProvider): Wallet => {
-    // Get mnemonic from local configs.
-    const WALLET_MNEMONIC =
-        process.env.WALLET_MNEMONIC || "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
+    // Get wallet from stored mnemonic.
+    const mnemonic = readFileSync(`./output/mnemonic.txt`)
 
-    // Get wallet from mnemonic.
-    let wallet = Wallet.fromMnemonic(WALLET_MNEMONIC)
+    let wallet = Wallet.fromMnemonic(mnemonic)
 
     // Connect to the provider.
     wallet = wallet.connect(provider)

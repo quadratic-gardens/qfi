@@ -27,7 +27,14 @@ import { directoryExists, makeDir, writeLocalJsonFile } from "../lib/files.js"
 async function deploy(network: string) {
     try {
         const outputDirPath = `./output`
+        const mnemonicDirPath = `${outputDirPath}/mnemonic.txt`
 
+        if (!directoryExists(outputDirPath))
+            makeDir(outputDirPath)
+
+        if (!directoryExists(mnemonicDirPath))
+            throw new Error(`missing mnemonic. Please run auth command first.`)
+        
         // Get the provider.
         const provider = getProvider(network)
         console.log(`${logSymbols.success} Connected to ${provider.network.name} / Chain ID ${provider.network.chainId}`)
@@ -145,9 +152,6 @@ async function deploy(network: string) {
         "PollProcessorAndTallier": \"${pollProcessorAndTallyer.address}\", 
         "QFI": \"${qfi.address}\"
     }`
-
-        if (!directoryExists(outputDirPath))
-            makeDir(outputDirPath)
 
         writeLocalJsonFile(`./output/deployedContracts.json`, JSON.parse(contractsInJson))
 
