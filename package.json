@@ -22,7 +22,10 @@
     "packages": [
       "packages/contracts",
       "packages/cli",
-      "packages/*"
+      "packages/subgraph",
+      "packages/hooks",
+      "packages/ui",
+      "packages/app"
       ],
     "nohoist": [
       "**/gitbook-cli/**",
