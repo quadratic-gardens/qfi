@@ -1,6 +1,6 @@
 {
   "name": "@qfi/contracts",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "quadratic-funding Contracts",
   "main": "index.js",
   "private": true,

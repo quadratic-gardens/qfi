@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.1.0](https://github.com/compare/v0.0.4...v0.1.0) (2022-06-02)
+
+
+### Bug Fixes
+
+* **all:** make lerna commands play nice with yarn workspaces ([5717344](https://github.com/commit/57173443e138d89320e8316f93375ab139fb8d9c))
+* change packages order when running build from root to avoid broken links among them ([09e5b32](https://github.com/commit/09e5b32ae619d21f08cb8ffe84c0a193dd1a1ebe))
+
+
+### Features
+
+* add command to authenticate via a wallet mnemonic phrase ([d15f1d2](https://github.com/commit/d15f1d2212845372e3c520bf539c5c7f3d0125c7))
+
+
+
+
+
 ## [0.0.4](https://github.com/compare/v0.0.3...v0.0.4) (2022-06-01)
 
 **Note:** Version bump only for package @qfi/qfi
