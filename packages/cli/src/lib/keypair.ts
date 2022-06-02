@@ -1,6 +1,6 @@
 import { Wallet, utils } from "ethers"
 import { Keypair as MaciKeyPair } from "qaci-domainobjs"
-import { EthKeyPair , KeyPair} from "../../types/index.js"
+import { EthKeyPair, KeyPair } from "../../types/index.js"
 
 /**
  * Generate a new Ethereum keypair.
@@ -12,7 +12,7 @@ export const generateEthereumKeyPair = (): EthKeyPair => {
 
   // Extract keys and mnemonic
 
-  const {address, privateKey} = wallet
+  const { address, privateKey } = wallet
   const mnemonic = wallet.mnemonic.phrase
 
   return {

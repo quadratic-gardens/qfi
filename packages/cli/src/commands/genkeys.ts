@@ -1,55 +1,59 @@
 #!/usr/bin/env node
 import logSymbols from "log-symbols"
-import inquirer from "inquirer"
-import figlet from "figlet"
-import { cleanDir, directoryExists, makeDir, toTextFile } from "../lib/files.js"
+import clear from "clear"
+import chalk from "chalk"
+import { cleanDir, directoryExists } from "../lib/files.js"
 import { EthKeyPair, KeyPair, QRCodeFileType } from "../../types/index.js"
 import { generateEthereumKeyPair, generateMaciKeyPair } from "../lib/keypair.js"
 import toQRCodeFile from "../lib/qrcode.js"
+import {
+  ethBaseDirPath,
+  ethKeyPairBaseDirAndFileName,
+  ethKeyPairBaseDirPath,
+  generatedKeysGlobalDirPath,
+  header,
+  maciBaseDirPath,
+  maciKeyPairBaseDirAndFileName,
+  maciKeyPairBaseDirPath,
+  outputDirPath
+} from "../lib/constants.js"
+import { askForConfirmation } from "../lib/prompts.js"
 
 /**
  * Genkeys command.
  * @param quantity <number> - amount of MACI and ETH keypairs to be generated.
  */
 async function genkeys(quantity: number) {
+  clear()
+
+  console.log(header)
+
   try {
-    const dirPath = `./output`
-    const ethDirPathName = `ethKeys`
-    const maciDirPathName = `maciKeys`
+    if (quantity === 0) throw new Error(`Sorry, but you cannot generate zero key pairs for MACI/QFI`)
 
-    const ethBaseName = `eth_key`
-    const maciBaseName = `maci_key`
+    // Check for output directory.
+    if (!directoryExists(outputDirPath)) cleanDir(outputDirPath)
+    else if (directoryExists(ethBaseDirPath) && directoryExists(maciBaseDirPath)) {
+      // Prompt for user.
+      console.log(`\n${logSymbols.info} Seems that you have already generated the keys!\n`)
 
-    const ethKeysDirPath = `${dirPath}/${ethDirPathName}`
-    const maciKeysDirPath = `${dirPath}/${maciDirPathName}`
+      const { confirmation } = await askForConfirmation(
+        "Are you sure you want to continue? (nb. confirmation will override your generated keys)",
+        "yes",
+        "no"
+      )
 
-    if (quantity === 0) throw new Error(`Please, provide an amount greater than zero!`)
-
-    // Create directories if not already generated.
-    if (!directoryExists(dirPath)) {
-      makeDir(dirPath)
-      makeDir(ethKeysDirPath)
-      makeDir(maciKeysDirPath)
-    } else {
-
-      //NOTE: prompt user to confirm deleting directory
-      console.log(`\n⚠️ Carefull you already have previously generated keys`)
-      const answer = await inquirer.prompt([
-        {
-          type: "confirm",
-          name: "continue",
-          message: `Do you want to continue?`,
-          default: false
-        }
-      ])
-
-      if (!answer.continue) {
-        throw new Error(`You decided to stop the process.`)
+      if (!confirmation) {
+        console.log(`\nFarewell 👋`)
+        process.exit(0)
       }
-
-      cleanDir(ethKeysDirPath)
-      cleanDir(maciKeysDirPath)
     }
+
+    cleanDir(generatedKeysGlobalDirPath)
+    cleanDir(ethBaseDirPath)
+    cleanDir(maciBaseDirPath)
+
+    console.log(chalk.bold(`\nEthereum and MACI Key generation is running`))
 
     for (let i = 0; i < quantity; i += 1) {
       // Generate an Ethereum keypair.
@@ -58,65 +62,40 @@ async function genkeys(quantity: number) {
       // Generate a MACI keypair.
       const maciKeyPair: KeyPair = generateMaciKeyPair()
 
-      const ethKeyDirPath = `${ethKeysDirPath}/${ethBaseName}_${i}`
-      const maciKeyDirPath = `${maciKeysDirPath}/${maciBaseName}_${i}`
-
-      makeDir(ethKeyDirPath)
-      makeDir(maciKeyDirPath)
-
-      /* Store as plaintext */
-
-      // Eth.
-      toTextFile(ethKeyDirPath, `${ethBaseName}_${i}_sk`, ethKeyPair.privateKey)
-      toTextFile(ethKeyDirPath, `${ethBaseName}_${i}_pk`, ethKeyPair.address)
-
-      // Maci.
-      toTextFile(maciKeyDirPath, `${maciBaseName}_${i}_sk`, maciKeyPair.privateKey)
-      toTextFile(maciKeyDirPath, `${maciBaseName}_${i}_pk`, maciKeyPair.publicKey)
+      cleanDir(`${ethKeyPairBaseDirPath}_${i}`)
+      cleanDir(`${maciKeyPairBaseDirPath}_${i}`)
 
       /* Store as QR Code */
 
       // Eth.
-      await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_mnemonic`, ethKeyPair.mnemonic, QRCodeFileType.PNG)
-      await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_mnemonic`, ethKeyPair.mnemonic, QRCodeFileType.SVG)
-      // await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_mnemonic`, ethKeyPair.mnemonic, QRCodeFileType.UTF8)
+      const ethMnemonicFilePath = `${ethKeyPairBaseDirPath}_${i}/${ethKeyPairBaseDirAndFileName}_${i}_mnemonic`
+      const ethAddressFilePath = `${ethKeyPairBaseDirPath}_${i}/${ethKeyPairBaseDirAndFileName}_${i}_address`
 
-      // await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_sk`, ethKeyPair.privateKey, QRCodeFileType.PNG)
-      // await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_sk`, ethKeyPair.privateKey, QRCodeFileType.SVG)
-      // await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_sk`, ethKeyPair.privateKey, QRCodeFileType.UTF8)
+      await toQRCodeFile(ethMnemonicFilePath, ethKeyPair.mnemonic, QRCodeFileType.PNG)
+      await toQRCodeFile(ethMnemonicFilePath, ethKeyPair.mnemonic, QRCodeFileType.SVG)
 
-      await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_address`, ethKeyPair.address, QRCodeFileType.PNG)
-      await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_address`, ethKeyPair.address, QRCodeFileType.SVG)
-      // await toQRCodeFile(ethKeyDirPath, `${ethBaseName}_${i}_pk`, ethKeyPair.address, QRCodeFileType.UTF8)
+      await toQRCodeFile(ethAddressFilePath, ethKeyPair.address, QRCodeFileType.PNG)
+      await toQRCodeFile(ethAddressFilePath, ethKeyPair.address, QRCodeFileType.SVG)
 
       // Maci.
-      await toQRCodeFile(maciKeyDirPath, `${maciBaseName}_${i}_sk`, maciKeyPair.privateKey, QRCodeFileType.PNG)
-      await toQRCodeFile(maciKeyDirPath, `${maciBaseName}_${i}_sk`, maciKeyPair.privateKey, QRCodeFileType.SVG)
-      // await toQRCodeFile(maciKeyDirPath, `${maciBaseName}_${i}_sk`, maciKeyPair.privateKey, QRCodeFileType.UTF8)
+      const maciPrivateFilePath = `${maciKeyPairBaseDirPath}_${i}/${maciKeyPairBaseDirAndFileName}_${i}_sk`
+      const maciPublicFilePath = `${maciKeyPairBaseDirPath}_${i}/${maciKeyPairBaseDirAndFileName}_${i}_pk`
 
-      await toQRCodeFile(maciKeyDirPath, `${maciBaseName}_${i}_pk`, maciKeyPair.publicKey, QRCodeFileType.PNG)
-      await toQRCodeFile(maciKeyDirPath, `${maciBaseName}_${i}_pk`, maciKeyPair.publicKey, QRCodeFileType.SVG)
-      // await toQRCodeFile(maciKeyDirPath, `${maciBaseName}_${i}_pk`, maciKeyPair.publicKey, QRCodeFileType.UTF8)
+      await toQRCodeFile(maciPrivateFilePath, maciKeyPair.privateKey, QRCodeFileType.PNG)
+      await toQRCodeFile(maciPrivateFilePath, maciKeyPair.privateKey, QRCodeFileType.SVG)
+
+      await toQRCodeFile(maciPublicFilePath, maciKeyPair.publicKey, QRCodeFileType.PNG)
+      await toQRCodeFile(maciPublicFilePath, maciKeyPair.publicKey, QRCodeFileType.SVG)
 
       console.log(`Keypair #${i} - ${logSymbols.success} Ethereum / ${logSymbols.success} MACI`)
     }
 
     console.log(
-      "\n",
-      figlet.textSync("EthPrague Step 1 Complete!", {
-        font: "ANSI Regular",
-        horizontalLayout: "default",
-        verticalLayout: "default",
-        width: 80,
-        whitespaceBreak: true
-      })
-    )
-
-    console.log(
-      `\nYou have successfully completed the key generation 🎊 You can find everything inside the \`${dirPath}/\` folder!`
+      `\n${logSymbols.info} Generated keypairs for Ethereum in the ${ethBaseDirPath} folder\n${logSymbols.info} Generated keypairs for MACI in the ${maciBaseDirPath} folder
+       \n${logSymbols.success} You have successfully generated the keypairs for Ethereum and MACI 🎊`
     )
   } catch (err: any) {
-    console.log(`${logSymbols.error} Something went wrong: ${err.message ?? err}`)
+    console.log(`\n${logSymbols.error} Something went wrong: ${err.message ?? err}`)
   }
 }
 

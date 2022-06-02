@@ -1,50 +1,53 @@
 #!/usr/bin/env node
-import inquirer from "inquirer"
+import clear from "clear"
 import logSymbols from "log-symbols"
+import chalk from "chalk"
 import { getWalletFromMnemonic } from "../lib/blockchain.js"
-import { directoryExists, makeDir, toTextFile } from "../lib/files.js"
+import { directoryExists, makeDir, writeFileSync } from "../lib/files.js"
+import { outputDirPath, mnemonicFilePath, mnemonicBaseDirPath, header } from "../lib/constants.js"
+import { askForConfirmation } from "../lib/prompts.js"
 
 /**
  * Auth command.
  * @param mnemonic <string> - the secret mnemonic phrase (e.g., 12 words) separated by spaces.
  */
 async function auth(mnemonic: string) {
-    try {
-        const dirPath = `./output`
-        const mnemonicFilePath = `${dirPath}/mnemonic.txt`
+  clear()
 
-        // Create directories if not already generated.
-        if (!directoryExists(dirPath))
-            makeDir(dirPath)
-        else if (directoryExists(mnemonicFilePath)) {
-            //NOTE: prompt user to confirm override current mnemonic.
-            console.log(`\n${logSymbols.warning} You already have insert a mnemonic. This command will override it.`)
-            const answer = await inquirer.prompt([
-                {
-                    type: "confirm",
-                    name: "continue",
-                    message: `Do you want to continue?`,
-                    default: false
-                }
-            ])
+  console.log(header)
 
-            if (!answer.continue) {
-                throw new Error(`You decided to stop the process.`)
-            }
-        }
+  try {
+    // Check for output directory.
+    if (!directoryExists(outputDirPath)) makeDir(outputDirPath)
 
-        // Get wallet from mnemonic.
-        const wallet = getWalletFromMnemonic(mnemonic)
+    // Check if mnemonic already present.
+    if (!directoryExists(mnemonicBaseDirPath)) makeDir(mnemonicBaseDirPath)
+    else {
+      // Prompt for user.
+      console.log(`\n${logSymbols.info} Seems that you have already provided a mnemonic for the authentication!\n`)
 
-        // Store mnemonic locally.
-        toTextFile(`${dirPath}`, `mnemonic`, mnemonic)
+      const { confirmation } = await askForConfirmation(
+        "Are you sure you want to continue? (nb. confirmation will overwrite your mnemonic)",
+        "yes",
+        "no"
+      )
 
-        console.log(
-            `\nYou have successfully logged in with your mnemonic 🎊\n${wallet.address} should be your first Ethereum account address in your wallet!`
-        )
-    } catch (err: any) {
-        console.log(`${logSymbols.error} Something went wrong: ${err.message ?? err}`)
+      if (!confirmation) {
+        console.log(`\nFarewell 👋`)
+        process.exit(0)
+      }
     }
+
+    // Get wallet from mnemonic.
+    const wallet = getWalletFromMnemonic(mnemonic)
+
+    // Store mnemonic locally.
+    writeFileSync(mnemonicFilePath, mnemonic)
+
+    console.log(`\n${logSymbols.success} You are now authenticated as ${chalk.bold(wallet.address)} successfully 🎊`)
+  } catch (err: any) {
+    console.log(`\n${logSymbols.error} Something went wrong: ${err.message ?? err}`)
+  }
 }
 
 export default auth

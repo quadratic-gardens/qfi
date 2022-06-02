@@ -18,7 +18,7 @@
     "outDir": "dist/",
     "declarationDir": "dist/types",
     "paths": {
-      "@qfi/contracts": ["@qfi/contracts"] 
+      "@qfi/contracts": ["@qfi/contracts"]
     }
   },
   "ts-node": {

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-import { ethers } from "ethers"
 import logSymbols from "log-symbols"
-import { getProvider, connectWalletToProviderFromMnemonic } from "../lib/blockchain.js"
+import { clear } from "console"
+import chalk from "chalk"
+import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 import { PoseidonT3__factory } from "../../../contracts/typechain/factories/PoseidonT3__factory.js"
 import { PoseidonT4__factory } from "../../../contracts/typechain/factories/PoseidonT4__factory.js"
 import { PoseidonT5__factory } from "../../../contracts/typechain/factories/PoseidonT5__factory.js"
@@ -19,122 +20,256 @@ import { BaseERC20Token__factory } from "../../../contracts/typechain/factories/
 import { PollProcessorAndTallyer__factory } from "../../../contracts/typechain/factories/PollProcessorAndTallyer__factory.js"
 import { MockVerifier__factory } from "../../../contracts/typechain/factories/MockVerifier__factory.js"
 import { directoryExists, makeDir, writeLocalJsonFile } from "../lib/files.js"
+import {
+  deployedContractsBaseDirPath,
+  deployedContractsFilePath,
+  header,
+  mnemonicBaseDirPath,
+  mnemonicFilePath,
+  outputDirPath
+} from "../lib/constants.js"
+import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 
 /**
  * Deploy command.
  * @param network <string> - the network where the contracts are going to be deployed.
  */
 async function deploy(network: string) {
-    try {
-        const outputDirPath = `./output`
-        const mnemonicDirPath = `${outputDirPath}/mnemonic.txt`
+  clear()
 
-        if (!directoryExists(outputDirPath))
-            makeDir(outputDirPath)
+  console.log(header)
 
-        if (!directoryExists(mnemonicDirPath))
-            throw new Error(`missing mnemonic. Please run auth command first.`)
-        
-        // Get the provider.
-        const provider = getProvider(network)
-        console.log(`${logSymbols.success} Connected to ${provider.network.name} / Chain ID ${provider.network.chainId}`)
+  try {
+    // Check for output directory.
+    if (!directoryExists(outputDirPath)) makeDir(outputDirPath)
 
-        // Connect wallet to provider from mnemonic.
-        const wallet = connectWalletToProviderFromMnemonic(provider)
-        const balanceInEthers = ethers.utils.formatEther((await wallet.getBalance()).toString())
+    // Check if mnemonic already present.
+    if (!directoryExists(mnemonicBaseDirPath) && !directoryExists(mnemonicFilePath))
+      throw new Error(`You must first authenticate by running \`auth \"<your-mnemonic>\"\` command!`)
 
-        console.log(`${logSymbols.success} Deployer address -> ${wallet.address}`)
-        console.log(`${logSymbols.success} Current balance (Ξ): ${balanceInEthers}`)
+    // Check if contracts has been already deployed.
+    if (!directoryExists(deployedContractsBaseDirPath)) makeDir(deployedContractsBaseDirPath)
+    else {
+      // Prompt for user.
+      console.log(`\n${logSymbols.info} Seems that you have already done the smart contracts deploy!\n`)
 
-        console.log(`\n${logSymbols.info} Starting the deploy for QFI/MACI smart contracts`)
+      const { confirmation } = await askForConfirmation(
+        "Are you sure you want to continue? (nb. confirmation will NOT override your on-chain contracts but you will LOSE your local contracts reference)",
+        "yes",
+        "no"
+      )
 
-        /** DEPLOY MACI/QFI SMART CONTRACTS */
+      if (!confirmation) {
+        console.log(`\nFarewell 👋`)
+        process.exit(0)
+      }
+    }
 
-        const PoseidonT3Factory = new PoseidonT3__factory(wallet);
-        const PoseidonT4Factory = new PoseidonT4__factory(wallet);
-        const PoseidonT5Factory = new PoseidonT5__factory(wallet);
-        const PoseidonT6Factory = new PoseidonT6__factory(wallet);
+    process.stdout.write(`\n`)
 
-        const PoseidonT3 = await PoseidonT3Factory.deploy();
-        console.log(`${logSymbols.success} PoseidonT3 deployed at ${PoseidonT3.address}`);
+    const { wallet, provider } = await connectToBlockchain(network)
+    const gasPrice = await provider.getGasPrice()
 
-        const PoseidonT4 = await PoseidonT4Factory.deploy();
-        console.log(`${logSymbols.success} PoseidonT4 deployed at ${PoseidonT4.address}`);
+    /** DEPLOY MACI/QFI SMART CONTRACTS */
+    console.log(chalk.bold(`\nDeploy for QFI/MACI smart contracts is running`))
 
-        const PoseidonT5 = await PoseidonT5Factory.deploy();
-        console.log(`${logSymbols.success} PoseidonT5 deployed at ${PoseidonT5.address}`);
+    const PoseidonT3Factory = new PoseidonT3__factory(wallet)
+    const PoseidonT4Factory = new PoseidonT4__factory(wallet)
+    const PoseidonT5Factory = new PoseidonT5__factory(wallet)
+    const PoseidonT6Factory = new PoseidonT6__factory(wallet)
 
-        const PoseidonT6 = await PoseidonT6Factory.deploy();
-        console.log(`${logSymbols.success} PoseidonT6 deployed at ${PoseidonT6.address}`);
+    let spinner = customSpinner(`Deploying PoseidonT3 smart contract..`, "point")
+    spinner.start()
 
-        const linkedLibraryAddresses = {
-            ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5"]: PoseidonT5.address,
-            ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3"]: PoseidonT3.address,
-            ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
-            ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
-        };
+    const PoseidonT3 = await PoseidonT3Factory.deploy({ gasPrice })
+    await PoseidonT3.deployed()
+    spinner.stop()
 
-        const GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, wallet);
-        const PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, wallet);
-        const MessageAqFactoryFactory = new MessageAqFactory__factory({ ...linkedLibraryAddresses }, wallet);
-        const QFIFactory = new QFI__factory({ ...linkedLibraryAddresses }, wallet);
+    console.log(`${logSymbols.success} PoseidonT3 deployed at ${chalk.bold(PoseidonT3.address)}`)
 
-        const VKRegistryFactory = new VkRegistry__factory(wallet);
-        const ConstantInitialVoiceCreditProxyFactory = new ConstantInitialVoiceCreditProxy__factory(wallet);
-        const FreeForAllGateKeeperFactory = new FreeForAllGatekeeper__factory(wallet);
-        const RecipientRegistryFactory = new OptimisticRecipientRegistry__factory(wallet);
-        const BaseERC20TokenFactory = new BaseERC20Token__factory(wallet);
-        const PollProcessorAndTallyerFactory = new PollProcessorAndTallyer__factory(wallet);
-        const MockVerifierFactory = new MockVerifier__factory(wallet);
+    spinner = customSpinner(`Deploying PoseidonT4 smart contract...`, "point")
+    spinner.start()
 
-        const optimisticRecipientRegistry = await RecipientRegistryFactory.deploy(0, 0, wallet.address);
-        console.log(`${logSymbols.success} OptimisticRecipientRegistry deployed at ${optimisticRecipientRegistry.address}`);
+    const PoseidonT4 = await PoseidonT4Factory.deploy({ gasPrice })
+    await PoseidonT4.deployed()
+    spinner.stop()
 
-        const grantRoundFactory = await GrantRoundFactory.deploy();
-        console.log(`${logSymbols.success} GrantRoundFactory deployed at ${grantRoundFactory.address}`);
+    console.log(`${logSymbols.success} PoseidonT4 deployed at ${chalk.bold(PoseidonT4.address)}`)
 
-        const tx = await grantRoundFactory.setRecipientRegistry(optimisticRecipientRegistry.address);
-        await tx.wait()
-        console.log(`${logSymbols.success} GrantRoundFactory registry correctly set!`);
+    spinner = customSpinner(`Deploying PoseidonT5 smart contract...`, "point")
+    spinner.start()
 
-        const pollFactory = await PollFactoryFactory.deploy();
-        console.log(`${logSymbols.success} PollFactory deployed at ${pollFactory.address}`);
+    const PoseidonT5 = await PoseidonT5Factory.deploy({ gasPrice })
+    await PoseidonT5.deployed()
+    spinner.stop()
 
-        const messageAqFactory = await MessageAqFactoryFactory.deploy();
-        console.log(`${logSymbols.success} MessageAqFactory deployed at ${messageAqFactory.address}`);
+    console.log(`${logSymbols.success} PoseidonT5 deployed at ${chalk.bold(PoseidonT5.address)}`)
 
-        const messageAqFactoryGrants = await MessageAqFactoryFactory.deploy();
-        console.log(`${logSymbols.success} MessageAqFactoryGrants deployed at ${messageAqFactoryGrants.address}`);
+    spinner = customSpinner(`Deploying PoseidonT6 smart contract...`, "point")
+    spinner.start()
 
-        const freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy();
-        console.log(`${logSymbols.success} FreeForAllGateKeeper deployed at ${freeForAllGateKeeper.address}`);
+    const PoseidonT6 = await PoseidonT6Factory.deploy({ gasPrice })
+    await PoseidonT6.deployed()
+    spinner.stop()
 
-        const constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(0);
-        console.log(`${logSymbols.success} ConstantInitialVoiceCreditProxy deployed at ${constantInitialVoiceCreditProxy.address}`);
+    console.log(`${logSymbols.success} PoseidonT6 deployed at ${chalk.bold(PoseidonT6.address)}`)
 
-        const vkRegistry = await VKRegistryFactory.deploy();
-        console.log(`${logSymbols.success} VKRegistry deployed at ${vkRegistry.address}`);
+    const linkedLibraryAddresses = {
+      "qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT5": PoseidonT5.address,
+      "qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT3": PoseidonT3.address,
+      "qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6": PoseidonT6.address,
+      "qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4": PoseidonT4.address
+    }
 
-        const baseERC20Token = await BaseERC20TokenFactory.deploy(100);
-        console.log(`${logSymbols.success} BaseERC20Token deployed at ${baseERC20Token.address}`);
+    const GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, wallet)
+    const PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, wallet)
+    const MessageAqFactoryFactory = new MessageAqFactory__factory({ ...linkedLibraryAddresses }, wallet)
+    const QFIFactory = new QFI__factory({ ...linkedLibraryAddresses }, wallet)
 
-        const mockVerifier = await MockVerifierFactory.deploy();
-        console.log(`${logSymbols.success} MockVerifier deployed at ${mockVerifier.address}`);
+    const VKRegistryFactory = new VkRegistry__factory(wallet)
+    const ConstantInitialVoiceCreditProxyFactory = new ConstantInitialVoiceCreditProxy__factory(wallet)
+    const FreeForAllGateKeeperFactory = new FreeForAllGatekeeper__factory(wallet)
+    const RecipientRegistryFactory = new OptimisticRecipientRegistry__factory(wallet)
+    const BaseERC20TokenFactory = new BaseERC20Token__factory(wallet)
+    const PollProcessorAndTallyerFactory = new PollProcessorAndTallyer__factory(wallet)
+    const MockVerifierFactory = new MockVerifier__factory(wallet)
 
-        const pollProcessorAndTallyer = await PollProcessorAndTallyerFactory.deploy(mockVerifier.address);
-        console.log(`${logSymbols.success} PollProcessorAndTallyer deployed at ${pollProcessorAndTallyer.address}`);
+    spinner = customSpinner(`Deploying OptimisticRecipientRegistry smart contract...`, "point")
+    spinner.start()
 
-        const qfi = await QFIFactory.deploy(
-            baseERC20Token.address,
-            grantRoundFactory.address,
-            pollFactory.address,
-            freeForAllGateKeeper.address,
-            constantInitialVoiceCreditProxy.address
-        );
-        console.log(`${logSymbols.success} QFI deployed at ${qfi.address}`);
+    const optimisticRecipientRegistry = await RecipientRegistryFactory.deploy(0, 0, wallet.address, { gasPrice })
+    await optimisticRecipientRegistry.deployed()
+    spinner.stop()
 
-        // Store addresses in a local JSON file.
-        const contractsInJson = `{
+    console.log(
+      `${logSymbols.success} OptimisticRecipientRegistry deployed at ${chalk.bold(optimisticRecipientRegistry.address)}`
+    )
+
+    spinner = customSpinner(`Deploying GrantRoundFactory smart contract...`, "point")
+    spinner.start()
+
+    const grantRoundFactory = await GrantRoundFactory.deploy({ gasPrice })
+    await grantRoundFactory.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} GrantRoundFactory deployed at ${chalk.bold(grantRoundFactory.address)}`)
+
+    spinner = customSpinner(`Setting OptimisticRecipientRegistry in GrantRoundFactory smart contract...`, "point")
+    spinner.start()
+
+    const tx = await grantRoundFactory.setRecipientRegistry(optimisticRecipientRegistry.address, { gasPrice })
+    await tx.wait()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} GrantRoundFactory registry correctly set!`)
+
+    spinner = customSpinner(`Deploying PollFactory smart contract...`, "point")
+    spinner.start()
+
+    const pollFactory = await PollFactoryFactory.deploy({ gasPrice })
+    await pollFactory.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} PollFactory deployed at ${chalk.bold(pollFactory.address)}`)
+
+    spinner = customSpinner(`Deploying MessageAqFactory smart contract...`, "point")
+    spinner.start()
+
+    const messageAqFactory = await MessageAqFactoryFactory.deploy({ gasPrice })
+    await messageAqFactory.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} MessageAqFactory deployed at ${chalk.bold(messageAqFactory.address)}`)
+
+    spinner = customSpinner(`Deploying MessageAqFactoryGrants smart contract...`, "point")
+    spinner.start()
+
+    const messageAqFactoryGrants = await MessageAqFactoryFactory.deploy({ gasPrice })
+    await messageAqFactoryGrants.deployed()
+    spinner.stop()
+
+    console.log(
+      `${logSymbols.success} MessageAqFactoryGrants deployed at ${chalk.bold(messageAqFactoryGrants.address)}`
+    )
+
+    spinner = customSpinner(`Deploying FreeForAllGateKeeper smart contract...`, "point")
+    spinner.start()
+
+    const freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy({ gasPrice })
+    await freeForAllGateKeeper.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} FreeForAllGateKeeper deployed at ${chalk.bold(freeForAllGateKeeper.address)}`)
+
+    spinner = customSpinner(`Deploying ConstantInitialVoiceCreditProxy smart contract...`, "point")
+    spinner.start()
+
+    const constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(0, { gasPrice })
+    await constantInitialVoiceCreditProxy.deployed()
+    spinner.stop()
+
+    console.log(
+      `${logSymbols.success} ConstantInitialVoiceCreditProxy deployed at ${chalk.bold(
+        constantInitialVoiceCreditProxy.address
+      )}`
+    )
+
+    spinner = customSpinner(`Deploying VKRegistry smart contract...`, "point")
+    spinner.start()
+
+    const vkRegistry = await VKRegistryFactory.deploy({ gasPrice })
+    await vkRegistry.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} VKRegistry deployed at ${chalk.bold(vkRegistry.address)}`)
+
+    spinner = customSpinner(`Deploying BaseERC20Token smart contract...`, "point")
+    spinner.start()
+
+    const baseERC20Token = await BaseERC20TokenFactory.deploy(100, { gasPrice })
+    await baseERC20Token.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} BaseERC20Token deployed at ${chalk.bold(baseERC20Token.address)}`)
+
+    spinner = customSpinner(`Deploying MockVerifier smart contract...`, "point")
+    spinner.start()
+
+    const mockVerifier = await MockVerifierFactory.deploy({ gasPrice })
+    await mockVerifier.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} MockVerifier deployed at ${chalk.bold(mockVerifier.address)}`)
+
+    spinner = customSpinner(`Deploying PollProcessorAndTallyer smart contract...`, "point")
+    spinner.start()
+
+    const pollProcessorAndTallyer = await PollProcessorAndTallyerFactory.deploy(mockVerifier.address, { gasPrice })
+    await pollProcessorAndTallyer.deployed()
+    spinner.stop()
+
+    console.log(
+      `${logSymbols.success} PollProcessorAndTallyer deployed at ${chalk.bold(pollProcessorAndTallyer.address)}`
+    )
+
+    spinner = customSpinner(`Deploying QFI smart contract...`, "point")
+    spinner.start()
+
+    const qfi = await QFIFactory.deploy(
+      baseERC20Token.address,
+      grantRoundFactory.address,
+      pollFactory.address,
+      freeForAllGateKeeper.address,
+      constantInitialVoiceCreditProxy.address,
+      { gasPrice }
+    )
+    await qfi.deployed()
+    spinner.stop()
+
+    console.log(`${logSymbols.success} QFI deployed at ${chalk.bold(qfi.address)}`)
+
+    // Store addresses in a local JSON file.
+    const contractsInJson = `{
         "PoseidonT3": \"${PoseidonT3.address}\",
         "PoseidonT4": \"${PoseidonT4.address}\",
         "PoseidonT5": \"${PoseidonT5.address}\",
@@ -153,14 +288,22 @@ async function deploy(network: string) {
         "QFI": \"${qfi.address}\"
     }`
 
-        writeLocalJsonFile(`./output/deployedContracts.json`, JSON.parse(contractsInJson))
+    writeLocalJsonFile(deployedContractsFilePath, JSON.parse(contractsInJson))
 
-        console.log(
-            `\nYou have successfully deployed the MACI/QFI smart contracts 🎊 You can find everything inside the \`deployedContracts.json\` file!`
-        )
-    } catch (err: any) {
-        console.log(`${logSymbols.error} Something went wrong: ${err}`)
-    }
+    console.log(
+      `\n${logSymbols.info} You can find the deployed smart contracts addresses in the ${deployedContractsFilePath} file\n${logSymbols.success} You have successfully deployed the MACI/QFI smart contracts 🎊\n`
+    )
+  } catch (err: any) {
+    console.log(err)
+    if (!err.transactionHash) console.log(`\n${logSymbols.error} Something went wrong: ${err}`)
+    else
+      console.log(
+        `\n${logSymbols.error} Something went wrong with the transaction! More info here: ${chalk.bold(
+          `${getNetworkExplorerUrl(network)}tx/${err.transactionHash}`
+        )}`
+      )
+    process.exit(0)
+  }
 }
 
 export default deploy

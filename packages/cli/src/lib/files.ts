@@ -7,7 +7,7 @@ import { Converter } from "csvtojson/v2/Converter"
 /**
  * Create a new empty directory.
  * @param dirPath <string> - the path where the directory must be created.
- * @returns 
+ * @returns
  */
 export const makeDir = (dirPath: string) => fs.mkdirSync(dirPath)
 
@@ -30,10 +30,18 @@ export const cleanDir = (dirPath: string): void => {
 /**
  * Read a file at given path.
  * @param filePath <string> - the absolute or relative path.
- * @returns <string> 
+ * @returns <string>
  */
-export const readFileSync = (filePath: string): string => {
-  return fs.readFileSync(filePath).toString()
+export const readFileSync = (filePath: string): string => fs.readFileSync(filePath).toString()
+
+/**
+ * Read a file at given path.
+ * @param filePath <string> - the absolute or relative path.
+ * @param content <any> - the data to be stored.
+ * @returns <string>
+ */
+export const writeFileSync = (filePath: string, content: any) => {
+  fs.writeFileSync(filePath, content)
 }
 
 /**
@@ -41,11 +49,7 @@ export const readFileSync = (filePath: string): string => {
  * @param filePath <string> - the absolute or relative path.
  * @returns <any>
  */
-export const readJSONFile = (filePath: string): any => {
-  if (!directoryExists(filePath)) throw new Error(`Oops, looks like that the provided file path does not exist!`)
-
-  return JSON.parse(readFileSync(filePath))
-}
+export const readJSONFile = (filePath: string): any => JSON.parse(readFileSync(filePath))
 
 /**
  * Read a local .json file at a given path.
@@ -61,24 +65,11 @@ export const readLocalJsonFile = (filePath: string): any => {
 
 /**
  * Write data a local .json file at a given path.
- * @param filePath <string> 
+ * @param filePath <string>
  * @param data <JSON>
  */
 export const writeLocalJsonFile = (filePath: string, data: JSON) => {
-  fs.writeFileSync(filePath, JSON.stringify(data), "utf-8");
-}
-
-/**
- *
- * @param dirPath <string> - the path to the directory where the file containing the key will be stored.
- * @param fileName <string> - the name of the file.
- * @param key <string> - the key to be stored.
- */
-export const toTextFile = (dirPath: string, fileName: string, key: string): void => {
-  // nb. always plaintext here!
-  const file = `${dirPath}/${fileName}.txt`
-
-  fs.writeFileSync(file, key)
+  fs.writeFileSync(filePath, JSON.stringify(data), "utf-8")
 }
 
 /**
@@ -88,5 +79,5 @@ export const toTextFile = (dirPath: string, fileName: string, key: string): void
  */
 export const getCSVFileRecords = async (filePath: string): Promise<Converter> => {
   if (!directoryExists(filePath)) throw new Error(`Oops, looks like that the provided CSV file path does not exist!`)
-  return await csv().fromFile(filePath);
-};
+  return csv().fromFile(filePath)
+}

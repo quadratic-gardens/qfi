@@ -4,7 +4,7 @@ import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
 import { auth, genkeys, deploy, registerRecipients } from "./commands/index.js"
 
-dotenv.config();
+dotenv.config()
 
 const pkg = readLocalJsonFile("../../package.json")
 
