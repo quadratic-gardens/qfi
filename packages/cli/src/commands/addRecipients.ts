@@ -65,7 +65,7 @@ const checkForMissingRecipientProperties = (recipientRecord: Recipient, index: n
  * @param network <string> - the network where the contracts are going to be deployed.
  * @param path <string> - the path of the CSV input file where the recipients data is stored.
  */
-async function registerRecipients(network: string, path: string) {
+async function addRecipients(network: string, path: string) {
   clear()
 
   console.log(header)
@@ -98,7 +98,7 @@ async function registerRecipients(network: string, path: string) {
 
     let i = 0
     for await (const recipientRecord of jsonRecipientsRecords) {
-      const spinner = customSpinner(`Adding recipient in position ${chalk.bold(i)}...`, "point")
+      const spinner = customSpinner(`Adding recipient in position ${chalk.bold(i)}`, "point")
       spinner.start()
 
       // Check input data.
@@ -145,4 +145,4 @@ async function registerRecipients(network: string, path: string) {
   }
 }
 
-export default registerRecipients
+export default addRecipients

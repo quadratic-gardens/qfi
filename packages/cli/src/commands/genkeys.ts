@@ -21,15 +21,15 @@ import { askForConfirmation } from "../lib/prompts.js"
 
 /**
  * Genkeys command.
- * @param quantity <number> - amount of MACI and ETH keypairs to be generated.
+ * @param amount <number> - amount of MACI and ETH keypairs to be generated.
  */
-async function genkeys(quantity: number) {
+async function genkeys(amount: number) {
   clear()
 
   console.log(header)
 
   try {
-    if (quantity === 0) throw new Error(`Sorry, but you cannot generate zero key pairs for MACI/QFI`)
+    if (amount === 0) throw new Error(`Sorry, but you cannot generate zero key pairs for MACI/QFI`)
 
     // Check for output directory.
     if (!directoryExists(outputDirPath)) cleanDir(outputDirPath)
@@ -55,7 +55,7 @@ async function genkeys(quantity: number) {
 
     console.log(chalk.bold(`\nEthereum and MACI Key generation is running`))
 
-    for (let i = 0; i < quantity; i += 1) {
+    for (let i = 0; i < amount; i += 1) {
       // Generate an Ethereum keypair.
       const ethKeyPair: EthKeyPair = generateEthereumKeyPair()
 
