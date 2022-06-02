@@ -35,6 +35,8 @@
   "scripts": {
     "cz": "cz",
     "release": "lerna version --conventional-commits",
+    "canary": "lerna publish --canary --preid",
+    "publish": "lerna publish",
     "build": "yarn workspaces run build",
     "build:contracts": "yarn workspace @qfi/contracts run build",
     "build:subgraph": "yarn workspace @qfi/subgraph run build",
