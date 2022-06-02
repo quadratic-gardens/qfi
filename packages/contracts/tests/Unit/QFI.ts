@@ -89,8 +89,9 @@ describe("QFI", () => {
   };
   // Finalize.
   const tallyResults = {
-    totalSpent: 100,
-    totalSpentSalt: BigInt(999999999999),
+    alphaDenominator:BigInt(1),
+    finalSbCommitment: BigInt(999999999999),
+    finalTallyCommitment: BigInt(999999999999),
   };
 
   beforeEach(async () => {
@@ -1274,13 +1275,16 @@ describe("QFI", () => {
 
       // Mocks.
       await mockPPT.mock.tallyBatchNum.withArgs().returns(1);
+      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
+      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
       await mockPPT.mock.processingComplete.withArgs().returns(true);
       await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
       await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
       await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
-      await mockGrantRound.mock.finalize.withArgs(tallyResults.totalSpent, tallyResults.totalSpentSalt).returns();
+      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
 
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt))
+      
+      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
         .to.emit(qfi, "GrantRoundFinalized")
         .withArgs(mockGrantRound.address, 4);
     });
@@ -1342,30 +1346,32 @@ describe("QFI", () => {
 
       // Mocks.
       await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
+      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
       await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
       await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
       await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
-      await mockGrantRound.mock.finalize.withArgs(tallyResults.totalSpent, tallyResults.totalSpentSalt).returns();
+      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
       await mockBaseERC20Token.mock.allowance.withArgs(fundingSourceAddress, qfi.address).returns(contributionAmount);
       await mockBaseERC20Token.mock.balanceOf.withArgs(fundingSourceAddress).returns(contributionAmount);
       await mockBaseERC20Token.mock.transferFrom
         .withArgs(fundingSourceAddress, mockGrantRound.address, contributionAmount)
         .returns(true);
 
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt))
+      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
         .to.emit(qfi, "GrantRoundFinalized")
         .withArgs(mockGrantRound.address, 4);
     });
 
     it("revert - allow only owner to finalize current grant round", async () => {
       await expect(
-        qfi.connect(contributor).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt)
+        qfi.connect(contributor).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
       ).to.revertedWith("Ownable: caller is not the owner");
     });
 
     it("revert - cannot finalize the grant round while not on waiting for finalization", async () => {
       await expect(
-        qfi.connect(deployer).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt)
+        qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
       ).to.revertedWith("QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage");
     });
 
@@ -1423,7 +1429,7 @@ describe("QFI", () => {
       await mockPPT.mock.processingComplete.withArgs().returns(false);
 
       await expect(
-        qfi.connect(deployer).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt)
+        qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
       ).to.revertedWith("QFI: messages have not been proccessed");
     });
 
@@ -1479,18 +1485,20 @@ describe("QFI", () => {
 
       // Mocks.
       await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
+      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
       await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
       await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
       await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
-      await mockGrantRound.mock.finalize.withArgs(tallyResults.totalSpent, tallyResults.totalSpentSalt).returns();
+      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
 
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt))
+      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
         .to.emit(qfi, "GrantRoundFinalized")
         .withArgs(mockGrantRound.address, 4);
 
       // Should revert.
       await expect(
-        qfi.connect(deployer).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt)
+        qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
       ).to.revertedWith("QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage");
     });
   });
@@ -1575,12 +1583,14 @@ describe("QFI", () => {
 
       // Mocks.
       await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
+      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
       await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
       await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
       await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
-      await mockGrantRound.mock.finalize.withArgs(tallyResults.totalSpent, tallyResults.totalSpentSalt).returns();
+      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
 
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.totalSpent, tallyResults.totalSpentSalt))
+      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
         .to.emit(qfi, "GrantRoundFinalized")
         .withArgs(mockGrantRound.address, 4);
 

@@ -45,7 +45,10 @@ contract QFI is MACI, FundsManager {
      * @param _messageAqFactoryGrantRounds The Ethereum smart contract address of the Message AQ Factory for the current Grant Round.
      * @param _currentStage The updated value for the current QFI stage.
      */
-    event QfiInitialized(address _messageAqFactoryGrantRounds, Stage _currentStage);
+    event QfiInitialized(
+        address _messageAqFactoryGrantRounds,
+        Stage _currentStage
+    );
 
     /**
      * Event issued when the owner (deployer) set the PollProcessorAndTallyer contract.
@@ -58,10 +61,7 @@ contract QFI is MACI, FundsManager {
      * @param _contributor The Ethereum address of who sends the contribution.
      * @param _amount The amount in native ERC20 tokens submitted as contribution.
      */
-    event ContributionSent(
-        address _contributor,
-        uint256 _amount
-    );
+    event ContributionSent(address _contributor, uint256 _amount);
 
     /**
      * Event issued when a contributor decides to withdraw his/her contribution for the current Grant Round.
@@ -210,7 +210,10 @@ contract QFI is MACI, FundsManager {
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 
-        emit QfiInitialized(address(_messageAqFactoryGrantRounds), currentStage);
+        emit QfiInitialized(
+            address(_messageAqFactoryGrantRounds),
+            currentStage
+        );
     }
 
     /**
@@ -415,35 +418,36 @@ contract QFI is MACI, FundsManager {
         emit VotingPeriodClosed(currentStage);
     }
 
-    function finalizeCurrentRound(uint256 _totalSpent, uint256 _totalSpentSalt)
-        external
-        onlyOwner
-    {
+    function finalizeCurrentRound(
+        uint256 _finalTallyCommitment,
+        uint256 _finalSbCommitment,
+        uint256 _alphaDenominator
+    ) external onlyOwner {
         require(
             currentStage == Stage.WAITING_FOR_FINALIZATION,
             "QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage"
         );
-        bool proccesingComplete = pollProcessorAndTallyer.processingComplete();
-        require(proccesingComplete, "QFI: messages have not been proccessed");
-
-        GrantRound g = currentGrantRound;
-
-        //TODO: actually verify tally proof again with VK
-        uint256 tallyBatchNum = pollProcessorAndTallyer.tallyBatchNum();
-        ( , uint256 tallyBatchSize) = g.batchSizes(); 
-        uint256 batchStartIndex = tallyBatchNum * tallyBatchSize;
-        (uint256 numSignUps,) = g.numSignUpsAndMessages();
-        // Require that there are NO untalied ballots left
         require(
-            batchStartIndex <= numSignUps,
-            "QFI: There are untalied ballots left"
+            pollProcessorAndTallyer.processingComplete(),
+            "QFI: messages have not been proccessed"
+        );
+        require(
+            _finalSbCommitment == pollProcessorAndTallyer.sbCommitment(),
+            "QFI: finalTallyCommitment does not match the current grant round's tally commitment"
+        );
+        require(
+            _finalTallyCommitment == pollProcessorAndTallyer.tallyCommitment(),
+            "QFI: finalTallyCommitment does not match the current grant round's tally commitment"
         );
 
-        //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
-        //TODO: verifySpentVoiceCredits(_totalSpent, _totalSpentSalt) within finalize function
-        g.finalize(_totalSpent, _totalSpentSalt);
+        GrantRound g = currentGrantRound;
+       
+
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
         transferMatchingFunds(g);
+        //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
+        g.finalize(_alphaDenominator);
+   
         currentStage = Stage.FINALIZED;
 
         emit GrantRoundFinalized(address(g), currentStage);
