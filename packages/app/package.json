@@ -29,6 +29,7 @@
     "react-icons": "^3.0.0",
     "react-pose": "^4.0.10",
     "react-pose-text": "^3.1.0",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "react-spinners": "^0.11.0",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.1",
+    "@types/react-qr-reader": "^2.1.4",
     "webpack-bundle-analyzer": "^4.5.0"
   }
 }
