@@ -18896,10 +18896,10 @@ q@^1.1.2, q@^1.5.1:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qaci-circuits@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/qaci-circuits/-/qaci-circuits-1.1.8.tgz#a0088a8ba5607dc80cc4dd3526d49429b8e0637c"
-  integrity sha512-vOK+Z5kQPbx4sicmGNM12WZM+4iohvV5xakdyGQcKqAgf/VkND6QjkTMlzrHUf+l/JWcOL2BjXZYM4F7Et50rQ==
+qaci-circuits@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/qaci-circuits/-/qaci-circuits-1.1.9.tgz#ec826c8e519e46d29eb20fe8604ddc8a7989749f"
+  integrity sha512-oZh8Vm7iU/2f/nBv+y2b1AYy4vdgjiDT29RMAOhZKamCrEnqnBsnXiNUI5k9Ay3U0R5KeXBEd2hXfu9scL+InQ==
   dependencies:
     argparse "^1.0.10"
     circomlib "https://github.com/weijiekoh/circomlib.git#ac85e82c1914d47789e2032fb11ceb2cfdd38a2b"
@@ -18907,10 +18907,10 @@ qaci-circuits@^1.1.8:
     snarkjs "0.4.10"
     tmp "^0.2.1"
 
-qaci-cli@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/qaci-cli/-/qaci-cli-1.1.8.tgz#26f836580f38fce4c8dce40d547d767849f0e5a6"
-  integrity sha512-efGSUwwIGBG+UfVHeX62z7cQm131MeARhfi54+anDAFZOtY8nhL0ebXdvgYAQX3NsG62vV4Cx+ZgC9OMu6lYpw==
+qaci-cli@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/qaci-cli/-/qaci-cli-1.1.9.tgz#e1d622acefdf34206379120ee3ca2f0d2e48cc55"
+  integrity sha512-bEsiCmKPSEYtqHDtowiaMSXg++oyyjeeqlNZNQC89B8TVql0rch7G2F6qLceDRtrn9+Hky/h/HdLtklOP07P5Q==
   dependencies:
     "@nomiclabs/hardhat-ethers" "^2.0.2"
     argparse "^1.0.10"
@@ -18922,12 +18922,12 @@ qaci-cli@^1.1.8:
     hardhat "^2.0.11"
     js-yaml "4.0.0"
     prompt-async "^0.9.9"
-    qaci-circuits "^1.1.8"
+    qaci-circuits "^1.1.9"
     qaci-common "^1.0.7"
-    qaci-contracts "^1.1.8"
-    qaci-core "^1.1.8"
-    qaci-crypto "^1.1.0"
-    qaci-domainobjs "^1.1.0"
+    qaci-contracts "^1.1.9"
+    qaci-core "^1.1.9"
+    qaci-crypto "^1.1.9"
+    qaci-domainobjs "^1.1.9"
     shelljs "^0.8.4"
     snarkjs "0.4.10"
     source-map-support "^0.5.19"
@@ -18940,10 +18940,10 @@ qaci-common@^1.0.7:
   resolved "https://registry.yarnpkg.com/qaci-common/-/qaci-common-1.0.7.tgz#3f1da8c90841ae82938442ba3002f79380cd874c"
   integrity sha512-iwWAlfP8z/rRH2NBZMFC1FTrr3xsrid+9E0W5rrqRhGWKdfDI4GqZgw7RlxeNNSatIhLadTuN+bjaFiuBzJz1g==
 
-qaci-contracts@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/qaci-contracts/-/qaci-contracts-1.1.8.tgz#765bb2e535e76ac3b99373d33783c652c32aaeea"
-  integrity sha512-mJZgzNeUuIXTXdWRvZ8Z7O69V9xUkwSnO89pwdBIjamjx3ZjzmDax88CmpH1PH5IvAhv3U63uZjfaPNpV/XUiQ==
+qaci-contracts@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/qaci-contracts/-/qaci-contracts-1.1.9.tgz#3cb8f5c13a9b8b5bd897f5fc4f84d0185e1a7ad9"
+  integrity sha512-C5VPg8DX/wuVKY9mnNA5ySnsrx4gqcrzVOWBnpW1NcgxDso/MguV6fesy7UwMVMS6RMj+ZGRUdUO52fA6o3W5g==
   dependencies:
     "@nomiclabs/hardhat-ethers" "^2.0.2"
     "@openzeppelin/contracts" ">=4.5.0-solc-0.8"
@@ -18954,19 +18954,19 @@ qaci-contracts@^1.1.8:
     hardhat-contract-sizer "^2.0.3"
     module-alias "^2.2.2"
 
-qaci-core@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/qaci-core/-/qaci-core-1.1.8.tgz#55bbab2fb2358ce8829e55128e6dd7ec2a857175"
-  integrity sha512-XdC83+9tnb1oD2cRjbclYheq3rPielntrRCiwlblGJ4rRphlgXfGjr5quUau0zGs4KxlC1dWAN8YHn46y5dg8Q==
+qaci-core@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/qaci-core/-/qaci-core-1.1.9.tgz#8e6e36e46eaae9628575fb48faba81b5a9b4b4df"
+  integrity sha512-Pcu5OZlKKMz4q/9G2hFkMeCiDmkq6tOAeftDQlBW9tlqZNayJESXdzrIQvZtUcEp2bw4ZNhorkytiLk89QzWHw==
   dependencies:
     module-alias "^2.2.2"
-    qaci-crypto "^1.1.0"
-    qaci-domainobjs "^1.1.0"
+    qaci-crypto "^1.1.9"
+    qaci-domainobjs "^1.1.9"
 
-qaci-crypto@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/qaci-crypto/-/qaci-crypto-1.1.0.tgz#3b7f5c946d8733e0bfe6c4d74a3e8e7d91a18921"
-  integrity sha512-OOb5ObhhOM1Mgyi236v+x3vH44TN5/7SiKwfJSyoJj0wmw0XFoqQMoll/enua2Dp1S3V/uCBEKsSefKfjlrm1Q==
+qaci-crypto@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/qaci-crypto/-/qaci-crypto-1.1.9.tgz#769421338b8cec878575bef17a59a7a0c6da82ba"
+  integrity sha512-irxQ2xtfC7pakBwvda05gdQLD51xzV3DBPMzvVf2ZCd0zVJTz6+s/7YvENcNw//tZi+kTq8oXE+6T7eC573HGQ==
   dependencies:
     blake-hash "^1.1.0"
     circomlib "https://github.com/weijiekoh/circomlib.git#24ed08eee0bb613b8c0135d66c1013bd9f78d50a"
@@ -18974,10 +18974,10 @@ qaci-crypto@^1.1.0:
     ffjavascript "0.2.35"
     optimisedmt "^0.0.7"
 
-qaci-domainobjs@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/qaci-domainobjs/-/qaci-domainobjs-1.1.0.tgz#929f39d973524e2b1c50580a2da8d6fd823e1887"
-  integrity sha512-VA+lW3Qr3cHmwkpTYg3ylrckbeBqSRTkevG/g+rezGMeQLDqCK5LFMkNoWG3GnwqZ4SDhdHdJIRlKCazEwK17w==
+qaci-domainobjs@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/qaci-domainobjs/-/qaci-domainobjs-1.1.9.tgz#74a18244185dc32fa77149ecd27f795fef1b1c8a"
+  integrity sha512-4TpoBgoSHNENpGzyQVO8DXG8LobFpspRm1naWOo2/KYT0DN/e4z3NnrRRwU6tqAagwZfsAz4+nha/uEbHQFPAA==
   dependencies:
     base64url "^3.0.1"
 
