@@ -2,22 +2,99 @@
 import logSymbols from "log-symbols"
 import clear from "clear"
 import chalk from "chalk"
-import { cleanDir, directoryExists } from "../lib/files.js"
+import { cleanDir, directoryExists, jsonToCsv, writeFileSync } from "../lib/files.js"
 import { EthKeyPair, KeyPair, QRCodeFileType } from "../../types/index.js"
 import { generateEthereumKeyPair, generateMaciKeyPair } from "../lib/keypair.js"
 import toQRCodeFile from "../lib/qrcode.js"
 import {
+  baseAddressFileName,
+  baseMnemonicFileName,
+  basePkFileName,
+  baseSkFileName,
+  ethBaseAddressDirPath,
+  ethBaseAddressQrPngDirPath,
+  ethBaseAddressQrSvgDirPath,
+  ethBaseAddressTxtDirPath,
+  ethBaseCsvFilePath,
   ethBaseDirPath,
-  ethKeyPairBaseDirAndFileName,
-  ethKeyPairBaseDirPath,
+  ethBaseMnemonicDirPath,
+  ethBaseMnemonicQrPngDirPath,
+  ethBaseMnemonicQrSvgDirPath,
+  ethBaseMnemonicTxtDirPath,
+  ethBasePkDirPath,
+  ethBasePkQrPngDirPath,
+  ethBasePkQrSvgDirPath,
+  ethBasePkTxtDirPath,
+  ethBaseSkDirPath,
+  ethBaseSkQrPngDirPath,
+  ethBaseSkQrSvgDirPath,
+  ethBaseSkTxtDirPath,
   generatedKeysGlobalDirPath,
   header,
+  maciBaseCsvFilePath,
   maciBaseDirPath,
-  maciKeyPairBaseDirAndFileName,
-  maciKeyPairBaseDirPath,
+  maciBasePkDirPath,
+  maciBasePkQrPngDirPath,
+  maciBasePkQrSvgDirPath,
+  maciBasePkTxtDirPath,
+  maciBaseSkDirPath,
+  maciBaseSkQrPngDirPath,
+  maciBaseSkQrSvgDirPath,
+  maciBaseSkTxtDirPath,
   outputDirPath
 } from "../lib/constants.js"
 import { askForConfirmation } from "../lib/prompts.js"
+
+const prepareDirectories = () => {
+  // Globals.
+  cleanDir(generatedKeysGlobalDirPath)
+  cleanDir(ethBaseDirPath)
+  cleanDir(maciBaseDirPath)
+
+  /** ETH */
+
+  // Root.
+  cleanDir(ethBasePkDirPath)
+  cleanDir(ethBaseSkDirPath)
+  cleanDir(ethBaseAddressDirPath)
+  cleanDir(ethBaseMnemonicDirPath)
+
+  // Txt.
+  cleanDir(ethBasePkTxtDirPath)
+  cleanDir(ethBaseSkTxtDirPath)
+  cleanDir(ethBaseAddressQrPngDirPath)
+  cleanDir(ethBaseMnemonicTxtDirPath)
+
+  // QR Png.
+  cleanDir(ethBasePkQrPngDirPath)
+  cleanDir(ethBaseSkQrPngDirPath)
+  cleanDir(ethBaseAddressTxtDirPath)
+  cleanDir(ethBaseMnemonicQrPngDirPath)
+
+  // QR Svg.
+  cleanDir(ethBasePkQrSvgDirPath)
+  cleanDir(ethBaseSkQrSvgDirPath)
+  cleanDir(ethBaseAddressQrSvgDirPath)
+  cleanDir(ethBaseMnemonicQrSvgDirPath)
+
+  /** MACI */
+
+  // Root.
+  cleanDir(maciBasePkDirPath)
+  cleanDir(maciBaseSkDirPath)
+
+  // Txt.
+  cleanDir(maciBasePkTxtDirPath)
+  cleanDir(maciBaseSkTxtDirPath)
+
+  // QR Png.
+  cleanDir(maciBasePkQrPngDirPath)
+  cleanDir(maciBaseSkQrPngDirPath)
+
+  // QR Svg.
+  cleanDir(maciBasePkQrSvgDirPath)
+  cleanDir(maciBaseSkQrSvgDirPath)
+}
 
 /**
  * Genkeys command.
@@ -49,11 +126,13 @@ async function genkeys(amount: number) {
       }
     }
 
-    cleanDir(generatedKeysGlobalDirPath)
-    cleanDir(ethBaseDirPath)
-    cleanDir(maciBaseDirPath)
+    // Cleaning directories.
+    prepareDirectories()
 
     console.log(chalk.bold(`\nEthereum and MACI Key generation is running`))
+
+    const mnemonics = []
+    const maciSks = []
 
     for (let i = 0; i < amount; i += 1) {
       // Generate an Ethereum keypair.
@@ -62,33 +141,56 @@ async function genkeys(amount: number) {
       // Generate a MACI keypair.
       const maciKeyPair: KeyPair = generateMaciKeyPair()
 
-      cleanDir(`${ethKeyPairBaseDirPath}_${i}`)
-      cleanDir(`${maciKeyPairBaseDirPath}_${i}`)
+      /* Files */
+      const ethMnemonicFile = `${baseMnemonicFileName}_${i}`
+      const ethAddressFile = `${baseAddressFileName}_${i}`
+      const skFile = `${baseSkFileName}_${i}`
+      const pkFile = `${basePkFileName}_${i}`
+
+      /* Store as plaintext */
+
+      // ETH.
+      writeFileSync(`${ethBaseMnemonicTxtDirPath}/${ethMnemonicFile}.txt`, ethKeyPair.mnemonic)
+      writeFileSync(`${ethBaseAddressTxtDirPath}/${ethAddressFile}.txt`, ethKeyPair.address)
+      writeFileSync(`${ethBaseSkTxtDirPath}/${skFile}.txt`, ethKeyPair.privateKey)
+      writeFileSync(`${ethBasePkTxtDirPath}/${pkFile}.txt`, ethKeyPair.publicKey)
+
+      // MACI.
+      writeFileSync(`${maciBaseSkTxtDirPath}/${skFile}.txt`, maciKeyPair.privateKey)
+      writeFileSync(`${maciBasePkTxtDirPath}/${pkFile}.txt`, maciKeyPair.publicKey)
 
       /* Store as QR Code */
 
-      // Eth.
-      const ethMnemonicFilePath = `${ethKeyPairBaseDirPath}_${i}/${ethKeyPairBaseDirAndFileName}_${i}_mnemonic`
-      const ethAddressFilePath = `${ethKeyPairBaseDirPath}_${i}/${ethKeyPairBaseDirAndFileName}_${i}_address`
+      // ETH.
+      await toQRCodeFile(`${ethBaseMnemonicQrPngDirPath}/${ethMnemonicFile}`, ethKeyPair.mnemonic, QRCodeFileType.PNG)
+      await toQRCodeFile(`${ethBaseMnemonicQrSvgDirPath}/${ethMnemonicFile}`, ethKeyPair.mnemonic, QRCodeFileType.SVG)
 
-      await toQRCodeFile(ethMnemonicFilePath, ethKeyPair.mnemonic, QRCodeFileType.PNG)
-      await toQRCodeFile(ethMnemonicFilePath, ethKeyPair.mnemonic, QRCodeFileType.SVG)
+      await toQRCodeFile(`${ethBaseAddressQrPngDirPath}/${ethAddressFile}`, ethKeyPair.address, QRCodeFileType.PNG)
+      await toQRCodeFile(`${ethBaseAddressQrSvgDirPath}/${ethAddressFile}`, ethKeyPair.address, QRCodeFileType.SVG)
 
-      await toQRCodeFile(ethAddressFilePath, ethKeyPair.address, QRCodeFileType.PNG)
-      await toQRCodeFile(ethAddressFilePath, ethKeyPair.address, QRCodeFileType.SVG)
+      await toQRCodeFile(`${ethBaseSkQrPngDirPath}/${skFile}`, ethKeyPair.privateKey, QRCodeFileType.PNG)
+      await toQRCodeFile(`${ethBaseSkQrSvgDirPath}/${skFile}`, ethKeyPair.privateKey, QRCodeFileType.SVG)
 
-      // Maci.
-      const maciPrivateFilePath = `${maciKeyPairBaseDirPath}_${i}/${maciKeyPairBaseDirAndFileName}_${i}_sk`
-      const maciPublicFilePath = `${maciKeyPairBaseDirPath}_${i}/${maciKeyPairBaseDirAndFileName}_${i}_pk`
+      await toQRCodeFile(`${ethBasePkQrPngDirPath}/${pkFile}`, ethKeyPair.publicKey, QRCodeFileType.PNG)
+      await toQRCodeFile(`${ethBasePkQrSvgDirPath}/${pkFile}`, ethKeyPair.publicKey, QRCodeFileType.SVG)
 
-      await toQRCodeFile(maciPrivateFilePath, maciKeyPair.privateKey, QRCodeFileType.PNG)
-      await toQRCodeFile(maciPrivateFilePath, maciKeyPair.privateKey, QRCodeFileType.SVG)
+      // MACI.
+      await toQRCodeFile(`${maciBaseSkQrPngDirPath}/${skFile}`, maciKeyPair.privateKey, QRCodeFileType.PNG)
+      await toQRCodeFile(`${maciBaseSkQrSvgDirPath}/${skFile}`, maciKeyPair.privateKey, QRCodeFileType.SVG)
 
-      await toQRCodeFile(maciPublicFilePath, maciKeyPair.publicKey, QRCodeFileType.PNG)
-      await toQRCodeFile(maciPublicFilePath, maciKeyPair.publicKey, QRCodeFileType.SVG)
+      await toQRCodeFile(`${maciBasePkQrPngDirPath}/${pkFile}`, maciKeyPair.publicKey, QRCodeFileType.PNG)
+      await toQRCodeFile(`${maciBasePkQrSvgDirPath}/${pkFile}`, maciKeyPair.publicKey, QRCodeFileType.SVG)
+
+      // Store rows for CSV files.
+      mnemonics.push({ mnemonic: ethKeyPair.mnemonic })
+      maciSks.push({ maci_sk: maciKeyPair.privateKey })
 
       console.log(`Keypair #${i} - ${logSymbols.success} Ethereum / ${logSymbols.success} MACI`)
     }
+
+    // Create CSV files.
+    jsonToCsv(ethBaseCsvFilePath, [`mnemonic`], mnemonics)
+    jsonToCsv(maciBaseCsvFilePath, [`maci_sk`], maciSks)
 
     console.log(
       `\n${logSymbols.info} Generated keypairs for Ethereum in the ${ethBaseDirPath} folder\n${logSymbols.info} Generated keypairs for MACI in the ${maciBaseDirPath} folder

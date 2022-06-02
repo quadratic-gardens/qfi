@@ -2,6 +2,7 @@ import { ethers } from "ethers"
 
 export type EthKeyPair = {
   privateKey: string
+  publicKey: string
   address: string
   mnemonic: string
 }

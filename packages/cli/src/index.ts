@@ -15,7 +15,9 @@ program.name(pkg.name).description(pkg.description).version(pkg.version)
 
 program
   .command("auth")
-  .description("Allow to interact with the blockchain-related commands (e.g., deploy) with a wallet by passing in wallet's mnemonic.")
+  .description(
+    "Allow to interact with the blockchain-related commands (e.g., deploy) with a wallet by passing in wallet's mnemonic."
+  )
   .argument("<mnemonic>", "the secret mnemonic phrase (e.g., 12 words) separated by spaces")
   .action((mnemonic: string) => {
     auth(mnemonic)
@@ -32,7 +34,9 @@ program
 
 program
   .command("contracts:deploy")
-  .description("Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network")
+  .description(
+    "Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network"
+  )
   .argument("<network>", "the network where the contracts will be deployed")
   .action((network: string) => {
     deploy(network)
@@ -40,7 +44,9 @@ program
 
 program
   .command("contracts:add-recipients")
-  .description("Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path")
+  .description(
+    "Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path"
+  )
   .argument("<network>", "the network where the contracts has been deployed")
   .argument("<path>", "the path of the CSV input file where the recipients data is stored")
   .action((network: string, path: string) => {

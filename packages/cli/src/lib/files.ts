@@ -3,6 +3,7 @@ import fs from "fs"
 import path from "path"
 import csv from "csvtojson"
 import { Converter } from "csvtojson/v2/Converter"
+import { parse } from "json2csv"
 
 /**
  * Create a new empty directory.
@@ -80,4 +81,18 @@ export const writeLocalJsonFile = (filePath: string, data: JSON) => {
 export const getCSVFileRecords = async (filePath: string): Promise<Converter> => {
   if (!directoryExists(filePath)) throw new Error(`Oops, looks like that the provided CSV file path does not exist!`)
   return csv().fromFile(filePath)
+}
+
+/**
+ * Create a new CSV file from a list of JSON objects.
+ * @param filePath <string> - the path where the csv file will be stored.
+ * @param fields <Array<string>> - the fields of each CSV row.
+ * @param data <Array<any>> - the input data.
+ */
+export const jsonToCsv = (filePath: string, fields: Array<string>, data: Array<any>) => {
+  // Parse to CSV.
+  const csvData = parse(data, { fields })
+
+  // Create the file.
+  writeFileSync(`${filePath}.csv`, csvData)
 }

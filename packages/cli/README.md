@@ -35,43 +35,32 @@
 </div>
 
 ---
+
 ## Commands
 
-* `ethpraguecli`: CLI entry point.
-* `ethpraguecli auth \"<mnemonic>\"`: Allow to interact with the blockchain-related commands (e.g., deploy) with a wallet by passing in wallet's mnemonic.
-    * `<mnemonic>`: the secret mnemonic phrase (e.g., 12 words) separated by spaces (e.g., "test test test test test test test test test test test junk"). *nb. the double quotes are mandatory!*
-* `ethpraguecli genkeys <amount>`: Generate a new specified amount of MACI and ETH keypairs (QR Codes inclueded).
-    * `<amount>`: amount of MACI and ETH keypairs to be generated (e.g., 3000)
-* `ethpraguecli contracts:deploy <network>`: Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network.
-    * `<network>`: the network where the contracts will be deployed (e.g., xdai)
-* `ethpraguecli contracts:add-recipients <network> <path>`: Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path.
-    * `<network>`: the network where the contracts has been deployed (e.g., xdai)
-    * `<path>`: the path of the CSV input file where the recipients data is stored (e.g., ~/Desktop/my_recipients_data.csv`).
-    *nb. The CSV file must contain rows organized as follows:*
-        * *name*
-        * *tagline*
-        * *description*
-        * *problemSpace*
-        * *ethereumAddress*
-        * *contactEmail*
-        * *teamName (optional)*
-        * *teamDescription (optional)*
-        * *githubUrl (optional)*
-        * *radicleUrl (optional)*
-        * *websiteUrl (optional)*
-        * *twitterUr (optional)*
-        * *discordUrl (optional)*
-        * *bannerImageHash*
-        * *thumbnailImageHash*
+- `ethpraguecli`: CLI entry point.
+- `ethpraguecli auth \"<mnemonic>\"`: Allow to interact with the blockchain-related commands (e.g., deploy) with a wallet by passing in wallet's mnemonic.
+  - `<mnemonic>`: the secret mnemonic phrase (e.g., 12 words) separated by spaces (e.g., "test test test test test test test test test test test junk"). _nb. the double quotes are mandatory!_
+- `ethpraguecli genkeys <amount>`: Generate a new specified amount of MACI and ETH keypairs (QR Codes inclueded).
+  - `<amount>`: amount of MACI and ETH keypairs to be generated (e.g., 3000)
+- `ethpraguecli contracts:deploy <network>`: Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network.
+  - `<network>`: the network where the contracts will be deployed (e.g., xdai)
+- `ethpraguecli contracts:add-recipients <network> <path>`: Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path.
+  - `<network>`: the network where the contracts has been deployed (e.g., xdai)
+  - `<path>`: the path of the CSV input file where the recipients data is stored (e.g., ~/Desktop/my_recipients_data.csv`).
+    _nb. The CSV file must contain rows organized as follows:_ \* _name_ \* _tagline_ \* _description_ \* _problemSpace_ \* _ethereumAddress_ \* _contactEmail_ \* _teamName (optional)_ \* _teamDescription (optional)_ \* _githubUrl (optional)_ \* _radicleUrl (optional)_ \* _websiteUrl (optional)_ \* _twitterUr (optional)_ \* _discordUrl (optional)_ \* _bannerImageHash_ \* _thumbnailImageHash_
 
 ## Examples
-* `ethpraguecli auth "test test test test test test test test test test test junk"`
-* `ethpraguecli genkeys 3000`
-* `ethpraguecli contracts:deploy xdai`
-* `ethpraguecli contracts:add-recipients xdai ~/Desktop/my_recipients_data.csv`
+
+- `ethpraguecli auth "test test test test test test test test test test test junk"`
+- `ethpraguecli genkeys 3000`
+- `ethpraguecli contracts:deploy xdai`
+- `ethpraguecli contracts:add-recipients xdai ~/Desktop/my_recipients_data.csv`
 
 ## Getting Started
+
 ### Prerequisities
+
 You need to have the following installed:
 
 git >= 2.25.1

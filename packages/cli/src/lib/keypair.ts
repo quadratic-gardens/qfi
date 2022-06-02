@@ -10,15 +10,15 @@ export const generateEthereumKeyPair = (): EthKeyPair => {
   // Generate a new Ethereum wallet.
   const wallet = Wallet.fromMnemonic(utils.entropyToMnemonic(utils.randomBytes(32)))
 
-  // Extract keys and mnemonic
-
-  const { address, privateKey } = wallet
+  // Extract keys and mnemonic.
+  const { address, privateKey, publicKey } = wallet
   const mnemonic = wallet.mnemonic.phrase
 
   return {
     address,
     mnemonic,
-    privateKey
+    privateKey,
+    publicKey
   }
 }
 
