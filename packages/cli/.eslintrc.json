@@ -25,6 +25,8 @@
     "import/extensions": "off",
     "no-bitwise": "off",
     "class-methods-use-this": "warn",
+    "no-useless-escape": "warn",
+    "prefer-regex-literals": "warn",
     "import/no-extraneous-dependencies": "off",
     "import/no-relative-packages": "off",
     "@typescript-eslint/no-loop-func": "off",
