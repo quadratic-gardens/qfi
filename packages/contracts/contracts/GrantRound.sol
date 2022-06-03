@@ -236,9 +236,7 @@ contract GrantRound is Poll {
         uint256 _spentVoiceCreditsHash,
         uint256 _perVOSpentVoiceCreditsHash,
         uint256 _tallyCommitment,
-        uint256 _spent,
-        uint256[][] memory _spentProof,
-        uint256 _spentSalt
+        uint256 _spent
     ) external {
         require(isFinalized, "GrantRound: Round not finalized");
         require(!isCancelled, "GrantRound: Round has been cancelled");
@@ -256,6 +254,9 @@ contract GrantRound is Poll {
                 _perVOSpentVoiceCreditsHash,
                 _tallyCommitment
             );
+            //TODO: Handle donations if accepting contributions
+            //TODO: verifyPerVOSpentVoiceCredits should be called after verifying the tally result
+            // require( sha256(_spent) == _spentVoiceCreditsHash, "GrantRound: Spent is incorrect" );
             require(resultVerified, "FundingRound: Incorrect tally result");
         }
         recipients[_voteOptionIndex] = true;
@@ -269,7 +270,7 @@ contract GrantRound is Poll {
             // Send funds back to the matching pool
             recipient = owner();
         }
-        uint256 allocatedAmount = getAllocatedAmount(_tallyResult, _spent);
+        uint256 allocatedAmount = getAllocatedAmount(_tallyResult, 0);
         nativeToken.safeTransfer(recipient, allocatedAmount);
 
         emit FundsClaimed(recipient, _voteOptionIndex, allocatedAmount);

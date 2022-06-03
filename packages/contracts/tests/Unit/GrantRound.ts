@@ -390,10 +390,10 @@ describe("Grant Round", () => {
     });
 
     //TODO: To be checked after grant round finalization.
-    it.skip("revert - grant round finalized", async () => {
+    it("verify - grant round finalized", async () => {
       await expect(
         grantRound.connect(coordinator).publishTallyHash(dummyTallyHash)
-      ).to.be.revertedWith("GrantRound: Round finalized");
+      ).to.emit(grantRound, "TallyPublished");
     });
 
     it("revert - provided tally hash is an empty string", async () => {
@@ -404,7 +404,7 @@ describe("Grant Round", () => {
   });
 
   describe("finalize()", async () => {
-    //TODO: fix broken test and merge maci verifier bugfix
+    //TODO: should fail with must be called by MACI
     it.skip("allow owner to finalize the grant round", async () => {
       await mockMessageAq.mock.enqueue
         .withArgs(hashMessangeAndEncPubKey)
@@ -972,8 +972,7 @@ describe("Grant Round", () => {
             dummyPerVOSpentVoiceCreditsHash,
             dummyTallyCommitment,
             dummySpent,
-            dummySpentProof,
-            dummySpentSalt
+        
           )
       )
         .to.emit(grantRound, "FundsClaimed")
@@ -1070,9 +1069,7 @@ describe("Grant Round", () => {
             dummySpentVoiceCreditsHash,
             dummyPerVOSpentVoiceCreditsHash,
             dummyTallyCommitment,
-            dummySpent,
-            dummySpentProof,
-            dummySpentSalt
+            dummySpent
           )
       )
         .to.emit(grantRound, "FundsClaimed")
@@ -1091,9 +1088,7 @@ describe("Grant Round", () => {
             dummySpentVoiceCreditsHash,
             dummyPerVOSpentVoiceCreditsHash,
             dummyTallyCommitment,
-            dummySpent,
-            dummySpentProof,
-            dummySpentSalt
+            dummySpent
           )
       ).to.be.revertedWith("GrantRound: Round not finalized");
     });
@@ -1117,9 +1112,7 @@ describe("Grant Round", () => {
             dummySpentVoiceCreditsHash,
             dummyPerVOSpentVoiceCreditsHash,
             dummyTallyCommitment,
-            dummySpent,
-            dummySpentProof,
-            dummySpentSalt
+            dummySpent
           )
       ).to.be.revertedWith("GrantRound: Round has been cancelled");
     });
@@ -1214,9 +1207,7 @@ describe("Grant Round", () => {
             dummySpentVoiceCreditsHash,
             dummyPerVOSpentVoiceCreditsHash,
             dummyTallyCommitment,
-            dummySpent,
-            dummySpentProof,
-            dummySpentSalt
+            dummySpent
           )
       )
         .to.emit(grantRound, "FundsClaimed")
@@ -1234,9 +1225,7 @@ describe("Grant Round", () => {
             dummySpentVoiceCreditsHash,
             dummyPerVOSpentVoiceCreditsHash,
             dummyTallyCommitment,
-            dummySpent,
-            dummySpentProof,
-            dummySpentSalt
+            dummySpent
           )
       ).to.be.revertedWith("FundingRound: Funds already claimed");
     });
@@ -1331,9 +1320,7 @@ describe("Grant Round", () => {
             dummySpentVoiceCreditsHash,
             dummyPerVOSpentVoiceCreditsHash,
             dummyTallyCommitment,
-            dummySpent,
-            dummySpentProof,
-            dummySpentSalt
+            dummySpent
           )
       ).to.be.revertedWith("FundingRound: Incorrect tally result");
     });

@@ -654,7 +654,7 @@ describe("QFI", () => {
     const contributionAmount = 100;
 
     beforeEach(async () => {
-      // Initialize.
+      // Initialize.'
       await mockGrantRoundFactory.mock.owner.withArgs().returns(qfi.address);
       await mockGrantRoundFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryGrantRounds.address).returns();
       await mockGrantRoundFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryGrantRounds.address);
@@ -664,6 +664,8 @@ describe("QFI", () => {
       await mockPollFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryPolls.address).returns();
       await mockPollFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
+      mockGrantRound = await deployMockContract(deployer, GrantRound__factory.abi);
+      mockGrantRound.mock.isCancelled.withArgs().returns(true);
       const expectedStage = 1; //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
         qfi
@@ -709,9 +711,8 @@ describe("QFI", () => {
     it("should withdraw the contribution", async () => {
       // Mocks.
       await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
-
+      
       await mockBaseERC20Token.mock.transfer.withArgs(contributorAddress, contributionAmount).returns(true);
-
       await expect(qfi.connect(contributor).withdrawContribution())
         .to.emit(qfi, "ContributionWithdrew")
         .withArgs(contributorAddress);
@@ -1187,7 +1188,7 @@ describe("QFI", () => {
 
     it("revert - cannot close the voting period while not on voting period open", async () => {
       await expect(qfi.connect(deployer).closeVotingAndWaitForDeadline()).to.revertedWith(
-        "MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
+        "MACI: WAITING_FOR_SIGNUPS_AND_TOPUPS Cannot deploy a new grant round"
       );
     });
   });

@@ -30,22 +30,24 @@ import {
 import { QFI__factory, QFILibraryAddresses } from "../../typechain/factories/QFI__factory";
 
 import { GrantRoundFactory } from "../../typechain/GrantRoundFactory";
+import { GrantRound__factory } from "../../typechain/factories/GrantRound__factory";
 import { PollFactory } from "../../typechain/PollFactory";
 import { MessageAqFactory } from "../../typechain/MessageAqFactory";
 import { QFI } from "../../typechain/QFI";
 import { Poll__factory } from "../../typechain/factories/Poll__factory";
 import { MessageStruct, Poll } from "../../typechain/Poll";
+import { GrantRound } from "../../typechain/GrantRound";
 
 import { VkRegistry__factory } from "../../typechain/factories/VkRegistry__factory";
-import { FreeForAllGatekeeper__factory } from "../../typechain/factories/FreeForAllGatekeeper__factory";
-import { ConstantInitialVoiceCreditProxy__factory } from "../../typechain/factories/ConstantInitialVoiceCreditProxy__factory";
+// import { FreeForAllGatekeeper__factory } from "../../typechain/factories/FreeForAllGatekeeper__factory";
+// import { ConstantInitialVoiceCreditProxy__factory } from "../../typechain/factories/ConstantInitialVoiceCreditProxy__factory";
 
 import { VerifyingKeyStruct, VkRegistry } from "../../typechain/VkRegistry";
-import { FreeForAllGatekeeper } from "../../typechain/FreeForAllGatekeeper";
-import { ConstantInitialVoiceCreditProxy } from "../../typechain/ConstantInitialVoiceCreditProxy";
+import { SimpleHackathon } from "../../typechain/SimpleHackathon";
+import { SimpleHackathon__factory } from "../../typechain/factories/SimpleHackathon__factory";
 
-import { OptimisticRecipientRegistry } from "../../typechain/OptimisticRecipientRegistry";
-import { OptimisticRecipientRegistry__factory } from "../../typechain/factories/OptimisticRecipientRegistry__factory";
+// import { OptimisticRecipientRegistry } from "../../typechain/OptimisticRecipientRegistry";
+// import { OptimisticRecipientRegistry__factory } from "../../typechain/factories/OptimisticRecipientRegistry__factory";
 
 import { BaseERC20Token } from "../../typechain/BaseERC20Token";
 import { BaseERC20Token__factory } from "../../typechain/factories/BaseERC20Token__factory";
@@ -81,7 +83,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Process - Tally QV poll votes", function () {
+describe("Process - Tally QV poll votes", function() {
   let deployer: Signer;
   let user1: Signer;
   let user2: Signer;
@@ -128,11 +130,11 @@ describe("Process - Tally QV poll votes", function () {
   let PollFactoryFactory: PollFactory__factory;
   let MessageAqFactoryFactory: MessageAqFactory__factory;
   let MessageAq_Factory: AccQueueQuinaryMaci__factory;
-  let FreeForAllGateKeeperFactory: FreeForAllGatekeeper__factory;
-  let ConstantInitialVoiceCreditProxyFactory: ConstantInitialVoiceCreditProxy__factory;
+  // let FreeForAllGateKeeperFactory: FreeForAllGatekeeper__factory;
+  // let ConstantInitialVoiceCreditProxyFactory: ConstantInitialVoiceCreditProxy__factory;
   let VKRegistryFactory: VkRegistry__factory;
-
-  let RecipientRegistryFactory: OptimisticRecipientRegistry__factory;
+  let SimpleHackathonFactory: SimpleHackathon__factory;
+  // let RecipientRegistryFactory: OptimisticRecipientRegistry__factory;
   let BaseERC20TokenFactory: BaseERC20Token__factory;
   let PollProcessorAndTallyerFactory: PollProcessorAndTallyer__factory;
   let MockVerifierFactory: MockVerifier__factory;
@@ -151,15 +153,14 @@ describe("Process - Tally QV poll votes", function () {
   let messageAqFactoryGrants: MessageAqFactory;
   let messageAq: AccQueueQuinaryMaci;
   let vkRegistry: VkRegistry;
-  let constantInitialVoiceCreditProxy: ConstantInitialVoiceCreditProxy;
-  let freeForAllGateKeeper: FreeForAllGatekeeper;
-  let optimisticRecipientRegistry: OptimisticRecipientRegistry;
+  let simpleHackathon: SimpleHackathon;
+  // let optimisticRecipientRegistry: OptimisticRecipientRegistry;
   let baseERC20Token: BaseERC20Token;
   let pollProcessorAndTallyer: PollProcessorAndTallyer;
   let mockVerifier: MockVerifier;
   let qfi: QFI;
   let coordinator: Keypair;
-  let poll: Poll;
+  let poll: GrantRound;
   let stateAq: AccQueueQuinaryMaci;
 
   let users: {
@@ -172,7 +173,8 @@ describe("Process - Tally QV poll votes", function () {
   const STATE_TREE_ARITY = 5;
   const MESSAGE_TREE_ARITY = 5;
 
-  const duration = 6000;
+  const duration = 600;
+  const initialVoiceCreditBalance = 99;
 
   const treeDepths = {
     intStateTreeDepth: 3, //NOTE: actualy use tally batch size of 25
@@ -196,7 +198,7 @@ describe("Process - Tally QV poll votes", function () {
     pollId: number;
     newTallyCommitment: any;
     results: {
-      tally: any;
+      tally: string[] | null;
       salt: any;
     };
     totalSpentVoiceCredits: {
@@ -204,13 +206,13 @@ describe("Process - Tally QV poll votes", function () {
       salt: any;
     };
     perVOSpentVoiceCredits: {
-      tally: any;
+      tally: string[] | null;
       salt: any;
     };
   };
   let maciNewSbCommitment: any;
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     this?.timeout(400000);
     expect(maxValues.maxMessages % messageBatchSize == 0).to.be.true;
 
@@ -266,22 +268,27 @@ describe("Process - Tally QV poll votes", function () {
     MessageAq_Factory = new AccQueueQuinaryMaci__factory({ ...linkedLibraryAddresses }, deployer);
     QFIFactory = new QFI__factory({ ...linkedLibraryAddresses }, deployer);
     VKRegistryFactory = new VkRegistry__factory(deployer);
-    ConstantInitialVoiceCreditProxyFactory = new ConstantInitialVoiceCreditProxy__factory(deployer);
-    FreeForAllGateKeeperFactory = new FreeForAllGatekeeper__factory(deployer);
-    RecipientRegistryFactory = new OptimisticRecipientRegistry__factory(deployer);
+    // ConstantInitialVoiceCreditProxyFactory = new ConstantInitialVoiceCreditProxy__factory(deployer);
+    // FreeForAllGateKeeperFactory = new FreeForAllGatekeeper__factory(deployer);
+    // RecipientRegistryFactory = new OptimisticRecipientRegistry__factory(deployer);
     BaseERC20TokenFactory = new BaseERC20Token__factory(deployer);
     PollProcessorAndTallyerFactory = new PollProcessorAndTallyer__factory(deployer);
     MockVerifierFactory = new MockVerifier__factory(deployer);
+    SimpleHackathonFactory = new SimpleHackathon__factory(deployer);
 
-    optimisticRecipientRegistry = await RecipientRegistryFactory.deploy(0, 0, deployerAddress);
+    // optimisticRecipientRegistry = await RecipientRegistryFactory.deploy(0, 0, deployerAddress);
+    simpleHackathon = await SimpleHackathonFactory.deploy(initialVoiceCreditBalance, deployerAddress);
+
+    expect(await simpleHackathon.owner()).to.equal(deployerAddress);
+
     grantRoundFactory = await GrantRoundFactory.deploy();
-    grantRoundFactory.setRecipientRegistry(optimisticRecipientRegistry.address);
+    grantRoundFactory.setRecipientRegistry(simpleHackathon.address);
     pollFactory = await PollFactoryFactory.deploy();
     messageAqFactory = await MessageAqFactoryFactory.deploy();
     messageAqFactoryGrants = await MessageAqFactoryFactory.deploy();
-    freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy();
+    // freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy();
     //NOTE: each user recieves 100 voice credits by default
-    constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(100);
+    // constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(100);
     vkRegistry = await VKRegistryFactory.deploy();
     baseERC20Token = await BaseERC20TokenFactory.deploy(100);
     mockVerifier = await MockVerifierFactory.deploy();
@@ -291,9 +298,12 @@ describe("Process - Tally QV poll votes", function () {
       baseERC20Token.address,
       grantRoundFactory.address,
       pollFactory.address,
-      freeForAllGateKeeper.address,
-      constantInitialVoiceCreditProxy.address
+      simpleHackathon.address,
+      simpleHackathon.address
     );
+    await simpleHackathon.setMaciInstance(qfi.address);
+    expect(await simpleHackathon.maci()).to.equal(qfi.address);
+
     await pollFactory.transferOwnership(qfi.address);
     await grantRoundFactory.transferOwnership(qfi.address);
     await messageAqFactory.transferOwnership(pollFactory.address);
@@ -321,6 +331,8 @@ describe("Process - Tally QV poll votes", function () {
 
     await vkRegistry.genProcessVkSig(_stateTreeDepth, _messageTreeDepth, _voteOptionTreeDepth, _messageBatchSize);
     await vkRegistry.genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth);
+
+    //==========================SET UP COMPLETE ======================================//
     coordinator = new Keypair();
     const coordinatorPubkey = coordinator.pubKey.asContractParam();
 
@@ -360,11 +372,11 @@ describe("Process - Tally QV poll votes", function () {
     for (const user of userSigners) {
       const maciKey = new Keypair();
       const _pubKey = maciKey.pubKey.asContractParam();
-      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
+      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
       const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
 
       const { logs } = await qfi
-        .connect(user)
+        .connect(deployer)
         .signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData)
         .then((tx) => tx.wait());
 
@@ -380,9 +392,10 @@ describe("Process - Tally QV poll votes", function () {
       );
     }
 
+    //////////////////////////////////////////////////////////////////////////////
     const { blockHash } = await qfi
       .connect(deployer)
-      .deployPoll(duration, maxValues, treeDepths, coordinatorPubkey, { gasLimit: 30000000 })
+      .deployGrantRound(duration, maxValues, treeDepths, coordinatorPubkey, deployerAddress, { gasLimit: 30000000 })
       .then((tx) => tx.wait());
 
     // NOTE: Deploy the poll on local maci data structure
@@ -397,8 +410,8 @@ describe("Process - Tally QV poll votes", function () {
       coordinator
     );
     const pollId = p.toString();
-    const pollContractAddress = await qfi.getPoll(0);
-    poll = new Poll__factory({ ...linkedLibraryAddresses }, deployer).attach(pollContractAddress);
+    const pollContractAddress = await qfi.currentGrantRound();
+    poll = new GrantRound__factory({ ...linkedLibraryAddresses }, deployer).attach(pollContractAddress);
 
     let index = 1;
     for (const user of users) {
@@ -425,13 +438,14 @@ describe("Process - Tally QV poll votes", function () {
         .publishMessage(_message, _encPubKey)
         .then((tx) => tx.wait());
     }
+
     index = 1;
     const overwrite = [...users];
     for (const user of overwrite) {
       const { maciKey, signer, stateIndex } = user;
       const _stateIndex = BigInt(stateIndex);
       const _newPubKey = maciKey.pubKey;
-      const _voteOptionIndex = BigInt(0);
+      const _voteOptionIndex = BigInt(index % 25);
       const _newVoteWeight = BigInt(1);
       const _nonce = BigInt(1);
       const _pollId = BigInt(0);
@@ -454,14 +468,14 @@ describe("Process - Tally QV poll votes", function () {
       const currentTime = (await provider.getBlock(blockHash)).timestamp;
     }
 
-    index = 0;
+    index = 1;
     const overwrite2 = [...users];
     for (const user of overwrite2) {
       const { maciKey, signer, stateIndex } = user;
       const _stateIndex = BigInt(stateIndex);
       const _newPubKey = maciKey.pubKey;
       const _voteOptionIndex = BigInt(index % 25);
-      const _newVoteWeight = BigInt(10);
+      const _newVoteWeight = BigInt(9);
       const _nonce = BigInt(1);
       const _pollId = BigInt(0);
       const _salt = BigInt(1);
@@ -484,7 +498,7 @@ describe("Process - Tally QV poll votes", function () {
     }
     const [_deployTime, _duration] = await poll.getDeployTimeAndDuration();
     const hardHatProvider = ethers.provider;
-    await hardHatProvider.send("evm_setNextBlockTimestamp", [_duration.toNumber() +_deployTime.toNumber() + 1]);
+    await hardHatProvider.send("evm_setNextBlockTimestamp", [_duration.toNumber() + _deployTime.toNumber() + 1]);
     await hardHatProvider.send("evm_mine", []);
 
     const extContracts = await poll.extContracts();
@@ -502,10 +516,10 @@ describe("Process - Tally QV poll votes", function () {
     while ((await stateAq.subTreesMerged()) != true) {
       await poll.mergeMaciStateAqSubRoots(0, 0); //call untill all subtrees are merged
       const numLeaves = await stateAq.numLeaves();
-      const subTreeMerged = await stateAq.subTreesMerged(); //white false merge subroots again
       console.log("numstateAqLeaves: " + numLeaves);
-      console.log("numstateAqSubTreeMerged: " + subTreeMerged);
     }
+    const staeAqSubTreesMerged = await stateAq.subTreesMerged(); //white false merge subroots again
+    console.log("all stateAQ subtrees merged: " + staeAqSubTreesMerged);
     await poll.mergeMaciStateAq(0); //only have to call once
 
     //NOTE: Merge message tree offchain
@@ -519,11 +533,10 @@ describe("Process - Tally QV poll votes", function () {
     while ((await messageAq.subTreesMerged()) != true) {
       await poll.mergeMessageAqSubRoots(0);
       const numLeaves = await stateAq.numLeaves();
-      const subTreeMerged = await stateAq.subTreesMerged(); //white false merge subroots again
       console.log("numMessageAqLeaves: " + numLeaves);
-      console.log("numMessageAqSubTreeMerged: " + subTreeMerged);
     }
-    console.log(await messageAq.subTreesMerged());
+    const messageAqSubTreeMerged = await stateAq.subTreesMerged(); //white false merge subroots again
+    console.log("all messageAQ subtrees merged: " + messageAqSubTreeMerged);
     await poll.mergeMessageAq();
 
     //========== ProcessMessagesCircuit Magik offchain ===========//
@@ -536,7 +549,7 @@ describe("Process - Tally QV poll votes", function () {
 
       //NOTE: new state root and ballot root commitment calculated off chain
       const newSbCommitment = circuitInputs.newSbCommitment;
-      console.log("Batch" + maciPoll.currentMessageBatchIndex + ": newSbCommitment" + newSbCommitment);
+      console.log("Batch" + maciPoll.currentMessageBatchIndex);
       processMessagesCircuitInputsByBatch.push(circuitInputs);
     }
 
@@ -588,12 +601,11 @@ describe("Process - Tally QV poll votes", function () {
       //NOTE: new stally commitment calculated off chain
       const newTallyCommitment = circuitInputs.newTallyCommitment;
 
-      console.log("Batch" + maciPoll.numBatchesTallied + ": newTallyCommitment" + newTallyCommitment);
+      console.log("Batch" + maciPoll.numBatchesTallied);
 
       tallyVotesCircuitInputsByBatch.push(circuitInputs);
       console.log("/=========TALLY SO FAR==========/");
       console.log(maciPoll.results.map((x: any) => x.toString()));
-      console.log("/=========TALLY SO FAR==========/");
     }
 
     //NOTE: Proof Generation offchain
@@ -629,12 +641,10 @@ describe("Process - Tally QV poll votes", function () {
         await pollProcessorAndTallyer.tallyVotes(pollAddress, newTallyCommitment, proof);
         return true;
       } catch (e) {
-        console.log(batchNumber);
+        console.log("Errored out at:" + batchNumber);
         return false;
       }
     });
-    console.log("🎉");
-    console.log(tallyVotesVerifierInputsByBatch);
 
     const onChainTallyAllOk = (await Promise.all(onChainTallyOk)).reduce((a, b) => a && b);
     expect(onChainTallyAllOk).to.be.true;
@@ -683,31 +693,31 @@ describe("Process - Tally QV poll votes", function () {
     it("verify - sanity checks", async () => {
       // prettier-ignore
       const expectedResultsTally = [
-        '20', '10', '10', '10', '10',  '10',
-        '10', '10', '10', '10', '10', '10',
-        '10', '10', '10', '10', '10',  '10',
-        '10', '10', '10', '10', '10',  '10',
-        '10'
+        '9', '18', '9', '9', '9',  '9',
+        '9', '9', '9', '9', '9', '9',
+        '9', '9', '9', '9', '9',  '9',
+        '9', '9', '9', '9', '9',  '9',
+        '9'
       ];
       expect(tallyFileData.results.tally).to.deep.equal(expectedResultsTally);
 
       // prettier-ignore
       const expectedPerVOSpentVoiceCredits = [
-        '200', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100'
+        '81', '162', '81', '81', '81',
+        '81', '81', '81', '81', '81',
+        '81', '81', '81', '81', '81',
+        '81', '81', '81', '81', '81',
+        '81', '81', '81', '81', '81'
       ];
       expect(tallyFileData.perVOSpentVoiceCredits.tally).to.deep.equal(expectedPerVOSpentVoiceCredits);
 
       // prettier-ignore
       const expectedTotalSpentVoiceCredits = [
-        '200', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100',
-        '100', '100', '100', '100', '100'
+        '81', '162', '81', '81', '81',
+        '81', '81', '81', '81', '81',
+        '81', '81', '81', '81', '81',
+        '81', '81', '81', '81', '81',
+        '81', '81', '81', '81', '81'
       ].reduce(((acc, x) => acc + Number(x)), 0).toString();
       expect(tallyFileData.totalSpentVoiceCredits.spent).to.deep.equal(expectedTotalSpentVoiceCredits);
 
@@ -774,8 +784,8 @@ describe("Process - Tally QV poll votes", function () {
     });
   });
 
-  describe("verify: claimAll", () => {
-    it("verify - poll SHOULD verifyTallyResult", async () => {
+  describe("Finalize and claim", () => {
+    it("verify - can verifyTallyResult for vote option", async () => {
       // Setup
       const recipientIndex = 1;
       const resultTree = new IncrementalQuinTree(treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5);
@@ -833,6 +843,89 @@ describe("Process - Tally QV poll votes", function () {
           _tallyCommitment
         )
       ).to.be.true;
+    });
+    it("verify - can claim once", async () => {
+      const tallyHash = "QmYA2fn8cMbVWo4v95RwcwJVyQsNtnEwHerfWR8UNtEwoE";
+      const expectedTallyHash = "QmYA2fn8cMbVWo4v95RwcwJVyQsNtnEwHerfWR8UNtEwoE";
+      await expect(poll.publishTallyHash(tallyHash))
+        .to.emit(poll, "TallyPublished")
+        .withArgs(expectedTallyHash);
+
+      await expect(qfi.closeVotingAndWaitForDeadline()).to.emit(qfi, "VotingPeriodClosed");
+
+      // prettier-ignore
+      const alphaDenominator = tallyFileData.results.tally?.reduce((total, tallyResult) => { return (total + BigNumber.from(tallyResult).pow(2).toNumber()) }, 0);
+      // prettier-ignore
+      const expectedAlphaDenominator = [
+        9, 18, 9, 9, 9, 9,
+        9, 9,  9, 9, 9, 9,
+        9, 9,  9, 9, 9, 9,
+        9, 9,  9, 9, 9, 9,
+        9
+      ].reduce((total, tallyResult) => {return total + tallyResult**2},0);
+      expect(alphaDenominator).to.be.equal(expectedAlphaDenominator);
+
+      await qfi.setPollProcessorAndTallyer(pollProcessorAndTallyer.address);
+
+      await qfi.finalizeCurrentRound(
+        tallyFileData.newTallyCommitment,
+        maciNewSbCommitment,
+        BigNumber.from(expectedAlphaDenominator).toString()
+      );
+
+      // Setup
+      const recipientIndex = 1;
+      const resultTree = new IncrementalQuinTree(treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5);
+      const perVOspentTree = new IncrementalQuinTree( treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5); // prettier-ignore
+
+      for (const leaf of tallyFileData.results.tally) resultTree.insert(leaf); // insert resuls tally as leaves
+      for (const leaf of tallyFileData.perVOSpentVoiceCredits.tally) perVOspentTree.insert(leaf); // insert perVO spent as leaves
+
+      const resultProof = resultTree.genMerklePath(recipientIndex); // generate merkle path for result
+      const spentProof = perVOspentTree.genMerklePath(recipientIndex); // generate merkle path for spent
+
+      expect(resultTree.root).to.be.equal(resultProof.root); // verify result tree root
+      expect(perVOspentTree.root).to.be.equal(spentProof.root); // verify spent tree root
+
+      // Calculate arguments
+      const _voteOptionIndex = recipientIndex;
+      const _tallyResult = tallyFileData.results.tally[recipientIndex]; // result of the recipient
+      const _tallyResultSalt = tallyFileData.results.salt;
+      const _tallyResultProof = resultProof.pathElements.map((x: any) => x.map((y: any) => y.toString())); // result proof as astring
+      const _spentVoiceCreditsHash = BigNumber.from(
+        hashLeftRight(
+          BigInt(tallyFileData.totalSpentVoiceCredits.spent),
+          BigInt(tallyFileData.totalSpentVoiceCredits.salt)
+        ).toString()
+      ).toString();
+      const _perVOSpentVoiceCreditsHash = BigNumber.from(
+        hashLeftRight(
+          perVOspentTree.root, 
+          BigInt(tallyFileData.perVOSpentVoiceCredits.salt)).toString()
+      ).toString(); // prettier-ignore
+      const _tallyCommitment = BigNumber.from(tallyFileData.newTallyCommitment).toString();
+
+      await poll.claimFunds(
+        _voteOptionIndex,
+        _tallyResult,
+        _tallyResultProof,
+        _tallyResultSalt,
+        _spentVoiceCreditsHash,
+        _perVOSpentVoiceCreditsHash,
+        _tallyCommitment,
+        0
+      );
+
+      await expect(poll.claimFunds(
+        _voteOptionIndex,
+        _tallyResult,
+        _tallyResultProof,
+        _tallyResultSalt,
+        _spentVoiceCreditsHash,
+        _perVOSpentVoiceCreditsHash,
+        _tallyCommitment,
+        0
+      )).to.be.revertedWith("FundingRound: Funds already claimed");
     });
   });
 });

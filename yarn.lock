@@ -19639,7 +19639,7 @@ qaci-core@^1.1.9:
     qaci-crypto "^1.1.9"
     qaci-domainobjs "^1.1.9"
 
-qaci-crypto@^1.1.9:
+qaci-crypto@^1.1.0, qaci-crypto@^1.1.9:
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/qaci-crypto/-/qaci-crypto-1.1.9.tgz#769421338b8cec878575bef17a59a7a0c6da82ba"
   integrity sha512-irxQ2xtfC7pakBwvda05gdQLD51xzV3DBPMzvVf2ZCd0zVJTz6+s/7YvENcNw//tZi+kTq8oXE+6T7eC573HGQ==
@@ -19650,7 +19650,7 @@ qaci-crypto@^1.1.9:
     ffjavascript "0.2.35"
     optimisedmt "^0.0.7"
 
-qaci-domainobjs@^1.1.9:
+qaci-domainobjs@^1.1.0, qaci-domainobjs@^1.1.9:
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/qaci-domainobjs/-/qaci-domainobjs-1.1.9.tgz#74a18244185dc32fa77149ecd27f795fef1b1c8a"
   integrity sha512-4TpoBgoSHNENpGzyQVO8DXG8LobFpspRm1naWOo2/KYT0DN/e4z3NnrRRwU6tqAagwZfsAz4+nha/uEbHQFPAA==

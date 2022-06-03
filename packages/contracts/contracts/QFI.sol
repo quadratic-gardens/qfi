@@ -297,7 +297,10 @@ contract QFI is MACI, FundsManager {
      * @dev Withdraw contributed funds from the pool if the round has been cancelled.
      */
     function withdrawContribution() external {
-        // require(isCancelled, 'FundingRound: Round not cancelled');
+        require(
+            currentStage == Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS,
+            "QFI: Not accepting signups or top ups"
+        );
         // Reconstruction of exact contribution amount from VCs may not be possible due to a loss of precision
         uint256 amount = contributors[msg.sender].voiceCredits *
             voiceCreditFactor;
@@ -410,7 +413,7 @@ contract QFI is MACI, FundsManager {
     function closeVotingAndWaitForDeadline() public onlyOwner {
         require(
             currentStage == Stage.VOTING_PERIOD_OPEN,
-            "MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
+            "MACI: WAITING_FOR_SIGNUPS_AND_TOPUPS Cannot deploy a new grant round"
         );
         //TODO: ACTUALLY CLOSE THE VOTING PERIOD on the grant round contract
         currentStage = Stage.WAITING_FOR_FINALIZATION;
@@ -441,13 +444,12 @@ contract QFI is MACI, FundsManager {
         );
 
         GrantRound g = currentGrantRound;
-       
 
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
         transferMatchingFunds(g);
         //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
         g.finalize(_alphaDenominator);
-   
+
         currentStage = Stage.FINALIZED;
 
         emit GrantRoundFinalized(address(g), currentStage);
