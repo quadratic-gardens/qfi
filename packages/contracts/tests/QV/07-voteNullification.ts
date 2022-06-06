@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-import { Command, Keypair, Message, VerifyingKey } from "qaci-domainobjs";
+import { Command, Keypair, Message, VerifyingKey, PrivKey, PubKey } from "qaci-domainobjs";
 import { G1Point, G2Point, hash5, hashLeftRight, IncrementalQuinTree } from "qaci-crypto";
 import { MaciState, genProcessVkSig, genTallyVkSig } from "qaci-core";
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
@@ -56,7 +56,12 @@ import { PollProcessorAndTallyer__factory } from "../../typechain/factories/Poll
 import { MockVerifier } from "../../typechain/MockVerifier";
 import { MockVerifier__factory } from "../../typechain/factories/MockVerifier__factory";
 import { AccQueueQuinaryMaci } from "../../typechain/AccQueueQuinaryMaci";
-import { AccQueueQuinaryMaci__factory } from "../../typechain";
+import {
+  AccQueue,
+  AccQueueQuinaryBlankSl__factory,
+  AccQueueQuinaryMaci__factory,
+  AccQueue__factory,
+} from "../../typechain";
 
 chai.use(solidity);
 const { expect } = chai;
@@ -88,6 +93,22 @@ describe("Process - Tally QV poll votes", function () {
   let user8: Signer;
   let user9: Signer;
   let user10: Signer;
+  let user11: Signer;
+  let user12: Signer;
+  let user13: Signer;
+  let user14: Signer;
+  let user15: Signer;
+  let user16: Signer;
+  let user17: Signer;
+  let user18: Signer;
+  let user19: Signer;
+  let user20: Signer;
+  let user21: Signer;
+  let user22: Signer;
+  let user23: Signer;
+  let user24: Signer;
+  let user25: Signer;
+  let user26: Signer;
 
   let project1: Signer;
   let project2: Signer;
@@ -118,6 +139,8 @@ describe("Process - Tally QV poll votes", function () {
 
   let QFIFactory: QFI__factory;
 
+  let AccQueueFactory: AccQueueQuinaryMaci__factory;
+
   let PoseidonT3: PoseidonT3;
   let PoseidonT4: PoseidonT4;
   let PoseidonT5: PoseidonT5;
@@ -127,7 +150,6 @@ describe("Process - Tally QV poll votes", function () {
   let messageAqFactory: MessageAqFactory;
   let messageAqFactoryGrants: MessageAqFactory;
   let messageAq: AccQueueQuinaryMaci;
-
   let vkRegistry: VkRegistry;
   let constantInitialVoiceCreditProxy: ConstantInitialVoiceCreditProxy;
   let freeForAllGateKeeper: FreeForAllGatekeeper;
@@ -138,28 +160,35 @@ describe("Process - Tally QV poll votes", function () {
   let qfi: QFI;
   let coordinator: Keypair;
   let poll: Poll;
+  let stateAq: AccQueueQuinaryMaci;
+
   let users: {
     maciKey: Keypair;
     signer: Signer;
     stateIndex: number;
   }[] = [];
-  const duration = 35;
-  const maxValues = {
-    maxUsers: 25,
-    maxMessages: 25,
-    maxVoteOptions: 25,
-  };
+
+  const STATE_TREE_DEPTH = 10;
+  const STATE_TREE_ARITY = 5;
+  const MESSAGE_TREE_ARITY = 5;
+
+  const duration = 6000;
+
   const treeDepths = {
-    intStateTreeDepth: 2, //NOTE: actualy use tally batch size of 25
+    intStateTreeDepth: 3, //NOTE: actualy use tally batch size of 25
     messageTreeDepth: 4,
     messageTreeSubDepth: 2,
     voteOptionTreeDepth: 2,
   };
-  const STATE_TREE_DEPTH = 10;
-  const STATE_TREE_ARITY = 5;
-  const MESSAGE_TREE_ARITY = 5;
+
   const messageBatchSize = MESSAGE_TREE_ARITY ** treeDepths.messageTreeSubDepth;
   const tallyBatchSize = STATE_TREE_ARITY ** treeDepths.intStateTreeDepth;
+
+  const maxValues = {
+    maxUsers: STATE_TREE_ARITY ** STATE_TREE_DEPTH,
+    maxMessages: MESSAGE_TREE_ARITY ** treeDepths.messageTreeDepth,
+    maxVoteOptions: MESSAGE_TREE_ARITY ** treeDepths.voteOptionTreeDepth,
+  };
 
   let maciState: MaciState;
   let tallyFileData: {
@@ -183,7 +212,37 @@ describe("Process - Tally QV poll votes", function () {
 
   beforeEach(async function () {
     this?.timeout(400000);
-    [deployer, user1, user2, user3, user4, user5, user6, user7, user8, user9, user10] = await ethers.getSigners();
+    expect(maxValues.maxMessages % messageBatchSize == 0).to.be.true;
+
+    [
+      deployer,
+      user1,
+      user2,
+      user3,
+      user4,
+      user5,
+      user6,
+      user7,
+      user8,
+      user9,
+      user10,
+      user11,
+      user12,
+      user13,
+      user14,
+      user15,
+      user16,
+      user17,
+      user18,
+      user19,
+      user20,
+      user21,
+      user22,
+      user23,
+      user24,
+      user25,
+      user26,
+    ] = await ethers.getSigners();
     deployerAddress = await deployer.getAddress();
     PoseidonT3Factory = new PoseidonT3__factory(deployer);
     PoseidonT4Factory = new PoseidonT4__factory(deployer);
@@ -200,7 +259,7 @@ describe("Process - Tally QV poll votes", function () {
       ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT6"]: PoseidonT6.address,
       ["qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4"]: PoseidonT4.address,
     };
-
+    AccQueueFactory = new AccQueueQuinaryBlankSl__factory({ ...linkedLibraryAddresses }, deployer);
     GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer);
     PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, deployer);
     MessageAqFactoryFactory = new MessageAqFactory__factory({ ...linkedLibraryAddresses }, deployer);
@@ -269,7 +328,34 @@ describe("Process - Tally QV poll votes", function () {
     maciState = new MaciState();
     const provider = deployer.provider ?? ethers.getDefaultProvider();
 
-    const userSigners = [user1, user2, user3, user4, user5, user6, user7, user8, user9, user10];
+    const userSigners = [
+      user1,
+      user2,
+      user3,
+      user4,
+      user5,
+      user6,
+      user7,
+      user8,
+      user9,
+      user10,
+      user11,
+      user12,
+      user13,
+      user14,
+      user15,
+      user16,
+      user17,
+      user18,
+      user19,
+      user20,
+      user21,
+      user22,
+      user23,
+      user24,
+      user25,
+      user26,
+    ];
     users = [];
     for (const user of userSigners) {
       const maciKey = new Keypair();
@@ -319,8 +405,8 @@ describe("Process - Tally QV poll votes", function () {
       const { maciKey, signer, stateIndex } = user;
       const _stateIndex = BigInt(stateIndex);
       const _newPubKey = maciKey.pubKey;
-      const _voteOptionIndex = BigInt(index);
-      const _newVoteWeight = BigInt(index);
+      const _voteOptionIndex = BigInt(24);
+      const _newVoteWeight = BigInt(2);
       const _nonce = BigInt(1);
       const _pollId = BigInt(0);
       const _salt = BigInt(1);
@@ -339,58 +425,240 @@ describe("Process - Tally QV poll votes", function () {
         .publishMessage(_message, _encPubKey)
         .then((tx) => tx.wait());
     }
+    index = 1;
+    const overwrite = [...users];
+    for (const user of overwrite) {
+      const { maciKey, signer, stateIndex } = user;
+      const _stateIndex = BigInt(stateIndex);
+      const _newPubKey = maciKey.pubKey;
+      const _voteOptionIndex = BigInt(0);
+      const _newVoteWeight = BigInt(1);
+      const _nonce = BigInt(1);
+      const _pollId = BigInt(0);
+      const _salt = BigInt(1);
+      const command = new Command(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
+      index++;
+
+      const signature = command.sign(maciKey.privKey);
+      const sharedKey = Keypair.genEcdhSharedKey(maciKey.privKey, coordinator.pubKey);
+      const message = command.encrypt(signature, sharedKey);
+      const _message = <MessageStruct>message.asContractParam();
+      const _encPubKey = maciKey.pubKey.asContractParam();
+      // NOTE: Publish the message on local maci data structure
+      maciState.polls[0].publishMessage(message, maciKey.pubKey);
+      const { logs, blockHash } = await poll
+        .connect(signer)
+        .publishMessage(_message, _encPubKey)
+        .then((tx) => tx.wait());
+
+      const currentTime = (await provider.getBlock(blockHash)).timestamp;
+    }
+
+    index = 0;
+    const overwrite2 = [...users];
+    for (const user of overwrite2) {
+      const { maciKey, signer, stateIndex } = user;
+      const _stateIndex = BigInt(stateIndex);
+      const _newPubKey = maciKey.pubKey;
+      const _voteOptionIndex = BigInt(index % 25);
+      const _newVoteWeight = BigInt(10);
+      const _nonce = BigInt(1);
+      const _pollId = BigInt(0);
+      const _salt = BigInt(1);
+      const command = new Command(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
+      index++;
+
+      const signature = command.sign(maciKey.privKey);
+      const sharedKey = Keypair.genEcdhSharedKey(maciKey.privKey, coordinator.pubKey);
+      const message = command.encrypt(signature, sharedKey);
+      const _message = <MessageStruct>message.asContractParam();
+      const _encPubKey = maciKey.pubKey.asContractParam();
+      // NOTE: Publish the message on local maci data structure
+      maciState.polls[0].publishMessage(message, maciKey.pubKey);
+      const { logs, blockHash } = await poll
+        .connect(signer)
+        .publishMessage(_message, _encPubKey)
+        .then((tx) => tx.wait());
+
+      const currentTime = (await provider.getBlock(blockHash)).timestamp;
+    }
     const [_deployTime, _duration] = await poll.getDeployTimeAndDuration();
     const hardHatProvider = ethers.provider;
-    await hardHatProvider.send("evm_increaseTime", [Number(_duration) + 1]);
+    await hardHatProvider.send("evm_setNextBlockTimestamp", [_duration.toNumber() +_deployTime.toNumber() + 1]);
     await hardHatProvider.send("evm_mine", []);
 
     const extContracts = await poll.extContracts();
 
-    const messageAqAddress = extContracts.messageAq;
-    messageAq = MessageAq_Factory.attach(messageAqAddress);
-
+    //==========Merge the state and message Merkle Trees on and offchain ========== //
+    console.log("Merging the state and message Merkle Trees on and offchain");
+    //NOTE: Merge state tree offchain
     const maciStateAq = maciState.stateAq;
     maciStateAq.mergeSubRoots(0); // 0 as input attempts to merge all subroots
     maciStateAq.merge(stateTreeDepth);
-    await poll.mergeMaciStateAqSubRoots(0, 0);
-    await poll.mergeMaciStateAq(0);
 
+    //NOTE: Merge state tree onchain
+    const stateAqAddress = await qfi.stateAq();
+    stateAq = await AccQueueFactory.attach(stateAqAddress);
+    while ((await stateAq.subTreesMerged()) != true) {
+      await poll.mergeMaciStateAqSubRoots(0, 0); //call untill all subtrees are merged
+      const numLeaves = await stateAq.numLeaves();
+      const subTreeMerged = await stateAq.subTreesMerged(); //white false merge subroots again
+      console.log("numstateAqLeaves: " + numLeaves);
+      console.log("numstateAqSubTreeMerged: " + subTreeMerged);
+    }
+    await poll.mergeMaciStateAq(0); //only have to call once
+
+    //NOTE: Merge message tree offchain
     const maciPoll = maciState.polls[0];
-    //maciPoll.mergeAllMessages();
     maciPoll.messageAq.mergeSubRoots(0); //NOTE: 0 as input attempts to merge all subroots
     maciPoll.messageAq.merge(treeDepths.messageTreeDepth);
-    await poll.mergeMessageAqSubRoots(0);
+
+    //NOTE: Merge message tree onchain
+    const messageAqAddress = extContracts.messageAq;
+    messageAq = MessageAq_Factory.attach(messageAqAddress);
+    while ((await messageAq.subTreesMerged()) != true) {
+      await poll.mergeMessageAqSubRoots(0);
+      const numLeaves = await stateAq.numLeaves();
+      const subTreeMerged = await stateAq.subTreesMerged(); //white false merge subroots again
+      console.log("numMessageAqLeaves: " + numLeaves);
+      console.log("numMessageAqSubTreeMerged: " + subTreeMerged);
+    }
+    console.log(await messageAq.subTreesMerged());
     await poll.mergeMessageAq();
 
-    //NOTE: new state root and ballot root commitment calculated off chain
-    const { newSbCommitment: _maciNewSbCommitment } = maciPoll.processMessages(0);
+    //========== ProcessMessagesCircuit Magik offchain ===========//
+    console.log("ProcessMessagesCircuit");
 
-    maciNewSbCommitment = _maciNewSbCommitment;
-    //TODO: why does this work? due to the dummy verifier that is linked to the pollProcessor?
-    const dummyProof: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish
-    ] = [0, 0, 0, 0, 0, 0, 0, 0];
-    await pollProcessorAndTallyer.processMessages(poll.address, maciNewSbCommitment, dummyProof);
+    //NOTE: Circuit input generation offchain
+    const processMessagesCircuitInputsByBatch = [];
+    while (maciPoll.hasUnprocessedMessages()) {
+      const circuitInputs = maciPoll.processMessages(pollId); //Process _batchSize messages starting from the saved index.
 
-    const maciTallyCircuitInputs = maciPoll.tallyVotes(0);
-    await pollProcessorAndTallyer.tallyVotes(poll.address, maciTallyCircuitInputs.newTallyCommitment, dummyProof);
+      //NOTE: new state root and ballot root commitment calculated off chain
+      const newSbCommitment = circuitInputs.newSbCommitment;
+      console.log("Batch" + maciPoll.currentMessageBatchIndex + ": newSbCommitment" + newSbCommitment);
+      processMessagesCircuitInputsByBatch.push(circuitInputs);
+    }
 
-    // const maciTallyCircuitInputs2 = maciPoll.tallyVotes(0);
-    // await pollProcessorAndTallyer.tallyVotes(poll.address, maciTallyCircuitInputs2.newTallyCommitment, dummyProof);
-    const newTallyCommitment = maciTallyCircuitInputs.newTallyCommitment;
+    //NOTE: Proof Generation offchain
+    const processMessagesVerifierInputsByBatch = processMessagesCircuitInputsByBatch.map(
+      (circuitInputs, batchNumber) => {
+        //NOTE: these are required for the Verifier Contract onchain
+        const proof = coordinatorServiceFetchProcessMessageProof(pollContractAddress, batchNumber);
+        const maciNewSbCommitment = circuitInputs.newSbCommitment;
+        const pollAddress = pollContractAddress;
+        return {
+          pollAddress,
+          maciNewSbCommitment,
+          proof,
+        };
+      }
+    );
+
+    //========== ProcessMessagesCircuit Magik onchain ===========//
+
+    //NOTE: Process messages onchain and verify proof using VkRegistry
+    const onchainProcessMessagesOk = processMessagesVerifierInputsByBatch.map(async (verifierInputs, batchNumber) => {
+      const { pollAddress, maciNewSbCommitment, proof } = verifierInputs;
+      console.log("Processing Batch" + batchNumber + " of messages onChain");
+      try {
+        //SNARK verification onchain
+        await pollProcessorAndTallyer.processMessages(pollAddress, maciNewSbCommitment, proof);
+        return true;
+      } catch (e) {
+        console.log(batchNumber);
+        return false;
+      }
+    });
+    const allOnchainProcessMessagesOk = (await Promise.all(onchainProcessMessagesOk)).reduce((a, b) => a && b);
+
+    expect(allOnchainProcessMessagesOk).to.be.true;
+
+    const processingComplete = await pollProcessorAndTallyer.processingComplete();
+    expect(processingComplete).to.be.true;
+
+    //========== TallyVotesCircuit Magik offchain ===========//
+    console.log("TallyVotesCircuit");
+
+    //NOTE: Circuit input generation offchain
+    const tallyVotesCircuitInputsByBatch = [];
+    while (maciPoll.hasUntalliedBallots()) {
+      const circuitInputs = maciPoll.tallyVotes(); //Process _batchSize ballots starting from the saved index.
+
+      //NOTE: new stally commitment calculated off chain
+      const newTallyCommitment = circuitInputs.newTallyCommitment;
+
+      console.log("Batch" + maciPoll.numBatchesTallied + ": newTallyCommitment" + newTallyCommitment);
+
+      tallyVotesCircuitInputsByBatch.push(circuitInputs);
+      console.log("/=========TALLY SO FAR==========/");
+      console.log(maciPoll.results.map((x: any) => x.toString()));
+      console.log("/=========TALLY SO FAR==========/");
+    }
+
+    //NOTE: Proof Generation offchain
+    const tallyVotesVerifierInputsByBatch = tallyVotesCircuitInputsByBatch.map((circuitInputs, batchNumber) => {
+      //NOTE: these are required for the Verifier Contract onchain
+
+      const proof = coordinatorServiceFetchTallyVoteProof(pollContractAddress, batchNumber);
+      const newTallyCommitment = circuitInputs.newTallyCommitment;
+      const newResultsRootSalt = circuitInputs.newResultsRootSalt;
+      const newSpentVoiceCreditSubtotalSalt = circuitInputs.newSpentVoiceCreditSubtotalSalt;
+      const newPerVOSpentVoiceCreditsRootSalt = circuitInputs.newPerVOSpentVoiceCreditsRootSalt;
+      const pollAddress = pollContractAddress;
+
+      return {
+        pollAddress,
+        newTallyCommitment,
+        proof,
+        newResultsRootSalt,
+        newSpentVoiceCreditSubtotalSalt,
+        newPerVOSpentVoiceCreditsRootSalt,
+      };
+    });
+
+    //========== TallyVotesCircuit Magik onchain ===========//
+
+    //NOTE: TallyVotes onchain and verify proof using VkRegistry
+    const onChainTallyOk = tallyVotesVerifierInputsByBatch.map(async (verifierInputs, batchNumber) => {
+      const { pollAddress, newTallyCommitment, proof } = verifierInputs;
+      console.log("Processing Batch" + batchNumber + " of messages onChain");
+
+      try {
+        //SNARK verification onchain
+        await pollProcessorAndTallyer.tallyVotes(pollAddress, newTallyCommitment, proof);
+        return true;
+      } catch (e) {
+        console.log(batchNumber);
+        return false;
+      }
+    });
+    console.log("🎉");
+    console.log(tallyVotesVerifierInputsByBatch);
+
+    const onChainTallyAllOk = (await Promise.all(onChainTallyOk)).reduce((a, b) => a && b);
+    expect(onChainTallyAllOk).to.be.true;
+
+    const { tallyBatchSize: finalTallybatchSize } = await poll.batchSizes();
+    const finalBatchStartIndex = (await pollProcessorAndTallyer.tallyBatchNum()).toNumber() * finalTallybatchSize;
+    const [finalNumSignups] = await poll.numSignUpsAndMessages();
+    expect(finalBatchStartIndex).to.be.greaterThanOrEqual(finalNumSignups.toNumber());
+
+    //========== Generate Tally File Data ===========//
+
+    const finalProcessMessagesCircuitInputs =
+      processMessagesCircuitInputsByBatch[processMessagesCircuitInputsByBatch.length - 1];
+    const finalTallyCircuitInputs = tallyVotesVerifierInputsByBatch[tallyVotesVerifierInputsByBatch.length - 1];
+
+    maciNewSbCommitment = finalProcessMessagesCircuitInputs.newSbCommitment;
+
+    const newTallyCommitment = finalTallyCircuitInputs.newTallyCommitment;
     const tallyResults = maciPoll.results.map((x: any) => x.toString());
-    const tallySalt = maciTallyCircuitInputs.newResultsRootSalt;
+    const tallySalt = finalTallyCircuitInputs.newResultsRootSalt;
     const voiceCreditsSpent = maciPoll.totalSpentVoiceCredits.toString();
-    const voiceCreditsSalt = maciTallyCircuitInputs.newSpentVoiceCreditSubtotalSalt;
+    const voiceCreditsSalt = finalTallyCircuitInputs.newSpentVoiceCreditSubtotalSalt;
     const perVOSpentTally = maciPoll.perVOSpentVoiceCredits.map((x: any) => x.toString());
-    const perVOSpentSalt = maciTallyCircuitInputs.newPerVOSpentVoiceCreditsRootSalt;
+    const perVOSpentSalt = finalTallyCircuitInputs.newPerVOSpentVoiceCreditsRootSalt;
     tallyFileData = {
       maci: qfi.address,
       pollId: pollId,
@@ -408,56 +676,47 @@ describe("Process - Tally QV poll votes", function () {
         salt: perVOSpentSalt,
       },
     };
+    console.log(tallyFileData);
   });
 
-  describe("Verify tally off chain", () => {
-    it("verify - tally results are correct", async () => {
+  describe("Verify vote nullification and verify maci state", () => {
+    it("verify - sanity checks", async () => {
       // prettier-ignore
       const expectedResultsTally = [
-        '0', '1', '2', '3', '4',  '5',
-        '6', '7', '8', '9', '10', '0',
-        '0', '0', '0', '0', '0',  '0',
-        '0', '0', '0', '0', '0',  '0',
-        '0'
+        '20', '10', '10', '10', '10',  '10',
+        '10', '10', '10', '10', '10', '10',
+        '10', '10', '10', '10', '10',  '10',
+        '10', '10', '10', '10', '10',  '10',
+        '10'
       ];
       expect(tallyFileData.results.tally).to.deep.equal(expectedResultsTally);
-    });
 
-    it("verify - per vote option spent voice credits results are correct", async () => {
       // prettier-ignore
       const expectedPerVOSpentVoiceCredits = [
-        '0',   '1',  '4',  '9',  '16',
-        '25',  '36', '49', '64', '81',
-        '100', '0',  '0',  '0',  '0',
-        '0',   '0',  '0',  '0',  '0',
-        '0',   '0',  '0',  '0',  '0'
+        '200', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100'
       ];
       expect(tallyFileData.perVOSpentVoiceCredits.tally).to.deep.equal(expectedPerVOSpentVoiceCredits);
-    });
 
-    it("verify - total spent voice credits is correct", async () => {
       // prettier-ignore
       const expectedTotalSpentVoiceCredits = [
-        '0',   '1',  '4',  '9',  '16',
-        '25',  '36', '49', '64', '81',
-        '100', '0',  '0',  '0',  '0',
-        '0',   '0',  '0',  '0',  '0',
-        '0',   '0',  '0',  '0',  '0'
+        '200', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100',
+        '100', '100', '100', '100', '100'
       ].reduce(((acc, x) => acc + Number(x)), 0).toString();
       expect(tallyFileData.totalSpentVoiceCredits.spent).to.deep.equal(expectedTotalSpentVoiceCredits);
-    });
-  });
 
-  describe("Verify ZK Proof on chain", () => {
-    it("verify - stateAQ merged and processing complete", async () => {
       const stateAqMerged = await poll.stateAqMerged();
       expect(stateAqMerged).to.be.true;
 
       const processingComplete = await pollProcessorAndTallyer.processingComplete();
       expect(processingComplete).to.be.true;
-    });
 
-    it("verify - all parameters are set correctly", async () => {
       const { intStateTreeDepth, messageTreeSubDepth, messageTreeDepth, voteOptionTreeDepth } = await poll.treeDepths();
       expect(intStateTreeDepth).to.be.equal(treeDepths.intStateTreeDepth);
       expect(messageTreeDepth).to.be.equal(treeDepths.messageTreeDepth);
@@ -465,8 +724,8 @@ describe("Process - Tally QV poll votes", function () {
       expect(voteOptionTreeDepth).to.be.equal(treeDepths.voteOptionTreeDepth);
 
       const [numSignUps, numMessages] = await poll.numSignUpsAndMessages();
-      expect(numSignUps).to.be.equal(10);
-      expect(numMessages).to.be.equal(10);
+      expect(numSignUps).to.be.equal(26);
+      expect(numMessages).to.be.equal(78);
 
       const [maxMessages, maxVoteOptions] = await poll.maxValues();
       expect(maxVoteOptions).to.be.equal(maxValues.maxVoteOptions);
@@ -475,9 +734,7 @@ describe("Process - Tally QV poll votes", function () {
       const [_messageBatchSize, _tallyBatchSize] = await poll.batchSizes();
       expect(_messageBatchSize).to.be.equal(messageBatchSize);
       expect(_tallyBatchSize).to.be.equal(tallyBatchSize);
-    });
 
-    it("verify - merged state root is correct", async () => {
       const mergedStateRootPoll = await poll.mergedStateRoot();
       const mergedStateRootMACI = await qfi.getStateAqRoot();
       const expectedStateTreeRoot = maciState.polls[0].maciStateRef.stateTree.root;
@@ -486,20 +743,14 @@ describe("Process - Tally QV poll votes", function () {
       expect(expectedStateTreeRoot).to.not.be.equal(BigNumber.from(0));
       expect(mergedStateRootPoll).to.be.equal(mergedStateRootMACI); // MACI state root is the same as the poll state root
       expect(mergedStateRootPoll).to.be.equal(expectedStateTreeRoot); // MACI state root is the same as the one calculated offchain
-    });
 
-    it("verify - sbCommitment is correct on pollProcessorAndTallyer", async () => {
       const pptsbCommitment = await pollProcessorAndTallyer.sbCommitment();
       const expectedSbCommitment = maciNewSbCommitment;
       expect(pptsbCommitment).to.not.be.equal(BigNumber.from(0));
       expect(expectedSbCommitment).to.not.be.equal(BigNumber.from(0));
       expect(pptsbCommitment).to.be.equal(expectedSbCommitment); // pollProcessorAndTallyer sbCommitment is the same as the one calculated offchain
-    });
 
-    it("verify - sbCommitment correct on poll", async () => {
       const pollCurrentSbCommitment = await poll.currentSbCommitment();
-      const pptsbCommitment = await pollProcessorAndTallyer.sbCommitment();
-      const expectedSbCommitment = maciNewSbCommitment;
       console.log(`poll_SbCommitment: ${pollCurrentSbCommitment}`);
       console.log(`pollProcessorAndTallyer_SbCommitment: ${pptsbCommitment}`);
       console.log(`expectedSbCommitment: ${expectedSbCommitment}`);
@@ -508,31 +759,23 @@ describe("Process - Tally QV poll votes", function () {
       expect(expectedSbCommitment).to.not.be.equal(BigNumber.from(0));
       expect(pptsbCommitment).to.be.equal(expectedSbCommitment);
       expect(pollCurrentSbCommitment).to.not.be.equal(pptsbCommitment); // poll sbCommitment is not the same as the one calculated on state
-    });
 
-    it("verify - merged message root is correct", async () => {
       const mergedMessageRoot = await messageAq.getMainRoot(treeDepths.messageTreeDepth);
       const expectedMessageTreeRoot = maciState.polls[0].messageTree.root;
       expect(mergedMessageRoot).to.not.be.equal(BigNumber.from(0));
       expect(expectedMessageTreeRoot).to.not.be.equal(BigNumber.from(0));
       expect(mergedMessageRoot).to.be.equal(expectedMessageTreeRoot); // MACI message root is the same as the one calculated offchain
-    });
 
-    it("verify - tally commitment is correct", async () => {
       const tallyCommitment = await pollProcessorAndTallyer.tallyCommitment();
       const expectedTallyCommitment = tallyFileData.newTallyCommitment;
       expect(tallyCommitment).to.not.be.equal(BigNumber.from(0));
       expect(expectedTallyCommitment).to.not.be.equal(BigNumber.from(0));
       expect(tallyCommitment).to.be.equal(expectedTallyCommitment); // pollProcessorAndTallyer tallyCommitment is the same as the one calculated offchain
     });
+  });
 
-    it.skip("TODO FIX - poll SHOULD verify total spent voice credits", async () => {
-      const { spent: _totalSpent, salt: _totalSpentSalt } = tallyFileData.totalSpentVoiceCredits;
-
-      expect(await poll.verifySpentVoiceCredits(_totalSpent, _totalSpentSalt)).to.be.true;
-    });
-
-    it("TODO FIX - poll SHOULD verifyTallyResult", async () => {
+  describe("verify: claimAll", () => {
+    it("verify - poll SHOULD verifyTallyResult", async () => {
       // Setup
       const recipientIndex = 1;
       const resultTree = new IncrementalQuinTree(treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5);
@@ -591,26 +834,47 @@ describe("Process - Tally QV poll votes", function () {
         )
       ).to.be.true;
     });
-    //TODO: fix broken tests once upstream  maci decorator is fixed
-    it.skip("verify - poll contract can verifyPerVOSpentVoiceCredits", async () => {
-      const recipientIndex = 1;
-
-      const perVOspentTree = new IncrementalQuinTree( treeDepths.voteOptionTreeDepth, BigInt(0), STATE_TREE_ARITY, hash5); // prettier-ignore
-      for (const leaf of tallyFileData.perVOSpentVoiceCredits.tally) perVOspentTree.insert(leaf); // insert tally as leaves
-      const spentProof = perVOspentTree.genMerklePath(recipientIndex); // generate merkle path for the spent voice credits
-      expect(perVOspentTree.root).to.be.equal(spentProof.root); // verify that the root of the tree is the same as the root of the merkle path
-
-      const _voteOptionIndex = recipientIndex;
-      const _spent = tallyFileData.perVOSpentVoiceCredits.tally[recipientIndex]; // get the spent voice credits for the recipient
-      const _spentProof = spentProof.pathElements.map((x: any) => x.map((y: any) => y.toString())); // convert merkle path to string
-      const _spentSalt = tallyFileData.perVOSpentVoiceCredits.salt; // get salt from tally.json
-
-      expect(await poll.verifyPerVOSpentVoiceCredits(
-        _voteOptionIndex,
-        _spent,
-        _spentProof,
-        _spentSalt
-      )).to.be.true; // prettier-ignore
-    });
   });
 });
+
+function coordinatorServiceGenProof(circuitInputs: any, pollId: any, pubKey: PubKey, privKey: PrivKey) {
+  const dummyProof: [
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish
+  ] = [0, 0, 0, 0, 0, 0, 0, 0];
+  return dummyProof;
+}
+
+function coordinatorServiceFetchProcessMessageProof(pollContractAddress, batchNumber) {
+  const dummyProof: [
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish
+  ] = [0, 0, 0, 0, 0, 0, 0, 0];
+  return dummyProof;
+}
+
+function coordinatorServiceFetchTallyVoteProof(pollContractAddress, batchNumber) {
+  const dummyProof: [
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish,
+    BigNumberish
+  ] = [0, 0, 0, 0, 0, 0, 0, 0];
+  return dummyProof;
+}
