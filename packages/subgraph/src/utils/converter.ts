@@ -1,16 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
-
-// Relates to schema.graphql Stage enum.
-export const NOT_INITIALIZED = 'NotInitialized';
-export const WAITING_FOR_SIGNUPS_AND_TOPUPS = 'WaitingForSignupsAndTopups';
-export const VOTING_PERIOD_OPEN = 'VotingPeriodOpen';
-export const WAITING_FOR_FINALIZATION = 'WaitingForFinalization';
-export const FINALIZED = 'Finalized';
-export const CANCELLED = 'Cancelled';
-
-// Relates to schema.graphql RequestType enum.
-export const REGISTRATION = 'Registration';
-export const REMOVAL = 'Removal';
+import { NOT_INITIALIZED, WAITING_FOR_SIGNUPS_AND_TOPUPS, VOTING_PERIOD_OPEN, WAITING_FOR_FINALIZATION, FINALIZED, CANCELLED, REGISTRATION, REMOVAL } from "./constants";
 
 /**
  * Current stage value converter.

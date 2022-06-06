@@ -32,6 +32,7 @@ import {
 } from "../../generated/schema"
 import { GrantRound as GrantRoundTemplate } from "../../generated/templates"
 import { currentStageConverterFromEnumIndexToString } from "../utils/converter"
+import { ONE } from "../utils/constants"
 
 /**
  * Handle a smart contract based on MACI (constructor event).
@@ -68,6 +69,8 @@ export function handleMaciDeployed(event: MaciDeployed): void {
     qfi.currentStage = currentStageConverterFromEnumIndexToString(qfiContract.currentStage().toString())
 
     qfi.save()
+
+    log.debug(`handleMaciDeployed executed correctly`, [])
 }
 
 /**
@@ -77,8 +80,11 @@ export function handleMaciDeployed(event: MaciDeployed): void {
 export function handleQfiDeployed(event: QfiDeployed): void {
     log.debug(`QFI Deployed event block: {}`, [event.block.number.toString()])
 
+    const timestamp = event.block.timestamp.toString()
+
     // Get the QFI/MACI instance.
     const qfiAddress = event.address
+    const qfiContract = QFIContract.bind(qfiAddress)
     const qfiId = qfiAddress.toHexString()
     let qfi = QFISchema.load(qfiId)
 
@@ -87,10 +93,10 @@ export function handleQfiDeployed(event: QfiDeployed): void {
         qfi.nativeERC20TokenAddress = event.params._nativeToken
         qfi.voiceCreditFactor = event.params._voiceCreditFactor
         qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
-        qfi.isInitialized = false
 
+        qfi.isInitialized = qfiContract.isInitialised()
 
-        // Check if the Grant Round Factory contract has Recipient Registry set.
+        // Check if the Grant Round Factory contract has been already populated w/ Recipient Registry.
         const grantRoundFactoryAddress = event.params._grantRoundFactory
         const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
         const grantRoundFactory = GrantRoundFactory.load(grantRoundFactoryId)
@@ -101,12 +107,13 @@ export function handleQfiDeployed(event: QfiDeployed): void {
             qfi.recipientRegistry = recipientRegistryId
         }
 
+        qfi.lastUpdatedAt = timestamp
         qfi.save()
-
-        log.info("QFI has been correctly deployed!", [])
     } else {
-        log.error("QFI is not deployed!", [])
+        log.error(`QFI entity not found!`, [])
     }
+
+    log.debug(`handleMaciDeployed executed correctly`, [])
 }
 
 /**
@@ -116,20 +123,26 @@ export function handleQfiDeployed(event: QfiDeployed): void {
 export function handleInitMaci(event: Init): void {
     log.debug(`Init MACI event block: {}`, [event.block.number.toString()])
 
+    const timestamp = event.block.timestamp.toString()
+
     // Get the QFI/MACI instance.
     const qfiAddress = event.address
+    const qfiContract = QFIContract.bind(qfiAddress)
     const qfiId = qfiAddress.toHexString()
     const qfi = QFISchema.load(qfiId)
 
     if (qfi !== null) {
         qfi.vkRegistryAddress = event.params._vkRegistry
         qfi.messageAqFactoryPollAddress = event.params._messageAqFactory
-        qfi.isInitialized = true
+        qfi.isInitialized = qfiContract.isInitialised()
+        qfi.lastUpdatedAt = timestamp
 
         qfi.save()
     } else {
-        log.error("QFI is not initialized!", [])
+        log.error(`QFI entity not found!`, [])
     }
+
+    log.debug(`handleInitMaci executed correctly`, [])
 }
 
 /**
@@ -139,6 +152,8 @@ export function handleInitMaci(event: Init): void {
 export function handleQfiInitialized(event: QfiInitialized): void {
     log.debug(`QfiInitialized event block: {}`, [event.block.number.toString()])
 
+    const timestamp = event.block.timestamp.toString()
+
     // Get the QFI/MACI instance.
     const qfiAddress = event.address
     const qfiId = qfiAddress.toHexString()
@@ -147,11 +162,14 @@ export function handleQfiInitialized(event: QfiInitialized): void {
     if (qfi !== null) {
         qfi.messageAqFactoryGrantRoundAddress = event.params._messageAqFactoryGrantRounds
         qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
+        qfi.lastUpdatedAt = timestamp
 
         qfi.save()
-
-        log.info("QFI has been correctly initialized", [])
+    } else {
+        log.error(`QFI entity not found!`, [])
     }
+
+    log.debug(`handleQfiInitialized executed correctly`, [])
 }
 
 /**
@@ -161,38 +179,41 @@ export function handleQfiInitialized(event: QfiInitialized): void {
 export function handleSignUp(event: SignUp): void {
     log.debug(`SignUp event block: {}`, [event.block.number.toString()])
 
+    const timestamp = event.block.timestamp.toString()
+
+    // User public key.
     const publicKeyId = event.transaction.from.toHexString()
     const publicKey = PublicKey.load(publicKeyId)
+
+    if (publicKey === null) {
+        // Create a new PublicKey instance.
+        const publicKey = new PublicKey(publicKeyId)
+
+        publicKey.x = event.params._userPubKey.x
+        publicKey.y = event.params._userPubKey.y
+        publicKey.stateIndex = event.params._stateIndex
+        publicKey.voiceCreditBalance = event.params._voiceCreditBalance
+        publicKey.timestamp = timestamp
+        publicKey.lifetimeAmountContributed = new BigInt(0)
+        publicKey.lastUpdatedAt = timestamp
+        
+        publicKey.save()
+    } else {
+        log.error(`Public key already in use!`, [])
+    }
+
+    // QFI.
     const qfiAddress = event.address
     const qfiId = qfiAddress.toHexString()
     const qfi = QFISchema.load(qfiId)
 
     if (qfi !== null) {
-        if (publicKey === null) {
-            // Create a new PublicKey instance.
-            const publicKey = new PublicKey(publicKeyId)
-
-            publicKey.x = event.params._userPubKey.x
-            publicKey.y = event.params._userPubKey.y
-            publicKey.stateIndex = event.params._stateIndex
-            publicKey.voiceCreditBalance = event.params._voiceCreditBalance
-            publicKey.timestamp = event.params._timestamp.toString()
-            publicKey.lifetimeAmountContributed = new BigInt(0)
-
-            publicKey.save()
-
-            log.info("A new PublicKey with ID '{}' has been created!", [publicKeyId])
-        }
-
-        // Update QFI.
-        qfi.numSignUps = qfi.numSignUps.plus(BigInt.fromI32(1))
-        qfi.lastUpdatedAt = event.block.timestamp.toString()
+        qfi.numSignUps = qfi.numSignUps.plus(ONE)
+        qfi.lastUpdatedAt = timestamp
 
         qfi.save()
-
-        log.info("QFI signups updated to '{}'!", [qfi.numSignUps.toString()])
     } else {
-        log.error("QFI is not initialized!", [])
+        log.error(`QFI entity not found!`, [])
     }
 }
 
