@@ -25,12 +25,12 @@ type QFI @entity {
     voiceCreditFactor: BigInt!
     nextGrantRoundId: BigInt!
     contributorCount: BigInt!
-    isStateAqMerged: Boolean
+    isStateAqMerged: Boolean!
 
     # Inherited from MACI.
     stateTreeDepth: BigInt!
     numSignUps: BigInt!
-    isInitialized: Boolean!
+    isInitialized: Boolean
     signUpTimestamp: BigInt!
     # Useful smart contracts addresses.
     signUpGatekeeperAddress: Bytes!
@@ -38,7 +38,7 @@ type QFI @entity {
     vkRegistryAddress: Bytes
     pollFactoryAddress: Bytes!
     messageAqFactoryPollAddress: Bytes
-    stateAqAddress: Bytes
+    stateAqAddress: Bytes!
     nativeERC20TokenAddress: Bytes
     messageAqFactoryGrantRoundAddress: Bytes
     grantRoundFactoryAddress: Bytes
@@ -72,7 +72,7 @@ type PublicKey @entity {
     # Associated voting info.
     lifetimeAmountContributed: BigInt!
     voiceCreditBalance: BigInt!
-    stateIndex: BigInt
+    stateIndex: BigInt!
     
     # Links.
     grantRound: GrantRound # Can be present if the PublicKey is used in addition to send a message.
@@ -83,6 +83,8 @@ type PublicKey @entity {
     contributions: [Contribution!] @derivedFrom(field: "publicKey")
 
     timestamp: String!
+
+    lastUpdatedAt: String!
 }
 
 # A message sent from a public key by a voter.
@@ -133,27 +135,34 @@ type Recipient @entity {
     id: ID!
 
     # Main fields.
-    address: Bytes!
-    metadata: String!
-    requestType: RequestType! # Enum.
-    requesterAddress: Bytes!
-    submissionTime: BigInt!
-    deposit: BigInt!
+    address: Bytes
+    metadata: String
     addedAt: BigInt
     removedAt: BigInt
     voteOptionIndex: BigInt
+
+    # Request fields.
+    # nb. we are not storing an history of requests (as the mapping on-chain, just the current/last one).
+    requestType: RequestType!
+    requesterAddress: Bytes!
+    requestRecipientAddress: Bytes!
+    requestRecipientMetadata: String!
+    submissionTime: BigInt!
+    resolutionTime: BigInt
+    deposit: BigInt!
     rejected: Boolean
     # Tx hash mirror.
+    requestSubmittedHash: Bytes!
     requestResolvedHash: Bytes
-    requestSubmittedHash: Bytes
-
+    
     # Links.
-    grantRounds: [GrantRoundRecipient!] @derivedFrom(field: "recipient")
     recipientRegistry: RecipientRegistry!
 
     # Reverse Lookup of the claimed donations sent to this recipient.
     donations: [Donation!] @derivedFrom(field: "recipient")
-
+    # Reverse Lookup of the Grant Rounds where the Recipient has participated.
+    grantRounds: [GrantRoundRecipient!] @derivedFrom(field: "recipient")
+    
     createdAt: String!
     lastUpdatedAt: String!
 }
