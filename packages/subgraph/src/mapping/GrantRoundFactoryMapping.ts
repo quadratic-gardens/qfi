@@ -2,11 +2,15 @@ import { log } from "@graphprotocol/graph-ts"
 import {
     OwnershipTransferred,
     MessageAqFactoryChanged,
-    RecipientRegistryChanged,
-    GrantRoundFactory
+    RecipientRegistryChanged
 } from "../../generated/GrantRoundFactory/GrantRoundFactory"
 import { OptimisticRecipientRegistry as RecipientRegistryContract } from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
-import { QFI as QFISchema, GrantRound, RecipientRegistry, GrantRoundFactory as GrantRoundFactorySchema } from "../../generated/schema"
+import {
+    QFI as QFISchema,
+    GrantRound,
+    RecipientRegistry,
+    GrantRoundFactory as GrantRoundFactorySchema
+} from "../../generated/schema"
 
 /**
  * (e.g., Store a PublicKey in the storage).
@@ -27,16 +31,21 @@ export function handleMessageAqFactoryChanged(event: MessageAqFactoryChanged): v
 
     const grantRoundFactoryAddress = event.address
     const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
-    let grantRoundFactory = new GrantRoundFactorySchema(grantRoundFactoryId)
+    let grantRoundFactory = GrantRoundFactorySchema.load(grantRoundFactoryId)
 
-    if (grantRoundFactory !== null) {
-        grantRoundFactory.messageAqFactoryAddress = event.params._messageAqFactory
-        grantRoundFactory.lastUpdatedAt = timestamp
-
-        grantRoundFactory.save()
-    } else {
-        log.error(`GrantRoundFactory entity not found!`, [])
+    if (grantRoundFactory === null) {
+        // Create a new Grant Round Factory entity.
+        grantRoundFactory = new GrantRoundFactorySchema(grantRoundFactoryId)
+        grantRoundFactory.createdAt = timestamp
     }
+
+    // Update the MessageAqFactory address.
+    grantRoundFactory.messageAqFactoryAddress = event.params._messageAqFactory
+    grantRoundFactory.lastUpdatedAt = timestamp
+
+    grantRoundFactory.save()
+
+    log.debug(`handleMessageAqFactoryChanged executed correctly`, [])
 }
 
 /**
@@ -48,11 +57,29 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
 
     const timestamp = event.block.timestamp.toString()
 
-    // Create/Update Recipient Registry.
     const recipientRegistryAddress = event.params._recipientRegistry
+
+    // Update Grant Round Factory entity.
+    const grantRoundFactoryAddress = event.address
+    const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
+    let grantRoundFactory = GrantRoundFactorySchema.load(grantRoundFactoryId)
+
+    if (grantRoundFactory === null) {
+        // Create a new GrantRoundFactory entity.
+        grantRoundFactory = new GrantRoundFactorySchema(grantRoundFactoryId)
+        grantRoundFactory.createdAt = timestamp
+    }
+
+    // Update.
+    grantRoundFactory.recipientRegistryAddress = recipientRegistryAddress
+    grantRoundFactory.lastUpdatedAt = timestamp
+
+    grantRoundFactory.save()
+
+    // Create/Update Recipient Registry.
+    const recipientRegistryContract = RecipientRegistryContract.bind(recipientRegistryAddress)
     const recipientRegistryId = recipientRegistryAddress.toHexString()
     let recipientRegistry = RecipientRegistry.load(recipientRegistryId)
-    const recipientRegistryContract = RecipientRegistryContract.bind(recipientRegistryAddress)
 
     // Read from contract (trade-off, only when changing registry. May not be changed for multiple rounds).
     const baseDeposit = recipientRegistryContract.baseDeposit()
@@ -61,6 +88,7 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
     const maxRecipients = recipientRegistryContract.maxRecipients()
 
     if (recipientRegistry === null) {
+        // Create a new Recipient Registry entity.
         recipientRegistry = new RecipientRegistry(recipientRegistryId)
 
         recipientRegistry.grantRoundFactoryAddress = event.address
@@ -70,27 +98,11 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
         recipientRegistry.maxRecipients = maxRecipients
         recipientRegistry.createdAt = timestamp
         recipientRegistry.lastUpdatedAt = timestamp
-
-        recipientRegistry.save()
+    } else {
+        log.error(`RecipientRegistry entity already in use!`, [])
     }
 
-    // Update Grant Round Factory entity.
-    const grantRoundFactoryAddress = event.address
-    const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
-    let grantRoundFactory = GrantRoundFactorySchema.load(grantRoundFactoryId)
-
-    if (grantRoundFactory === null) {
-        grantRoundFactory = new GrantRoundFactorySchema(grantRoundFactoryId)
-
-        grantRoundFactory.recipientRegistryAddress = recipientRegistryAddress
-        grantRoundFactory.createdAt = timestamp
-    } else 
-        grantRoundFactory.recipientRegistryAddress = recipientRegistryAddress
-
-    grantRoundFactory.lastUpdatedAt = timestamp
-    grantRoundFactory.save()
-
-    // nb. may happen that the TX may not be signed from QFI contract.
+    // nb. may happen that the tx may not be signed from QFI contract owner.
     const qfiAddress = event.address
     const qfiId = qfiAddress.toHexString()
     const qfi = new QFISchema(qfiId)
@@ -99,14 +111,11 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
         const grantRoundId = qfi.currentGrantRound
 
         if (grantRoundId !== null) {
-            // Update recipient registry.
+            // Updates.
             recipientRegistry.grantRound = grantRoundId
-            recipientRegistry.save()
 
-            // Update QFI.
             qfi.recipientRegistry = recipientRegistryId
             qfi.lastUpdatedAt = event.block.timestamp.toString()
-
             qfi.save()
 
             // Update GrantRound.
@@ -117,13 +126,11 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
                 grantRound.lastUpdatedAt = timestamp
 
                 grantRound.save()
-            } else {
-                log.error(`GrantRound entity not found!`, [])
-            }
-        } else {
-            log.info(`QFI current GrantRound not deployed yet!`, [])
+            } else log.error(`GrantRound entity not found!`, [])
         }
-    } else {
-        log.info(`QFI not initialized yet!`, [])
     }
+
+    recipientRegistry.save()
+
+    log.debug(`handleRecipientRegistryChanged executed correctly`, [])
 }

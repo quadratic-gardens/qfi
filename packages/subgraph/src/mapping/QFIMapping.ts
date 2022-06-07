@@ -86,7 +86,7 @@ export function handleQfiDeployed(event: QfiDeployed): void {
     const qfiAddress = event.address
     const qfiContract = QFIContract.bind(qfiAddress)
     const qfiId = qfiAddress.toHexString()
-    let qfi = QFISchema.load(qfiId)
+    const qfi = QFISchema.load(qfiId)
 
     if (qfi !== null) {
         qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
@@ -96,15 +96,22 @@ export function handleQfiDeployed(event: QfiDeployed): void {
 
         qfi.isInitialized = qfiContract.isInitialised()
 
-        // Check if the Grant Round Factory contract has been already populated w/ Recipient Registry.
         const grantRoundFactoryAddress = event.params._grantRoundFactory
         const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
-        const grantRoundFactory = GrantRoundFactory.load(grantRoundFactoryId)
+        let grantRoundFactory = GrantRoundFactory.load(grantRoundFactoryId)
 
+        // Check if the Grant Round Factory entity has been already created; otherwise create a new one.
         if (grantRoundFactory !== null) {
-            const recipientRegistryId = grantRoundFactory.recipientRegistryAddress.toHexString()
+            const recipientRegistryAddress = grantRoundFactory.recipientRegistryAddress
 
-            qfi.recipientRegistry = recipientRegistryId
+            qfi.recipientRegistry = recipientRegistryAddress ? recipientRegistryAddress.toHexString() : null
+        } else {
+            // Create a new Grant Round Factory entity.
+            grantRoundFactory = new GrantRoundFactory(grantRoundFactoryId)
+            grantRoundFactory.createdAt = timestamp
+            grantRoundFactory.lastUpdatedAt = timestamp
+
+            grantRoundFactory.save()
         }
 
         qfi.lastUpdatedAt = timestamp
@@ -196,7 +203,7 @@ export function handleSignUp(event: SignUp): void {
         publicKey.timestamp = timestamp
         publicKey.lifetimeAmountContributed = new BigInt(0)
         publicKey.lastUpdatedAt = timestamp
-        
+
         publicKey.save()
     } else {
         log.error(`Public key already in use!`, [])
@@ -269,7 +276,6 @@ export function handleContributionSent(event: ContributionSent): void {
     const qfi = QFISchema.load(qfiId)
 
     if (qfi !== null) {
-
         // Get Contributor.
         const contributorAddress = event.params._contributor
         const contributorId = contributorAddress.toHexString()
@@ -331,9 +337,7 @@ export function handleContributionSent(event: ContributionSent): void {
                 publicKey.voiceCreditBalance = publicKey.voiceCreditBalance.plus(
                     event.params._amount.div(voiceCreditFactor)
                 )
-                publicKey.lifetimeAmountContributed = publicKey.lifetimeAmountContributed.plus(
-                    event.params._amount
-                )
+                publicKey.lifetimeAmountContributed = publicKey.lifetimeAmountContributed.plus(event.params._amount)
 
                 publicKey.save()
 

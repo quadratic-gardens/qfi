@@ -6,7 +6,7 @@ import {
 } from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
 
 import { Recipient, RecipientRegistry } from "../../generated/schema"
-import { REGISTRATION, REMOVAL } from "../utils/constants"
+import { REGISTRATION } from "../utils/constants"
 import { requestTypeConverterFromEnumIndexToString } from "../utils/converter"
 
 /**
@@ -46,8 +46,7 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
         recipient.lastUpdatedAt = timestamp
 
         recipient.save()
-    } else
-        log.error(`Recipient Registry entity not found!`, [])
+    } else log.error(`Recipient Registry entity not found!`, [])
 
     log.debug(`handleRequestSubmitted executed correctly`, [])
 }
@@ -82,19 +81,14 @@ export function handleRequestResolved(event: RequestResolved): void {
                     recipient.address = recipient.requestRecipientAddress
                     recipient.addedAt = event.params._timestamp
                     recipient.voteOptionIndex = event.params._recipientIndex
-                }
-                else
-                    recipient.removedAt = event.params._timestamp
+                } else recipient.removedAt = event.params._timestamp
             }
 
             recipient.lastUpdatedAt = timestamp
 
             recipient.save()
-
-        } else
-            log.error(`Recipient entity not found!`, [])
-    } else
-        log.error(`Recipient Registry entity not found!`, [])
+        } else log.error(`Recipient entity not found!`, [])
+    } else log.error(`Recipient Registry entity not found!`, [])
 
     log.debug(`handleRequestResolved executed correctly`, [])
 }
