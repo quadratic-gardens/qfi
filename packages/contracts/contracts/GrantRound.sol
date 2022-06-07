@@ -237,7 +237,7 @@ contract GrantRound is Poll {
         uint256 _perVOSpentVoiceCreditsHash,
         uint256 _tallyCommitment,
         uint256 _spent
-    ) external {
+    ) external payable {
         require(isFinalized, "GrantRound: Round not finalized");
         require(!isCancelled, "GrantRound: Round has been cancelled");
         require(
@@ -274,5 +274,39 @@ contract GrantRound is Poll {
         nativeToken.safeTransfer(recipient, allocatedAmount);
 
         emit FundsClaimed(recipient, _voteOptionIndex, allocatedAmount);
+    }
+
+    /*
+     * @dev Transfer funds from matching pool to current funding round and finalize it.
+     * @param _totalSpent Total amount of spent voice credits.
+     * @param _totalSpentSalt The salt.
+     */
+    function transferMatchingFunds(
+        uint256 _voteOptionIndex,
+        uint256 _payoutAmount,
+        address _erc20Address
+    ) external payable onlyOwner {
+        require(
+            !isFinalized || isCancelled,
+            "GrantRound: Round has been cancelled"
+        );
+        require(
+            !recipients[_voteOptionIndex],
+            "FundingRound: Funds already claimed"
+        );
+        recipients[_voteOptionIndex] = true;
+        ERC20 roundToken = ERC20(_erc20Address);
+        (uint256 deployTime, uint256 duration) = getDeployTimeAndDuration();
+        address recipient = recipientRegistry.getRecipientAddress(
+            _voteOptionIndex,
+            deployTime,
+            deployTime + duration
+        );
+        // Factory contract is the default funding source
+        uint256 balance = roundToken.balanceOf(address(this));
+        if (balance >= _payoutAmount) {
+            roundToken.safeTransfer(recipient, _payoutAmount);
+        }
+        emit FundsClaimed(recipient, _voteOptionIndex, _payoutAmount);
     }
 }
