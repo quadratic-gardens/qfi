@@ -32,6 +32,6 @@ npx lint-staged
 RETURN_CODE=$(is_contracts_changed)
 if [ $RETURN_CODE = "true" ]; then
     # Run contract tests
-    npx yarn workspace @quadratic-funding/contracts typechain
-    npx yarn workspace @quadratic-funding/contracts test:unit
+    npx yarn workspace @qfi/contracts typechain
+    npx yarn workspace @qfi/contracts test:unit
 fi

@@ -1,37 +1,38 @@
 import { ColorMode, extendTheme } from "@chakra-ui/react";
-import { theme as defaultTheme} from "@chakra-ui/theme"
-import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
+import { theme as defaultTheme } from "@chakra-ui/theme";
+import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { lighten, darken } from "polished";
 
-import Badge from './core/badge';
-import Button from './core/button';
-import FormLabel from './core/formLabel';
-import Heading from './core/heading';
-import IconButton from './core/iconButton';
-import Input from './core/input';
-import Link from './core/link';
-import Menu from './core/menu';
-import Modal from './core/modal';
-import NumberInput from './core/numberInput';
-import Popover from './core/popover';
-import Tabs from './core/tabs';
-import Textarea from './core/textarea';
-
+import Badge from "./core/badge";
+import Button from "./core/button";
+import FormLabel from "./core/formLabel";
+import Heading from "./core/heading";
+import IconButton from "./core/iconButton";
+import Input from "./core/input";
+import Link from "./core/link";
+import Menu from "./core/menu";
+import Modal from "./core/modal";
+import NumberInput from "./core/numberInput";
+import Popover from "./core/popover";
+import Tabs from "./core/tabs";
+import Textarea from "./core/textarea";
 
 import { defaultTheme as customTheme } from "./brand";
-
+const activeLabelStyles = {
+  transform: "scale(0.85) translateY(-24px)",
+};
 
 const themeKeys = Object.keys(customTheme);
 const brand = {
   ...defaultTheme,
-  ...themeKeys.reduce((acc:any, prop): {} => {
+  ...themeKeys.reduce((acc: any, prop): {} => {
     //@ts-ignore
     acc[prop] = customTheme[prop] || defaultTheme[prop];
     return acc;
   }, {}),
 };
 // Add color mode config
-const mode: ColorMode | undefined = "dark";
+const mode: ColorMode | undefined = "light";
 const config = {
   initialColorMode: mode,
   useSystemColorMode: false,
@@ -42,7 +43,7 @@ export const theme = extendTheme({
   colors: {
     secondaryAlpha: brand.secondaryAlpha,
     primaryAlpha: brand.primaryAlpha,
-    
+
     link: {
       50: lighten(0.4, brand.link),
       100: lighten(0.3, brand.link),
@@ -103,7 +104,6 @@ export const theme = extendTheme({
       800: darken(0.15, brand.secondary),
       900: darken(0.2, brand.secondary),
     },
-   
   },
   images: {
     avatarImg: brand.avatarImg,
@@ -137,20 +137,49 @@ export const theme = extendTheme({
     Tabs,
     Textarea,
     Steps,
+    Form: {
+      variants: {
+        floating: {
+          container: {
+            _focusWithin: {
+              label: {
+                ...activeLabelStyles,
+              },
+            },
+            "input:not(:placeholder-shown) + label, .chakra-select__wrapper + label": {
+              ...activeLabelStyles,
+            },
+            label: {
+              top: 0,
+              left: 0,
+              zIndex: 2,
+              position: "absolute",
+              backgroundColor: "white",
+              pointerEvents: "none",
+              mx: 3,
+              px: 1,
+              my: 2,
+              transformOrigin: "left top",
+            },
+          },
+        },
+      },
+    },
+
     // custom components
   },
   styles: {
     bgOverlayOpacity: brand.bgOverlayOpacity,
     global: {
-      'html, body': {
-        fontSize: 'm',
-        color: 'mode.900',
-        lineHeight: 'tall',
+      "html, body": {
+        fontSize: "m",
+        color: "mode.900",
+        lineHeight: "tall",
       },
       a: {
-        transition: 'all 0.15s linear',
-        color: 'secondary.400',
-        _hover: { textDecoration: 'none', color: 'secondary.500' },
+        transition: "all 0.15s linear",
+        color: "secondary.400",
+        _hover: { textDecoration: "none", color: "secondary.500" },
       },
     },
   },
