@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/quadratic-funding/qfi/compare/v0.2.0...v0.2.1) (2022-06-08)
+
+
+### Features
+
+* **contracts:** emergency fund distribution on round cancel ([1c55859](https://github.com/quadratic-funding/qfi/commit/1c55859b96815f032161b9d20bbee42163a56e2b))
+
+
+
+
+
 # [0.2.0](https://github.com/quadratic-funding/qfi/compare/v0.1.0...v0.2.0) (2022-06-03)
 
 

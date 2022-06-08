@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/quadratic-funding/qfi/compare/v0.2.0...v0.2.1) (2022-06-08)
+
+
+### Features
+
+* **app:** add project to ballots via search params and enforce voting rules ([a139415](https://github.com/quadratic-funding/qfi/commit/a13941580e11d80a4324d2c7f1df727f1f716e8d))
+
+
+
+
+
 # [0.2.0](https://github.com/quadratic-funding/qfi/compare/v0.1.0...v0.2.0) (2022-06-03)
 
 **Note:** Version bump only for package @qfi/app
