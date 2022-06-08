@@ -106,3 +106,7 @@ export const networks = {
     explorer: "https://kovan.etherscan.io/"
   }
 }
+
+/** Parameters */
+export const initialVoiceCreditBalance = 99
+export const baseERC20TokenInitialSupply = 100

@@ -13,17 +13,17 @@ import { PollFactory__factory } from "../../../contracts/typechain/factories/Pol
 import { MessageAqFactory__factory } from "../../../contracts/typechain/factories/MessageAqFactory__factory.js"
 import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
 import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
-import { ConstantInitialVoiceCreditProxy__factory } from "../../../contracts/typechain/factories/ConstantInitialVoiceCreditProxy__factory.js"
-import { FreeForAllGatekeeper__factory } from "../../../contracts/typechain/factories/FreeForAllGatekeeper__factory.js"
-import { OptimisticRecipientRegistry__factory } from "../../../contracts/typechain/factories/OptimisticRecipientRegistry__factory.js"
+import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
 import { BaseERC20Token__factory } from "../../../contracts/typechain/factories/BaseERC20Token__factory.js"
 import { PollProcessorAndTallyer__factory } from "../../../contracts/typechain/factories/PollProcessorAndTallyer__factory.js"
 import { MockVerifier__factory } from "../../../contracts/typechain/factories/MockVerifier__factory.js"
 import { directoryExists, makeDir, writeLocalJsonFile } from "../lib/files.js"
 import {
+  baseERC20TokenInitialSupply,
   deployedContractsBaseDirPath,
   deployedContractsFilePath,
   header,
+  initialVoiceCreditBalance,
   mnemonicBaseDirPath,
   mnemonicFilePath,
   outputDirPath
@@ -71,12 +71,15 @@ async function deploy(network: string) {
     const gasPrice = await provider.getGasPrice()
 
     /** DEPLOY MACI/QFI SMART CONTRACTS */
+    const deployer = wallet
+    const deployerAddress = wallet.address
+
     console.log(chalk.bold(`\nDeploy for QFI/MACI smart contracts is running`))
 
-    const PoseidonT3Factory = new PoseidonT3__factory(wallet)
-    const PoseidonT4Factory = new PoseidonT4__factory(wallet)
-    const PoseidonT5Factory = new PoseidonT5__factory(wallet)
-    const PoseidonT6Factory = new PoseidonT6__factory(wallet)
+    const PoseidonT3Factory = new PoseidonT3__factory(deployer)
+    const PoseidonT4Factory = new PoseidonT4__factory(deployer)
+    const PoseidonT5Factory = new PoseidonT5__factory(deployer)
+    const PoseidonT6Factory = new PoseidonT6__factory(deployer)
 
     let spinner = customSpinner(`Deploying PoseidonT3 smart contract..`, "point")
     spinner.start()
@@ -121,29 +124,27 @@ async function deploy(network: string) {
       "qaci-contracts/contracts/crypto/Hasher.sol:PoseidonT4": PoseidonT4.address
     }
 
-    const GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, wallet)
-    const PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, wallet)
-    const MessageAqFactoryFactory = new MessageAqFactory__factory({ ...linkedLibraryAddresses }, wallet)
-    const QFIFactory = new QFI__factory({ ...linkedLibraryAddresses }, wallet)
+    const GrantRoundFactory = new GrantRoundFactory__factory({ ...linkedLibraryAddresses }, deployer)
+    const PollFactoryFactory = new PollFactory__factory({ ...linkedLibraryAddresses }, deployer)
+    const MessageAqFactoryFactory = new MessageAqFactory__factory({ ...linkedLibraryAddresses }, deployer)
+    const QFIFactory = new QFI__factory({ ...linkedLibraryAddresses }, deployer)
 
-    const VKRegistryFactory = new VkRegistry__factory(wallet)
-    const ConstantInitialVoiceCreditProxyFactory = new ConstantInitialVoiceCreditProxy__factory(wallet)
-    const FreeForAllGateKeeperFactory = new FreeForAllGatekeeper__factory(wallet)
-    const RecipientRegistryFactory = new OptimisticRecipientRegistry__factory(wallet)
-    const BaseERC20TokenFactory = new BaseERC20Token__factory(wallet)
-    const PollProcessorAndTallyerFactory = new PollProcessorAndTallyer__factory(wallet)
-    const MockVerifierFactory = new MockVerifier__factory(wallet)
+    const VKRegistryFactory = new VkRegistry__factory(deployer)
+    const BaseERC20TokenFactory = new BaseERC20Token__factory(deployer)
+    const PollProcessorAndTallyerFactory = new PollProcessorAndTallyer__factory(deployer)
+    const MockVerifierFactory = new MockVerifier__factory(deployer)
+    const SimpleHackathonFactory = new SimpleHackathon__factory(deployer)
 
-    spinner = customSpinner(`Deploying OptimisticRecipientRegistry smart contract...`, "point")
+    spinner = customSpinner(`Deploying SimpleHackathon smart contract...`, "point")
     spinner.start()
 
-    const optimisticRecipientRegistry = await RecipientRegistryFactory.deploy(0, 0, wallet.address, { gasPrice })
-    await optimisticRecipientRegistry.deployed()
+    const simpleHackathon = await SimpleHackathonFactory.deploy(initialVoiceCreditBalance, deployerAddress, {
+      gasPrice
+    })
+    await simpleHackathon.deployed()
     spinner.stop()
 
-    console.log(
-      `${logSymbols.success} OptimisticRecipientRegistry deployed at ${chalk.bold(optimisticRecipientRegistry.address)}`
-    )
+    console.log(`${logSymbols.success} SimpleHackathon deployed at ${chalk.bold(simpleHackathon.address)}`)
 
     spinner = customSpinner(`Deploying GrantRoundFactory smart contract...`, "point")
     spinner.start()
@@ -154,14 +155,17 @@ async function deploy(network: string) {
 
     console.log(`${logSymbols.success} GrantRoundFactory deployed at ${chalk.bold(grantRoundFactory.address)}`)
 
-    spinner = customSpinner(`Setting OptimisticRecipientRegistry in GrantRoundFactory smart contract...`, "point")
+    spinner = customSpinner(
+      `Setting SimpleHackathon as recipient registry in GrantRoundFactory smart contract...`,
+      "point"
+    )
     spinner.start()
 
-    const tx = await grantRoundFactory.setRecipientRegistry(optimisticRecipientRegistry.address, { gasPrice })
+    const tx = await grantRoundFactory.setRecipientRegistry(simpleHackathon.address, { gasPrice })
     await tx.wait()
     spinner.stop()
 
-    console.log(`${logSymbols.success} GrantRoundFactory registry correctly set!`)
+    console.log(`${logSymbols.success} GrantRoundFactory recipient registry correctly set!`)
 
     spinner = customSpinner(`Deploying PollFactory smart contract...`, "point")
     spinner.start()
@@ -192,28 +196,6 @@ async function deploy(network: string) {
       `${logSymbols.success} MessageAqFactoryGrants deployed at ${chalk.bold(messageAqFactoryGrants.address)}`
     )
 
-    spinner = customSpinner(`Deploying FreeForAllGateKeeper smart contract...`, "point")
-    spinner.start()
-
-    const freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy({ gasPrice })
-    await freeForAllGateKeeper.deployed()
-    spinner.stop()
-
-    console.log(`${logSymbols.success} FreeForAllGateKeeper deployed at ${chalk.bold(freeForAllGateKeeper.address)}`)
-
-    spinner = customSpinner(`Deploying ConstantInitialVoiceCreditProxy smart contract...`, "point")
-    spinner.start()
-
-    const constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(0, { gasPrice })
-    await constantInitialVoiceCreditProxy.deployed()
-    spinner.stop()
-
-    console.log(
-      `${logSymbols.success} ConstantInitialVoiceCreditProxy deployed at ${chalk.bold(
-        constantInitialVoiceCreditProxy.address
-      )}`
-    )
-
     spinner = customSpinner(`Deploying VKRegistry smart contract...`, "point")
     spinner.start()
 
@@ -226,7 +208,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying BaseERC20Token smart contract...`, "point")
     spinner.start()
 
-    const baseERC20Token = await BaseERC20TokenFactory.deploy(100, { gasPrice })
+    const baseERC20Token = await BaseERC20TokenFactory.deploy(baseERC20TokenInitialSupply, { gasPrice })
     await baseERC20Token.deployed()
     spinner.stop()
 
@@ -259,8 +241,8 @@ async function deploy(network: string) {
       baseERC20Token.address,
       grantRoundFactory.address,
       pollFactory.address,
-      freeForAllGateKeeper.address,
-      constantInitialVoiceCreditProxy.address,
+      simpleHackathon.address,
+      simpleHackathon.address,
       { gasPrice }
     )
     await qfi.deployed()
@@ -274,13 +256,11 @@ async function deploy(network: string) {
         "PoseidonT4": \"${PoseidonT4.address}\",
         "PoseidonT5": \"${PoseidonT5.address}\",
         "PoseidonT6": \"${PoseidonT6.address}\",
-        "OptimisticRecipientRegistry": \"${optimisticRecipientRegistry.address}\",
         "GrantRoundFactory": \"${grantRoundFactory.address}\",
         "PollFactory": \"${pollFactory.address}\",
         "MessageAqFactory": \"${messageAqFactory.address}\",
         "MessageAqFactoryGrants": \"${messageAqFactoryGrants.address}\",
-        "FreeForAllGateKeeper": \"${freeForAllGateKeeper.address}\",
-        "ConstantInitialVoiceCreditProxy": \"${constantInitialVoiceCreditProxy.address}\",
+        "SimpleHackathon": \"${simpleHackathon.address}\",
         "VKRegistry": \"${vkRegistry.address}\",
         "BaseERC20Token": \"${baseERC20Token.address}\", 
         "MockVerifier": \"${mockVerifier.address}\", 
