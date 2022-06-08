@@ -1,11 +1,13 @@
-import { BigInt, log } from "@graphprotocol/graph-ts"
+import { log } from "@graphprotocol/graph-ts"
 import {
     OwnershipTransferred,
     RequestResolved,
     RequestSubmitted
 } from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
 
-import { Recipient } from "../../generated/schema"
+import { Recipient, RecipientRegistry } from "../../generated/schema"
+import { REGISTRATION } from "../utils/constants"
+import { requestTypeConverterFromEnumIndexToString } from "../utils/converter"
 
 /**
  * (e.g., Store a PublicKey in the storage).
@@ -22,25 +24,31 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 export function handleRequestSubmitted(event: RequestSubmitted): void {
     log.debug(`RequestSubmitted event block: {}`, [event.block.number.toString()])
 
-    const recipientRegistryId = event.address.toHexString()
     const timestamp = event.block.timestamp.toString()
 
-    // Create a new Recipient.
-    const recipientId = event.params._recipientId.toHexString()
-    const recipient = new Recipient(recipientId)
+    const recipientRegistryId = event.address.toHexString()
+    const recipientRegistry = RecipientRegistry.load(recipientRegistryId)
 
-    recipient.address = event.params._recipient
-    recipient.requestType = BigInt.fromI32(event.params._type).toString()
-    recipient.requesterAddress = event.transaction.from
-    recipient.submissionTime = event.params._timestamp
-    recipient.deposit = event.transaction.value
-    recipient.metadata = event.params._metadata
-    recipient.recipientRegistry = recipientRegistryId
-    recipient.requestSubmittedHash = event.transaction.hash
-    recipient.createdAt = timestamp
-    recipient.lastUpdatedAt = timestamp
+    if (recipientRegistry !== null) {
+        // Create a new request for the Recipient.
+        const recipientId = event.params._recipientId.toHexString()
+        const recipient = new Recipient(recipientId)
 
-    recipient.save()
+        recipient.requestType = requestTypeConverterFromEnumIndexToString(event.params._type.toString())
+        recipient.submissionTime = event.block.timestamp
+        recipient.requesterAddress = event.transaction.from
+        recipient.deposit = event.transaction.value
+        recipient.requestSubmittedHash = event.transaction.hash
+        recipient.recipientRegistry = recipientRegistryId
+        recipient.requestRecipientAddress = event.params._recipient
+        recipient.requestRecipientMetadata = event.params._metadata
+        recipient.createdAt = timestamp
+        recipient.lastUpdatedAt = timestamp
+
+        recipient.save()
+    } else log.error(`Recipient Registry entity not found!`, [])
+
+    log.debug(`handleRequestSubmitted executed correctly`, [])
 }
 
 /**
@@ -51,29 +59,36 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
 export function handleRequestResolved(event: RequestResolved): void {
     log.debug(`RequestResolved event block: {}`, [event.block.number.toString()])
 
+    const timestamp = event.block.timestamp.toString()
+
     // Calculate the RecipientRegistry identifier.
     const recipientRegistryId = event.address.toHexString()
-    const recipientId = event.params._recipientId.toHexString()
-    const recipient = Recipient.load(recipientId)
+    const recipientRegistry = RecipientRegistry.load(recipientRegistryId)
 
-    if (recipient !== null) {
-        recipient.requestType = BigInt.fromI32(event.params._type).toString()
-        recipient.requesterAddress = event.transaction.from
-        recipient.submissionTime = event.params._timestamp
-        recipient.deposit = event.transaction.value
-        recipient.recipientRegistry = recipientRegistryId
-        recipient.requestResolvedHash = event.transaction.hash
-        recipient.rejected = event.params._rejected
+    if (recipientRegistry !== null) {
+        const recipientId = event.params._recipientId.toHexString()
+        const recipient = Recipient.load(recipientId)
 
-        if (event.params._recipientIndex != BigInt.fromI32(0)) {
-            if (BigInt.fromI32(event.params._type).toString() == "Registration")
-                recipient.addedAt = event.params._recipientIndex
-            else recipient.removedAt = event.params._recipientIndex
-        }
+        if (recipient !== null) {
+            recipient.requestType = requestTypeConverterFromEnumIndexToString(event.params._type.toString())
+            recipient.rejected = event.params._rejected
+            recipient.resolutionTime = event.params._timestamp
+            recipient.requestResolvedHash = event.transaction.hash
 
-        recipient.save()
-    }
-    {
-        log.error(`Recipient entity not found!`, [])
-    }
+            if (!recipient.rejected) {
+                if (recipient.requestType === REGISTRATION) {
+                    recipient.metadata = recipient.requestRecipientMetadata
+                    recipient.address = recipient.requestRecipientAddress
+                    recipient.addedAt = event.params._timestamp
+                    recipient.voteOptionIndex = event.params._recipientIndex
+                } else recipient.removedAt = event.params._timestamp
+            }
+
+            recipient.lastUpdatedAt = timestamp
+
+            recipient.save()
+        } else log.error(`Recipient entity not found!`, [])
+    } else log.error(`Recipient Registry entity not found!`, [])
+
+    log.debug(`handleRequestResolved executed correctly`, [])
 }
