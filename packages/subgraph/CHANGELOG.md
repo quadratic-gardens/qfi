@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
+
+
+### Bug Fixes
+
+* add missing converter for request type ([9766979](https://github.com/quadratic-funding/qfi/commit/9766979ba5257132deaacf43332c5b956cd21156))
+* change from a new creation of a QFI scheme to its loading for the same id ([b7af432](https://github.com/quadratic-funding/qfi/commit/b7af432ef46b441fa2eafd664bced4ec40182e3b))
+* converters and qfi initialization ([969c1b4](https://github.com/quadratic-funding/qfi/commit/969c1b4c1d0468c2031cd3084e8300ce78d67e97))
+* missing abis for different data sources ([0cf3a3d](https://github.com/quadratic-funding/qfi/commit/0cf3a3d30633bcc30861b34f979f900035bd7a2d))
+* removed non-nullable property for wrong variables when deploying QFI ([d5cf5c9](https://github.com/quadratic-funding/qfi/commit/d5cf5c90c1ea77775d24fa9807dcbe8ea83eacfa))
+
+
+### Features
+
+* add missing grant round factory entity for managing pre-QFI Recipient Registry change ([0495196](https://github.com/quadratic-funding/qfi/commit/0495196d92189189616f460e6fa272068fc8be88))
+
+
+
+
+
 ## [0.2.1](https://github.com/quadratic-funding/qfi/compare/v0.2.0...v0.2.1) (2022-06-08)
 
 **Note:** Version bump only for package @qfi/subgraph
