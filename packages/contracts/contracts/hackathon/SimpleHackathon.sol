@@ -25,7 +25,7 @@ contract SimpleHackathon is
     uint256 internal balance;
 
     constructor(uint256 _balance, address _controller)
-        SimpleRecipientRegistry(controller)
+        SimpleRecipientRegistry(_controller)
     {
         balance = _balance;
     }
