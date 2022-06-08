@@ -47,8 +47,8 @@
   - `<network>`: the network where the contracts will be deployed (e.g., xdai)
 - `ethpraguecli contracts:add-recipients <network> <path>`: Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path.
   - `<network>`: the network where the contracts has been deployed (e.g., xdai)
-  - `<path>`: the path of the CSV input file where the recipients data is stored (e.g., ~/Desktop/my_recipients_data.csv`).
-    _nb. The CSV file must contain rows organized as follows:_ \* _name_ \* _tagline_ \* _description_ \* _problemSpace_ \* _ethereumAddress_ \* _contactEmail_ \* _teamName (optional)_ \* _teamDescription (optional)_ \* _githubUrl (optional)_ \* _radicleUrl (optional)_ \* _websiteUrl (optional)_ \* _twitterUr (optional)_ \* _discordUrl (optional)_ \* _bannerImageHash_ \* _thumbnailImageHash_
+  - `<path>`: the path of the CSV input file where the recipients data is stored (e.g., ~/Desktop/my*recipients_data.csv`).
+    \_nb. The CSV file must contain rows organized as follows:* \* _name_ \* _tagline_ \* _description_ \* _problemSpace_ \* _ethereumAddress_ \* _contactEmail_ \* _teamName (optional)_ \* _teamDescription (optional)_ \* _githubUrl (optional)_ \* _radicleUrl (optional)_ \* _websiteUrl (optional)_ \* _twitterUr (optional)_ \* _discordUrl (optional)_ \* _bannerImageHash_ \* _thumbnailImageHash_
 
 ## Examples
 

@@ -7,36 +7,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @qfi/ethpraguecli
 
-
-
-
-
 ## [0.2.1](https://github.com/quadratic-funding/qfi/compare/v0.2.0...v0.2.1) (2022-06-08)
 
 **Note:** Version bump only for package @qfi/ethpraguecli
-
-
-
-
 
 # [0.2.0](https://github.com/quadratic-funding/qfi/compare/v0.1.0...v0.2.0) (2022-06-03)
 
 **Note:** Version bump only for package @qfi/ethpraguecli
 
-
-
-
-
 # [0.1.0](https://github.com/quadratic-funding/qfi/compare/v0.0.4...v0.1.0) (2022-06-02)
-
 
 ### Features
 
-* add command to authenticate via a wallet mnemonic phrase ([d15f1d2](https://github.com/quadratic-funding/qfi/commit/d15f1d2212845372e3c520bf539c5c7f3d0125c7))
-
-
-
-
+- add command to authenticate via a wallet mnemonic phrase ([d15f1d2](https://github.com/quadratic-funding/qfi/commit/d15f1d2212845372e3c520bf539c5c7f3d0125c7))
 
 ## [0.0.4](https://github.com/quadratic-funding/qfi/compare/v0.0.3...v0.0.4) (2022-06-01)
 
