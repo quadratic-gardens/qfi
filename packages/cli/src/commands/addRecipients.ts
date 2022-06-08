@@ -15,7 +15,7 @@ import {
   mnemonicFilePath,
   outputDirPath
 } from "../lib/constants.js"
-import { OptimisticRecipientRegistry__factory } from "../../../contracts/typechain/factories/OptimisticRecipientRegistry__factory.js"
+import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
 import { customSpinner } from "../lib/prompts.js"
 
 /**
@@ -25,39 +25,34 @@ import { customSpinner } from "../lib/prompts.js"
  */
 const checkForMissingRecipientProperties = (recipientRecord: Recipient, index: number) => {
   const {
-    name,
+    projectName,
     tagline,
     description,
-    problemSpace,
     ethereumAddress,
-    contactEmail,
-    bannerImageHash,
-    thumbnailImageHash
+    website,
+    bannerImageLink,
+    thumbnailImageLink,
+    logoCdnUrl
   } = recipientRecord
 
-  if (!name) throw new Error(`Missing \`name\` property for the recipient (Row #${index})`)
+  if (!projectName) throw new Error(`Missing \`projectName\` property for the recipient (Row #${index})`)
 
   if (!tagline) throw new Error(`Missing \`tagline\` property for the recipient (Row #${index})`)
 
-  if (tagline.length > 140) throw new Error(`Too long \`tagline\` property for the recipient (Row #${index})`)
-
   if (!description) throw new Error(`Missing \`description\` property for the recipient (Row #${index})`)
 
-  if (!problemSpace) throw new Error(`Missing \`problemSpace\` property for the recipient (Row #${index})`)
+  if (!website) throw new Error(`Missing \`website\` property for the recipient (Row #${index})`)
 
   if (!ethereumAddress) throw new Error(`Missing \`ethereumAddress\` property for the recipient (Row #${index})`)
 
   if (ethereumAddress.length !== 42 || !ethereumAddress.startsWith("0x"))
     throw new Error(`Malformed \`ethereumAddress\` property for the recipient (Row #${index})`)
 
-  if (!contactEmail) throw new Error(`Missing \`contactEmail\` property for the recipient (Row #${index})`)
+  if (!bannerImageLink) throw new Error(`Missing \`bannerImageLink\` property for the recipient (Row #${index})`)
 
-  if (!RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(contactEmail))
-    throw new Error(`Malformed \`contactEmail\` property for the recipient (Row #${index})`)
+  if (!thumbnailImageLink) throw new Error(`Missing \`thumbnailImageLink\` property for the recipient (Row #${index})`)
 
-  if (!bannerImageHash) throw new Error(`Missing \`bannerImageHash\` property for the recipient (Row #${index})`)
-
-  if (!thumbnailImageHash) throw new Error(`Missing \`thumbnailImageHash\` property for the recipient (Row #${index})`)
+  if (!logoCdnUrl) throw new Error(`Missing \`logoCdnUrl\` property for the recipient (Row #${index})`)
 }
 
 /**
@@ -85,7 +80,7 @@ async function addRecipients(network: string, path: string) {
     process.stdout.write(`\n`)
 
     const { provider, wallet } = await connectToBlockchain(network)
-
+    const deployer = wallet
     /** DEPLOY MACI/QFI SMART CONTRACTS */
 
     // Retrieve deployed smart contracts addresses.
@@ -104,11 +99,11 @@ async function addRecipients(network: string, path: string) {
       // Check input data.
       checkForMissingRecipientProperties(recipientRecord, i)
 
-      // Get deployed RecipientRegistry instance.
-      const recipientRegistry = new ethers.Contract(
-        deployedContracts.OptimisticRecipientRegistry,
-        OptimisticRecipientRegistry__factory.abi,
-        wallet
+      // Get deployed simpleHackathon instance.
+      const simpleHackathon = new ethers.Contract(
+        deployedContracts.SimpleHackathon,
+        SimpleHackathon__factory.abi,
+        deployer
       )
 
       // Create metadata.
@@ -116,7 +111,7 @@ async function addRecipients(network: string, path: string) {
       const metadata = JSON.stringify(metadataJSON)
 
       // Create tx.
-      const tx = await recipientRegistry.connect(wallet).addRecipient(recipientRecord.ethereumAddress, metadata, {
+      const tx = await simpleHackathon.connect(deployer).addRecipient(recipientRecord.ethereumAddress, metadata, {
         gasPrice: await provider.getGasPrice(),
         gasLimit: ethers.utils.hexlify(10000000)
       })
@@ -125,7 +120,7 @@ async function addRecipients(network: string, path: string) {
       spinner.stop()
       console.log(
         `${logSymbols.success} Recipient #${chalk.bold(i)} (${chalk.bold(
-          recipientRecord.name
+          recipientRecord.projectName
         )}) has been successfully registered on-chain`
       )
 
