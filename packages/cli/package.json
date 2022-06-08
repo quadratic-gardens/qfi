@@ -24,6 +24,7 @@
     "start": "node dist/cli/src/index.js",
     "auth": "yarn start auth",
     "genkeys": "yarn start genkeys",
+    "initialize": "yarn start initialize",
     "contracts:deploy": "yarn start contracts:deploy",
     "contracts:add-recipients": "yarn start contracts:add-recipients",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

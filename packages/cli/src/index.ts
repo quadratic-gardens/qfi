@@ -2,7 +2,7 @@
 import dotenv from "dotenv"
 import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
-import { auth, genkeys, deploy, addRecipients } from "./commands/index.js"
+import { auth, genkeys, deploy, initialize, addRecipients } from "./commands/index.js"
 
 dotenv.config()
 
@@ -31,6 +31,14 @@ program
     genkeys(amount)
   })
   .addHelpCommand(`ethpraguecli genkeys 3000`)
+
+program
+  .command("initialize")
+  .description("Initialize the deployed MACI/QFI smart contracts")
+  .argument("<network>", "the network where the contracts has been deployed")
+  .action((network: string) => {
+    initialize(network)
+  })
 
 program
   .command("contracts:deploy")

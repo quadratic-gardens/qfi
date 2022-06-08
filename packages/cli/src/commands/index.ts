@@ -1,6 +1,7 @@
 import auth from "./auth.js"
 import genkeys from "./genkeys.js"
 import deploy from "./deploy.js"
+import initialize from "./initialize.js"
 import addRecipients from "./addRecipients.js"
 
-export { auth, genkeys, deploy, addRecipients }
+export { auth, genkeys, deploy, initialize, addRecipients }
