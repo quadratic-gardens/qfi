@@ -26,7 +26,8 @@ export type Option = {
   address: string;
   url: string;
   description: string;
-  image: string;
+  logo: string;
+  banner: string;
   problemSpace: string;
   tagline: string;
 };

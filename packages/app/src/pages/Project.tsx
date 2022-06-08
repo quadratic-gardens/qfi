@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   VStack,
   Container,
@@ -13,15 +13,73 @@ import {
   Button,
   Box,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { HiArrowLeft } from "react-icons/hi";
-import { Link, useParams } from "react-router-dom";
+import { createSearchParams, Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getProject } from "../data";
 
 export function Project() {
+  const toast = useToast();
   let { projectId } = useParams();
+  let navigate = useNavigate();
+  let [searchParams] = useSearchParams();
+  const isInBallot = useMemo(() => {
+    return searchParams.getAll("option").includes(projectId ?? "notfound");
+  }, [searchParams, projectId]);
+
+  const handleRemoveFromBallot = useCallback(
+    (projectId: string) => {
+      return () => {
+        if (projectId && isInBallot) {
+          let filtered = searchParams.getAll("option").filter((id) => id !== projectId);
+          let newSearchParams = createSearchParams({
+            option: filtered,
+          });
+          toast({
+            title: "Removed from ballot",
+            description: "You can add it back to the ballot later",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+         
+          navigate("/projects/" + projectId + "?" + newSearchParams.toString());
+          return
+        }
+      };
+    },
+    [searchParams, isInBallot, navigate, toast]
+  );
+
   let project = getProject(projectId ?? "0");
+
   const color = useColorModeValue("gray.100", "gray.700");
+  const handleAddToBallot = useCallback(() => {
+    if (searchParams.getAll("option").length >= 8) {
+      toast({
+        title: "Too many options",
+        description: "You can only add up to 8 options to your ballot",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!isInBallot && projectId) {
+      searchParams.append("option", projectId);
+      toast({
+        title: "Added to ballot",
+        description: "You can now vote on this project",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate("/projects/" + projectId + "?" + searchParams.toString());
+      return;
+    }
+  }, [searchParams, isInBallot, projectId, navigate, toast]);
   return (
     <Flex
       as="main"
@@ -54,6 +112,7 @@ export function Project() {
           w="full"
           maxWidth={{ xs: "full", sm: "full", md: "full", lg: "lg", xl: "xl" }}>
           <VStack
+            pb={120}
             borderColor={color}
             borderLeftWidth={1}
             borderRightWidth={1}
@@ -74,7 +133,7 @@ export function Project() {
                   boxSize={"34px"}
                   variant={"ghost"}
                   rounded="full"
-                  to="/projects"
+                  to={`/projects?${searchParams.toString()}`}
                   as={Link}
                   icon={<Icon as={HiArrowLeft} />}
                   aria-label="Home"
@@ -89,19 +148,21 @@ export function Project() {
                 </Text>
               </VStack>
             </HStack>
-            <VStack display={"block"} w="full" overflow={"hidden"}>
+            <VStack display={"block"} w="full" minH={{ base: "100px", md: "200px" }} overflow={"hidden"}>
               <Box
                 h="full"
                 w="full"
                 position="relative"
-                paddingBottom="33.3333%"
+                mt={"-13%"}
                 sx={{
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  background: `rgb(26, 31, 41) url('${project?.image}') `,
+                  background: `rgb(26, 31, 41) url('${project?.banner}') `,
                   backgroundSize: "cover",
                 }}>
-                <Image h="full" w="full" position="absolute" src={project.image} alt={project.name} />
+                <AspectRatio position="relative" ratio={16 / 9}>
+                  <Image h="full" w="auto" position="relative" src={project.banner} alt={project.name} />
+                </AspectRatio>
               </Box>
             </VStack>
             <HStack pt={3} px={{ base: "4", md: "6" }} justifyContent={"space-between"} w="full" spacing={0}>
@@ -110,25 +171,29 @@ export function Project() {
                 borderWidth={3}
                 zIndex="1"
                 w={{ base: "25%", md: "25%" }}
-                mt="-15%"
+                mt={{ sm: "-15%", md: "-15%" }}
                 mb="12px"
                 display="block"
                 overflow={"visible"}
                 rounded="full"
                 maxW="100%"
                 ratio={1}>
-                <Image borderRadius="full" src={project.image} alt={project.name} />
+                <Image borderRadius="full" src={project.logo} alt={project.name} />
               </AspectRatio>
 
               <Button
                 fontSize={"15px"}
-                bg="blue"
+                bg={isInBallot ? "red.400" : "blue"}
                 color="white"
                 rounded={"full"}
-                as={Link}
-                to={`/ballot`}
+                onClick={isInBallot ? handleRemoveFromBallot(projectId?.toString() ?? "noop") : handleAddToBallot}
                 height={{ base: "30px", md: "40px" }}
-                marginTop={{ base: "-20px !important", md: "20px !important" }}>
+                marginTop={{
+                  base: "-12% !important",
+                  sm: "-5% !important",
+                  md: "-6% !important",
+                  lg: "-2% !important",
+                }}>
                 <HStack px={4}>
                   <Icon
                     color="white"
@@ -149,7 +214,7 @@ export function Project() {
                     fontSize={["xs", "sm", "sm", "sm"]}
                     fontWeight="800"
                     ml={2}>
-                    BALLOT
+                    {isInBallot ? "Remove" : "Add to Ballot"}
                   </Text>
                 </HStack>
               </Button>
@@ -164,11 +229,12 @@ export function Project() {
                 </Text>
               </VStack>
               <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-                {project.description} {project.problemSpace}
+                {project.problemSpace}
               </Text>
-              {/* <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-             
-            </Text> */}
+              <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
+                {project.description}
+              </Text>
+
               <VStack alignItems="flex-start" w="full" spacing={1}>
                 <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
                   <b> Project Ballot ID:</b> {project.id}

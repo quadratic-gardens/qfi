@@ -1,6 +1,8 @@
 import {
   VStack,
-  Container, HStack, Text,
+  Container,
+  HStack,
+  Text,
   Heading,
   Drawer,
   DrawerOverlay,
@@ -9,7 +11,7 @@ import {
   IconButton,
   Icon,
   List,
-  ListItem
+  ListItem,
 } from "@chakra-ui/react";
 import { MagikButton } from "@qfi/ui";
 import { HiQrcode, HiCollection } from "react-icons/hi";
@@ -17,7 +19,6 @@ import { MdDashboard } from "react-icons/md";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
 const Guide = () => {
-  
   return (
     <Container
       h="full"
@@ -65,7 +66,7 @@ const Guide = () => {
           <Text fontFamily={"archivo"}>
             Adding your project makes you eligible to receive funds from the matching pool, but doesn’t guarantee
             funding. How much each project receives will be decided by ETHPrague attendees who vote during the event.
-            You will need to be able to receive cryptocurrency (xDAI) in order to receive funds in the QF round; if
+            You will need to be able to receive cryptocurrency (wxDAI) in order to receive funds in the QF round; if
             you’re uncertain about this feel free to get in touch and we’ll be happy to help.
           </Text>
           <IconButton w={36} h={12} color="gray.800" icon={<Icon as={HiQrcode} boxSize={10} />} aria-label="Scan" />
@@ -73,11 +74,16 @@ const Guide = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="md">Who should sign up?</Heading>
           <Text fontFamily={"archivo"}>
-            We don’t have a lot of hard eligibility criteria, but your project should be a public good, often defined as
-            non-rivalrous (use by one person doesn’tprevent access by others) and non-excludable (anyone can access or
-            use it). It should also be:
+            We don’t have a lot of hard eligibility criteria, but your project should be local to the Czech Republic and
+            a public good, often defined as non-rivalrous (use by one person doesn’tprevent access by others) and
+            non-excludable (anyone can access or use it).
           </Text>
-          <List spacing={1} px={3}>
+          <Text fontFamily={"archivo"}>
+            Projects do not need to be Ethereum-specific or online/digital; public goods in this context could also
+            include things like informational, educational or community resources, nonprofit organizations, creative
+            work etc.
+          </Text>
+          {/* <List spacing={1} px={3}>
             <ListItem>
               <Text fontFamily={"archivo"}>• Local to Prague</Text>
             </ListItem>
@@ -87,7 +93,7 @@ const Guide = () => {
             <ListItem>
               <Text fontFamily={"archivo"}>• Not a scam</Text>
             </ListItem>
-          </List>
+          </List> */}
           <IconButton
             w={36}
             h={12}

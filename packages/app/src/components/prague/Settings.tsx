@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { MagikButton } from "@qfi/ui";
 
-const Settings = () => {
+export const Settings = () => {
   const [values, setValues] = React.useState(["", "", ""]);
 
   return (
@@ -23,11 +23,11 @@ const Settings = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Account Setup</Heading>
           <Text fontFamily={"archivo"}>
-          Casting a Ballot requires you to have a wallet on the xDAI chain, xDAI to pay for gas and a valid ballot key. 
+          Casting a Ballot requires you to have a wallet on the Gnosis Chain chain, xDAI to pay for gas and a valid ballot key. 
           </Text>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
-          <Heading size="md">xDAI Wallet.</Heading>
+          <Heading size="md">GnosisChain Wallet.</Heading>
           <Text fontFamily={"archivo"}>
           The wallet contained in your registration card is pre-loaded with xDAI to pay for gas, but you can also use any other wallet that you have access to. Voting is anonymous, but ballot registration happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your wallet registered.
           </Text>

@@ -18,13 +18,31 @@ import { getProject } from "../data";
 import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
+import { useSearchParams } from "react-router-dom";
 
 export const Ballot = () => {
+  const [searchParams] = useSearchParams();
+  const voteOptions = useMemo(() => {
+    return searchParams.getAll("option");
+  }, [searchParams]);
+
+  //TODO: IDs of all the projects on the users ballot according to recipient registry
+  const recipientRegistryIds = useMemo(() => {
+    return voteOptions.filter((s) => !isNaN(parseInt(s))).map((s) => parseInt(s));
+  }, [voteOptions]);
 
   const color = useColorModeValue("gray.800", "gray.700");
   const [ballotOptions, setBallotOptions] = useState<number[]>([]);
   const [ballotData, setBallotData] = useState<Option[]>([]);
   const [voiceCreditBalance, setVoiceCreditBBalance] = useState(0);
+
+  const isEmptyBallot = useMemo(
+    () =>
+      ballotOptions.reduce((p, option) => {
+        return p && isNaN(option);
+      }, true) === false,
+    [ballotOptions]
+  );
 
   //ballot option 1 number of votes
   const [ballotOption1Votes, setBallotOption1Votes] = useState(0);
@@ -32,6 +50,55 @@ export const Ballot = () => {
   const [ballotOption3Votes, setBallotOption3Votes] = useState(0);
   const [ballotOption4Votes, setBallotOption4Votes] = useState(0);
   const [ballotOption5Votes, setBallotOption5Votes] = useState(0);
+  const [ballotOption6Votes, setBallotOption6Votes] = useState(0);
+  const [ballotOption7Votes, setBallotOption7Votes] = useState(0);
+  const [ballotOption8Votes, setBallotOption8Votes] = useState(0);
+
+  //TODO: number of votes per vote option, lines up with recipientRegistryIds
+  //TODO: take this data along with recipientRegistryIds and use it to populate messages, then submit
+  const votes = useMemo(
+    () => [
+      ballotOption1Votes,
+      ballotOption2Votes,
+      ballotOption3Votes,
+      ballotOption4Votes,
+      ballotOption5Votes,
+      ballotOption6Votes,
+      ballotOption7Votes,
+      ballotOption8Votes,
+    ],
+    [
+      ballotOption1Votes,
+      ballotOption2Votes,
+      ballotOption3Votes,
+      ballotOption4Votes,
+      ballotOption5Votes,
+      ballotOption6Votes,
+      ballotOption7Votes,
+      ballotOption8Votes,
+    ]
+  );
+
+  const resetAllVotes = useCallback(() => {
+    setBallotOption1Votes(0);
+    setBallotOption2Votes(0);
+    setBallotOption3Votes(0);
+    setBallotOption4Votes(0);
+    setBallotOption5Votes(0);
+    setBallotOption6Votes(0);
+    setBallotOption7Votes(0);
+    setBallotOption8Votes(0);
+  }, [
+    setBallotOption1Votes,
+    setBallotOption2Votes,
+    setBallotOption3Votes,
+    setBallotOption4Votes,
+    setBallotOption5Votes,
+    setBallotOption6Votes,
+    setBallotOption7Votes,
+    setBallotOption8Votes,
+  ]);
+
   const addBallotOption1Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption1Votes ** 2 - (ballotOption1Votes + 1) ** 2 < 0) {
       return setBallotOption1Votes(0);
@@ -77,11 +144,35 @@ export const Ballot = () => {
     }
     return setBallotOption5Votes(0);
   }, [ballotOption5Votes, voiceCreditBalance]);
+  const addBallotOption6Votes = useCallback(() => {
+    if (voiceCreditBalance + ballotOption6Votes ** 2 - (ballotOption6Votes + 1) ** 2 < 0) {
+      return setBallotOption6Votes(0);
+    }
+    if (ballotOption6Votes < 9) {
+      return setBallotOption6Votes(ballotOption6Votes + 1);
+    }
+    return setBallotOption6Votes(0);
+  }, [ballotOption6Votes, voiceCreditBalance]);
+  const addBallotOption7Votes = useCallback(() => {
+    if (voiceCreditBalance + ballotOption7Votes ** 2 - (ballotOption7Votes + 1) ** 2 < 0) {
+      return setBallotOption7Votes(0);
+    }
+    if (ballotOption7Votes < 9) {
+      return setBallotOption7Votes(ballotOption7Votes + 1);
+    }
+    return setBallotOption7Votes(0);
+  }, [ballotOption7Votes, voiceCreditBalance]);
+  const addBallotOption8Votes = useCallback(() => {
+    if (voiceCreditBalance + ballotOption8Votes ** 2 - (ballotOption8Votes + 1) ** 2 < 0) {
+      return setBallotOption8Votes(0);
+    }
+    if (ballotOption8Votes < 9) {
+      return setBallotOption8Votes(ballotOption8Votes + 1);
+    }
+    return setBallotOption8Votes(0);
+  }, [ballotOption8Votes, voiceCreditBalance]);
   //wrap all the votes into an array
-  const votes = useMemo(
-    () => [ballotOption1Votes, ballotOption2Votes, ballotOption3Votes, ballotOption4Votes, ballotOption5Votes],
-    [ballotOption1Votes, ballotOption2Votes, ballotOption3Votes, ballotOption4Votes, ballotOption5Votes]
-  );
+
   const totalVoiceCredits = useMemo(() => {
     return votes.reduce((acc, curr) => acc + curr ** 2, 0);
   }, [votes]);
@@ -91,13 +182,20 @@ export const Ballot = () => {
     addBallotOption3Votes,
     addBallotOption4Votes,
     addBallotOption5Votes,
+    addBallotOption6Votes,
+    addBallotOption7Votes,
+    addBallotOption8Votes,
   ];
   useEffect(() => {
-    const intialBallotOptions = [0, 1, 2, 3, 4];
+    const intialBallotOptions = [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN];
+    const options = voteOptions.filter((s) => !isNaN(parseInt(s))).map((s) => parseInt(s));
+
     const initialVoiceCreditBalance = 99;
+    resetAllVotes();
     setVoiceCreditBBalance(initialVoiceCreditBalance);
-    setBallotOptions(intialBallotOptions);
-  }, []);
+
+    setBallotOptions(options.length === 0 ? intialBallotOptions : options);
+  }, [voteOptions, resetAllVotes]);
 
   useEffect(() => {
     const newBallotData = ballotOptions?.map((optionId) => {
@@ -123,18 +221,18 @@ export const Ballot = () => {
       sx={{
         scrollbarColor: "green",
         "::-webkit-scrollbar": {
-          width: "0px"
+          width: "0px",
         },
-        
+
         "::-webkit-scrollbar-track": {
           boxShadow: "inset 0 0 0px grey",
-          borderRadius: "0px"
+          borderRadius: "0px",
         },
-        
+
         "::-webkit-scrollbar-thumb": {
           background: "transparent",
-          borderRadius: "0px"
-        }
+          borderRadius: "0px",
+        },
       }}>
       <VStack spacing={0} w="full">
         <Container h="full" w="full" maxWidth="container.sm">
@@ -149,14 +247,16 @@ export const Ballot = () => {
                 </Text>
               </EaseInBottom>
               <Text fontSize={"xs"} pt={2} px={"1px"}>
-                Voice Credits Spent: {ballotOption1Votes ** 2} + {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +{" "}
-                {ballotOption4Votes ** 2} + {ballotOption5Votes ** 2} = {totalVoiceCredits}
+                Voice Credits Spent: {ballotOption1Votes ** 2} + {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +
+                {ballotOption4Votes ** 2} + {ballotOption5Votes ** 2} + {ballotOption6Votes ** 2} +{" "}
+                {ballotOption7Votes ** 2} + {ballotOption8Votes ** 2}= {totalVoiceCredits}
               </Text>
             </VStack>
-            <VStack spacing={0} alignItems={"flex-start"} w="full">
+            <VStack spacing={0} alignItems={"flex-start"} w="full" display={isEmptyBallot ? "flex" : "none"}>
               {ballotData.map((project, index) => (
                 <BallotOption
-                  lastOption={index === 4 ? true : false}
+                  key={index}
+                  lastOption={index === ballotOptions.length - 1 ? true : false}
                   ballotOption={project}
                   votes={votes[index]}
                   onClick={updateVotes[index]}
@@ -179,9 +279,9 @@ export const Ballot = () => {
                 <Text fontSize={"xs"}>
                   Think about this like a captcha on steroids. Ballot (MACI) Passphrase distribution is done as an
                   in-person sybil check that assigns a white listed, pseudo random maci key to each voter. While at the
-                  event, you will be given a passphrase to use to submit your ballot. (ID and signature check required).
-                  This secret key is used to sign the ballot and is not stored on the blockchain. Keep it safe! it is
-                  the only way to vote. QR scanning soon!
+                  event, you will be given a passphrase to use to submit your ballot. This secret key is used to sign
+                  the ballot and is not stored on the blockchain. Keep it safe! it is the only way to vote. QR scanning
+                  soon!
                 </Text>
                 <HStack maxW={"container.md"}>
                   <PinInput defaultValue="macisk." size="xs" type="alphanumeric">

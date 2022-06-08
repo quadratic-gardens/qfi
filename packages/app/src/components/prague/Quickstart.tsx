@@ -41,7 +41,7 @@ export const Quickstart = () => {
           <Heading size="md">A wallet specific made for you.</Heading>
           <Text fontFamily={"archivo"}>
             Find the private key hidden at bottom of your registration card, peel it off and keep it safe. We have just
-            drop 10 xDai to that wallet!
+            drop .10 xDai to that wallet!
           </Text>
           <MagikButton />
         </VStack>

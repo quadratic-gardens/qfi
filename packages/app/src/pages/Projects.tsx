@@ -19,12 +19,18 @@ import {
   AccordionPanel,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { Link, Outlet } from "react-router-dom";
-import { getProjects } from "../data";
+import { Link, Outlet, useSearchParams } from "react-router-dom";
+import { getProjects, getShuffledProjects } from "../data";
+import { Option } from "../propTypes";
+
+const shortenEthAddress = (address: string) => {
+  return address.substring(0, 6) + "..." + address.substring(address.length - 4);
+};
 
 export const Projects = () => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
   const color = useColorModeValue("gray.800", "gray.700");
+  let [searchParams] = useSearchParams();
   return (
     <>
       <Flex
@@ -66,8 +72,8 @@ export const Projects = () => {
                   <AccordionItem border="none">
                     <VStack>
                       <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
-                        This is a directory of Dummy projects. This page will be updated once the event starts to let
-                        you add projects to your ballot that you meet at the event. Tap here to learn more 📖🧐.
+                        This is a directory of projects! This page will be updated once the event starts to let
+                        you add projects to a real ballot and vote for projects that you meet at the event. Tap here to learn more 📖🧐.
                         <AccordionIcon></AccordionIcon>
                       </Text>
                     </VStack>
@@ -122,7 +128,7 @@ export const Projects = () => {
                 </Accordion>
               </VStack>
               <VStack spacing={0} alignItems={"flex-start"} w="full">
-                {getProjects().map((project) => (
+                {getShuffledProjects().map((project:Option) => (
                   <Box
                     _hover={{
                       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
@@ -130,7 +136,7 @@ export const Projects = () => {
                     }}
                     alignItems={"stretch"}
                     as={Link}
-                    to={`/projects/${project.id}`}
+                    to={`/projects/${project.id}?${searchParams.toString()}`}
                     color={fontColor}
                     key={project.id}
                     pt={3}
@@ -147,15 +153,20 @@ export const Projects = () => {
                         rounded="full"
                         ratio={1}
                         mt={1}>
-                        <Image borderRadius="full" src={project.image} alt={project.name} />
+                        <Image borderRadius="full" src={project.logo} alt={project.name} />
                       </AspectRatio>
                       <VStack alignItems="flex-start" w="full" spacing={1.5} px={{ base: "4", md: "3" }}>
                         <VStack alignItems="flex-start" w="full" spacing={0}>
                           <Heading my={0.5} fontSize={"lg"} lineHeight={"24px"} fontWeight="700">
                             {project.name}
                           </Heading>
-                          <Text color={"gray.600"} fontSize={"sm"} lineHeight={"14px"} fontWeight="400">
-                            {project.address}
+                          <Text
+                            color={"gray.600"}
+                            fontSize={"sm"}
+                            lineHeight={"14px"}
+                            fontWeight="400"
+                            overflow={"clip"}>
+                            {shortenEthAddress(project.address)}
                           </Text>
                         </VStack>
                         <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">

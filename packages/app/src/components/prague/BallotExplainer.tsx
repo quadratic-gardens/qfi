@@ -26,7 +26,7 @@ export const BallotExplainer = () => {
         <AccordionPanel pb={4}>
           <UnorderedList marginInlineStart={"1rem !important"} fontSize="xs" w="full">
             <ListItem>
-              This page will be updated once the event starts to let you add projects you meet at the event.
+              This page will be updated once the event starts to let you vote for projects you meet at the event.
             </ListItem>
             <ListItem>
               When a voter is whitelisted they receive a{" "}

@@ -1,20 +1,36 @@
-import React from "react";
-import {
-  VStack,
-  Stack,
-  HStack,
-  Tooltip,
-  Icon,
-  Text,
-  Heading,
-  Button,
-  Center
-} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import React, { useCallback, useMemo } from "react";
+import { VStack, Stack, HStack, Tooltip, Icon, Text, Heading, Button, Center, IconButton } from "@chakra-ui/react";
+import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { BallotOptionProps } from "../../propTypes";
-
+import { FaWindowClose } from "react-icons/fa";
 
 export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: BallotOptionProps) => {
+  let [searchParams] = useSearchParams();
+  let navigate = useNavigate();
+  const isInBallot = useCallback(
+    (projectId: string) => {
+      return searchParams.getAll("option").includes(projectId ?? "notfound");
+    },
+    [searchParams]
+  );
+  const handleRemoveFromBallot = useCallback(
+    (projectId: string) => {
+      return () => {
+       
+
+        if (projectId && isInBallot(projectId)) {
+          let filtered = searchParams.getAll("option").filter((id) => id !== projectId);
+          let newSearchParams = createSearchParams({
+              option: filtered
+            });
+          
+          navigate("/ballot?" + newSearchParams.toString());
+        }
+        
+      };
+    },
+    [searchParams, isInBallot, navigate]
+  );
   return (
     <Stack
       boxSizing={"content-box"}
@@ -46,6 +62,7 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
       </VStack>
       <VStack
         spacing={0}
+        position="relative"
         borderRightColor="black"
         borderRightWidth={2}
         justifyContent="flex-start"
@@ -53,13 +70,14 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
         w={{ base: "full", md: "full" }}
         py={2.5}
         px={2}>
-        <HStack alignItems={"flex-end"}>
+        <HStack alignItems={"flex-start"}>
           <Heading fontSize={{ base: "md", md: "xl" }} fontWeight={"black"} letterSpacing={"-1px"}>
             {ballotOption?.name}
           </Heading>
+
           <Text
             as={Link}
-            to={to ?? "/projects"}
+            to={`${to}?${searchParams.toString()}` ?? "/projects"}
             fontFamily={"arial"}
             fontSize={{ base: "sm", md: "sm" }}
             fontWeight={"thin"}
@@ -69,16 +87,33 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
           </Text>
         </HStack>
         <Text fontSize={"xs"} lineHeight={"short"} fontWeight={"normal"} overflow="hidden">
-          {ballotOption?.description}
+          {ballotOption?.tagline}
         </Text>
         <Text
           as={Link}
-          to={to ?? "/projects"}
+          to={`${to}?${searchParams.toString()}` ?? "/projects"}
           display={{ base: "flex", md: "none" }}
           fontSize={"xs"}
           fontWeight={"light"}>
           {ballotOption?.url}
         </Text>
+
+        <Tooltip label={`remove ${ballotOption?.name} from ballot`} placement="left">
+          <IconButton
+            position="absolute"
+            right={0}
+            top={0}
+            rounded="0"
+            size="sm"
+            fontSize="lg"
+            variant="ghost"
+            color="gray.600"
+            marginLeft="2"
+            onClick={handleRemoveFromBallot(ballotOption?.id ?? "")}
+            icon={<FaWindowClose />}
+            aria-label={`remove ${ballotOption?.name} from ballot`}
+          />
+        </Tooltip>
       </VStack>
 
       <VStack
@@ -100,7 +135,7 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
                   position: "absolute",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  background: `rgb(26, 31, 41) url('${ballotOption?.image}') `,
+                  background: `rgb(26, 31, 41) url('${ballotOption?.logo}') `,
                   backgroundSize: "cover",
                   top: 0,
                   left: 0,
@@ -109,7 +144,7 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
                   zIndex: "-1",
                   filter: "blur(1px)",
                   transform: "scale(0.9)",
-                  rounded:"full"
+                  rounded: "full",
                 },
               }}
               bg="transparent"
@@ -122,7 +157,6 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
               boxSize="50px">
               <Center>
                 <Icon
-
                   color="white"
                   position="relative"
                   zIndex={1}

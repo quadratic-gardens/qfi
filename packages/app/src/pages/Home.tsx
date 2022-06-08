@@ -53,7 +53,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             mt={{ base: "80px", xl: "60px" }}>
             <MagikText
               fontFamily="Arial"
-              text="ZERO KNOWLEDGE QUADRATIC PRIZE POOL"
+              text="MAGIK PRIZE POOL"
               charPoses={animateText.bottomLeft(0)}
               mt={10}
               fontWeight={"black"}
