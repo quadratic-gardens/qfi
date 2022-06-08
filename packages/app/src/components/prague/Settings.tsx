@@ -1,7 +1,9 @@
 import React from "react";
 import {
   VStack,
-  Container, HStack, Text,
+  Container,
+  HStack,
+  Text,
   Heading,
   Button,
   Drawer,
@@ -10,7 +12,7 @@ import {
   DrawerCloseButton,
   PinInput,
   PinInputField,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import { MagikButton } from "@qfi/ui";
 
@@ -23,21 +25,27 @@ export const Settings = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Account Setup</Heading>
           <Text fontFamily={"archivo"}>
-          Casting a Ballot requires you to have a wallet on the Gnosis Chain chain, xDAI to pay for gas and a valid ballot key. 
+            Casting a Ballot requires you to have a wallet on the Gnosis Chain chain, xDAI to pay for gas and a valid
+            ballot key.
           </Text>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="md">GnosisChain Wallet.</Heading>
           <Text fontFamily={"archivo"}>
-          The wallet contained in your registration card is pre-loaded with xDAI to pay for gas, but you can also use any other wallet that you have access to. Voting is anonymous, but ballot registration happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your wallet registered.
+            The wallet contained in your registration card is pre-loaded with xDAI to pay for gas, but you can also use
+            any other wallet that you have access to. Voting is anonymous, but ballot registration happens in person as
+            a sybil check. At the event, visit the Quadratic Funding booth to get your wallet registered.
           </Text>
           <MagikButton />
         </VStack>
         <VStack spacing={2} alignItems="flex-start">
           <Heading size="md">Ballot (MACI) passphrase</Heading>
-          <Text fontFamily={"archivo"}>MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting. 
-
-Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.</Text>
+          <Text fontFamily={"archivo"}>
+            MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and
+            collusion in blockchain voting. Each voter gets a pseudo-random MACI key which is used to encrypt and
+            validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any
+            time while the round is active, so keep it safe.
+          </Text>
         </VStack>
 
         <VStack spacing={1} alignItems="flex-start">
@@ -158,7 +166,10 @@ Each voter gets a pseudo-random MACI key which is used to encrypt and validate y
         </VStack>
         <VStack spacing={2} alignItems="flex-start">
           <Heading size="md">Confused or need help?</Heading>
-          <Text fontFamily={"archivo"}>You can contact us at qb@ethereum.org, or visit us at the Quadratic Funding booth in the Few sponsor area at ETHPrague.</Text>
+          <Text fontFamily={"archivo"}>
+            You can contact us at privacy.scaling.explorations@gmail.com, or visit us at the Quadratic Funding booth in
+            the Few sponsor area at ETHPrague.
+          </Text>
         </VStack>
       </VStack>
     </Container>
