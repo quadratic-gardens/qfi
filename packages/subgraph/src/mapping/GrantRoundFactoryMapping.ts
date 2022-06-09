@@ -11,6 +11,7 @@ import {
     RecipientRegistry,
     GrantRoundFactory as GrantRoundFactorySchema
 } from "../../generated/schema"
+import { ZERO } from "../utils/constants"
 
 /**
  * (e.g., Store a PublicKey in the storage).
@@ -82,8 +83,11 @@ export function handleRecipientRegistryChanged(event: RecipientRegistryChanged):
     let recipientRegistry = RecipientRegistry.load(recipientRegistryId)
 
     // Read from contract (trade-off, only when changing registry. May not be changed for multiple rounds).
-    const baseDeposit = recipientRegistryContract.baseDeposit()
-    const challengePeriodDuration = recipientRegistryContract.challengePeriodDuration()
+    const baseDepositCall = recipientRegistryContract.try_baseDeposit() // exists only in OptimisticRecipientRegistry.
+    const challengePeriodDurationCall = recipientRegistryContract.try_challengePeriodDuration() // exists only in OptimisticRecipientRegistry.
+    const baseDeposit = baseDepositCall.reverted ? ZERO : baseDepositCall.value
+    const challengePeriodDuration = challengePeriodDurationCall.reverted ? ZERO : challengePeriodDurationCall.value
+
     const controller = recipientRegistryContract.controller()
     const maxRecipients = recipientRegistryContract.maxRecipients()
 
