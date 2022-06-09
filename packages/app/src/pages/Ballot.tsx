@@ -19,9 +19,6 @@ import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { useSearchParams } from "react-router-dom";
-import { genRandomSalt, IncrementalQuinTree } from "qaci-crypto";
-import { Keypair, PubKey, Command, Message } from "qaci-domainobjs";
-import { BigNumber } from "ethers";
 
 export const Ballot = () => {
   const [searchParams] = useSearchParams();
@@ -213,36 +210,36 @@ export const Ballot = () => {
     setVoiceCreditBBalance(newVoiceCreditBalance);
   }, [votes]);
 
-  const [txLoading, setTxLoading] = useState<boolean>(false);
-  const [txError, setTxError] = useState<boolean | string>(false);
-  const [txLink, setTxLink] = useState<string>("");
-  const [txReceipt, setTxReceipt] = useState<any>(null);
-  const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
-  const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
+  // const [txLoading, setTxLoading] = useState<boolean>(false);
+  // const [txError, setTxError] = useState<boolean | string>(false);
+  // const [txLink, setTxLink] = useState<string>("");
+  // const [txReceipt, setTxReceipt] = useState<any>(null);
+  // const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
+  // const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
 
-  useEffect(() => {
-    const newData = recipientRegistryIds.map((projectId, index) => {
-      const recipientVoteOptionIndex = projectId;
-      const maciKeyPair = new Keypair();
-      const userStateIndex = getUserStateIdbyMaciKey(maciKeyPair);
-      const voiceCredits = votes[index] ** 2;
+  // useEffect(() => {
+  //   const newData = recipientRegistryIds.map((projectId, index) => {
+  //     const recipientVoteOptionIndex = projectId;
+  //     const maciKeyPair = new Keypair();
+  //     const userStateIndex = getUserStateIdbyMaciKey(maciKeyPair);
+  //     const voiceCredits = votes[index] ** 2;
 
-      const coordinatorPubKey = new Keypair().pubKey;
-      const nonce = index;
+  //     const coordinatorPubKey = new Keypair().pubKey;
+  //     const nonce = index;
 
-      // const [message, encPubKey] = createMessage(
-      //   userStateIndex,
-      //   maciKeyPair,
-      //   null,
-      //   coordinatorPubKey,
-      //   recipientVoteOptionIndex,
-      //   BigNumber.from(voiceCredits),
-      //   nonce
-      // );
-      return [0, 0];
-    });
-    // setData(newData);
-  }, [recipientRegistryIds, votes]);
+  //     // const [message, encPubKey] = createMessage(
+  //     //   userStateIndex,
+  //     //   maciKeyPair,
+  //     //   null,
+  //     //   coordinatorPubKey,
+  //     //   recipientVoteOptionIndex,
+  //     //   BigNumber.from(voiceCredits),
+  //     //   nonce
+  //     // );
+  //     return [0, 0];
+  //   });
+  //   // setData(newData);
+  // }, [recipientRegistryIds, votes]);
 
   
 
@@ -447,7 +444,7 @@ export const Ballot = () => {
                   mt={4}>
                   SUBMIT BALLOT
                 </Button>
-                <Text fontSize={"xs"}>{txError ?? ""}</Text>
+                {/* <Text fontSize={"xs"}>{txError ?? ""}</Text> */}
               </VStack>
             </Stack>
           </VStack>
@@ -456,17 +453,17 @@ export const Ballot = () => {
     </Flex>
   );
 };
-function getUserStateIdbyMaciKey(id: Keypair) {
-  return 1;
-}
+// function getUserStateIdbyMaciKey(id: Keypair) {
+//   return 1;
+// }
 
-function getMaciKeyPair() {
-  return "";
-}
+// function getMaciKeyPair() {
+//   return "";
+// }
 
-function getCoordinatorPubKey() {
-  return "";
-}
+// function getCoordinatorPubKey() {
+//   return "";
+// }
 
 // export function createMessage(
 //   userStateIndex: number,
