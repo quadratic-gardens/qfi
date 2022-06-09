@@ -24,6 +24,7 @@ export const csvUserSignupFileName = `userSignup`
 export const deployedContractsFileExt = `.json`
 export const csvUserSignupFileExt = `.csv`
 export const usersStateIndexesFileName = `signedUsersStateIndexes`
+export const hacksFileName = `hacks`
 export const mnemonicFileName = `mnemonic`
 export const mnemonicFileExt = `.txt`
 
@@ -78,6 +79,7 @@ export const deployedContractsFilePath = `${deployedContractsBaseDirPath}/${depl
 
 export const csvUserSignupFilePath = `${csvUserSignupBaseDirPath}/${csvUserSignupFileName}${csvUserSignupFileExt}`
 export const usersStateIndexesFilePath = `${usersStateIndexesBaseDirPath}/${usersStateIndexesFileName}`
+export const hacksFilePath = `${usersStateIndexesBaseDirPath}/${hacksFileName}`
 export const mnemonicFilePath = `${mnemonicBaseDirPath}/${mnemonicFileName}${mnemonicFileExt}`
 
 /** Header */

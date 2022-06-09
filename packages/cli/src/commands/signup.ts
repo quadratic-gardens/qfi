@@ -5,12 +5,20 @@ import { clear } from "console"
 import chalk from "chalk"
 import { UserSignupData } from "types/index.js"
 import { ethers } from "ethers"
-import { Keypair, PrivKey } from "qaci-domainobjs"
+import {  PubKey } from "qaci-domainobjs"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
-import { directoryExists, getCSVFileRecords, jsonToCsv, makeDir, readJSONFile } from "../lib/files.js"
+import {
+  directoryExists,
+  getCSVFileRecords,
+  jsonToCsv,
+  makeDir,
+  readJSONFile,
+  writeLocalJsonFile
+} from "../lib/files.js"
 import {
   deployedContractsBaseDirPath,
   deployedContractsFilePath,
+  hacksFilePath,
   header,
   mnemonicBaseDirPath,
   mnemonicFilePath,
@@ -91,6 +99,8 @@ async function signup(network: string, path: string) {
     let i = 0
     const stateIndexes = []
 
+    const hacks: { [k: string]: string } = {}
+
     // Get deployed qfi instance.
     const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
 
@@ -105,8 +115,7 @@ async function signup(network: string, path: string) {
       const { ethereumAddress, maciPK } = userSignupData
 
       // Prepare data for tx.
-      const maciKeyPair = new Keypair(PrivKey.unserialize(maciPK)) // TODO: check if this is working or not passing a maci public key.
-      const _maciPK = maciKeyPair.pubKey.asContractParam()
+      const _maciPK = PubKey.unserialize(maciPK).asContractParam()
       const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
       const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
 
@@ -119,7 +128,7 @@ async function signup(network: string, path: string) {
       // Read the event from logs.
       const iface = qfi.interface
       const signUpEvent = iface.parseLog(logs[logs.length - 1])
-      const stateIndex = signUpEvent.args._stateIndex.toString()
+      const stateIndex: string = signUpEvent.args._stateIndex.toString()
 
       stateIndexes.push(stateIndex)
 
@@ -136,12 +145,15 @@ async function signup(network: string, path: string) {
         maciPK,
         stateIndex
       })
+      hacks[maciPK] = stateIndex
 
       i += 1
     }
 
     // Create CSV file.
     jsonToCsv(usersStateIndexesFilePath, [`ethereumAddress`, `maciPK`, `stateIndex`], stateIndexes)
+
+    writeLocalJsonFile(hacksFilePath, JSON.parse(JSON.stringify(hacks)))
 
     console.log(`\n${logSymbols.success} You have successfully registered the recipients on-chain 🎊\n`)
   } catch (err: any) {
