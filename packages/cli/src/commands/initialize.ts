@@ -10,7 +10,7 @@ import { PollFactory__factory } from "../../../contracts/typechain/factories/Pol
 import { MessageAqFactory__factory } from "../../../contracts/typechain/factories/MessageAqFactory__factory.js"
 import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
 import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
-import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
+// import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
 
 import { directoryExists, makeDir, readJSONFile } from "../lib/files.js"
 import {
@@ -87,7 +87,7 @@ async function initialize(network: string) {
       deployer
     )
 
-    const vkRegistry = new ethers.Contract(deployedContracts.VkRegistry, VkRegistry__factory.abi, deployer)
+    // const vkRegistry = new ethers.Contract(deployedContracts.VkRegistry, VkRegistry__factory.abi, deployer)
 
     const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
 
