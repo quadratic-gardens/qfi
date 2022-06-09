@@ -10,13 +10,12 @@ export function createMessage(
   coordinatorPubKey: PubKey,
   voteOptionIndex: number | null,
   voteWeight: number | null,
-  nonce: number,
-  salt?: BigInt
+  nonce: number
 ): [Message, PubKey] {
   const encKeypair = new Keypair();
-  if (!salt) {
-    salt = genRandomSalt();
-  }
+  
+   const  salt = genRandomSalt();
+  
   const quadraticVoteWeight = voteWeight?? 0;
   const pubkey = userKeypair.pubKey;
   const command = new Command(
@@ -25,7 +24,7 @@ export function createMessage(
     BigInt(voteOptionIndex || 0),
     BigInt(quadraticVoteWeight.toString()),
     BigInt(nonce),
-    BigInt(salt.toString())
+    salt
   );
   const signature = command.sign(userKeypair.privKey);
   const message = command.encrypt(signature, Keypair.genEcdhSharedKey(encKeypair.privKey, coordinatorPubKey));

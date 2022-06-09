@@ -229,36 +229,36 @@ export const Ballot = () => {
     setVoiceCreditBBalance(newVoiceCreditBalance);
   }, [votes]);
 
-  // const [txLoading, setTxLoading] = useState<boolean>(false);
-  // const [txError, setTxError] = useState<boolean | string>(false);
-  // const [txLink, setTxLink] = useState<string>("");
-  // const [txReceipt, setTxReceipt] = useState<any>(null);
-  // const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
+  const [txLoading, setTxLoading] = useState<boolean>(false);
+  const [txError, setTxError] = useState<boolean | string>(false);
+  const [txLink, setTxLink] = useState<string>("");
+  const [txReceipt, setTxReceipt] = useState<any>(null);
+  const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
   // const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
 
-  // useEffect(() => {
-  //   const newData = recipientRegistryIds.map((projectId, index) => {
-  //     const recipientVoteOptionIndex = projectId;
-  //     const maciKeyPair = new Keypair();
-  //     const userStateIndex = getUserStateIdbyMaciKey(maciKeyPair);
-  //     const voiceCredits = votes[index] ** 2;
+  useEffect(() => {
+    const newData = recipientRegistryIds.map((projectId, index) => {
+      const recipientVoteOptionIndex = projectId;
+      // const maciKeyPair = new Keypair();
+      // const userStateIndex = getUserStateIdbyMaciKey(maciKeyPair);
+      // const voiceCredits = votes[index] ** 2;
 
-  //     const coordinatorPubKey = new Keypair().pubKey;
-  //     const nonce = index;
+      // const coordinatorPubKey = new Keypair().pubKey;
+      const nonce = index;
 
-  //     // const [message, encPubKey] = createMessage(
-  //     //   userStateIndex,
-  //     //   maciKeyPair,
-  //     //   null,
-  //     //   coordinatorPubKey,
-  //     //   recipientVoteOptionIndex,
-  //     //   BigNumber.from(voiceCredits),
-  //     //   nonce
-  //     // );
-  //     return [0, 0];
-  //   });
-  //   // setData(newData);
-  // }, [recipientRegistryIds, votes]);
+      // const [message, encPubKey] = createMessage(
+      //   userStateIndex,
+      //   maciKeyPair,
+      //   null,
+      //   coordinatorPubKey,
+      //   recipientVoteOptionIndex,
+      //   BigNumber.from(voiceCredits),
+      //   nonce
+      // );
+      return [0, 0];
+    });
+    // setData(newData);
+  }, [recipientRegistryIds, votes]);
 
   return (
     <Flex
@@ -441,6 +441,10 @@ export const Ballot = () => {
     </Flex>
   );
 };
+
+// function getUserStateIdbyMaciKey(maciKeyPair: Keypair) {
+//   return 1
+// }
 // function getUserStateIdbyMaciKey(id: Keypair) {
 //   return 1;
 // }

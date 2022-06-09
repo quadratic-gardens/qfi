@@ -26,6 +26,13 @@ export type HomeProps = {
   isGuideOpen: boolean;
   onGuideOpen: () => void;
 };
+// Simple enumerative for key types.
+const isMaciPrivKey = (key: string): boolean => {
+  if (key.length === 71 && key.startsWith("macisk.")) {
+    return true;
+  }
+  return false;
+};
 
 export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
   const color = useColorModeValue("gray.800", "gray.700");
@@ -38,10 +45,11 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
   const { maciKey, setMaciKey } = useDappState();
 
   useEffect(() => {
-    if(maciKey) {
+    console.log("isMaciPrivKey", isMaciPrivKey(maciKey));
+    if (maciKey) {
       setKey(maciKey);
     }
-  },[setKey, maciKey])
+  }, [setKey, maciKey]);
   const handleChange = (value: string) => {
     setKey(value);
     console.log("changed");
@@ -166,6 +174,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                         value={key}
                         onChange={handleChange}
                         onComplete={handleComplete}>
+                        <PinInputField marginInlineStart={"0px !important"} />
                         <PinInputField marginInlineStart={"0px !important"} />
                         <PinInputField marginInlineStart={"0px !important"} />
                         <PinInputField marginInlineStart={"0px !important"} />
