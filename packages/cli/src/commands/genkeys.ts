@@ -44,9 +44,6 @@ import {
   outputDirPath
 } from "../lib/constants.js"
 import { askForConfirmation } from "../lib/prompts.js"
-
-
-
 const prepareDirectories = () => {
   // Globals.
   cleanDir(generatedKeysGlobalDirPath)
