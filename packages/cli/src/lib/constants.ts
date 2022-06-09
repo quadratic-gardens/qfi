@@ -109,5 +109,5 @@ export const networks = {
 
 /** Parameters */
 export const initialVoiceCreditBalance = 99
-export const baseERC20TokenInitialSupply = 100
-export const numberOfMaxRecipients = 30
+export const baseERC20TokenInitialSupply = 100000000000000000000000
+export const numberOfMaxRecipients = 25

@@ -212,7 +212,7 @@ async function deploy(network: string) {
     await baseERC20Token.deployed()
     spinner.stop()
 
-    console.log(`${logSymbols.success} BaseERC20Token deployed at ${chalk.bold(baseERC20Token.address)}`)
+    console.log(`${logSymbols.success} Prage Pool Token [PRG] deployed at ${chalk.bold(baseERC20Token.address)}`)
 
     spinner = customSpinner(`Deploying MockVerifier smart contract...`, "point")
     spinner.start()
