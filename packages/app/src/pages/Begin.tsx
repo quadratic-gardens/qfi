@@ -103,7 +103,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                     </Text>
                   </VStack>
 
-                  <VStack w="full" display={{ base: "none", xl: "flex" }} pt="10" justifyContent={"center"}>
+                  <VStack w="full" pt="10" justifyContent={"center"}>
                     <Button
                       h="80px"
                       w="full"

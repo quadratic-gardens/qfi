@@ -87,7 +87,9 @@
     "zkey-manager/**",
     "**/typechain",
     "**/@typechain/*",
-    "**/@nomiclabs/**"
+    "**/@nomiclabs/**",
+    "**/qaci-crypto/**",
+    "**/qaci-domainobjs/**"
   ],
   "author": "",
   "license": "GPL-3.0"
