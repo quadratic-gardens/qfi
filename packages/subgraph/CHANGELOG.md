@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/quadratic-funding/qfi/compare/v0.3.3...v0.4.0) (2022-06-09)
+
+
+### Bug Fixes
+
+* build error due to missing data source ([aa8d6d7](https://github.com/quadratic-funding/qfi/commit/aa8d6d771924ca44b255611694bb730cbbbc3c09))
+* missing SimpleHackathon source on subgraph.yaml ([44eaeea](https://github.com/quadratic-funding/qfi/commit/44eaeeaca442fc3409e5ad050bf346d0ce594064))
+
+
+### Features
+
+* track SimpleHackathon contract as a recipient registry in the subgraph ([abe27c5](https://github.com/quadratic-funding/qfi/commit/abe27c5a9be033192eaa47af3ee5c02824bcaad1))
+
+
+
+
+
 ## [0.3.3](https://github.com/quadratic-funding/qfi/compare/v0.3.2...v0.3.3) (2022-06-09)
 
 **Note:** Version bump only for package @qfi/subgraph
