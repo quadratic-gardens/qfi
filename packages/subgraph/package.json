@@ -1,6 +1,6 @@
 {
   "name": "@qfi/subgraph",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "quadratic-funding subgraph",
   "main": "index.js",
   "author": "",

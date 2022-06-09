@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.3](https://github.com/compare/v0.3.2...v0.3.3) (2022-06-09)
+
+
+### Bug Fixes
+
+* numeric overflow when passing initial supply of ERC20 token to contract ([375b63c](https://github.com/commit/375b63cfe144d36c0ccd97f34f34f8b2e0d020ec))
+
+
+
+
+
 ## [0.3.1](https://github.com/compare/v0.2.2...v0.3.1) (2022-06-09)
 
 
