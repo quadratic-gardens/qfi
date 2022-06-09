@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/quadratic-funding/qfi/compare/v1.0.0...v1.0.1) (2022-06-09)
+
+
+### Reverts
+
+* npm revert to 0.3.3 ([68e6766](https://github.com/quadratic-funding/qfi/commit/68e676698356c95e7e456622138407993150e943))
+
+
+
+
+
 # [1.0.0](https://github.com/quadratic-funding/qfi/compare/v0.3.3...v1.0.0) (2022-06-09)
 
 
