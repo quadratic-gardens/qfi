@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/compare/v0.3.3...v1.0.0) (2022-06-09)
+
+
+### Reverts
+
+* revern npm deploy ([f3a096b](https://github.com/commit/f3a096b17a735be52877588b8041ac321e035cf5))
+
+
+
+
+
 ## [0.3.3](https://github.com/compare/v0.3.2...v0.3.3) (2022-06-09)
 
 
