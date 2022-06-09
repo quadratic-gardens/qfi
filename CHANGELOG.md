@@ -3,21 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.4.0](https://github.com/compare/v0.3.3...v0.4.0) (2022-06-09)
+
+## [1.0.1](https://github.com/compare/v1.0.0...v1.0.1) (2022-06-09)
 
 
-### Bug Fixes
+### Reverts
 
-* build error due to missing data source ([aa8d6d7](https://github.com/commit/aa8d6d771924ca44b255611694bb730cbbbc3c09))
-* missing SimpleHackathon source on subgraph.yaml ([44eaeea](https://github.com/commit/44eaeeaca442fc3409e5ad050bf346d0ce594064))
-
-
-### Features
-
-* add basic signup command; minors and code lint ([1a3bab8](https://github.com/commit/1a3bab8b065ae64b5c3c47590e633745e77abce4))
-* track SimpleHackathon contract as a recipient registry in the subgraph ([abe27c5](https://github.com/commit/abe27c5a9be033192eaa47af3ee5c02824bcaad1))
-
-
+* npm revert to 0.3.3 ([68e6766](https://github.com/commit/68e676698356c95e7e456622138407993150e943))
 
 
 
