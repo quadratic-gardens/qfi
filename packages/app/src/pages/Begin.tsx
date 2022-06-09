@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   VStack,
   Container,
@@ -36,6 +36,21 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
   const onClickSetOpenQRCodeReader = () => setOpenQRCodeReader(!openQRCodeReader);
 
   const { maciKey, setMaciKey } = useDappState();
+
+  useEffect(() => {
+    if(maciKey) {
+      setKey(maciKey);
+    }
+  },[setKey, maciKey])
+  const handleChange = (value: string) => {
+    setKey(value);
+    console.log("changed");
+  };
+
+  const handleComplete = (value: string) => {
+    console.log("complete");
+    setMaciKey(value);
+  };
   console.log("maciKey", maciKey);
   return (
     <Flex
@@ -119,16 +134,18 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                     {openQRCodeReader && (
                       <Container h="full" w="full" maxWidth="container.sm">
                         <QrReader
+                          scanDelay={1000}
                           onResult={(result: any, error: any) => {
                             if (!!result) {
-                              setMaciKey(result);
+                              setMaciKey(result.text);
+                              setKey(result.text);
                             }
 
                             if (!!error) {
                               console.info(`Something went wrong while reading the QR Code: ${error}`);
                             }
                           }}
-                          constraints={{ facingMode: "user" }}
+                          constraints={{ facingMode: "environment" }}
                         />
                       </Container>
                     )}
@@ -141,85 +158,87 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   </VStack>
 
                   <VStack spacing={1} alignItems="flex-start">
-                    <HStack  flexWrap="wrap" maxW="240px">
-                      <PinInput defaultValue="macisk." size="xs" type="alphanumeric" >
-              
-                        
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-                        <PinInputField marginInlineStart={"0px !important"}/>
-
-             
+                    <HStack flexWrap="wrap" maxW="240px">
+                      <PinInput
+                        defaultValue="macisk."
+                        size="xs"
+                        type="alphanumeric"
+                        value={key}
+                        onChange={handleChange}
+                        onComplete={handleComplete}>
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
+                        <PinInputField marginInlineStart={"0px !important"} />
                       </PinInput>
                     </HStack>
-                    
+
                     <Divider></Divider>
                     <Button colorScheme="blue" variant="outline" w="full" mt={4}>
                       Save

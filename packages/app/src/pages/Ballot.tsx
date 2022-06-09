@@ -19,9 +19,28 @@ import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { useSearchParams } from "react-router-dom";
+import { useDappState } from "../context/DappContext";
 
 export const Ballot = () => {
   const [searchParams] = useSearchParams();
+  const [key, setKey] = useState<string>();
+  const { maciKey, setMaciKey } = useDappState();
+  const handleChange = (value: string) => {
+    setKey(value);
+    console.log("changed");
+  };
+
+  const handleComplete = (value: string) => {
+    console.log("complete");
+    setMaciKey(value);
+  };
+
+  useEffect(() => {
+    if (maciKey) {
+      setKey(maciKey);
+    }
+  }, [setKey, maciKey]);
+
   const voteOptions = useMemo(() => {
     return searchParams.getAll("option");
   }, [searchParams]);
@@ -241,8 +260,6 @@ export const Ballot = () => {
   //   // setData(newData);
   // }, [recipientRegistryIds, votes]);
 
-  
-
   return (
     <Flex
       as="main"
@@ -316,114 +333,85 @@ export const Ballot = () => {
                   the ballot and is not stored on the blockchain. Keep it safe! it is the only way to vote. QR scanning
                   soon!
                 </Text>
-                <HStack maxW={"container.md"}>
-                  <PinInput defaultValue="macisk." size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-                <HStack maxW={"container.md"}>
-                  <PinInput mask size="xs" type="alphanumeric">
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
+                <HStack flexWrap="wrap" maxW="240px">
+                  <PinInput
+                    
+                    defaultValue="macisk."
+                    size="xs"
+                    type="alphanumeric"
+                    value={key}
+                    onChange={handleChange}
+                    onComplete={handleComplete}>
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
                   </PinInput>
                 </HStack>
                 <Divider></Divider>
@@ -463,46 +451,4 @@ export const Ballot = () => {
 
 // function getCoordinatorPubKey() {
 //   return "";
-// }
-
-// export function createMessage(
-//   userStateIndex: number,
-//   userKeypair: Keypair,
-//   newUserKeypair: Keypair | null,
-//   coordinatorPubKey: PubKey,
-//   voteOptionIndex: number | null,
-//   voiceCredits: BigNumber | null,
-//   nonce: number,
-//   salt?: BigInt
-// ): [Message, PubKey] {
-//   const encKeypair = new Keypair();
-//   if (!salt) {
-//     salt = genRandomSalt();
-//   }
-//   const quadraticVoteWeight = voiceCredits ? bnSqrt(voiceCredits) : 0;
-//   const command = new Command(
-//     BigInt(userStateIndex),
-//     newUserKeypair ? newUserKeypair.pubKey : userKeypair.pubKey,
-//     BigInt(voteOptionIndex || 0),
-//     BigInt(quadraticVoteWeight.toString()),
-//     BigInt(nonce),
-//     BigInt(salt.toString())
-//   );
-//   const signature = command.sign(userKeypair.privKey);
-//   const message = command.encrypt(signature, Keypair.genEcdhSharedKey(encKeypair.privKey, coordinatorPubKey));
-//   return [message, encKeypair.pubKey];
-// }
-// function bnSqrt(a: BigNumber): BigNumber {
-//   // Take square root from a big number
-//   // https://stackoverflow.com/a/52468569/1868395
-//   if (a.isZero()) {
-//     return a
-//   }
-//   let x
-//   let x1 = a.div(2)
-//   do {
-//     x = x1
-//     x1 = x.add(a.div(x)).div(2)
-//   } while (!x.eq(x1))
-//   return x
 // }
