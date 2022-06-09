@@ -20,6 +20,7 @@ import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { useSearchParams } from "react-router-dom";
 import { useDappState } from "../context/DappContext";
+import { Keypair, PubKey, Command, Message } from 'qaci-domainobjs'
 
 export const Ballot = () => {
   const [searchParams] = useSearchParams();
@@ -28,6 +29,9 @@ export const Ballot = () => {
   const handleChange = (value: string) => {
     setKey(value);
     console.log("changed");
+    const encKeypair = new Keypair();
+    const test = new Command(1n, encKeypair.pubKey, 2n, 3n, 4n, 5n);
+    const msg = new Message([1n, 2n]);
   };
 
   const handleComplete = (value: string) => {
