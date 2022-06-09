@@ -62,6 +62,7 @@ dataSources:
         - event: PollProcessorAndTallyerChanged(address)
           handler: handlePollProcessorAndTallyerChanged
       file: ./src/mapping/QFIMapping.ts
+  # NB. not used for ETHPrague, so set to zero address.
   - kind: ethereum/contract
     name: OptimisticRecipientRegistry
     #    network: { { network } }
@@ -92,6 +93,37 @@ dataSources:
           handler: handleRequestSubmitted
         - event: RequestResolved(indexed bytes32,indexed uint8,indexed bool,uint256,uint256)
           handler: handleRequestResolved
+      file: ./src/mapping/RecipientRegistryMapping.ts
+  - kind: ethereum/contract
+    name: SimpleHackathon
+    #    network: { { network } }
+    source:
+      #      address: { { address } }
+      #      startBlock: { { startBlock } }
+      abi: SimpleHackathon
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - RecipientRegistry
+        - Recipient
+      abis:
+        - name: QFI
+          file: ./abis/QFI.json
+        - name: SimpleHackathon
+          file: ./abis/SimpleHackathon.json
+        - name: GrantRound
+          file: ./abis/GrantRound.json
+        - name: GrantRoundFactory
+          file: ./abis/GrantRoundFactory.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RecipientAdded(indexed bytes32,address,string,uint256,uint256)
+          handler: handleRecipientAdded
+        - event: RecipientRemoved(indexed bytes32,uint256)
+          handler: handleRecipientRemoved
       file: ./src/mapping/RecipientRegistryMapping.ts
   - kind: ethereum/contract
     name: GrantRoundFactory

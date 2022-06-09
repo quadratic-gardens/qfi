@@ -8,6 +8,10 @@
             "address": "0xC0d3dFF951dF81A2BF2B9435bc4f0Ff83f9737b6",
             "startBlock": 12093300
         },
+        "OptimisticRecipientRegistry": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "startBlock": 12093300
+        },
         "GrantRoundFactory": {
             "address": "0xA904EfB2Ad049ccCe2184939c418a512984b396A",
             "startBlock": 12093300
