@@ -10,6 +10,8 @@ import { PollFactory__factory } from "../../../contracts/typechain/factories/Pol
 import { MessageAqFactory__factory } from "../../../contracts/typechain/factories/MessageAqFactory__factory.js"
 import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
 import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
+// import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
+
 import { directoryExists, makeDir, readJSONFile } from "../lib/files.js"
 import {
   deployedContractsBaseDirPath,
@@ -85,6 +87,8 @@ async function initialize(network: string) {
       deployer
     )
 
+    // const vkRegistry = new ethers.Contract(deployedContracts.VkRegistry, VkRegistry__factory.abi, deployer)
+
     const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
 
     // Send txs.
@@ -150,6 +154,29 @@ async function initialize(network: string) {
     await tx.wait()
     spinner.stop()
     console.log(`${logSymbols.success} Initialize QFI contract`)
+
+    //TODO: Set up vk registry
+    // const stateTreeDepth = await qfi.stateTreeDepth();
+    // const _stateTreeDepth = stateTreeDepth.toString();
+    // const _intStateTreeDepth = treeDepths.intStateTreeDepth;
+    // const _messageTreeDepth = treeDepths.messageTreeDepth;
+    // const _voteOptionTreeDepth = treeDepths.voteOptionTreeDepth;
+    // const _messageBatchSize = messageBatchSize.toString();
+    // const _processVk = <VerifyingKeyStruct>testProcessVk.asContractParam();
+    // const _tallyVk = <VerifyingKeyStruct>testTallyVk.asContractParam();
+
+    // await vkRegistry.setVerifyingKeys(
+    //   _stateTreeDepth,
+    //   _intStateTreeDepth,
+    //   _messageTreeDepth,
+    //   _voteOptionTreeDepth,
+    //   _messageBatchSize,
+    //   _processVk,
+    //   _tallyVk
+    // );
+
+    // await vkRegistry.genProcessVkSig(_stateTreeDepth, _messageTreeDepth, _voteOptionTreeDepth, _messageBatchSize);
+    // await vkRegistry.genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth);
 
     console.log(`\n${logSymbols.success} You have successfully initialized the deployed MACI/QFI smart contracts 🎊\n`)
   } catch (err: any) {

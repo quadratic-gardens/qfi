@@ -1,6 +1,6 @@
 {
   "name": "@qfi/ethpraguecli",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
   "main": "dist/cli/src/index.js",
   "repository": "https://github.com/quadratic-funding/qfi",
@@ -72,5 +72,8 @@
     "qaci-crypto": "^1.1.0",
     "qaci-domainobjs": "^1.1.0",
     "qrcode": "^1.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

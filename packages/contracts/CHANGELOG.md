@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* wrong controller parameter value passed to SimpleRecipientRegistry constructor ([26c8c11](https://github.com/quadratic-funding/qfi/commit/26c8c119245ed5298c59c58eadd6d682d1e9f32d))
+
+
+### Features
+
+* **cli:** crate prague erc20, mint with 18 decimals ([dc40032](https://github.com/quadratic-funding/qfi/commit/dc40032fba08832b35bb5ce4862bd77952908e00))
+
+
+
+
+
 # [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
 
 **Note:** Version bump only for package @qfi/contracts

@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/compare/v0.2.2...v0.3.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* add missing converter for request type ([9766979](https://github.com/commit/9766979ba5257132deaacf43332c5b956cd21156))
+* **app:** fixed babel error that converts ** to .pow causing build failure with Bigint error ([ac2d7d5](https://github.com/commit/ac2d7d54ceb31f7c02d4d6bd110caf3c019cdf11))
+* change from a new creation of a QFI scheme to its loading for the same id ([b7af432](https://github.com/commit/b7af432ef46b441fa2eafd664bced4ec40182e3b))
+* converters and qfi initialization ([969c1b4](https://github.com/commit/969c1b4c1d0468c2031cd3084e8300ce78d67e97))
+* missing abis for different data sources ([0cf3a3d](https://github.com/commit/0cf3a3d30633bcc30861b34f979f900035bd7a2d))
+* removed non-nullable property for wrong variables when deploying QFI ([d5cf5c9](https://github.com/commit/d5cf5c90c1ea77775d24fa9807dcbe8ea83eacfa))
+* wrong controller parameter value passed to SimpleRecipientRegistry constructor ([26c8c11](https://github.com/commit/26c8c119245ed5298c59c58eadd6d682d1e9f32d))
+* wrong deploy script name in package.json; code lint and fix ([2d241b2](https://github.com/commit/2d241b2a8c3b1ea8b420ba937702153d2ba1ef8f))
+
+
+### Features
+
+* add MACI/QFI smart contracts initialization command ([24491cf](https://github.com/commit/24491cf61615f74674c1c0161bc2d366792adbea))
+* add missing grant round factory entity for managing pre-QFI Recipient Registry change ([0495196](https://github.com/commit/0495196d92189189616f460e6fa272068fc8be88))
+* **cli:** crate prague erc20, mint with 18 decimals ([dc40032](https://github.com/commit/dc40032fba08832b35bb5ce4862bd77952908e00))
+
+
+
+
+
 # [0.3.0](https://github.com/compare/v0.2.2...v0.3.0) (2022-06-08)
 
 
