@@ -21,6 +21,7 @@ export const ethMnemonicsCsvFileName = `mnemonics`
 export const maciPrivateKeysCsvFileName = `secretKeys`
 export const deployedContractsFileName = `deployedContracts`
 export const deployedContractsFileExt = `.json`
+export const usersStateIndexesFileName = `signedUsersStateIndexes`
 export const mnemonicFileName = `mnemonic`
 export const mnemonicFileExt = `.txt`
 
@@ -67,8 +68,10 @@ export const maciBaseSkFilePath = `${maciBaseSkDirPath}/${baseSkFileName}`
 export const ethBaseCsvFilePath = `${ethBaseMnemonicDirPath}/${ethMnemonicsCsvFileName}`
 export const maciBaseCsvFilePath = `${maciBaseSkDirPath}/${maciPrivateKeysCsvFileName}`
 export const deployedContractsBaseDirPath = `${outputDirPath}/${deployedContractsFileName}`
+export const usersStateIndexesBaseDirPath = `${outputDirPath}/${usersStateIndexesFileName}`
 export const mnemonicBaseDirPath = `${outputDirPath}/${mnemonicFileName}`
 export const deployedContractsFilePath = `${deployedContractsBaseDirPath}/${deployedContractsFileName}${deployedContractsFileExt}`
+export const usersStateIndexesFilePath = `${usersStateIndexesBaseDirPath}/${usersStateIndexesFileName}`
 export const mnemonicFilePath = `${mnemonicBaseDirPath}/${mnemonicFileName}${mnemonicFileExt}`
 
 /** Header */

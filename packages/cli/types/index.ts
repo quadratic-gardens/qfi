@@ -39,3 +39,8 @@ export type Recipient = {
   thumbnailImageLink: string
   logoCdnUrl: string
 }
+
+export type UserSignupData = {
+  ethereumAddress: string
+  maciPK: string
+}

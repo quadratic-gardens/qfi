@@ -27,6 +27,7 @@
     "initialize": "yarn start initialize",
     "contracts:deploy": "yarn start contracts:deploy",
     "contracts:add-recipients": "yarn start contracts:add-recipients",
+    "contracts:signup": "yarn start contracts:signup",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "prettier": "prettier -c .",

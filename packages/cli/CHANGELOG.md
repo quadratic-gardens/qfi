@@ -5,31 +5,20 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.3.3](https://github.com/quadratic-funding/qfi/compare/v0.3.2...v0.3.3) (2022-06-09)
 
-
 ### Bug Fixes
 
-* numeric overflow when passing initial supply of ERC20 token to contract ([375b63c](https://github.com/quadratic-funding/qfi/commit/375b63cfe144d36c0ccd97f34f34f8b2e0d020ec))
-
-
-
-
+- numeric overflow when passing initial supply of ERC20 token to contract ([375b63c](https://github.com/quadratic-funding/qfi/commit/375b63cfe144d36c0ccd97f34f34f8b2e0d020ec))
 
 ## [0.3.1](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.1) (2022-06-09)
 
-
 ### Bug Fixes
 
-* wrong deploy script name in package.json; code lint and fix ([2d241b2](https://github.com/quadratic-funding/qfi/commit/2d241b2a8c3b1ea8b420ba937702153d2ba1ef8f))
-
+- wrong deploy script name in package.json; code lint and fix ([2d241b2](https://github.com/quadratic-funding/qfi/commit/2d241b2a8c3b1ea8b420ba937702153d2ba1ef8f))
 
 ### Features
 
-* add MACI/QFI smart contracts initialization command ([24491cf](https://github.com/quadratic-funding/qfi/commit/24491cf61615f74674c1c0161bc2d366792adbea))
-* **cli:** crate prague erc20, mint with 18 decimals ([dc40032](https://github.com/quadratic-funding/qfi/commit/dc40032fba08832b35bb5ce4862bd77952908e00))
-
-
-
-
+- add MACI/QFI smart contracts initialization command ([24491cf](https://github.com/quadratic-funding/qfi/commit/24491cf61615f74674c1c0161bc2d366792adbea))
+- **cli:** crate prague erc20, mint with 18 decimals ([dc40032](https://github.com/quadratic-funding/qfi/commit/dc40032fba08832b35bb5ce4862bd77952908e00))
 
 # [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
 

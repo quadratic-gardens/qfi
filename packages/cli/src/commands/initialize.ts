@@ -155,7 +155,7 @@ async function initialize(network: string) {
     spinner.stop()
     console.log(`${logSymbols.success} Initialize QFI contract`)
 
-    //TODO: Set up vk registry
+    // TODO: Set up vk registry
     // const stateTreeDepth = await qfi.stateTreeDepth();
     // const _stateTreeDepth = stateTreeDepth.toString();
     // const _intStateTreeDepth = treeDepths.intStateTreeDepth;

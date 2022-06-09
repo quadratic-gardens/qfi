@@ -3,6 +3,7 @@
 import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
+import { ethers } from "ethers"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 import { PoseidonT3__factory } from "../../../contracts/typechain/factories/PoseidonT3__factory.js"
 import { PoseidonT4__factory } from "../../../contracts/typechain/factories/PoseidonT4__factory.js"
@@ -29,7 +30,6 @@ import {
   outputDirPath
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
-import { ethers } from "ethers"
 
 /**
  * Deploy command.
@@ -209,7 +209,9 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying BaseERC20Token smart contract...`, "point")
     spinner.start()
 
-    const baseERC20Token = await BaseERC20TokenFactory.deploy(ethers.BigNumber.from(baseERC20TokenInitialSupply), { gasPrice })
+    const baseERC20Token = await BaseERC20TokenFactory.deploy(ethers.BigNumber.from(baseERC20TokenInitialSupply), {
+      gasPrice
+    })
     await baseERC20Token.deployed()
     spinner.stop()
 
