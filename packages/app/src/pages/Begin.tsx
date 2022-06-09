@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   VStack,
   Container,
@@ -12,10 +12,13 @@ import {
   HStack,
   PinInput,
   PinInputField,
+  Wrap,
 } from "@chakra-ui/react";
 import { animateText, MagikButton, MagikText } from "@qfi/ui";
 import { Hero } from "../components/Hero";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import { useDappState } from "../context/DappContext";
+import { QrReader } from "react-qr-reader";
 
 export type HomeProps = {
   isSettingsOpen: boolean;
@@ -26,6 +29,14 @@ export type HomeProps = {
 
 export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
   const color = useColorModeValue("gray.800", "gray.700");
+
+  const [key, setKey] = useState<string>();
+  const [keyType, setKeyType] = useState<string>();
+  const [openQRCodeReader, setOpenQRCodeReader] = useState(false);
+  const onClickSetOpenQRCodeReader = () => setOpenQRCodeReader(!openQRCodeReader);
+
+  const { maciKey, setMaciKey } = useDappState();
+  console.log("maciKey", maciKey);
   return (
     <Flex
       as="main"
@@ -92,117 +103,123 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                     </Text>
                   </VStack>
 
+                  <VStack w="full" display={{ base: "none", xl: "flex" }} pt="10" justifyContent={"center"}>
+                    <Button
+                      h="80px"
+                      w="full"
+                      background="#FFFF00"
+                      color={color}
+                      variant={"solid"}
+                      onClick={onClickSetOpenQRCodeReader}>
+                      <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
+                        {" "}
+                        Scan key QR Code{" "}
+                      </Text>
+                    </Button>
+                    {openQRCodeReader && (
+                      <Container h="full" w="full" maxWidth="container.sm">
+                        <QrReader
+                          onResult={(result: any, error: any) => {
+                            if (!!result) {
+                              setMaciKey(result);
+                            }
+
+                            if (!!error) {
+                              console.info(`Something went wrong while reading the QR Code: ${error}`);
+                            }
+                          }}
+                          constraints={{ facingMode: "user" }}
+                        />
+                      </Container>
+                    )}
+                    <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
+                      {keyType}
+                    </Text>
+                    <Text fontSize="sm" fontWeight={"black"} fontFamily={"archivo"}>
+                      {key}
+                    </Text>
+                  </VStack>
+
                   <VStack spacing={1} alignItems="flex-start">
-                    <HStack maxW={"container.md"}>
-                      <PinInput defaultValue="macisk." size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
+                    <HStack  flexWrap="wrap" maxW="240px">
+                      <PinInput defaultValue="macisk." size="xs" type="alphanumeric" >
+              
+                        
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+                        <PinInputField marginInlineStart={"0px !important"}/>
+
+             
                       </PinInput>
                     </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
-                    <HStack maxW={"container.md"}>
-                      <PinInput mask size="xs" type="alphanumeric">
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </HStack>
+                    
                     <Divider></Divider>
                     <Button colorScheme="blue" variant="outline" w="full" mt={4}>
                       Save
