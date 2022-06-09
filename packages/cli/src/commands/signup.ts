@@ -91,15 +91,15 @@ async function signup(network: string, path: string) {
     let i = 0
     const stateIndexes = []
 
+    // Get deployed qfi instance.
+    const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
+
     for await (const userSignupData of jsonUsersSignupData) {
       const spinner = customSpinner(`Sign up for user in position ${chalk.bold(i)}`, "point")
       spinner.start()
 
       // Check input data.
       checkForMissingUserSignupDataProperties(userSignupData, i)
-
-      // Get deployed qfi instance.
-      const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
 
       // Extract user data.
       const { ethereumAddress, maciPK } = userSignupData
