@@ -2,7 +2,7 @@
 import dotenv from "dotenv"
 import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
-import { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing } from "./commands/index.js"
+import { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing, fund } from "./commands/index.js"
 
 dotenv.config()
 
@@ -70,12 +70,20 @@ program
     signup(network, path)
   })
 
-  program
+program
   .command("dothething")
   .description("Does all the things without user input")
   .argument("<network>", "the network where the contracts has been deployed")
   .action((network: string) => {
     doTheThing(network)
+  })
+
+program
+  .command("fund")
+  .description("seeds user keys")
+  .argument("<network>", "the network where the contracts has been deployed")
+  .action((network: string) => {
+    fund(network)
   })
 
 program.parseAsync()
