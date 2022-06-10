@@ -13,12 +13,14 @@ import {
   PinInput,
   PinInputField,
   Wrap,
+  Icon,
 } from "@chakra-ui/react";
 import { animateText, MagikButton, MagikText } from "@qfi/ui";
 import { Hero } from "../components/Hero";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { useDappState } from "../context/DappContext";
 import { QrReader } from "react-qr-reader";
+import { HiExternalLink } from "react-icons/hi";
 
 export type HomeProps = {
   isSettingsOpen: boolean;
@@ -100,29 +102,23 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   display="contents"
                   mt={{ base: "80px", xl: "60px" }}>
                   <VStack spacing={6} alignItems="flex-start">
-                    <Heading size="4xl">Account Setup</Heading>
+                    <Heading size="4xl">How it works?</Heading>
                     <Text fontFamily={"archivo"}>
-                      Casting a Ballot requires you to have a wallet on the Gnosis Chain chain, xDAI to pay for gas and
-                      a valid ballot key.
+                      Casting a Ballot requires you to have a wallet on Gnosis Chain, xDai to pay for gas, and a valid ballot key. Voting is anonymous, but ballot registration happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your ballot keys.
                     </Text>
                   </VStack>
                   <VStack spacing={6} alignItems="flex-start">
-                    <Heading size="md">GnosisChain Wallet.</Heading>
+                    <Heading size="md">GnosisChain (xDai) Wallet</Heading>
                     <Text fontFamily={"archivo"}>
-                      The wallet contained in your registration card is pre-loaded with xDAI to pay for gas, but you can
-                      also use any other wallet that you have access to. Voting is anonymous, but ballot registration
-                      happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your
-                      wallet registered.
+                      You will receive keys for an xDai address that is whitelisted for this voting round, pre-loaded with enough gas to cover the transaction fees for ballot submission.
                     </Text>
                     <MagikButton />
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Ballot (MACI) passphrase</Heading>
                     <Text fontFamily={"archivo"}>
-                      MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against
-                      censorship and collusion in blockchain voting. Each voter gets a pseudo-random MACI key which is
-                      used to encrypt and validate your votes. This is the only way to vote in the round, and can be
-                      used to change your ballot at any time while the round is active, so keep it safe.
+                      MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting.
+                      Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.
                     </Text>
                   </VStack>
 
@@ -255,9 +251,14 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Confused or need help?</Heading>
-                    <Text fontFamily={"archivo"}>
-                      You can contact us at qb@ethereum.org, or visit us at the Quadratic Funding booth in the Few
-                      sponsor area at ETHPrague.
+                    <Text fontSize="md" fontFamily={"archivo"}>
+                      You can send us an email at privacy.scaling.explorations@gmail.com or join the ETHPrague Telegram group
+                      <Link href='https://t.me/ethprague' isExternal>
+                        <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
+                      </Link>
+                    </Text>
+                    <Text fontSize="md" fontFamily={"archivo"}>
+                      Visit us at the Quadratic Funding booth in the Looks Rare sponsor area at ETHPrague.
                     </Text>
                   </VStack>
                 </VStack>
