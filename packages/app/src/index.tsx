@@ -24,9 +24,9 @@ ReactDOM.render(
   <React.StrictMode>
     <CSSReset />
     <DappProvider>
-      <BrowserRouter>
+      <HashRouter>
         <App />
-      </BrowserRouter>
+      </HashRouter>
     </DappProvider>
   </React.StrictMode>,
   document.getElementById("root")
