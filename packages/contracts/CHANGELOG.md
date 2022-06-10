@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/quadratic-funding/qfi/compare/v1.0.1...v1.1.0) (2022-06-10)
+
+
+### Features
+
+* **cli:** dothething command to batch all the other commands ([0254747](https://github.com/quadratic-funding/qfi/commit/0254747fdc6da224300986d476a855ab289f65b1))
+
+
+
+
+
 # [1.0.0](https://github.com/quadratic-funding/qfi/compare/v0.3.3...v1.0.0) (2022-06-09)
 
 **Note:** Version bump only for package @qfi/contracts

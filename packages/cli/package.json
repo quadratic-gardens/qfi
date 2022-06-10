@@ -1,6 +1,6 @@
 {
   "name": "@qfi/ethpraguecli",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
   "main": "dist/cli/src/index.js",
   "repository": "https://github.com/quadratic-funding/qfi",
