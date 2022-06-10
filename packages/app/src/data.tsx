@@ -9,7 +9,7 @@ let projects = [
       "EthPrague in 2022 has been a great success, with a series of talks, workshops and a hackathon. This application is the seed of an idea, to begin fundraising for a follow-up event... the second EthPrague. We are beginning fundraising early, to allow the event to be as community-owned as possible, and to reduce the event's reliance on the benevolence of sponsors. We look forward to receiving your support.",
     address: "0x46022C178984bDc20658aBd1435ce6deFF87DA74",
     id: "12",
-    recipientId: "1",
+    recipientId: 1,
     url: "https://ethprague.com/",
     logo: "/logo.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654624120/ethpraguedva_qqgxoj.png",
@@ -23,7 +23,7 @@ let projects = [
       "We think that information about Ethereum and DeFi in Czech, or local projects that would focus on this segment of the new free programmable money, is a scarce commodity. Therefore, we decided to try to accelerate the development of such projects and create a non-profit fund that could help them financially in the form of subsidies (grants).",
     address: "0x41198CE04A731ad2F3F397FA898F9f34b9fe7002",
     id: "9",
-    recipientId: "2",
+    recipientId: 2,
     url: "https://docs.bohemiandao.cz/",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/Bohemian_DAO_dtrbs4.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/Bohemian_DAO_dtrbs4.png",
@@ -31,7 +31,7 @@ let projects = [
   {
     name: "Paralelní Polis",
     id: "15",
-    recipientId: "3",
+    recipientId: 3,
     address: "0x42105F249681ff262D6aB723bf19Bc854656E619",
     url: "https://twitter.com/Paralelni_Polis",
     description:
@@ -45,7 +45,7 @@ let projects = [
   {
     name: "CZK FX rate on chain",
     id: "1",
-    recipientId: "4",
+    recipientId: 4,
     address: "0x9C81E538B9523CA46421a03F1C351b00b765b92f",
     url: "-",
     description:
@@ -59,7 +59,7 @@ let projects = [
   {
     name: "MindfulDropin",
     id: "2",
-    recipientId: "5",
+    recipientId: 5,
     address: "0x5aB7505Af5Ee7686a1C56edb582621E1f0484A5F",
     url: "https://unifiedmindfulness.com/",
     description:
@@ -74,7 +74,7 @@ let projects = [
   {
     name: "Sázíme stromy: We plant trees where others won´t",
     id: "3",
-    recipientId: "6",
+    recipientId: 6,
     address: "0x059FdC73e9bed40265D0afAC73D04B604b02722A",
     url: "https://www.sazimestromy.cz/en",
     description:
@@ -89,7 +89,7 @@ let projects = [
   {
     name: "Pragashrooms",
     id: "4",
-    recipientId: "7",
+    recipientId: 7,
     address: "0x9B8BB786550749d34e56b16De4385C306540020E",
     url: "https://www.instagram.com/pragashrooms/?hl=cs",
     description:
@@ -110,7 +110,7 @@ let projects = [
       "The problem we are solving is a lack of education in creating a diversified crypto portfolio and an overview of crypto indices and data with advanced insights.",
     address: "0xFBb777a2DDdF9309B505B0ac594b0977898c7a92",
     id: "5",
-    recipientId: "8",
+    recipientId: 8,
     url: "https://www.indices.fi/",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623127/indices.fi_soyeqp.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623127/indices.fi_soyeqp.png",
@@ -125,7 +125,7 @@ let projects = [
       "In the Czech Republic, young people with disadvantaged backgrounds have few opportunities to participate in long-term activities. Due to this, they are often unable to acquire valuable life skills, such as being able to deal with unexpected situations, or to cooperate with a variety of stakeholders. As such, many are unable to actively participate in public life.",
     address: "0x0C5249B8c1DbFC72C9502638243812dbBfdf8Bcb",
     id: "6",
-    recipientId: "9",
+    recipientId: 9,
     url: "https://www.united-vision.org/",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/United_Vision_eo34ua.jpg",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/United_Vision_eo34ua.jpg",
@@ -140,7 +140,7 @@ let projects = [
       "NFTs have legitimized digital art. Pushing this to the next level involves display, curation, environments, and connections. By hosting events and exhibitions we are able to bring together a community of like-minded individuals who can build with each other, and prove that next-generational digital art has its place in the eyes of the public.",
     address: "0x3F24e9829AE70b756eD28A8cAC76C28A3AF2cD26",
     id: "7",
-    recipientId: "10",
+    recipientId: 10,
     url: "www.cryptoportal.art",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/Crypto_Portal_s67mkm.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/Crypto_Portal_s67mkm.png",
@@ -154,7 +154,7 @@ let projects = [
     problemSpace: "Spreading awareness of decentralised finance. And local support for projects",
     address: "0x41198CE04A731ad2F3F397FA898F9f34b9fe7002",
     id: "8",
-    recipientId: "11",
+    recipientId: 11,
     url: "https://gwei.cz/",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654624963/logo-gwei.cz_hy7xz7.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654624963/logo-gwei.cz_hy7xz7.png",
@@ -168,7 +168,7 @@ let projects = [
       "To provide a public-good tool for developers in the Ethereum ecosystem to assure the quality and security of their smart contracts.",
     address: "0x9C6696C44dE739b51d3aDf51c87E98e19dD33337",
     id: "10",
-    recipientId: "12",
+    recipientId: 12,
     url: "https://twitter.com/hackerdom_",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/sleeping_emoji_ds4up3.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623126/sleeping_emoji_ds4up3.png",
@@ -183,7 +183,7 @@ let projects = [
       "We are trying to make a really open conference. For many, this is a buzzword. For us, it's something we stand behind. Other Czech conferences aimed at newbies are often very commercial promoting centralised platforms and we don't like that at all. Unfortunately, that's not all. Basically, all events for newbies in the Czech Republic are divided between bitcoin maximalists and the others. We are different. For the first big conference we're organising we have managed to get both Bitcoin maximalists and Ethereum people together to talk! We believe that the toxic part of the community is the loudest one and that most people are kind, they are just not heard.",
     address: "0x49A6D3e146f4C032f97B65A2c5E05B1196d69026",
     id: "11",
-    recipientId: "13",
+    recipientId: 13,
     url: "utxo.cz",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654624116/logo-utxo_yuwws8.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654624116/logo-utxo_yuwws8.png",
@@ -197,7 +197,7 @@ let projects = [
       "Sea turtles are one of the few ancient species left on the Earth. Unfortunately, all seven species are threatened with extinction. Alongside improving fishing techniques worldwide, the essential conservation strategy is to protect nesting sites to ensure species reproduction. In South East Asia, dated conservation practices include the unnecessary handling of eggs, placing newly hatched turtles in small pools, and then manually releasing them. Through decades of research, it has been proven that this methodology does not reflect the biological needs of the species and can cause more harm than good, no matter the intentions.",
     address: "0x5Fd8bE6bd01F932D6FcBCeAB1582F8adbC92e76B",
     id: "13",
-    recipientId: "14",
+    recipientId: 14,
     url: "https://nfturtle.io/",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623127/NFTurtle_twtoqk.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623127/NFTurtle_twtoqk.png",
@@ -212,7 +212,7 @@ let projects = [
       "Bordel is nothing which can be explained by words. It's an experience, daily and trip long experience which has to be integrated by your own mind. Come to have a party to Bordel during EthPrague! All the hackers are invited.* The party in our underground shady semi-legit-almost-a-bar Bordel is opened for you every night till 4:20AM. Don't hesitate to pay a visit. *We are sorry but please don't visit us if you have epilepsy or in case you are a cop",
     address: "0xe83E0b36bc68c1407B81B6d42CA4bd23FC309517",
     id: "14",
-    recipientId: "15",
+    recipientId: 15,
     url: "github.com/bordel",
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623942/bordel-hackspace_jxlytx.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623942/bordel-hackspace_jxlytx.png",
@@ -224,7 +224,11 @@ export function getProjects() {
 }
 
 export function getRecipientIdbyId(id) {
-  return projects.find((project) => project.id === id).recipientId;
+  console.log(id)
+  const p = projects.find((p) => p.id === id);
+  
+
+  return p.recipientId;
 }
 
 export function getProject(id: string) {
@@ -232,7 +236,7 @@ export function getProject(id: string) {
     projects.find((p) => p.id === id) ?? {
       name: "404 Project not found",
       id: id,
-      recipientId: "0",
+      recipientId: 0,
       address: "404 Address not found",
       url: "404 URL not found",
       description: "404 Description not found",

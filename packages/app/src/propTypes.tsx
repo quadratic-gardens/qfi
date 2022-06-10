@@ -23,7 +23,7 @@ export type BallotOptionProps = {
 export type Option = {
   name: string;
   id: string;
-  recipientId: string;
+  recipientId: number;
   address: string;
   url: string;
   description: string;
