@@ -20,7 +20,19 @@ import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { useSearchParams } from "react-router-dom";
 import { useDappState } from "../context/DappContext";
-import { Keypair, PubKey, Command, Message } from 'qaci-domainobjs'
+import { Keypair, PubKey, PrivKey, Command, Message } from "qaci-domainobjs";
+import { genRandomSalt } from "qaci-crypto";
+
+const isMaciPrivKey = (key: string): boolean => {
+  if (key.length === 71 && key.startsWith("macisk.")) {
+    try {
+      PrivKey.unserialize(key);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+};
 
 export const Ballot = () => {
   const [searchParams] = useSearchParams();
@@ -28,10 +40,11 @@ export const Ballot = () => {
   const { maciKey, setMaciKey } = useDappState();
   const handleChange = (value: string) => {
     setKey(value);
-    console.log("changed");
-    const encKeypair = new Keypair();
-    const test = new Command(1n, encKeypair.pubKey, 2n, 3n, 4n, 5n);
-    const msg = new Message([1n, 2n]);
+    if (isMaciPrivKey(value)) {
+      setMaciKey(value);
+      console.log("changed");
+      console.log(new Keypair(PrivKey.unserialize(value)).pubKey.serialize());
+    }
   };
 
   const handleComplete = (value: string) => {
@@ -238,31 +251,91 @@ export const Ballot = () => {
   const [txLink, setTxLink] = useState<string>("");
   const [txReceipt, setTxReceipt] = useState<any>(null);
   const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
-  // const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
+  const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
 
-  useEffect(() => {
-    const newData = recipientRegistryIds.map((projectId, index) => {
-      const recipientVoteOptionIndex = projectId;
-      // const maciKeyPair = new Keypair();
-      // const userStateIndex = getUserStateIdbyMaciKey(maciKeyPair);
-      // const voiceCredits = votes[index] ** 2;
+  function createMessage(
+    userStateIndex: number,
+    userKeypair: Keypair,
+    coordinatorPubKey: PubKey,
+    voteOptionIndex: number | null,
+    voteWeight: number | null,
+    nonce: number
+  ): [Message, PubKey] {
+    const salt = genRandomSalt();
 
-      // const coordinatorPubKey = new Keypair().pubKey;
-      const nonce = index;
+    const quadraticVoteWeight = voteWeight ?? 0;
+    const pubkey = userKeypair.pubKey;
 
-      // const [message, encPubKey] = createMessage(
-      //   userStateIndex,
-      //   maciKeyPair,
-      //   null,
-      //   coordinatorPubKey,
-      //   recipientVoteOptionIndex,
-      //   BigNumber.from(voiceCredits),
-      //   nonce
-      // );
-      return [0, 0];
+    // /stateIndex: BigInt,
+    // newPubKey: PubKey,
+    // voteOptionIndex: BigInt,
+    // newVoteWeight: BigInt,
+    // nonce: BigInt,
+    // pollId: BigInt,
+    const command = new Command(
+      BigInt(userStateIndex),
+      pubkey,
+      BigInt(voteOptionIndex || 0),
+      BigInt(quadraticVoteWeight),
+      BigInt(nonce),
+      BigInt(0),
+      salt
+    );
+    // console.log("command", command)
+    const signature = command.sign(userKeypair.privKey);
+    // console.log("signature", signature)
+    const message = command.encrypt(signature, Keypair.genEcdhSharedKey(userKeypair.privKey, coordinatorPubKey));
+    return [message, userKeypair.pubKey];
+  }
+
+  const handleSubmit = async () => {
+    console.log("fadsfas")
+    setTxLoading(true);
+    const txData = recipientRegistryIds.map((projectId, index) => {
+      try {
+        const recipientVoteOptionIndex = projectId;
+        let maciKeyPair: Keypair;
+        let serializedMaciPublicKey: string;
+        let userStateIndex: number;
+        if (isMaciPrivKey(maciKey)) {
+          maciKeyPair = new Keypair(PrivKey.unserialize(maciKey));
+          serializedMaciPublicKey = maciKeyPair.pubKey.serialize();
+          userStateIndex = getUserStateIdbyMaciKey(serializedMaciPublicKey);
+          const nonce = index;
+          const voteWeight = votes[index];
+
+          const coordinatorKey = PubKey.unserialize(
+            "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
+          );
+
+          const [message, encPubKey] = createMessage(
+            userStateIndex,
+            maciKeyPair,
+            coordinatorKey,
+            recipientVoteOptionIndex,
+            voteWeight,
+            nonce
+          );
+          return [message, encPubKey];
+        }
+      } catch (e) {
+        console.log(e);
+        return [null, null];
+      }
+      console.log(txData);
     });
-    // setData(newData);
-  }, [recipientRegistryIds, votes]);
+    console.log(txData);
+    // try {
+
+    //     fundingRound.submitMessageBatch(
+    //       messages.reverse().map((msg) => msg.asContractParam()),
+    //       encPubKeys.reverse().map((key) => key.asContractParam())
+    //   })
+    // } catch (error) {
+    //   this.voteTxError = error.message
+    //   return
+    // }
+  };
 
   return (
     <Flex
@@ -339,7 +412,6 @@ export const Ballot = () => {
                 </Text>
                 <HStack flexWrap="wrap" maxW="240px">
                   <PinInput
-                    
                     defaultValue="macisk."
                     size="xs"
                     type="alphanumeric"
@@ -424,7 +496,8 @@ export const Ballot = () => {
               <VStack spacing={6} alignItems="flex-start" w="full">
                 <MagikButton />
                 <Button
-                  disabled={true}
+                onClick={handleSubmit}
+                  
                   rounded={"full"}
                   py={6}
                   fontSize={"lg"}
@@ -447,9 +520,9 @@ export const Ballot = () => {
   );
 };
 
-// function getUserStateIdbyMaciKey(maciKeyPair: Keypair) {
-//   return 1
-// }
+function getUserStateIdbyMaciKey(serializedMaciPubKey: string) {
+  return 1;
+}
 // function getUserStateIdbyMaciKey(id: Keypair) {
 //   return 1;
 // }
