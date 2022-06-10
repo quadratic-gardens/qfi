@@ -288,8 +288,8 @@ export const Ballot = () => {
     return [message, userKeypair.pubKey];
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    console.log("fadsfas")
     setTxLoading(true);
     const txData = recipientRegistryIds.map((projectId, index) => {
       try {
@@ -322,8 +322,9 @@ export const Ballot = () => {
         console.log(e);
         return [null, null];
       }
+      console.log(txData);
     });
-
+    console.log(txData);
     // try {
 
     //     fundingRound.submitMessageBatch(
@@ -494,9 +495,9 @@ export const Ballot = () => {
               </VStack>
               <VStack spacing={6} alignItems="flex-start" w="full">
                 <MagikButton />
-                {/* <Button
-                onSubmit={handleSubmit}
-                  disabled={true}
+                <Button
+                onClick={handleSubmit}
+                  
                   rounded={"full"}
                   py={6}
                   fontSize={"lg"}
@@ -508,7 +509,7 @@ export const Ballot = () => {
                   w="full"
                   mt={4}>
                   SUBMIT BALLOT
-                </Button> */}
+                </Button>
                 {/* <Text fontSize={"xs"}>{txError ?? ""}</Text> */}
               </VStack>
             </Stack>
