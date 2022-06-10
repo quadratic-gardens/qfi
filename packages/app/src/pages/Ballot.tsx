@@ -261,13 +261,11 @@ export const Ballot = () => {
     voteWeight: number | null,
     nonce: number
   ): [Message, PubKey] {
-    
-    
     const salt = genRandomSalt();
 
     const quadraticVoteWeight = voteWeight ?? 0;
     const pubkey = userKeypair.pubKey;
-    // console.log("pubkey", pubkey)
+
     // /stateIndex: BigInt,
     // newPubKey: PubKey,
     // voteOptionIndex: BigInt,
@@ -290,8 +288,10 @@ export const Ballot = () => {
     return [message, userKeypair.pubKey];
   }
 
-  useEffect(() => {
-    const newData = recipientRegistryIds.map((projectId, index) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setTxLoading(true);
+    const txData = recipientRegistryIds.map((projectId, index) => {
       try {
         const recipientVoteOptionIndex = projectId;
         let maciKeyPair: Keypair;
@@ -304,12 +304,14 @@ export const Ballot = () => {
           const nonce = index;
           const voteWeight = votes[index];
 
-          const coordinatorKey = new Keypair(PrivKey.unserialize("macisk.15fc102af6e9d3608f7dd8cbb3af16cec063edf7e4ad71969532bbd4e52dcf93"));
+          const coordinatorKey = PubKey.unserialize(
+            "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
+          );
 
           const [message, encPubKey] = createMessage(
             userStateIndex,
             maciKeyPair,
-            coordinatorKey.pubKey,
+            coordinatorKey,
             recipientVoteOptionIndex,
             voteWeight,
             nonce
@@ -321,9 +323,18 @@ export const Ballot = () => {
         return [null, null];
       }
     });
-    
-    setData(newData)
-  }, [recipientRegistryIds, votes, maciKey]);
+
+    // try {
+
+    //     fundingRound.submitMessageBatch(
+    //       messages.reverse().map((msg) => msg.asContractParam()),
+    //       encPubKeys.reverse().map((key) => key.asContractParam())
+    //   })
+    // } catch (error) {
+    //   this.voteTxError = error.message
+    //   return
+    // }
+  };
 
   return (
     <Flex
@@ -483,7 +494,8 @@ export const Ballot = () => {
               </VStack>
               <VStack spacing={6} alignItems="flex-start" w="full">
                 <MagikButton />
-                <Button
+                {/* <Button
+                onSubmit={handleSubmit}
                   disabled={true}
                   rounded={"full"}
                   py={6}
@@ -496,7 +508,7 @@ export const Ballot = () => {
                   w="full"
                   mt={4}>
                   SUBMIT BALLOT
-                </Button>
+                </Button> */}
                 {/* <Text fontSize={"xs"}>{txError ?? ""}</Text> */}
               </VStack>
             </Stack>
