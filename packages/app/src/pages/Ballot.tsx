@@ -416,6 +416,7 @@ export const Ballot = () => {
                     <PinInputField marginInlineStart={"0px !important"} />
                     <PinInputField marginInlineStart={"0px !important"} />
                     <PinInputField marginInlineStart={"0px !important"} />
+                    <PinInputField marginInlineStart={"0px !important"} />
                   </PinInput>
                 </HStack>
                 <Divider></Divider>
