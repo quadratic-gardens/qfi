@@ -25,6 +25,7 @@
     "auth": "yarn start auth",
     "genkeys": "yarn start genkeys",
     "initialize": "yarn start initialize",
+    "dothething": "yarn start dothething",
     "contracts:deploy": "yarn start contracts:deploy",
     "contracts:add-recipients": "yarn start contracts:add-recipients",
     "contracts:signup": "yarn start contracts:signup",

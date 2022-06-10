@@ -744,7 +744,6 @@ export const TallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 )
 
-
 export const STATE_TREE_DEPTH = 10
 export const STATE_TREE_ARITY = 5
 export const MESSAGE_TREE_ARITY = 5
@@ -762,8 +761,8 @@ export const tallyBatchSize = STATE_TREE_ARITY ** treeDepths.intStateTreeDepth
 export const maxValues = {
   maxUsers: STATE_TREE_ARITY ** STATE_TREE_DEPTH,
   maxMessages: MESSAGE_TREE_ARITY ** treeDepths.messageTreeDepth,
-  maxVoteOptions: MESSAGE_TREE_ARITY ** treeDepths.voteOptionTreeDepth,
-};
+  maxVoteOptions: MESSAGE_TREE_ARITY ** treeDepths.voteOptionTreeDepth
+}
 export const userSignUps = [
   "macipk.0128c3a1b3c61c121dfd9dbebdb7be22a4d6d3b48cf35abac6f3226f5a6c8b2d",
   "macipk.7eaa787bd13f61a4d7b28e3b5341917b0eed2c7ac42c79a316898423639d4a29",

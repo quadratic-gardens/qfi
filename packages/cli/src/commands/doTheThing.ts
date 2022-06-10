@@ -3,7 +3,7 @@
 import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 import { GrantRoundFactory__factory } from "../../../contracts/typechain/factories/GrantRoundFactory__factory.js"
 import { PollFactory__factory } from "../../../contracts/typechain/factories/PollFactory__factory.js"
@@ -29,8 +29,8 @@ import {
   treeDepths,
   usersStateIndexesFilePath,
   userSignUps,
-  maxValues
-  
+  maxValues,
+  usersStateIndexesBaseDirPath
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 import { VerifyingKeyStruct } from "../../../contracts/typechain/VkRegistry.js"
@@ -38,14 +38,12 @@ import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRe
 import { PubKey } from "qaci-domainobjs"
 import { Recipient } from "types/index.js"
 
-
-
 /**
  * Throw an error if at least one recipient field value is not provided or malformed.
  * @param recipientRecord <Recipient>
  * @param index <number>
  */
- const checkForMissingRecipientProperties = (recipientRecord: Recipient, index: number) => {
+const checkForMissingRecipientProperties = (recipientRecord: Recipient, index: number) => {
   const {
     projectName,
     tagline,
@@ -93,19 +91,50 @@ async function doTheThing(network: string) {
     // Check if mnemonic already present.
     if (!directoryExists(mnemonicBaseDirPath) && !directoryExists(mnemonicFilePath))
       throw new Error(`You must first authenticate by running \`auth \"<your-mnemonic>\"\` command!`)
-
+    // Check if users has been already signed up.
+    if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
+    if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
     // NOTE: contracts allready deployed.
     process.stdout.write(`\n`)
 
     const { provider, wallet } = await connectToBlockchain(network)
     const gasPrice = await provider.getGasPrice()
+    const double = BigNumber.from("2")
+    const doubleGasPrice = gasPrice.mul(double)
     const gasLimit = ethers.utils.hexlify(10000000)
 
     /** INIT MACI/QFI SMART CONTRACTS */
     const deployer = wallet
 
-    console.log(chalk.bold(`\nInitialization for QFI/MACI smart contracts is running`))
+    console.log(chalk.bold(`\n For all the marbles this will take approximately [43] minutes`))
+    console.log(`\n${logSymbols.info} MAKE SURE YOU HAVE A STABLE WIFI CONNECTION AND YOUR LAPTOP IS CHARGED!\n`)
+    const { confirmation: preFlightCheck1 } = await askForConfirmation("Ready?")
 
+    if (!preFlightCheck1) {
+      console.log(`\nFarewell 1👋`)
+      process.exit(0)
+    }
+
+    const { confirmation: preFlightCheck2 } = await askForConfirmation("Are you ABOLUTELY SURE?", "yes", "no")
+
+    if (!preFlightCheck2) {
+      console.log(`\nFarewell 2👋`)
+      process.exit(0)
+    }
+
+    const { confirmation: preFlightCheck3 } = await askForConfirmation("Do you have enough gas ?", "yes", "no")
+
+    if (!preFlightCheck3) {
+      console.log(`\nFarewell3 👋`)
+      process.exit(0)
+    }
+
+    const { confirmation: preFlightCheck4 } = await askForConfirmation("LETS DO THE THING?", "I HAVE NO DOUBTS", "no")
+
+    if (!preFlightCheck4) {
+      console.log(`\nFarewell4 👋`)
+      process.exit(0)
+    }
     // Get deployed contracts instances.
 
     const simpleHackathon = new ethers.Contract(
@@ -142,7 +171,9 @@ async function doTheThing(network: string) {
     let spinner = customSpinner(`Set MACI instance for SimpleHackathon contract`, "point")
     spinner.start()
 
-    let tx = await simpleHackathon.connect(deployer).setMaciInstance(qfi.address, { gasPrice, gasLimit })
+    let tx = await simpleHackathon
+      .connect(deployer)
+      .setMaciInstance(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
     await tx.wait()
     spinner.stop()
     console.log(`${logSymbols.success} Set MACI instance for SimpleHackathon contract`)
@@ -150,7 +181,9 @@ async function doTheThing(network: string) {
     spinner = customSpinner(`Max number of recipients for the SimpleHackathon base registry`, "point")
     spinner.start()
 
-    tx = await simpleHackathon.connect(deployer).setMaxRecipients(numberOfMaxRecipients, { gasPrice, gasLimit })
+    tx = await simpleHackathon
+      .connect(deployer)
+      .setMaxRecipients(numberOfMaxRecipients, { gasPrice: doubleGasPrice, gasLimit })
     await tx.wait()
     spinner.stop()
     console.log(`${logSymbols.success} Max number of recipients for the SimpleHackathon base registry`)
@@ -158,7 +191,7 @@ async function doTheThing(network: string) {
     spinner = customSpinner(`Transfer PollFactory ownership to QFI contract`, "point")
     spinner.start()
 
-    tx = await pollFactory.connect(deployer).transferOwnership(qfi.address, { gasPrice, gasLimit })
+    tx = await pollFactory.connect(deployer).transferOwnership(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
     await tx.wait()
     spinner.stop()
     console.log(`${logSymbols.success} Transfer PollFactory ownership to QFI contract`)
@@ -166,7 +199,9 @@ async function doTheThing(network: string) {
     spinner = customSpinner(`Transfer GrantRoundFactory ownership to QFI contract`, "point")
     spinner.start()
 
-    tx = await grantRoundFactory.connect(deployer).transferOwnership(qfi.address, { gasPrice, gasLimit })
+    tx = await grantRoundFactory
+      .connect(deployer)
+      .transferOwnership(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
     await tx.wait()
     spinner.stop()
     console.log(`${logSymbols.success} Transfer GrantRoundFactory ownership to QFI contract`)
@@ -174,7 +209,9 @@ async function doTheThing(network: string) {
     spinner = customSpinner(`Transfer MessageAq ownership to PollFactory contract`, "point")
     spinner.start()
 
-    tx = await messageAqFactory.connect(deployer).transferOwnership(pollFactory.address, { gasPrice, gasLimit })
+    tx = await messageAqFactory
+      .connect(deployer)
+      .transferOwnership(pollFactory.address, { gasPrice: doubleGasPrice, gasLimit })
     await tx.wait()
     spinner.stop()
     console.log(`${logSymbols.success} Transfer MessageAq ownership to PollFactory contract`)
@@ -184,7 +221,7 @@ async function doTheThing(network: string) {
 
     tx = await messageAqFactoryGrants
       .connect(deployer)
-      .transferOwnership(grantRoundFactory.address, { gasPrice, gasLimit })
+      .transferOwnership(grantRoundFactory.address, { gasPrice: doubleGasPrice, gasLimit })
     await tx.wait()
     spinner.stop()
     console.log(`${logSymbols.success} Transfer MessageAqFactoryGrants ownership to GrantRoundFactory contract`)
@@ -195,7 +232,7 @@ async function doTheThing(network: string) {
     tx = await qfi
       .connect(deployer)
       .initialize(deployedContracts.VKRegistry, messageAqFactory.address, messageAqFactoryGrants.address, {
-        gasPrice,
+        gasPrice: doubleGasPrice,
         gasLimit
       })
     await tx.wait()
@@ -215,43 +252,32 @@ async function doTheThing(network: string) {
     spinner = customSpinner(`Set VKs`, "point")
     spinner.start()
 
-    const vkTx = await vkRegistry.connect(deployer).setVerifyingKeys(stateTreeDepth,
-      _intStateTreeDepth,
-      _messageTreeDepth,
-      _voteOptionTreeDepth,
-      _messageBatchSize,
-      _processVk,
-      _tallyVk, {
-      gasPrice: await provider.getGasPrice(),
-      gasLimit: ethers.utils.hexlify(10000000)
-    })
+    const vkTx = await vkRegistry
+      .connect(deployer)
+      .setVerifyingKeys(
+        stateTreeDepth,
+        _intStateTreeDepth,
+        _messageTreeDepth,
+        _voteOptionTreeDepth,
+        _messageBatchSize,
+        _processVk,
+        _tallyVk,
+        { gasPrice: doubleGasPrice, gasLimit }
+      )
     await vkTx.wait()
 
-    const genProcessVkSigTx = await vkRegistry.connect(deployer).genProcessVkSig(_stateTreeDepth, _messageTreeDepth, _voteOptionTreeDepth, _messageBatchSize, {
-      gasPrice: await provider.getGasPrice(),
-      gasLimit: ethers.utils.hexlify(10000000)
-    })
-    await genProcessVkSigTx.wait()
-    const genTallyVkSigTx = await vkRegistry.connect(deployer).genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth, {
-      gasPrice: await provider.getGasPrice(),
-      gasLimit: ethers.utils.hexlify(10000000)
-    })
-    await genTallyVkSigTx.wait()
+    await vkRegistry
+      .connect(deployer)
+      .genProcessVkSig(_stateTreeDepth, _messageTreeDepth, _voteOptionTreeDepth, _messageBatchSize)
+
+    await vkRegistry.connect(deployer).genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth)
 
     spinner.stop()
     console.log(`${logSymbols.success} Set Vks`)
-    console.log(`\n${logSymbols.info} contracts initiated, continuing to project sign up step!\n`)
+    console.log(`\n${logSymbols.info} contracts connected, continuing to project sign up step!\n`)
 
-    const { confirmation } = await askForConfirmation(
-      "You are about to register [16] projects, are you sure you want to continue? (nb. no requires you to run the steps one at a time)",
-      "yes",
-      "no"
-    )
-
-    if (!confirmation) {
-      console.log(`\nFarewell 👋`)
-      process.exit(0)
-    }
+    
+    console.log(`\n${logSymbols.info} ou are about to register [16] projects\n`)
 
     // Get CSV records.
 
@@ -276,7 +302,7 @@ async function doTheThing(network: string) {
 
       // Create tx.
       const tx = await simpleHackathon.connect(deployer).addRecipient(recipientRecord.ethereumAddress, metadata, {
-        gasPrice: await provider.getGasPrice(),
+        gasPrice: doubleGasPrice,
         gasLimit: ethers.utils.hexlify(10000000)
       })
       await tx.wait()
@@ -293,25 +319,16 @@ async function doTheThing(network: string) {
 
     console.log(`\n${logSymbols.success} You have successfully registered the recipients on-chain 🎊\n`)
 
-    const { confirmation:secondConfirmation } = await askForConfirmation(
-      "You are about to register [400] ballots, are you sure you want to continue? (nb. no requires you to run the steps one at a time)",
-      "yes",
-      "no"
-    )
+    
+    console.log(`\n${logSymbols.success} You are about to register [400] ballots, DO NOT EXIT RECOVERY FROM HERE IS HARD 🎊\n`)
 
-    if (!secondConfirmation) {
-      console.log(`\nFarewell 👋`)
-      process.exit(0)
-    }
-
-  
 
     const stateIndexes = []
 
     const hacks: { [k: string]: string } = {}
-
+    let j = 1
     for await (const maciPK of userSignUps) {
-      const spinner = customSpinner(`Sign up for user in position ${chalk.bold(i)}`, "point")
+      const spinner = customSpinner(`Sign up for user in position ${chalk.bold(j)}`, "point")
       spinner.start()
 
       // Prepare data for tx.
@@ -322,7 +339,10 @@ async function doTheThing(network: string) {
       // Create tx.
       const { logs } = await qfi
         .connect(deployer)
-        .signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData)
+        .signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData, {
+          gasPrice: doubleGasPrice,
+          gasLimit: ethers.utils.hexlify(10000000)
+        })
         .then((tx: any) => tx.wait())
 
       // Read the event from logs.
@@ -334,7 +354,7 @@ async function doTheThing(network: string) {
 
       spinner.stop()
       console.log(
-        `${logSymbols.success} User #${chalk.bold(i)} (${chalk.bold(
+        `${logSymbols.success} User #${chalk.bold(j)} (${chalk.bold(
           maciPK
         )}) has been successfully registered on-chain with a state index of ${stateIndex}`
       )
@@ -345,7 +365,7 @@ async function doTheThing(network: string) {
         stateIndex
       })
       hacks[maciPK] = stateIndex
-
+      j++
     }
 
     // Create CSV file.
@@ -355,19 +375,26 @@ async function doTheThing(network: string) {
 
     console.log(`\n${logSymbols.success} You have successfully registered [400] users on-chain 🎊\n`)
 
-    const THREEDAYS = 60 * 60 * 24 * 3;
+    console.log(`\n${logSymbols.success} We will now start the grant round. It will be active for [3] days. 🎊\n`)
 
+
+
+    const THREEDAYS = 60 * 60 * 24 * 3
+
+    const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam();
     const grantRoundTx = await qfi
       .connect(deployer)
-      .deployGrantRound(THREEDAYS, maxValues, treeDepths, coordinatorPubkey, deployer.address,{
-        gasPrice,
-        gasLimit
+      .deployGrantRound(THREEDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
+        gasPrice: doubleGasPrice,
+        gasLimit: ethers.utils.hexlify(30000000)
       })
-    
+
     await grantRoundTx.wait()
 
     console.log(`\n${logSymbols.success} You have successfully initialized the deployed MACI/QFI smart contracts 🎊\n`)
-    console.log(`\n${logSymbols.success} you grant rouns will be active once this transaction is confirmed ${grantRoundTx} n`)
+    console.log(
+      `\n${logSymbols.success} you grant round will be active once this transaction is confirmed ${grantRoundTx} n`
+    )
   } catch (err: any) {
     console.log(err)
     if (!err.transactionHash) console.log(`\n${logSymbols.error} Something went wrong: ${err}`)
