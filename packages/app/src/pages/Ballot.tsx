@@ -12,26 +12,70 @@ import {
   Divider,
   Stack,
   useColorModeValue,
+  Center,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Image,
+  ListItem,
+  UnorderedList,
+  Icon,
+  Link
 } from "@chakra-ui/react";
+
 import { EaseInBottom, MagikButton } from "@qfi/ui";
-import { getProject } from "../data";
+import { getProject, getRecipientIdbyId } from "../data";
 import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { useSearchParams } from "react-router-dom";
 import { useDappState } from "../context/DappContext";
-import { Keypair, PubKey, Command, Message } from 'qaci-domainobjs'
+
+import { Keypair, PubKey, PrivKey, Command, Message } from "qaci-domainobjs";
+import { genRandomSalt } from "qaci-crypto";
+import { useWallet } from "@qfi/hooks";
+import { BigNumber, Contract, ethers } from "ethers";
+import { QFI__factory } from "../typechain/factories/QFI__factory";
+import { GrantRound__factory } from "../typechain";
+import { HiExternalLink } from "react-icons/hi";
+
+const isMaciPrivKey = (key: string): boolean => {
+  if ((key.length === 71 || key.length === 70) && key.startsWith("macisk.")) {
+    try {
+      new Keypair(PrivKey.unserialize(key)).pubKey.serialize();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  return false;
+};
 
 export const Ballot = () => {
   const [searchParams] = useSearchParams();
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
+
+  const isValidMaciKey = useMemo(() => {
+    return isMaciPrivKey(maciKey);
+  }, [maciKey]);
+
+  const { provider, chainId, address, isConnected } = useWallet();
   const handleChange = (value: string) => {
     setKey(value);
-    console.log("changed");
-    const encKeypair = new Keypair();
-    const test = new Command(1n, encKeypair.pubKey, 2n, 3n, 4n, 5n);
-    const msg = new Message([1n, 2n]);
+    try {
+      if (isMaciPrivKey(value)) {
+        setMaciKey(value);
+        console.log("changed");
+        console.log(new Keypair(PrivKey.unserialize(value)).pubKey.serialize());
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleComplete = (value: string) => {
@@ -238,31 +282,125 @@ export const Ballot = () => {
   const [txLink, setTxLink] = useState<string>("");
   const [txReceipt, setTxReceipt] = useState<any>(null);
   const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
-  // const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
+  const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
 
-  useEffect(() => {
-    const newData = recipientRegistryIds.map((projectId, index) => {
-      const recipientVoteOptionIndex = projectId;
-      // const maciKeyPair = new Keypair();
-      // const userStateIndex = getUserStateIdbyMaciKey(maciKeyPair);
-      // const voiceCredits = votes[index] ** 2;
+  function createMessage(
+    userStateIndex: number,
+    userKeypair: Keypair,
+    coordinatorPubKey: PubKey,
+    voteOptionIndex: number | null,
+    voteWeight: number | null,
+    nonce: number
+  ): [Message, PubKey] {
+    const salt = genRandomSalt();
 
-      // const coordinatorPubKey = new Keypair().pubKey;
-      const nonce = index;
+    const quadraticVoteWeight = voteWeight ?? 0;
+    const pubkey = userKeypair.pubKey;
 
-      // const [message, encPubKey] = createMessage(
-      //   userStateIndex,
-      //   maciKeyPair,
-      //   null,
-      //   coordinatorPubKey,
-      //   recipientVoteOptionIndex,
-      //   BigNumber.from(voiceCredits),
-      //   nonce
-      // );
-      return [0, 0];
+    // /stateIndex: BigInt,
+    // newPubKey: PubKey,
+    // voteOptionIndex: BigInt,
+    // newVoteWeight: BigInt,
+    // nonce: BigInt,
+    // pollId: BigInt,
+    const command = new Command(
+      BigInt(userStateIndex),
+      pubkey,
+      BigInt(voteOptionIndex || 0),
+      BigInt(quadraticVoteWeight),
+      BigInt(nonce),
+      BigInt(0),
+      salt
+    );
+    // console.log("command", command)
+    const signature = command.sign(userKeypair.privKey);
+    // console.log("signature", signature)
+    const message = command.encrypt(signature, Keypair.genEcdhSharedKey(userKeypair.privKey, coordinatorPubKey));
+    return [message, userKeypair.pubKey];
+  }
+
+  const handleSubmit = async () => {
+    console.log(isMaciPrivKey(maciKey));
+    const signer = provider.getSigner(address);
+    const grantRoundAddress = "0x98CfEF9169d670064D3caBa1891a29eeC3A1b7b1";
+    // const qfiAddress = "0x7718F3716e45C1bcCd538fF756f244978747ef4d"
+    // const qfiContract = new Contract(qfiAddress, QFI__factory.abi, signer);
+    const grantRound = new ethers.Contract(grantRoundAddress, GrantRound__factory.abi, signer);
+    // const that = await grantRound.connect(signer).maxValues();
+    // console.log(that);
+    console.log("-----------------------------------------------------");
+
+    setTxLoading(true);
+    const txData: [Message, PubKey][] = recipientRegistryIds.map((projectId, index) => {
+      try {
+        const recipientVoteOptionIndex = getRecipientIdbyId(projectId.toString());
+        console.log(recipientVoteOptionIndex);
+        let maciKeyPair: Keypair;
+        let serializedMaciPublicKey: string;
+        let userStateIndex: number;
+        if (isMaciPrivKey(maciKey)) {
+          maciKeyPair = new Keypair(PrivKey.unserialize(maciKey));
+          console.log("test", maciKeyPair);
+          serializedMaciPublicKey = maciKeyPair.pubKey.serialize();
+          userStateIndex = getUserStateIdbyMaciKey(serializedMaciPublicKey);
+          console.log(userStateIndex);
+          const nonce = index;
+          const voteWeight = votes[index];
+
+          const coordinatorKey = PubKey.unserialize(
+            "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
+          );
+
+          const [message, encPubKey] = createMessage(
+            userStateIndex,
+            maciKeyPair,
+            coordinatorKey,
+            recipientVoteOptionIndex,
+            voteWeight,
+            nonce
+          );
+          return [message, encPubKey];
+        }
+      } catch (e) {
+        return [null, null];
+      }
     });
-    // setData(newData);
-  }, [recipientRegistryIds, votes]);
+    const messages: Message[] = [];
+    const encPubKeys: PubKey[] = [];
+
+    for (const [message, encPubKey] of txData) {
+      messages.push(message);
+      encPubKeys.push(encPubKey);
+    }
+    try {
+      const gasPrice = await provider.getGasPrice();
+      const double = BigNumber.from("2");
+      const doubleGasPrice = gasPrice.mul(double);
+      const gasLimit = ethers.utils.hexlify(10000000);
+      const signer = provider.getSigner(address);
+
+      const tx = await grantRound.connect(signer).publishMessageBatch(
+        messages.reverse().map((msg) => msg.asContractParam()),
+        encPubKeys.reverse().map((key) => key.asContractParam()),
+        { gasPrice: doubleGasPrice, gasLimit }
+      );
+      await tx.wait();
+    } catch (e) {
+      console.log(e);
+    }
+
+    console.log(txData);
+    // try {
+
+    //     fundingRound.submitMessageBatch(
+    //       messages.reverse().map((msg) => msg.asContractParam()),
+    //       encPubKeys.reverse().map((key) => key.asContractParam())
+    //   })
+    // } catch (error) {
+    //   this.voteTxError = error.message
+    //   return
+    // }
+  };
 
   return (
     <Flex
@@ -291,19 +429,18 @@ export const Ballot = () => {
       <VStack spacing={0} w="full">
         <Container h="full" w="full" maxWidth="container.sm">
           <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
-            <Heading mb={4}>Example Ballot</Heading>
+            <Heading mb={4}>Your Ballot</Heading>
             <VStack spacing={2} alignItems={"flex-start"} w="full">
               <BallotExplainer />
-
               <EaseInBottom duration={0.3} delay={0.5} heightStart={20} heightEnd={10}>
                 <Text fontSize={"md"}>
                   <b>Voice Credit balance: {voiceCreditBalance}</b>
                 </Text>
               </EaseInBottom>
-              <Text fontSize={"xs"} pt={2} px={"1px"}>
-                Voice Credits Spent: {ballotOption1Votes ** 2} + {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +
+              <Text fontSize={"md"} pt={2} px={"1px"}>
+                Voice Credits spent: {ballotOption1Votes ** 2} + {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +
                 {ballotOption4Votes ** 2} + {ballotOption5Votes ** 2} + {ballotOption6Votes ** 2} +{" "}
-                {ballotOption7Votes ** 2} + {ballotOption8Votes ** 2}= {totalVoiceCredits}
+                {ballotOption7Votes ** 2} + {ballotOption8Votes ** 2} = {totalVoiceCredits}
               </Text>
             </VStack>
             <VStack spacing={0} alignItems={"flex-start"} w="full" display={isEmptyBallot ? "flex" : "none"}>
@@ -326,20 +463,15 @@ export const Ballot = () => {
               alignItems={"flex-end"}
               justifyContent={{ base: "center", md: "space-between" }}
               w="full">
-              <VStack spacing={1} alignItems={{ base: "center", md: "flex-start" }}>
-                <Heading fontSize={"sm"} fontWeight={"bold"} alignSelf={"flex-start"}>
+              <VStack spacing={2} alignItems={{ base: "center", md: "flex-start" }}>
+                <Heading fontSize={"md"} fontWeight={"bold"} alignSelf={"flex-start"}>
                   Ballot (MACI) Passphrase
                 </Heading>
-                <Text fontSize={"xs"}>
-                  Think about this like a captcha on steroids. Ballot (MACI) Passphrase distribution is done as an
-                  in-person sybil check that assigns a white listed, pseudo random maci key to each voter. While at the
-                  event, you will be given a passphrase to use to submit your ballot. This secret key is used to sign
-                  the ballot and is not stored on the blockchain. Keep it safe! it is the only way to vote. QR scanning
-                  soon!
+                <Text fontSize={"md"}>
+                  MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting. Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.
                 </Text>
                 <HStack flexWrap="wrap" maxW="240px">
                   <PinInput
-                    
                     defaultValue="macisk."
                     size="xs"
                     type="alphanumeric"
@@ -423,21 +555,26 @@ export const Ballot = () => {
               </VStack>
               <VStack spacing={6} alignItems="flex-start" w="full">
                 <MagikButton />
-                <Button
-                  disabled={true}
-                  rounded={"full"}
-                  py={6}
-                  fontSize={"lg"}
-                  fontWeight="extrabold"
-                  fontFamily={"Helvetica"}
-                  bg="blue"
-                  color="white"
-                  variant="solid"
-                  w="full"
-                  mt={4}>
-                  SUBMIT BALLOT
-                </Button>
-                {/* <Text fontSize={"xs"}>{txError ?? ""}</Text> */}
+                {isConnected && isValidMaciKey ? (
+                  <Button
+                    onClick={handleSubmit}
+                    rounded={"full"}
+                    py={6}
+                    fontSize={"lg"}
+                    fontWeight="extrabold"
+                    fontFamily={"Helvetica"}
+                    bg="blue"
+                    color="white"
+                    variant="solid"
+                    w="full"
+                    mt={4}>
+                    SUBMIT BALLOT
+                  </Button>
+                ) : (
+                  <Center textAlign="center">
+                    <Text fontWeight="bold">Unregistered MACI Key: Enter a valid MACI passphrase to continue.</Text>
+                  </Center>
+                )}
               </VStack>
             </Stack>
           </VStack>
@@ -447,9 +584,9 @@ export const Ballot = () => {
   );
 };
 
-// function getUserStateIdbyMaciKey(maciKeyPair: Keypair) {
-//   return 1
-// }
+function getUserStateIdbyMaciKey(serializedMaciPubKey: string) {
+  return 1;
+}
 // function getUserStateIdbyMaciKey(id: Keypair) {
 //   return 1;
 // }

@@ -67,9 +67,9 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             </Text>
 
             <VStack display={{ base: "flex", xl: "none" }} pt="0" alignItems={"flex-start"} w="full">
-              <Button as={Link} to="/projects" h="60px" w="full" background="#FFFF00" color="black" variant={"solid"}>
+              <Button as={Link} to="/begin" h="60px" w="full" background="#FFFF00" color="black" variant={"solid"}>
                 <Text fontSize="lg"  color={color} fontWeight={"black"}>
-                  Check out the Projects
+                  Get Started
                 </Text>
               </Button>
               <Button
@@ -86,9 +86,9 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             </VStack>
 
             <VStack w="full" display={{ base: "none", xl: "flex" }} pt="10" justifyContent={"center"}>
-              <Button as={Link} to="/projects" h="80px" w="full" background="#FFFF00"color={color} variant={"solid"}>
+              <Button as={Link} to="/begin" h="80px" w="full" background="#FFFF00"color={color} variant={"solid"}>
                 <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
-                Check out the Projects
+                Get Started
                 </Text>
               </Button>
               <Button
