@@ -2,7 +2,7 @@
 import dotenv from "dotenv"
 import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
-import { auth, genkeys, deploy, initialize, addRecipients, signup } from "./commands/index.js"
+import { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing } from "./commands/index.js"
 
 dotenv.config()
 
@@ -68,6 +68,14 @@ program
   .argument("<path>", "the path of the CSV input file where the signup data for users is stored")
   .action((network: string, path: string) => {
     signup(network, path)
+  })
+
+  program
+  .command("dothething")
+  .description("Does all the things without user input")
+  .argument("<network>", "the network where the contracts has been deployed")
+  .action((network: string) => {
+    doTheThing(network)
   })
 
 program.parseAsync()

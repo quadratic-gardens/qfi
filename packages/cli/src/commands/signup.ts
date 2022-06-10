@@ -155,7 +155,7 @@ async function signup(network: string, path: string) {
 
     writeLocalJsonFile(hacksFilePath, JSON.parse(JSON.stringify(hacks)))
 
-    console.log(`\n${logSymbols.success} You have successfully registered the recipients on-chain 🎊\n`)
+    console.log(`\n${logSymbols.success} You have successfully registered the users on-chain 🎊\n`)
   } catch (err: any) {
     if (!err.transactionHash) console.log(`\n${logSymbols.error} Something went wrong: ${err}`)
     else

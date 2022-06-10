@@ -178,10 +178,10 @@ describe("Process - Tally QV poll votes", function() {
 
   const treeDepths = {
     intStateTreeDepth: 3, //NOTE: actualy use tally batch size of 25
-    messageTreeDepth: 4,
+    messageTreeDepth: 9,
     messageTreeSubDepth: 2,
-    voteOptionTreeDepth: 2,
-  };
+    voteOptionTreeDepth: 2
+  }
 
   const messageBatchSize = MESSAGE_TREE_ARITY ** treeDepths.messageTreeSubDepth;
   const tallyBatchSize = STATE_TREE_ARITY ** treeDepths.intStateTreeDepth;
