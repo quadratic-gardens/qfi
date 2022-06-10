@@ -30,7 +30,13 @@ export const SUPPORTED_NETWORKS: NetworkConfig = {
     explorer: "https://etherscan.io",
     rpc: "https://mainnet.infura.io/v3/<your infura project id>",
   },
-
+  "0x64": {
+    chainId: "0x64",
+    name: "Gnosis Chain",
+    symbol: "xDai",
+    explorer: "https://blockscout.com/xdai/mainnet/",
+    rpc: "https://rpc.gnosischain.com/",
+  },
   "0x539": {
     chainId: "0x539",
     name: "Hardhat",
@@ -61,7 +67,7 @@ export const providerOptions: IProviderOptions = {
       infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
       rpc: {
         1: SUPPORTED_NETWORKS["0x1"].rpc,
-        // 4: SUPPORTED_NETWORKS["0x4"].rpc,
+        100: SUPPORTED_NETWORKS["0x64"].rpc,
         1337: SUPPORTED_NETWORKS["0x539"].rpc,
       },
     },
@@ -73,7 +79,7 @@ export const providerOptions: IProviderOptions = {
       infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
       rpc: {
         1: SUPPORTED_NETWORKS["0x1"].rpc,
-        // 4: SUPPORTED_NETWORKS["0x4"].rpc,
+        100: SUPPORTED_NETWORKS["0x64"].rpc,
         1337: SUPPORTED_NETWORKS["0x539"].rpc,
       },
     },
@@ -380,6 +386,8 @@ export const useWallet = (): WalletContextType => useContext(WalletContext);
 
 export const nameToChainId = (name: string): string | undefined => {
   switch (name) {
+    case "xdai":
+      return "0x64";
     case "Mainnet":
       return "0x1";
     case "Hardhat":

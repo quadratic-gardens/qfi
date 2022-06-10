@@ -73,7 +73,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 </Text>
               </Button>
               <Button
-                onClick={onGuideOpen}
+                as={Link} to="/begin"
                 fontSize="lg"
                 fontWeight={"black"}
                 bg={"black"}
@@ -81,7 +81,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 h="60px"
                 w="full"
                 background="#5400FF">
-                LEARN MORE
+                Get Started
               </Button>
             </VStack>
 
@@ -90,6 +90,17 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
                 Check out the Projects
                 </Text>
+              </Button>
+              <Button
+                as={Link} to="/begin"
+                fontSize="lg"
+                fontWeight={"black"}
+                bg={"black"}
+                color="white"
+                h="60px"
+                w="full"
+                background="#5400FF">
+                Get Started
               </Button>
             </VStack>
           </VStack>

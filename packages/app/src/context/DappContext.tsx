@@ -48,7 +48,7 @@ export const DappProvider: React.FC<Props> = ({ children }) => {
       <WalletProvider
         web3modalOptions={web3modalOptions}
         networks={SUPPORTED_NETWORKS}
-        defaultChainId={nameToChainId("Mainnet")}
+        defaultChainId={nameToChainId("xdai")}
         handleAccountsChangedEvent={(accounts: string[]) => {
           console.log("Accounts changed");
         }}
