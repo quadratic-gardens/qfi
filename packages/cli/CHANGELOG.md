@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/quadratic-funding/qfi/compare/v1.2.0...v1.3.0) (2022-06-10)
+
+
+### Bug Fixes
+
+* **cli:** patch prague deploy ([c4eb8dd](https://github.com/quadratic-funding/qfi/commit/c4eb8ddab9594772e5e72f5a5640b3a24f960320))
+
+
+
+
+
 # [1.2.0](https://github.com/quadratic-funding/qfi/compare/v1.1.0...v1.2.0) (2022-06-10)
 
 **Note:** Version bump only for package @qfi/ethpraguecli
