@@ -1,6 +1,6 @@
 {
   "name": "@qfi/ethpraguecli",
-  "version": "0.3.0",
+  "version": "1.3.0",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
   "main": "dist/cli/src/index.js",
   "repository": "https://github.com/quadratic-funding/qfi",
@@ -24,8 +24,11 @@
     "start": "node dist/cli/src/index.js",
     "auth": "yarn start auth",
     "genkeys": "yarn start genkeys",
-    "contracts:deploy": "yarn start deploy",
+    "initialize": "yarn start initialize",
+    "dothething": "yarn start dothething",
+    "contracts:deploy": "yarn start contracts:deploy",
     "contracts:add-recipients": "yarn start contracts:add-recipients",
+    "contracts:signup": "yarn start contracts:signup",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "prettier": "prettier -c .",
@@ -71,5 +74,8 @@
     "qaci-crypto": "^1.1.0",
     "qaci-domainobjs": "^1.1.0",
     "qrcode": "^1.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

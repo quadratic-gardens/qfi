@@ -3,6 +3,98 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/compare/v1.2.0...v1.3.0) (2022-06-10)
+
+
+### Bug Fixes
+
+* **cli:** patch prague deploy ([c4eb8dd](https://github.com/commit/c4eb8ddab9594772e5e72f5a5640b3a24f960320))
+
+
+
+
+
+# [1.2.0](https://github.com/compare/v1.1.0...v1.2.0) (2022-06-10)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+# [1.1.0](https://github.com/compare/v1.0.1...v1.1.0) (2022-06-10)
+
+
+### Features
+
+* **cli:** dothething command to batch all the other commands ([0254747](https://github.com/commit/0254747fdc6da224300986d476a855ab289f65b1))
+
+
+
+# [0.4.0](https://github.com/compare/v0.3.3...v0.4.0) (2022-06-09)
+
+
+### Bug Fixes
+
+* build error due to missing data source ([aa8d6d7](https://github.com/commit/aa8d6d771924ca44b255611694bb730cbbbc3c09))
+* missing SimpleHackathon source on subgraph.yaml ([44eaeea](https://github.com/commit/44eaeeaca442fc3409e5ad050bf346d0ce594064))
+
+
+### Features
+
+* add basic signup command; minors and code lint ([1a3bab8](https://github.com/commit/1a3bab8b065ae64b5c3c47590e633745e77abce4))
+* track SimpleHackathon contract as a recipient registry in the subgraph ([abe27c5](https://github.com/commit/abe27c5a9be033192eaa47af3ee5c02824bcaad1))
+
+
+
+
+
+
+## [1.0.1](https://github.com/compare/v1.0.0...v1.0.1) (2022-06-09)
+
+
+### Reverts
+
+* npm revert to 0.3.3 ([68e6766](https://github.com/commit/68e676698356c95e7e456622138407993150e943))
+
+
+
+## [0.3.3](https://github.com/compare/v0.3.2...v0.3.3) (2022-06-09)
+
+
+### Bug Fixes
+
+* numeric overflow when passing initial supply of ERC20 token to contract ([375b63c](https://github.com/commit/375b63cfe144d36c0ccd97f34f34f8b2e0d020ec))
+
+
+
+
+
+## [0.3.1](https://github.com/compare/v0.2.2...v0.3.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* add missing converter for request type ([9766979](https://github.com/commit/9766979ba5257132deaacf43332c5b956cd21156))
+* **app:** fixed babel error that converts ** to .pow causing build failure with Bigint error ([ac2d7d5](https://github.com/commit/ac2d7d54ceb31f7c02d4d6bd110caf3c019cdf11))
+* change from a new creation of a QFI scheme to its loading for the same id ([b7af432](https://github.com/commit/b7af432ef46b441fa2eafd664bced4ec40182e3b))
+* converters and qfi initialization ([969c1b4](https://github.com/commit/969c1b4c1d0468c2031cd3084e8300ce78d67e97))
+* missing abis for different data sources ([0cf3a3d](https://github.com/commit/0cf3a3d30633bcc30861b34f979f900035bd7a2d))
+* removed non-nullable property for wrong variables when deploying QFI ([d5cf5c9](https://github.com/commit/d5cf5c90c1ea77775d24fa9807dcbe8ea83eacfa))
+* wrong controller parameter value passed to SimpleRecipientRegistry constructor ([26c8c11](https://github.com/commit/26c8c119245ed5298c59c58eadd6d682d1e9f32d))
+* wrong deploy script name in package.json; code lint and fix ([2d241b2](https://github.com/commit/2d241b2a8c3b1ea8b420ba937702153d2ba1ef8f))
+
+
+### Features
+
+* add MACI/QFI smart contracts initialization command ([24491cf](https://github.com/commit/24491cf61615f74674c1c0161bc2d366792adbea))
+* add missing grant round factory entity for managing pre-QFI Recipient Registry change ([0495196](https://github.com/commit/0495196d92189189616f460e6fa272068fc8be88))
+* **cli:** crate prague erc20, mint with 18 decimals ([dc40032](https://github.com/commit/dc40032fba08832b35bb5ce4862bd77952908e00))
+
+
+
+
+
 # [0.3.0](https://github.com/compare/v0.2.2...v0.3.0) (2022-06-08)
 
 

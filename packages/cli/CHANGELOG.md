@@ -3,40 +3,96 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
+# [1.3.0](https://github.com/quadratic-funding/qfi/compare/v1.2.0...v1.3.0) (2022-06-10)
+
+
+### Bug Fixes
+
+* **cli:** patch prague deploy ([c4eb8dd](https://github.com/quadratic-funding/qfi/commit/c4eb8ddab9594772e5e72f5a5640b3a24f960320))
+
+
+
+
+
+# [1.2.0](https://github.com/quadratic-funding/qfi/compare/v1.1.0...v1.2.0) (2022-06-10)
 
 **Note:** Version bump only for package @qfi/ethpraguecli
 
 
 
 
+
+# [1.1.0](https://github.com/quadratic-funding/qfi/compare/v1.0.1...v1.1.0) (2022-06-10)
+
+
+### Features
+
+* **cli:** dothething command to batch all the other commands ([0254747](https://github.com/quadratic-funding/qfi/commit/0254747fdc6da224300986d476a855ab289f65b1))
+
+
+
+# [0.4.0](https://github.com/quadratic-funding/qfi/compare/v0.3.3...v0.4.0) (2022-06-09)
+
+
+### Features
+
+* add basic signup command; minors and code lint ([1a3bab8](https://github.com/quadratic-funding/qfi/commit/1a3bab8b065ae64b5c3c47590e633745e77abce4))
+
+
+
+
+
+## [1.0.1](https://github.com/quadratic-funding/qfi/compare/v1.0.0...v1.0.1) (2022-06-09)
+
+
+### Reverts
+
+* npm revert to 0.3.3 ([68e6766](https://github.com/quadratic-funding/qfi/commit/68e676698356c95e7e456622138407993150e943))
+
+
+
+### Features
+
+* add basic signup command; minors and code lint ([1a3bab8](https://github.com/quadratic-funding/qfi/commit/1a3bab8b065ae64b5c3c47590e633745e77abce4))
+
+
+
+
+
+## [0.3.3](https://github.com/quadratic-funding/qfi/compare/v0.3.2...v0.3.3) (2022-06-09)
+
+### Bug Fixes
+
+- numeric overflow when passing initial supply of ERC20 token to contract ([375b63c](https://github.com/quadratic-funding/qfi/commit/375b63cfe144d36c0ccd97f34f34f8b2e0d020ec))
+
+## [0.3.1](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.1) (2022-06-09)
+
+### Bug Fixes
+
+- wrong deploy script name in package.json; code lint and fix ([2d241b2](https://github.com/quadratic-funding/qfi/commit/2d241b2a8c3b1ea8b420ba937702153d2ba1ef8f))
+
+### Features
+
+- add MACI/QFI smart contracts initialization command ([24491cf](https://github.com/quadratic-funding/qfi/commit/24491cf61615f74674c1c0161bc2d366792adbea))
+- **cli:** crate prague erc20, mint with 18 decimals ([dc40032](https://github.com/quadratic-funding/qfi/commit/dc40032fba08832b35bb5ce4862bd77952908e00))
+
+# [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
+
+**Note:** Version bump only for package @qfi/ethpraguecli
 
 ## [0.2.1](https://github.com/quadratic-funding/qfi/compare/v0.2.0...v0.2.1) (2022-06-08)
 
 **Note:** Version bump only for package @qfi/ethpraguecli
 
-
-
-
-
 # [0.2.0](https://github.com/quadratic-funding/qfi/compare/v0.1.0...v0.2.0) (2022-06-03)
 
 **Note:** Version bump only for package @qfi/ethpraguecli
 
-
-
-
-
 # [0.1.0](https://github.com/quadratic-funding/qfi/compare/v0.0.4...v0.1.0) (2022-06-02)
-
 
 ### Features
 
-* add command to authenticate via a wallet mnemonic phrase ([d15f1d2](https://github.com/quadratic-funding/qfi/commit/d15f1d2212845372e3c520bf539c5c7f3d0125c7))
-
-
-
-
+- add command to authenticate via a wallet mnemonic phrase ([d15f1d2](https://github.com/quadratic-funding/qfi/commit/d15f1d2212845372e3c520bf539c5c7f3d0125c7))
 
 ## [0.0.4](https://github.com/quadratic-funding/qfi/compare/v0.0.3...v0.0.4) (2022-06-01)
 

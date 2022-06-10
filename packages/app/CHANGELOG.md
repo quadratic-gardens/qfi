@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/quadratic-funding/qfi/compare/v1.0.1...v1.1.0) (2022-06-10)
+
+
+
+# [0.4.0](https://github.com/quadratic-funding/qfi/compare/v0.3.3...v0.4.0) (2022-06-09)
+
+**Note:** Version bump only for package @qfi/app
+
+
+
+
+
+
+# [1.0.0](https://github.com/quadratic-funding/qfi/compare/v0.3.3...v1.0.0) (2022-06-09)
+
+**Note:** Version bump only for package @qfi/app
+
+
+
+
+
+## [0.3.3](https://github.com/quadratic-funding/qfi/compare/v0.3.2...v0.3.3) (2022-06-09)
+
+**Note:** Version bump only for package @qfi/app
+
+
+
+
+
+## [0.3.1](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.1) (2022-06-09)
+
+
+### Bug Fixes
+
+* **app:** fixed babel error that converts ** to .pow causing build failure with Bigint error ([ac2d7d5](https://github.com/quadratic-funding/qfi/commit/ac2d7d54ceb31f7c02d4d6bd110caf3c019cdf11))
+
+
+
+
+
 # [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
 
 **Note:** Version bump only for package @qfi/app
