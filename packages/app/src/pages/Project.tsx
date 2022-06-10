@@ -229,9 +229,6 @@ export function Project() {
                 </Text>
               </VStack>
               <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-                {project.problemSpace}
-              </Text>
-              <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
                 {project.description}
               </Text>
 

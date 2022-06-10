@@ -72,8 +72,9 @@ export const Projects = () => {
                   <AccordionItem border="none">
                     <VStack>
                       <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
-                        This is a directory of projects! This page will be updated once the event starts to let
-                        you add projects to a real ballot and vote for projects that you meet at the event. Tap here to learn more 📖🧐.
+                        This is a directory of projects! This page will be updated once the event starts to let you add
+                        projects to a real ballot and vote for projects that you meet at the event. Tap here to learn
+                        more 📖🧐.
                         <AccordionIcon></AccordionIcon>
                       </Text>
                     </VStack>
@@ -128,7 +129,7 @@ export const Projects = () => {
                 </Accordion>
               </VStack>
               <VStack spacing={0} alignItems={"flex-start"} w="full">
-                {getShuffledProjects().map((project:Option) => (
+                {getShuffledProjects().map((project: Option) => (
                   <Box
                     _hover={{
                       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
@@ -170,7 +171,7 @@ export const Projects = () => {
                           </Text>
                         </VStack>
                         <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-                          {project.problemSpace}
+                          {project.tagline}
                         </Text>
                         {/* <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
            
