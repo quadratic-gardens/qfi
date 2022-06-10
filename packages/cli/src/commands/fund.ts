@@ -13,8 +13,8 @@ import {
   mnemonicBaseDirPath,
   mnemonicFilePath,
   outputDirPath,
-  usersStateIndexesBaseDirPath
-  // userWallets
+  usersStateIndexesBaseDirPath,
+  userWallets
 } from "../lib/constants.js"
 import { askForConfirmation } from "../lib/prompts.js"
 
@@ -41,9 +41,9 @@ async function fund(network: string) {
     const double = BigNumber.from("2")
     const doubleGasPrice = gasPrice.mul(double)
     const gasLimit = ethers.utils.hexlify(10000000)
-    const wallets = ["0x4B6b8fb1d5368C4Db129be5EdDB16332E4680124", "0x5C3F41711A031d2D102F7F48Eb5dc36138BE05b7"]
+    const wallets = userWallets
 
-    console.log(chalk.bold(`\n you are about to send money to [400] people.`))
+    console.log(chalk.bold(`\n you are about to send [0.1] to [400] people.`))
     const { confirmation: preFlightCheck1 } = await askForConfirmation("Ready?")
     if (!preFlightCheck1) {
       console.log(`\nFarewell 1👋`)
