@@ -4,6 +4,7 @@ import {
     RequestResolved,
     RequestSubmitted
 } from "../../generated/OptimisticRecipientRegistry/OptimisticRecipientRegistry"
+import { RecipientAdded, RecipientRemoved } from "../../generated/SimpleHackathon/SimpleHackathon"
 
 import { Recipient, RecipientRegistry } from "../../generated/schema"
 import { REGISTRATION } from "../utils/constants"
@@ -55,7 +56,6 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
  * Handle the request resolution for a Recipient.
  * @param event Ethereum event emitted when the request for a Recipient is resolved.
  */
-
 export function handleRequestResolved(event: RequestResolved): void {
     log.debug(`RequestResolved event block: {}`, [event.block.number.toString()])
 
@@ -91,4 +91,66 @@ export function handleRequestResolved(event: RequestResolved): void {
     } else log.error(`Recipient Registry entity not found!`, [])
 
     log.debug(`handleRequestResolved executed correctly`, [])
+}
+
+/**
+ * Add a new Recipient.
+ * @param event Ethereum event emitted when someone adds a new Recipient.
+ */
+export function handleRecipientAdded(event: RecipientAdded): void {
+    log.debug(`RecipientAdded event block: {}`, [event.block.number.toString()])
+
+    const timestamp = event.block.timestamp.toString()
+
+    const recipientRegistryId = event.address.toHexString()
+    const recipientRegistry = RecipientRegistry.load(recipientRegistryId)
+
+    if (recipientRegistry !== null) {
+        // Create a new request for the Recipient.
+        const recipientId = event.params._recipientId.toHexString()
+        const recipient = new Recipient(recipientId)
+
+        recipient.deposit = event.transaction.value
+        recipient.recipientRegistry = recipientRegistryId
+        recipient.address = event.params._recipient
+        recipient.metadata = event.params._metadata
+        recipient.voteOptionIndex = event.params._index
+        recipient.addedAt = event.params._timestamp
+
+        recipient.createdAt = timestamp
+        recipient.lastUpdatedAt = timestamp
+
+        recipient.save()
+    } else log.error(`Recipient Registry entity not found!`, [])
+
+    log.debug(`handleRecipientAdded executed correctly`, [])
+}
+
+/**
+ * Remove a Recipient.
+ * @param event Ethereum event emitted when someone removes a Recipient.
+ */
+
+export function handleRecipientRemoved(event: RecipientRemoved): void {
+    log.debug(`RecipientRemoved event block: {}`, [event.block.number.toString()])
+
+    const timestamp = event.block.timestamp.toString()
+
+    // Calculate the RecipientRegistry identifier.
+    const recipientRegistryId = event.address.toHexString()
+    const recipientRegistry = RecipientRegistry.load(recipientRegistryId)
+
+    if (recipientRegistry !== null) {
+        const recipientId = event.params._recipientId.toHexString()
+        const recipient = Recipient.load(recipientId)
+
+        if (recipient !== null) {
+            recipient.removedAt = event.params._timestamp
+            recipient.lastUpdatedAt = timestamp
+
+            recipient.save()
+        } else log.error(`Recipient entity not found!`, [])
+    } else log.error(`Recipient Registry entity not found!`, [])
+
+    log.debug(`handleRecipientRemoved executed correctly`, [])
 }

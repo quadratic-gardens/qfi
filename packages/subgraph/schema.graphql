@@ -143,16 +143,16 @@ type Recipient @entity {
 
     # Request fields.
     # nb. we are not storing an history of requests (as the mapping on-chain, just the current/last one).
-    requestType: RequestType!
-    requesterAddress: Bytes!
-    requestRecipientAddress: Bytes!
-    requestRecipientMetadata: String!
-    submissionTime: BigInt!
+    requestType: RequestType
+    requesterAddress: Bytes
+    requestRecipientAddress: Bytes
+    requestRecipientMetadata: String
+    submissionTime: BigInt
     resolutionTime: BigInt
     deposit: BigInt!
     rejected: Boolean
     # Tx hash mirror.
-    requestSubmittedHash: Bytes!
+    requestSubmittedHash: Bytes
     requestResolvedHash: Bytes
     
     # Links.

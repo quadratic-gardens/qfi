@@ -1,6 +1,6 @@
 {
   "name": "@qfi/subgraph",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "quadratic-funding subgraph",
   "main": "index.js",
   "author": "",
@@ -10,8 +10,8 @@
     "clean": "shx rm -rf ./build ./generated",
     "codegen": "graph codegen",
     "build": "graph codegen && graph build",
-    "build:prod-xdai": "graph build --network xdai --network-file ./config/prodNetworks.json",
-    "build:test-rinkarby": "graph build --network arbitrum-rinkeby --network-file ./config/testNetworks.json",
+    "build:prod-xdai": "yarn build && graph build --network xdai --network-file ./config/prodNetworks.json",
+    "build:test-rinkarby": "yarn build && graph build --network arbitrum-rinkeby --network-file ./config/testNetworks.json",
     "auth": "graph auth --product hosted-service",
     "deploy:prod": "graph deploy --product hosted-service 0xjei/qfi-prod",
     "deploy:test": "graph deploy --product hosted-service 0xjei/qfi-test",

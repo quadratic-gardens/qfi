@@ -1,15 +1,19 @@
 {
     "arbitrum-rinkeby": {
         "QFI": {
-            "address": "0x20f127CF2573a691C2dDF290760f12A608B84358",
+            "address": "0x060D89D6F529B194084F431D46439fc1f77Db6C4",
+            "startBlock": 12093300
+        },
+        "SimpleHackathon": {
+            "address": "0xC0d3dFF951dF81A2BF2B9435bc4f0Ff83f9737b6",
             "startBlock": 12093300
         },
         "OptimisticRecipientRegistry": {
-            "address": "0x77473bCbaA81620fe0B2f4c04581AC9d62045815",
+            "address": "0x0000000000000000000000000000000000000000",
             "startBlock": 12093300
         },
         "GrantRoundFactory": {
-            "address": "0x3b73B401A4F552ae0187d2B5DE53E24448E992aA",
+            "address": "0xA904EfB2Ad049ccCe2184939c418a512984b396A",
             "startBlock": 12093300
         }
     },

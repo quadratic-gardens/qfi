@@ -41,6 +41,9 @@ import { ONE } from "../utils/constants"
 export function handleMaciDeployed(event: MaciDeployed): void {
     log.debug(`MACI Deployed event block: {}`, [event.block.number.toString()])
 
+    // TODO: need to add MaciDeployed event to MACI smart contract to trigger this. For now,
+    // we are just not using it (therefore, the QFI creation is on the QfiDeployed handler).
+
     const timestamp = event.block.timestamp.toString()
 
     // Get the QFI/MACI instance.
@@ -82,45 +85,59 @@ export function handleQfiDeployed(event: QfiDeployed): void {
 
     const timestamp = event.block.timestamp.toString()
 
-    // Get the QFI/MACI instance.
+    // Create the QFI/MACI instance.
     const qfiAddress = event.address
     const qfiContract = QFIContract.bind(qfiAddress)
     const qfiId = qfiAddress.toHexString()
-    const qfi = QFISchema.load(qfiId)
+    const qfi = new QFISchema(qfiId)
 
-    if (qfi !== null) {
-        qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
-        qfi.nativeERC20TokenAddress = event.params._nativeToken
-        qfi.voiceCreditFactor = event.params._voiceCreditFactor
-        qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
+    qfi.grantRoundFactoryAddress = event.params._grantRoundFactory
+    qfi.nativeERC20TokenAddress = event.params._nativeToken
+    qfi.voiceCreditFactor = event.params._voiceCreditFactor
+    qfi.currentStage = currentStageConverterFromEnumIndexToString(event.params._currentStage.toString())
 
-        qfi.isInitialized = qfiContract.isInitialised()
+    // From contract.
+    qfi.stateAqAddress = qfiContract.stateAq()
+    qfi.pollFactoryAddress = qfiContract.pollFactory()
+    qfi.initialVoiceCreditProxyAddress = qfiContract.initialVoiceCreditProxy()
+    qfi.signUpGatekeeperAddress = qfiContract.signUpGatekeeper()
+    qfi.signUpTimestamp = qfiContract.signUpTimestamp()
+    qfi.isInitialized = qfiContract.isInitialised()
+    qfi.stateTreeDepth = qfiContract.stateTreeDepth()
+    qfi.numSignUps = qfiContract.numSignUps()
+    qfi.nextGrantRoundId = qfiContract.nextGrantRoundId()
+    qfi.contributorCount = qfiContract.contributorCount()
+    qfi.voiceCreditFactor = qfiContract.voiceCreditFactor()
+    qfi.isInitialized = qfiContract.isInitialised()
+    qfi.stateTreeDepth = qfiContract.stateTreeDepth()
+    qfi.isStateAqMerged = false
+    qfi.currentStage = currentStageConverterFromEnumIndexToString(qfiContract.currentStage().toString())
 
-        const grantRoundFactoryAddress = event.params._grantRoundFactory
-        const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
-        let grantRoundFactory = GrantRoundFactory.load(grantRoundFactoryId)
+    qfi.createdAt = timestamp
+    qfi.lastUpdatedAt = timestamp
 
-        // Check if the Grant Round Factory entity has been already created; otherwise create a new one.
-        if (grantRoundFactory !== null) {
-            const recipientRegistryAddress = grantRoundFactory.recipientRegistryAddress
+    const grantRoundFactoryAddress = event.params._grantRoundFactory
+    const grantRoundFactoryId = grantRoundFactoryAddress.toHexString()
+    let grantRoundFactory = GrantRoundFactory.load(grantRoundFactoryId)
 
-            qfi.recipientRegistry = recipientRegistryAddress ? recipientRegistryAddress.toHexString() : null
-        } else {
-            // Create a new Grant Round Factory entity.
-            grantRoundFactory = new GrantRoundFactory(grantRoundFactoryId)
-            grantRoundFactory.createdAt = timestamp
-            grantRoundFactory.lastUpdatedAt = timestamp
+    // Check if the Grant Round Factory entity has been already created; otherwise create a new one.
+    if (grantRoundFactory !== null) {
+        const recipientRegistryAddress = grantRoundFactory.recipientRegistryAddress
 
-            grantRoundFactory.save()
-        }
-
-        qfi.lastUpdatedAt = timestamp
-        qfi.save()
+        qfi.recipientRegistry = recipientRegistryAddress ? recipientRegistryAddress.toHexString() : null
     } else {
-        log.error(`QFI entity not found!`, [])
+        // Create a new Grant Round Factory entity.
+        grantRoundFactory = new GrantRoundFactory(grantRoundFactoryId)
+        grantRoundFactory.createdAt = timestamp
+        grantRoundFactory.lastUpdatedAt = timestamp
+
+        grantRoundFactory.save()
     }
 
-    log.debug(`handleMaciDeployed executed correctly`, [])
+    qfi.lastUpdatedAt = timestamp
+    qfi.save()
+
+    log.debug(`handleQfiDeployed executed correctly`, [])
 }
 
 /**

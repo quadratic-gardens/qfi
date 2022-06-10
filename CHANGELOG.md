@@ -3,25 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/compare/v1.2.0...v1.3.0) (2022-06-10)
+
+
+### Bug Fixes
+
+* **cli:** patch prague deploy ([c4eb8dd](https://github.com/commit/c4eb8ddab9594772e5e72f5a5640b3a24f960320))
+
+
+
+
+
+# [1.2.0](https://github.com/compare/v1.1.0...v1.2.0) (2022-06-10)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+# [1.1.0](https://github.com/compare/v1.0.1...v1.1.0) (2022-06-10)
+
+
+### Features
+
+* **cli:** dothething command to batch all the other commands ([0254747](https://github.com/commit/0254747fdc6da224300986d476a855ab289f65b1))
+
+
+
+# [0.4.0](https://github.com/compare/v0.3.3...v0.4.0) (2022-06-09)
+
+
+### Bug Fixes
+
+* build error due to missing data source ([aa8d6d7](https://github.com/commit/aa8d6d771924ca44b255611694bb730cbbbc3c09))
+* missing SimpleHackathon source on subgraph.yaml ([44eaeea](https://github.com/commit/44eaeeaca442fc3409e5ad050bf346d0ce594064))
+
+
+### Features
+
+* add basic signup command; minors and code lint ([1a3bab8](https://github.com/commit/1a3bab8b065ae64b5c3c47590e633745e77abce4))
+* track SimpleHackathon contract as a recipient registry in the subgraph ([abe27c5](https://github.com/commit/abe27c5a9be033192eaa47af3ee5c02824bcaad1))
+
+
+
+
+
+
 ## [1.0.1](https://github.com/compare/v1.0.0...v1.0.1) (2022-06-09)
 
 
 ### Reverts
 
 * npm revert to 0.3.3 ([68e6766](https://github.com/commit/68e676698356c95e7e456622138407993150e943))
-
-
-
-
-
-# [1.0.0](https://github.com/compare/v0.3.3...v1.0.0) (2022-06-09)
-
-
-### Reverts
-
-* revern npm deploy ([f3a096b](https://github.com/commit/f3a096b17a735be52877588b8041ac321e035cf5))
-
-
 
 
 
