@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   VStack,
   Container,
@@ -12,15 +12,16 @@ import {
   HStack,
   PinInput,
   PinInputField,
-  Wrap,
   Icon,
+  useToast,
 } from "@chakra-ui/react";
-import { animateText, MagikButton, MagikText } from "@qfi/ui";
-import { Hero } from "../components/Hero";
+import { MagikButton } from "@qfi/ui";
+import { Keypair, PrivKey } from "qaci-domainobjs";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { useDappState } from "../context/DappContext";
 import { QrReader } from "react-qr-reader";
 import { HiExternalLink } from "react-icons/hi";
+import { getStateIndex } from "../quickBallotConfig";
 
 export type HomeProps = {
   isSettingsOpen: boolean;
@@ -28,17 +29,26 @@ export type HomeProps = {
   isGuideOpen: boolean;
   onGuideOpen: () => void;
 };
-// Simple enumerative for key types.
+
 const isMaciPrivKey = (key: string): boolean => {
-  if (key.length === 71 && key.startsWith("macisk.")) {
-    return true;
+  if ((key.length === 71 || key.length === 70) && key.startsWith("macisk.")) {
+    try {
+      const pubKey = new Keypair(PrivKey.unserialize(key)).pubKey.serialize();
+      if (getStateIndex(pubKey)) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
+
   return false;
 };
 
 export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
   const color = useColorModeValue("gray.800", "gray.700");
-
+  const toast = useToast();
   const [key, setKey] = useState<string>();
   const [keyType, setKeyType] = useState<string>();
   const [openQRCodeReader, setOpenQRCodeReader] = useState(false);
@@ -47,21 +57,44 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
   const { maciKey, setMaciKey } = useDappState();
 
   useEffect(() => {
-    console.log("isMaciPrivKey", isMaciPrivKey(maciKey));
     if (maciKey) {
       setKey(maciKey);
     }
   }, [setKey, maciKey]);
   const handleChange = (value: string) => {
     setKey(value);
-    console.log("changed");
   };
 
   const handleComplete = (value: string) => {
     console.log("complete");
-    setMaciKey(value);
+    try {
+      if (isMaciPrivKey(value)) {
+        setMaciKey(value);
+
+        toast({
+          title: "New Maci Key",
+          description: "You have updated your MACI key, and are registered to vote.",
+          status: "success",
+          duration: 6000,
+          isClosable: true,
+        });
+        console.log("changed");
+        console.log(new Keypair(PrivKey.unserialize(value)).pubKey.serialize());
+      }
+      else{
+        throw new Error("Invalid MACI key");
+      }
+    } catch (e) {
+      toast({
+        title: "Invalid Maci Key",
+        description: "The MACI Key you have provided is either incorrect or not registered",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      console.log(e.message);
+    }
   };
-  console.log("maciKey", maciKey);
   return (
     <Flex
       as="main"
@@ -104,21 +137,26 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   <VStack spacing={6} alignItems="flex-start">
                     <Heading size="4xl">How it works?</Heading>
                     <Text fontFamily={"archivo"}>
-                      Casting a Ballot requires you to have a wallet on Gnosis Chain, xDai to pay for gas, and a valid ballot key. Voting is anonymous, but ballot registration happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your ballot keys.
+                      Casting a Ballot requires you to have a wallet on Gnosis Chain, xDai to pay for gas, and a valid
+                      ballot key. Voting is anonymous, but ballot registration happens in person as a sybil check. At
+                      the event, visit the Quadratic Funding booth to get your ballot keys.
                     </Text>
                   </VStack>
                   <VStack spacing={6} alignItems="flex-start">
                     <Heading size="md">GnosisChain (xDai) Wallet</Heading>
                     <Text fontFamily={"archivo"}>
-                      You will receive keys for an xDai address that is whitelisted for this voting round, pre-loaded with enough gas to cover the transaction fees for ballot submission.
+                      You will receive keys for an xDai address that is whitelisted for this voting round, pre-loaded
+                      with enough gas to cover the transaction fees for ballot submission.
                     </Text>
                     <MagikButton />
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Ballot (MACI) passphrase</Heading>
                     <Text fontFamily={"archivo"}>
-                      MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting.
-                      Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.
+                      MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against
+                      censorship and collusion in blockchain voting. Each voter gets a pseudo-random MACI key which is
+                      used to encrypt and validate your votes. This is the only way to vote in the round, and can be
+                      used to change your ballot at any time while the round is active, so keep it safe.
                     </Text>
                   </VStack>
 
@@ -153,12 +191,6 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                         />
                       </Container>
                     )}
-                    <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
-                      {keyType}
-                    </Text>
-                    <Text fontSize="sm" fontWeight={"black"} fontFamily={"archivo"}>
-                      {key}
-                    </Text>
                   </VStack>
 
                   <VStack spacing={1} alignItems="flex-start">
@@ -245,15 +277,13 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                     </HStack>
 
                     <Divider></Divider>
-                    <Button colorScheme="blue" variant="outline" w="full" mt={4}>
-                      Save
-                    </Button>
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Confused or need help?</Heading>
                     <Text fontSize="md" fontFamily={"archivo"}>
-                      You can send us an email at privacy.scaling.explorations@gmail.com or join the ETHPrague Telegram group
-                      <Link href='https://t.me/ethprague' isExternal>
+                      You can send us an email at privacy.scaling.explorations@gmail.com or join the ETHPrague Telegram
+                      group
+                      <Link href="https://t.me/ethprague" isExternal>
                         <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                       </Link>
                     </Text>

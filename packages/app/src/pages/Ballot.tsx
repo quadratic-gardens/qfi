@@ -22,7 +22,8 @@ import {
   ListItem,
   UnorderedList,
   Icon,
-  Link
+  Link,
+  useToast,
 } from "@chakra-ui/react";
 
 import { EaseInBottom, MagikButton } from "@qfi/ui";
@@ -40,13 +41,16 @@ import { BigNumber, Contract, ethers } from "ethers";
 import { QFI__factory } from "../typechain/factories/QFI__factory";
 import { GrantRound__factory } from "../typechain";
 import { HiExternalLink } from "react-icons/hi";
+import { getStateIndex } from "../quickBallotConfig";
 
 const isMaciPrivKey = (key: string): boolean => {
   if ((key.length === 71 || key.length === 70) && key.startsWith("macisk.")) {
     try {
-      new Keypair(PrivKey.unserialize(key)).pubKey.serialize();
-
-      return true;
+      const pubKey = new Keypair(PrivKey.unserialize(key)).pubKey.serialize();
+      if (getStateIndex(pubKey)) {
+        return true;
+      }
+      return false;
     } catch (e) {
       return false;
     }
@@ -59,6 +63,7 @@ export const Ballot = () => {
   const [searchParams] = useSearchParams();
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
+  const toast = useToast();
 
   const isValidMaciKey = useMemo(() => {
     return isMaciPrivKey(maciKey);
@@ -67,20 +72,37 @@ export const Ballot = () => {
   const { provider, chainId, address, isConnected } = useWallet();
   const handleChange = (value: string) => {
     setKey(value);
-    try {
-      if (isMaciPrivKey(value)) {
-        setMaciKey(value);
-        console.log("changed");
-        console.log(new Keypair(PrivKey.unserialize(value)).pubKey.serialize());
-      }
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   const handleComplete = (value: string) => {
     console.log("complete");
-    setMaciKey(value);
+    try {
+      if (isMaciPrivKey(value)) {
+        setMaciKey(value);
+
+        toast({
+          title: "New Maci Key",
+          description: "You have updated your MACI key, and are registered to vote.",
+          status: "success",
+          duration: 6000,
+          isClosable: true,
+        });
+        console.log("changed");
+        console.log(new Keypair(PrivKey.unserialize(value)).pubKey.serialize());
+      }
+      else{
+        throw new Error("Invalid MACI key");
+      }
+    } catch (e) {
+      toast({
+        title: "Invalid Maci Key",
+        description: "The MACI Key you have provided is either incorrect or not registered",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      console.log(e.message);
+    }
   };
 
   useEffect(() => {
@@ -326,27 +348,30 @@ export const Ballot = () => {
     // const qfiAddress = "0x7718F3716e45C1bcCd538fF756f244978747ef4d"
     // const qfiContract = new Contract(qfiAddress, QFI__factory.abi, signer);
     const grantRound = new ethers.Contract(grantRoundAddress, GrantRound__factory.abi, signer);
-    // const that = await grantRound.connect(signer).maxValues();
-    // console.log(that);
-    console.log("-----------------------------------------------------");
 
     setTxLoading(true);
+    console.log("-----------------------------------------------------");
     const txData: [Message, PubKey][] = recipientRegistryIds.map((projectId, index) => {
       try {
         const recipientVoteOptionIndex = getRecipientIdbyId(projectId.toString());
-        console.log(recipientVoteOptionIndex);
+        console.log("recipientVoteOptionIndex", recipientVoteOptionIndex);
         let maciKeyPair: Keypair;
         let serializedMaciPublicKey: string;
         let userStateIndex: number;
+        let nonce: number;
+        let voteWeight: number;
+
         if (isMaciPrivKey(maciKey)) {
           maciKeyPair = new Keypair(PrivKey.unserialize(maciKey));
-          console.log("test", maciKeyPair);
           serializedMaciPublicKey = maciKeyPair.pubKey.serialize();
-          userStateIndex = getUserStateIdbyMaciKey(serializedMaciPublicKey);
-          console.log(userStateIndex);
-          const nonce = index;
-          const voteWeight = votes[index];
-
+          console.log("serializedMaciPublicKey", serializedMaciPublicKey);
+          userStateIndex = getStateIndex(serializedMaciPublicKey);
+          console.log("stateIndex", userStateIndex);
+          nonce = index;
+          voteWeight = votes[index];
+        }
+        if (isMaciPrivKey(maciKey) && getStateIndex(serializedMaciPublicKey)) {
+          console.log("User is registered, signing ballot with private key");
           const coordinatorKey = PubKey.unserialize(
             "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
           );
@@ -360,6 +385,9 @@ export const Ballot = () => {
             nonce
           );
           return [message, encPubKey];
+        } else {
+          console.log("user is not registered, throw message");
+          throw new Error("User is not registered");
         }
       } catch (e) {
         return [null, null];
@@ -372,6 +400,9 @@ export const Ballot = () => {
       messages.push(message);
       encPubKeys.push(encPubKey);
     }
+
+    console.log(messages);
+    console.log(encPubKeys);
     try {
       const gasPrice = await provider.getGasPrice();
       const double = BigNumber.from("2");
@@ -386,20 +417,11 @@ export const Ballot = () => {
       );
       await tx.wait();
     } catch (e) {
+      setTxLoading(false);
       console.log(e);
     }
-
-    console.log(txData);
-    // try {
-
-    //     fundingRound.submitMessageBatch(
-    //       messages.reverse().map((msg) => msg.asContractParam()),
-    //       encPubKeys.reverse().map((key) => key.asContractParam())
-    //   })
-    // } catch (error) {
-    //   this.voteTxError = error.message
-    //   return
-    // }
+    setTxLoading(false);
+    console.log("debug log", txData);
   };
 
   return (
@@ -468,7 +490,10 @@ export const Ballot = () => {
                   Ballot (MACI) Passphrase
                 </Heading>
                 <Text fontSize={"md"}>
-                  MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting. Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.
+                  MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship
+                  and collusion in blockchain voting. Each voter gets a pseudo-random MACI key which is used to encrypt
+                  and validate your votes. This is the only way to vote in the round, and can be used to change your
+                  ballot at any time while the round is active, so keep it safe.
                 </Text>
                 <HStack flexWrap="wrap" maxW="240px">
                   <PinInput
@@ -557,6 +582,7 @@ export const Ballot = () => {
                 <MagikButton />
                 {isConnected && isValidMaciKey ? (
                   <Button
+                    disabled={txLoading}
                     onClick={handleSubmit}
                     rounded={"full"}
                     py={6}
@@ -583,18 +609,3 @@ export const Ballot = () => {
     </Flex>
   );
 };
-
-function getUserStateIdbyMaciKey(serializedMaciPubKey: string) {
-  return 1;
-}
-// function getUserStateIdbyMaciKey(id: Keypair) {
-//   return 1;
-// }
-
-// function getMaciKeyPair() {
-//   return "";
-// }
-
-// function getCoordinatorPubKey() {
-//   return "";
-// }
