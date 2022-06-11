@@ -217,6 +217,35 @@ let projects = [
     logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623942/bordel-hackspace_jxlytx.png",
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654623942/bordel-hackspace_jxlytx.png",
   },
+  {
+    name: "Octopus Lab | Agama Point Community",
+    tagline: "We are a community of dreamers, visionaries, geeks, creators and developers who believe technology is here to serve people, connect them together and push humanity to the next level.",
+    description:
+      "The local community around Octopus Lab is active in many ways. The physical hackerspace lab in Prague 10 has been developing, building, educating in free and open source software and hardware for more than 10 years. It provides a huge variety of tools, materials to build and generally hack hardware, various electronics and software systems. Since the beginning, the community was inspired by the revolution of virtual reality and cryptocurrencies and built hardware focused on adopting the new technology. ATMs, point of sale terminals, NFC payments for Bitcoin and other currencies were already built here 7 years ago. Apart from that, the community was building tools, researching and educating about electronics, virtual and augmented reality, internet of things, 3D printing liberation, cracking private keys and entropy, Python ecosystem, machine learning and much more. Workshops and educational content are also part of the mission. All of the previous work is open and it's hard to sum up all the projects. To mention some current initiatives: - ČUDO - crypto universal device, created at Flying Circuit hackaton in Paralelní Polis. It includes libraries for receiving via PoS system, serving as ATM and communicating with payment cards. - LNATM - Lightning ATM which enables smooth onboarding experience via anonymous p2p trade. Started as an open python re-implementation of Bleskomat ATM, LNATM includes security features and NFC card option in a simple design. - Agama Point - research community focused especially on cryptocurrencies, entropy and chaos, cryptography in Bitcoin and exploring new possibilities of these technologies. One of the original goals, long before metaverse buzzwords, was to create an universal platform connecting Virtual Reality, Augmented Reality and Internet of Things, which  allows users to create, visualize and manage data, and have fun cooperating in a virtual space without boundaries. Projects involving cryptocurrencies and AI are here to help us build a parallel and sustainable collaborations built on free and open technologies. ",
+    problemSpace:
+      "The local community around Octopus Lab is active in many ways. The physical hackerspace lab in Prague 10 has been developing, building, educating in free and open source software and hardware for more than 10 years. It provides a huge variety of tools, materials to build and generally hack hardware, various electronics and software systems. Since the beginning, the community was inspired by the revolution of virtual reality and cryptocurrencies and built hardware focused on adopting the new technology. ATMs, point of sale terminals, NFC payments for Bitcoin and other currencies were already built here 7 years ago. Apart from that, the community was building tools, researching and educating about electronics, virtual and augmented reality, internet of things, 3D printing liberation, cracking private keys and entropy, Python ecosystem, machine learning and much more. Workshops and educational content are also part of the mission. All of the previous work is open and it's hard to sum up all the projects. To mention some current initiatives: - ČUDO - crypto universal device, created at Flying Circuit hackaton in Paralelní Polis. It includes libraries for receiving via PoS system, serving as ATM and communicating with payment cards. - LNATM - Lightning ATM which enables smooth onboarding experience via anonymous p2p trade. Started as an open python re-implementation of Bleskomat ATM, LNATM includes security features and NFC card option in a simple design. - Agama Point - research community focused especially on cryptocurrencies, entropy and chaos, cryptography in Bitcoin and exploring new possibilities of these technologies. One of the original goals, long before metaverse buzzwords, was to create an universal platform connecting Virtual Reality, Augmented Reality and Internet of Things, which  allows users to create, visualize and manage data, and have fun cooperating in a virtual space without boundaries. Projects involving cryptocurrencies and AI are here to help us build a parallel and sustainable collaborations built on free and open technologies. ",
+    address: "0xC31706B00379B370458683E907F63F647b15aB5C",
+    id: "16",
+    recipientId: 16,
+    url: "https://twitter.com/AgamaPoint/",
+    logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654811799/octopus_engine_z8gkgr.png",
+    banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654811799/octopus_engine_z8gkgr.png",
+  },
+
+  {
+    name: "Holešovice Testnet",
+    tagline: "The first post-merge Shanghai Verkle Tree network",
+    description:
+    "A public good network, for testing and implementing the most cutting-edge upgrades and features of the base Execution Layer of Ethereum. This project was conceived at EthPrague, and was named after Nadraží Holešovice, the closest train terminus to Paralelni Polis and La Fabrika, the hackathon's venues. The project aims to build on existing work by the go-ethereum and devOps teams from the Ethereum Foundation. It will seek to tackle some implementation challenges around the implementation of Verkle Trees, a key requirement for enabling trustless light-clients, and making Ethereum more accessible to all.",
+    problemSpace:
+    "A public good network, for testing and implementing the most cutting-edge upgrades and features of the base Execution Layer of Ethereum. This project was conceived at EthPrague, and was named after Nadraží Holešovice, the closest train terminus to Paralelni Polis and La Fabrika, the hackathon's venues. The project aims to build on existing work by the go-ethereum and devOps teams from the Ethereum Foundation. It will seek to tackle some implementation challenges around the implementation of Verkle Trees, a key requirement for enabling trustless light-clients, and making Ethereum more accessible to all.",
+    address: "0xC64F0115325E8cdc6f1F3dc26DdbC501eD855847",
+    id: "17",
+    recipientId: 17,
+    url: "-",
+    logo: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654889615/Hole%C5%A1ovice_Testnet_fsqx9p.png",
+    banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1654889615/Hole%C5%A1ovice_Testnet_fsqx9p.png",
+  },
 ];
 
 export function getProjects() {
