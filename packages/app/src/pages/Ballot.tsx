@@ -22,7 +22,6 @@ import {
   ListItem,
   UnorderedList,
   Icon,
-  Link,
   useToast,
 } from "@chakra-ui/react";
 
@@ -31,7 +30,7 @@ import { getProject, getRecipientIdbyId } from "../data";
 import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useDappState } from "../context/DappContext";
 
 import { Keypair, PubKey, PrivKey, Command, Message } from "qaci-domainobjs";
@@ -89,8 +88,7 @@ export const Ballot = () => {
         });
         console.log("changed");
         console.log(new Keypair(PrivKey.unserialize(value)).pubKey.serialize());
-      }
-      else{
+      } else {
         throw new Error("Invalid MACI key");
       }
     } catch (e) {
@@ -120,6 +118,9 @@ export const Ballot = () => {
     return voteOptions.filter((s) => !isNaN(parseInt(s))).map((s) => parseInt(s));
   }, [voteOptions]);
 
+  const displayOptions: boolean = useMemo(() => {
+    return recipientRegistryIds.length > 0;
+  }, [recipientRegistryIds]);
   const color = useColorModeValue("gray.800", "gray.700");
   const [ballotOptions, setBallotOptions] = useState<number[]>([]);
   const [ballotData, setBallotData] = useState<Option[]>([]);
@@ -465,18 +466,35 @@ export const Ballot = () => {
                 {ballotOption7Votes ** 2} + {ballotOption8Votes ** 2} = {totalVoiceCredits}
               </Text>
             </VStack>
-            <VStack spacing={0} alignItems={"flex-start"} w="full" display={isEmptyBallot ? "flex" : "none"}>
-              {ballotData.map((project, index) => (
-                <BallotOption
-                  key={index}
-                  lastOption={index === ballotOptions.length - 1 ? true : false}
-                  ballotOption={project}
-                  votes={votes[index]}
-                  onClick={updateVotes[index]}
-                  to={`/projects/${project.id}`}
-                />
-              ))}
-            </VStack>
+            {displayOptions ? (
+              <VStack spacing={0} alignItems={"flex-start"} w="full" display={isEmptyBallot ? "flex" : "none"}>
+                {ballotData.map((project, index) => (
+                  <BallotOption
+                    key={index}
+                    lastOption={index === ballotOptions.length - 1 ? true : false}
+                    ballotOption={project}
+                    votes={votes[index]}
+                    onClick={updateVotes[index]}
+                    to={`/projects/${project.id}`}
+                  />
+                ))}
+              </VStack>
+            ) : (
+              <VStack spacing={0} alignItems={"center"} w="full">
+                <Button
+                  as={Link}
+                  to="/projects"
+                  fontSize="lg"
+                  fontWeight={"black"}
+                  bg={"black"}
+                  color="white"
+                  h="60px"
+                  w="full"
+                  background="#5400FF">
+                  Checkout The Projects
+                </Button>
+              </VStack>
+            )}
 
             <Stack
               spacing={3}
