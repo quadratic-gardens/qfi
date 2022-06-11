@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   VStack,
   Container,
@@ -14,6 +14,11 @@ import {
   PinInputField,
   Icon,
   useToast,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
 import { MagikButton } from "@qfi/ui";
 import { Keypair, PrivKey } from "qaci-domainobjs";
@@ -50,11 +55,20 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
   const color = useColorModeValue("gray.800", "gray.700");
   const toast = useToast();
   const [key, setKey] = useState<string>();
+  const numChars = useMemo(() => {
+    if (key) {
+      return key.length;
+    }
+  }, [key]);
   const [keyType, setKeyType] = useState<string>();
   const [openQRCodeReader, setOpenQRCodeReader] = useState(false);
   const onClickSetOpenQRCodeReader = () => setOpenQRCodeReader(!openQRCodeReader);
 
   const { maciKey, setMaciKey } = useDappState();
+
+  const isError = useMemo(() => {
+    return key && !isMaciPrivKey(key);
+  }, [key]);
 
   useEffect(() => {
     if (maciKey) {
@@ -63,6 +77,10 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
   }, [setKey, maciKey]);
   const handleChange = (value: string) => {
     setKey(value);
+  };
+
+  const handleInputChange = (e) => {
+    setKey(e.target.value);
   };
 
   const handleComplete = (value: string) => {
@@ -80,8 +98,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
         });
         console.log("changed");
         console.log(new Keypair(PrivKey.unserialize(value)).pubKey.serialize());
-      }
-      else{
+      } else {
         throw new Error("Invalid MACI key");
       }
     } catch (e) {
@@ -94,6 +111,11 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
       });
       console.log(e.message);
     }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleComplete(key);
   };
   return (
     <Flex
@@ -193,8 +215,29 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                     )}
                   </VStack>
 
-                  <VStack spacing={1} alignItems="flex-start">
-                    <HStack flexWrap="wrap" maxW="240px">
+                  <VStack spacing={1} alignItems="flex-start" w="full">
+                    <form style={{ width: "100%" }} onSubmit={handleSubmit}>
+                      <FormControl w="full" isInvalid={isError} variant="floating" id="key" isRequired>
+                        <Input w="full" type={"password"} placeholder="" value={key} onChange={handleInputChange} />
+                        {/* It is important that the Label comes after the Control due to css selectors */}
+                        <FormLabel>MACI SK</FormLabel>
+                        <FormHelperText>{numChars}/71</FormHelperText>
+                        <Button
+                          fontSize="lg"
+                          fontWeight={"black"}
+                          bg={"black"}
+                          color="white"
+                          h="60px"
+                          w="full"
+                          background="#5400FF"
+                          type="submit"
+                          width="full"
+                          mt={4}>
+                          SAVE
+                        </Button>
+                      </FormControl>
+                    </form>
+                    {/* <HStack flexWrap="wrap" maxW="240px">
                       <PinInput
                         defaultValue="macisk."
                         size="xs"
@@ -274,9 +317,9 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                         <PinInputField marginInlineStart={"0px !important"} />
                         <PinInputField marginInlineStart={"0px !important"} />
                       </PinInput>
-                    </HStack>
+                    </HStack> */}
 
-                    <Divider></Divider>
+                    {/* <Divider></Divider> */}
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Confused or need help?</Heading>

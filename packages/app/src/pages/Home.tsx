@@ -68,7 +68,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
               </Button>
               <Button
                 as={Link}
-                to="/begin"
+                to="/projects"
                 fontSize="lg"
                 fontWeight={"black"}
                 bg={"black"}
@@ -76,7 +76,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 h="60px"
                 w="full"
                 background="#5400FF">
-                Learn More
+                Checkout The Projects
               </Button>
             </VStack>
 
@@ -88,7 +88,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
               </Button>
               <Button
                 as={Link}
-                to="/begin"
+                to="/projects"
                 fontSize="lg"
                 fontWeight={"black"}
                 bg={"black"}
@@ -96,7 +96,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 h="60px"
                 w="full"
                 background="#5400FF">
-                Get Started
+                Checkout The Projects
               </Button>
             </VStack>
           </VStack>
