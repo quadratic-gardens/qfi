@@ -7,13 +7,11 @@ import chalk from "chalk"
 import { BigNumber, ethers } from "ethers"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 
-import { directoryExists, makeDir } from "../lib/files.js"
+import { directoryExists } from "../lib/files.js"
 import {
   header,
   mnemonicBaseDirPath,
   mnemonicFilePath,
-  outputDirPath,
-  usersStateIndexesBaseDirPath,
   userWallets
 } from "../lib/constants.js"
 import { askForConfirmation } from "../lib/prompts.js"
