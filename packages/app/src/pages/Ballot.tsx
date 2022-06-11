@@ -417,7 +417,15 @@ export const Ballot = () => {
         { gasPrice: doubleGasPrice, gasLimit }
       );
       await tx.wait();
+      toast({
+        title: "Ballot Submitted",
+        description: "You have submitted your ballot! Feel free to resubmit if you change your mind.",
+        status: "success",
+        duration: 10000,
+        isClosable: true,
+      });
     } catch (e) {
+      
       setTxLoading(false);
       console.log(e);
     }
