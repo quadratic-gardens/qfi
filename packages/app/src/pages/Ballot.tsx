@@ -198,6 +198,7 @@ export const Ballot = () => {
     }
     return setBallotOption1Votes(0);
   }, [ballotOption1Votes, voiceCreditBalance]);
+
   const addBallotOption2Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption2Votes ** 2 - (ballotOption2Votes + 1) ** 2 < 0) {
       return setBallotOption2Votes(0);
@@ -207,6 +208,7 @@ export const Ballot = () => {
     }
     return setBallotOption2Votes(0);
   }, [ballotOption2Votes, voiceCreditBalance]);
+
   const addBallotOption3Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption3Votes ** 2 - (ballotOption3Votes + 1) ** 2 < 0) {
       return setBallotOption3Votes(0);
@@ -216,6 +218,7 @@ export const Ballot = () => {
     }
     return setBallotOption3Votes(0);
   }, [ballotOption3Votes, voiceCreditBalance]);
+
   const addBallotOption4Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption4Votes ** 2 - (ballotOption4Votes + 1) ** 2 < 0) {
       return setBallotOption4Votes(0);
@@ -225,6 +228,7 @@ export const Ballot = () => {
     }
     return setBallotOption4Votes(0);
   }, [ballotOption4Votes, voiceCreditBalance]);
+
   const addBallotOption5Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption5Votes ** 2 - (ballotOption5Votes + 1) ** 2 < 0) {
       return setBallotOption5Votes(0);
@@ -234,6 +238,7 @@ export const Ballot = () => {
     }
     return setBallotOption5Votes(0);
   }, [ballotOption5Votes, voiceCreditBalance]);
+
   const addBallotOption6Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption6Votes ** 2 - (ballotOption6Votes + 1) ** 2 < 0) {
       return setBallotOption6Votes(0);
@@ -243,6 +248,7 @@ export const Ballot = () => {
     }
     return setBallotOption6Votes(0);
   }, [ballotOption6Votes, voiceCreditBalance]);
+
   const addBallotOption7Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption7Votes ** 2 - (ballotOption7Votes + 1) ** 2 < 0) {
       return setBallotOption7Votes(0);
@@ -252,6 +258,7 @@ export const Ballot = () => {
     }
     return setBallotOption7Votes(0);
   }, [ballotOption7Votes, voiceCreditBalance]);
+
   const addBallotOption8Votes = useCallback(() => {
     if (voiceCreditBalance + ballotOption8Votes ** 2 - (ballotOption8Votes + 1) ** 2 < 0) {
       return setBallotOption8Votes(0);
@@ -261,11 +268,13 @@ export const Ballot = () => {
     }
     return setBallotOption8Votes(0);
   }, [ballotOption8Votes, voiceCreditBalance]);
+
   //wrap all the votes into an array
 
   const totalVoiceCredits = useMemo(() => {
     return votes.reduce((acc, curr) => acc + curr ** 2, 0);
   }, [votes]);
+
   const updateVotes = [
     addBallotOption1Votes,
     addBallotOption2Votes,
@@ -276,6 +285,7 @@ export const Ballot = () => {
     addBallotOption7Votes,
     addBallotOption8Votes,
   ];
+  
   useEffect(() => {
     const intialBallotOptions = [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN];
     const options = voteOptions.filter((s) => !isNaN(parseInt(s))).map((s) => parseInt(s));
@@ -301,11 +311,6 @@ export const Ballot = () => {
   }, [votes]);
 
   const [txLoading, setTxLoading] = useState<boolean>(false);
-  const [txError, setTxError] = useState<boolean | string>(false);
-  const [txLink, setTxLink] = useState<string>("");
-  const [txReceipt, setTxReceipt] = useState<any>(null);
-  const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
-  const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
 
   function createMessage(
     userStateIndex: number,
@@ -319,13 +324,6 @@ export const Ballot = () => {
 
     const quadraticVoteWeight = voteWeight ?? 0;
     const pubkey = userKeypair.pubKey;
-
-    // /stateIndex: BigInt,
-    // newPubKey: PubKey,
-    // voteOptionIndex: BigInt,
-    // newVoteWeight: BigInt,
-    // nonce: BigInt,
-    // pollId: BigInt,
     const command = new Command(
       BigInt(userStateIndex),
       pubkey,
@@ -335,9 +333,9 @@ export const Ballot = () => {
       BigInt(0),
       salt
     );
-    // console.log("command", command)
+
     const signature = command.sign(userKeypair.privKey);
-    // console.log("signature", signature)
+
     const message = command.encrypt(signature, Keypair.genEcdhSharedKey(userKeypair.privKey, coordinatorPubKey));
     return [message, userKeypair.pubKey];
   }
@@ -346,8 +344,7 @@ export const Ballot = () => {
     console.log(isMaciPrivKey(maciKey));
     const signer = provider.getSigner(address);
     const grantRoundAddress = "0x0dA71825182944234F45755989a8C96Ac1343E07";
-    // const qfiAddress = "0x7718F3716e45C1bcCd538fF756f244978747ef4d"
-    // const qfiContract = new Contract(qfiAddress, QFI__factory.abi, signer);
+
     const grantRound = new ethers.Contract(grantRoundAddress, GrantRound__factory.abi, signer);
 
     setTxLoading(true);
