@@ -23,6 +23,10 @@ import {
   UnorderedList,
   Icon,
   useToast,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
 
 import { EaseInBottom, MagikButton } from "@qfi/ui";
@@ -41,6 +45,8 @@ import { QFI__factory } from "../typechain/factories/QFI__factory";
 import { GrantRound__factory } from "../typechain";
 import { HiExternalLink } from "react-icons/hi";
 import { getStateIndex } from "../quickBallotConfig";
+import { QrReader } from "react-qr-reader";
+import { isError } from "util";
 
 const isMaciPrivKey = (key: string): boolean => {
   if ((key.length === 71 || key.length === 70) && key.startsWith("macisk.")) {
@@ -63,14 +69,16 @@ export const Ballot = () => {
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
   const toast = useToast();
+  const [openQRCodeReader, setOpenQRCodeReader] = useState(false);
+  const onClickSetOpenQRCodeReader = () => setOpenQRCodeReader(!openQRCodeReader);
 
   const isValidMaciKey = useMemo(() => {
     return isMaciPrivKey(maciKey);
   }, [maciKey]);
 
   const { provider, chainId, address, isConnected } = useWallet();
-  const handleChange = (value: string) => {
-    setKey(value);
+  const handleInputChange = (e) => {
+    setKey(String(e.target.value).trim());
   };
 
   const handleComplete = (value: string) => {
@@ -101,6 +109,20 @@ export const Ballot = () => {
       });
       console.log(e.message);
     }
+  };
+
+  const numChars = useMemo(() => {
+    if (key) {
+      return key.length;
+    }
+  }, [key]);
+  const isError = useMemo(() => {
+    return key && !isMaciPrivKey(key);
+  }, [key]);
+
+  const handleSubmitMaciChange = (event) => {
+    event.preventDefault();
+    handleComplete(key);
   };
 
   useEffect(() => {
@@ -425,7 +447,6 @@ export const Ballot = () => {
         isClosable: true,
       });
     } catch (e) {
-      
       setTxLoading(false);
       console.log(e);
     }
@@ -521,87 +542,68 @@ export const Ballot = () => {
                   and validate your votes. This is the only way to vote in the round, and can be used to change your
                   ballot at any time while the round is active, so keep it safe.
                 </Text>
-                <HStack flexWrap="wrap" maxW="240px">
-                  <PinInput
-                    defaultValue="macisk."
-                    size="xs"
-                    type="alphanumeric"
-                    value={key}
-                    onChange={handleChange}
-                    onComplete={handleComplete}>
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                    <PinInputField marginInlineStart={"0px !important"} />
-                  </PinInput>
-                </HStack>
+                <VStack spacing={1} alignItems="flex-start" w="full">
+                  <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
+                    <FormControl w="full" isInvalid={isError} variant="floating" id="key" isRequired my={4}>
+                      <Input w="full" type={"password"} placeholder="" value={key} onChange={handleInputChange} />
+                      {/* It is important that the Label comes after the Control due to css selectors */}
+                      <FormLabel>MACI SK</FormLabel>
+                      <FormHelperText>{numChars}/71</FormHelperText>
+                      <HStack spacing={2}>
+                        <VStack w="full" pt="10" justifyContent={"center"} alignItems="flex-start">
+                          <Button
+                            h="40px"
+                            w="full"
+                            background="#FFFF00"
+                            color={color}
+                            variant={"solid"}
+                            onClick={onClickSetOpenQRCodeReader}>
+                            <Text fontSize="md" fontWeight={"black"} fontFamily={"archivo"}>
+                              {" "}
+                              Scan key QR Code{" "}
+                            </Text>
+                          </Button>
+                         
+                        </VStack>
+                        <VStack w="full" pt="10" justifyContent={"center"}>
+                          <Button
+                            
+                            fontSize="md"
+                            fontWeight={"black"}
+                            bg={"black"}
+                            color="white"
+                            h="40px"
+                            w="full"
+                            background="#5400FF"
+                            type="submit"
+                            width="full"
+                            >
+                            SAVE
+                          </Button>
+                        </VStack>
+                      </HStack>
+                    </FormControl>
+                  </form>
+                </VStack>
+                {openQRCodeReader && (
+                      <Container h="full" w="full" maxWidth="container.sm">
+                        <QrReader
+                          scanDelay={1000}
+                          onResult={(result: any, error: any) => {
+                            if (!!result) {
+                              setMaciKey(result.text);
+                              setKey(result.text);
+                            }
+
+                            if (!!error) {
+                              console.info(`Something went wrong while reading the QR Code: ${error}`);
+                            }
+                          }}
+                          constraints={{ facingMode: "environment" }}
+                        />
+                      </Container>
+                    )}
+
                 <Divider></Divider>
               </VStack>
               <VStack spacing={6} alignItems="flex-start" w="full">
