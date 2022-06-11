@@ -80,7 +80,7 @@ program
 
 program
   .command("fund")
-  .description("seeds user keys")
+  .description("seeds user keys with 0.1 base network currency")
   .argument("<network>", "the network where the contracts has been deployed")
   .action((network: string) => {
     fund(network)
