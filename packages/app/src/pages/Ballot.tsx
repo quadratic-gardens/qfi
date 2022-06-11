@@ -616,7 +616,23 @@ export const Ballot = () => {
                   </Button>
                 ) : (
                   <Center textAlign="center">
-                    <Text fontWeight="bold">Unregistered MACI Key: Enter a valid MACI passphrase to continue.</Text>
+                    <VStack spacing={6} textAlign="center" w="full">
+                      <Text
+                        display={isConnected ? "none" : "flex"}
+                        fontSize={"sm"}
+                        fontWeight="extrabold"
+                        fontFamily={"Helvetica"}>
+                        Not Connected: Sign in to continue
+                      </Text>
+
+                      <Text
+                        fontSize={"sm"}
+                        display={isValidMaciKey ? "none" : "flex"}
+                        fontWeight="extrabold"
+                        fontFamily={"Helvetica"}>
+                        Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.
+                      </Text>
+                    </VStack>
                   </Center>
                 )}
               </VStack>
