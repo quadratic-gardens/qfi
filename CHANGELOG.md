@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/compare/v1.4.1...v1.5.0) (2022-06-11)
+
+
+### Features
+
+* **app:** graceful error handling on MACI key input ([f1b11db](https://github.com/commit/f1b11dbb1f999d1a5cf21cf23492bdace15cd26e))
+
+
+
+
+
 ## [1.4.1](https://github.com/compare/v1.4.0...v1.4.1) (2022-06-11)
 
 **Note:** Version bump only for package @qfi/qfi
