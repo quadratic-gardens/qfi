@@ -18,7 +18,7 @@ export const Layout = ({
 }: LayoutProps) => {
   const backgroundColor = useColorModeValue("gray.100", "gray.700");
   return (
-    <HStack h="100vh" spacing={0}>
+    <HStack h="100vh" w="full" spacing={0}>
       <Flex as="nav" h="full" maxW={16} w="full" bg={backgroundColor}>
         <SideNav onSettingsOpen={onSettingsOpen} onGuideOpen={onGuideOpen} />
       </Flex>
