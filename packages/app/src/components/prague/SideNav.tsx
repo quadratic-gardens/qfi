@@ -11,7 +11,7 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   let [searchParams] = useSearchParams();
 
   return (
-    <VStack p={4} justifyContent="space-between" alignItems="center" w="full" >
+    <VStack p={4} justifyContent="space-between" alignItems="center" w="full">
       <VStack>
         <IconButton
           bg={backgroundColor}
@@ -86,7 +86,16 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   let [searchParams] = useSearchParams();
 
   return (
-    <HStack position={"fixed"} bottom={0} left={0} bg={backgroundColor} p={4} justifyContent="space-between" alignItems="center" w="full" minH={"32px"} >
+    <HStack
+      position={"fixed"}
+      bottom={0}
+      left={0}
+      bg={backgroundColor}
+      p={4}
+      justifyContent="space-between"
+      alignItems="center"
+      w="full"
+      minH={"32px"}>
       <HStack>
         <Tooltip label="Ballot" placement="right">
           <IconButton
@@ -106,7 +115,6 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
             aria-label="Projects"
           />
         </Tooltip>
-        
       </HStack>
       <HStack>
         <IconButton
@@ -138,7 +146,6 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
             </Tooltip> */}
       </HStack>
       <HStack>
-
         <Tooltip label="Guide" placement="right">
           <IconButton
             onClick={onGuideOpen}
