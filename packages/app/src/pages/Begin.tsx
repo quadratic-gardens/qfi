@@ -76,11 +76,11 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
     }
   }, [setKey, maciKey]);
   const handleChange = (value: string) => {
-    setKey(value);
+    setKey(value.trim);
   };
 
   const handleInputChange = (e) => {
-    setKey(e.target.value);
+    setKey(String(e.target.value).trim());
   };
 
   const handleComplete = (value: string) => {
