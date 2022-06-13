@@ -46,7 +46,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             mt={{ base: "80px", xl: "60px" }}>
             <MagikText
               fontFamily="Arial"
-              text="MAGIK PRIZE POOL"
+              text="VOTING CLOSED :("
               charPoses={animateText.bottomLeft(0)}
               mt={10}
               fontWeight={"black"}
