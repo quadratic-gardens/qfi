@@ -1,3 +1,5 @@
+[![Frontend-Build](https://github.com/quadratic-funding/qfi/actions/workflows/frontend-build.yml/badge.svg)](https://github.com/quadratic-funding/qfi/actions/workflows/frontend-build.yml)
+
 This project was bootstrapped with
 [Create React App](https://github.com/facebook/create-react-app).
 
