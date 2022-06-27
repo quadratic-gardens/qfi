@@ -1,5 +1,7 @@
+/* eslint-disable import/no-duplicates */
 import { fileURLToPath } from "url"
 import fs from "fs"
+import { promises as fsa } from "fs"
 import path from "path"
 import csv from "csvtojson"
 import { Converter } from "csvtojson/v2/Converter"
@@ -69,8 +71,14 @@ export const readLocalJsonFile = (filePath: string): any => {
  * @param filePath <string>
  * @param data <JSON>
  */
-export const writeLocalJsonFile = (filePath: string, data: JSON) => {
-  fs.writeFileSync(filePath, JSON.stringify(data), "utf-8")
+export const writeLocalJsonFile = async (filePath: string, data: JSON) => {
+  const promise = new Promise((resolve, reject) => {
+    fs.writeFile(filePath, JSON.stringify(data), "utf8", (err) => {
+      if (err) reject(err)
+      else resolve(data)
+    })
+  })
+  return promise
 }
 
 /**

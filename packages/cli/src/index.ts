@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
 import { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing, fund } from "./commands/index.js"
+import tally from "./commands/tally.js"
 
 dotenv.config()
 
@@ -84,6 +85,16 @@ program
   .argument("<network>", "the network where the contracts has been deployed")
   .action((network: string) => {
     fund(network)
+  })
+
+program
+  .command("tally")
+  .description("calculates the tally of the current vote offchain")
+  .argument("<network>", "the network where the contracts has been deployed")
+  .argument("<coordinatorPrivkey>", "MACI SK used by coodinator in Diffie Hellman Secret")
+  .argument("<matchingPoolAmount>", "Amount to use for matching pool in xDAI")
+  .action((network: string, coordinatorPrivkey:string, matchingPoolAmount: string) => {
+    tally(network, coordinatorPrivkey, matchingPoolAmount)
   })
 
 program.parseAsync()

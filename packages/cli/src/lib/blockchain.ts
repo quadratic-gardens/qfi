@@ -25,13 +25,12 @@ export const getNetworkExplorerUrl = (networkName: string): string => {
  */
 export const getProvider = (network: string): JsonRpcProvider => {
   let selectedNetwork: Network
-
+  
   // Connect to selected network.
   if (network === networks.xdai.name) selectedNetwork = networks.xdai
   else if (network === networks.arbitrumRinkeby.name) selectedNetwork = networks.arbitrumRinkeby
   else if (network === networks.kovan.name) selectedNetwork = networks.kovan
   else selectedNetwork = networks.localhost
-
   const provider = new JsonRpcProvider(selectedNetwork.rpcUrl, selectedNetwork.name)
 
   return provider

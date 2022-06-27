@@ -1,6 +1,6 @@
 {
   "name": "@qfi/contracts",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "quadratic-funding Contracts",
   "main": "index.js",
   "private": true,
@@ -27,8 +27,7 @@
     "lint:js": "eslint '{tests,scripts}/**/*.ts'",
     "lint:solidity": "solhint 'contracts/**/*.sol'",
     "lint": "yarn lint:solidity",
-    "typechain": "hardhat typechain",
-    "docs:generate": "npx solidity-docgen --solc-module solc-0.8.1 -t ./docs/templates/ -i ./contracts -o ./docs"
+    "typechain": "hardhat typechain"
   },
   "dependencies": {
     "@openzeppelin/contracts": ">=4.5.0-solc-0.8.1",

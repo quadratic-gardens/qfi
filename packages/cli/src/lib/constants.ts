@@ -108,7 +108,7 @@ export const networks = {
   },
   xdai: {
     name: "xdai",
-    rpcUrl: "https://rpc.xdaichain.com/",
+    rpcUrl:"https://rpc.gnosischain.com/", 
     chainId: 100,
     explorer: "https://blockscout.com/xdai/mainnet/"
   },
@@ -322,7 +322,8 @@ export const deployedContracts = {
   BaseERC20Token: "0xf25fe8fe72aEC927042B2f32B79Be134C8471f78",
   MockVerifier: "0x872B22a7ADEE42164948D609063fabD0c124EB31",
   PollProcessorAndTallier: "0x02d3b2Ce14D5B09E871091c80D08ED05f22bEC05",
-  QFI: "0x7718F3716e45C1bcCd538fF756f244978747ef4d"
+  QFI: "0x7718F3716e45C1bcCd538fF756f244978747ef4d",
+  GrantRound: "0x98CfEF9169d670064D3caBa1891a29eeC3A1b7b1",
 }
 export const coordinatorPubkey = "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
 export const userWallets = [

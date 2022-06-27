@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "strict": true,
     "target": "ES5",
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "strict": false,
     "resolveJsonModule": true,
     "preserveConstEnums": true,
     "skipLibCheck": true,
@@ -13,7 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "typeRoots": ["node_modules/@types", "types"],
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
     "sourceMap": true,
     "outDir": "dist/",
     "declarationDir": "dist/types",
