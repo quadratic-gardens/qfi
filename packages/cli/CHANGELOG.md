@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/quadratic-funding/qfi/compare/v1.5.2...v1.6.0) (2022-06-27)
+
+
+### Features
+
+* **cli:** tally for ethPrague 2022 ([cbac6c1](https://github.com/quadratic-funding/qfi/commit/cbac6c1621596a54daa3b14dae5e6f6d6481b546))
+
+
+
+
+
 ## [1.5.2](https://github.com/quadratic-funding/qfi/compare/v1.5.0...v1.5.2) (2022-06-27)
 
 **Note:** Version bump only for package @qfi/ethpraguecli
