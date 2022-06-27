@@ -92,7 +92,7 @@ program
   .description("calculates the tally of the current vote offchain")
   .argument("<network>", "the network where the contracts has been deployed")
   .argument("<coordinatorPrivkey>", "MACI privatekey used by coodinator in Diffie Hellman Secret")
-  .argument("<matchingPoolAmount>", "xDAI to use for matching pool (dollar amount)")
+  .argument("<matchingPoolAmount>", "Amount of xDAI to use for matching pool (dollar amount)")
   .action((network: string, coordinatorPrivkey:string, matchingPoolAmount: string) => {
     tally(network, coordinatorPrivkey, matchingPoolAmount)
   })
