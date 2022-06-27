@@ -5,7 +5,7 @@
 import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
-import { BigNumberish, ethers } from "ethers"
+import { BigNumber, BigNumberish, ethers } from "ethers"
 import { Message, PubKey, PrivKey, Keypair } from "qaci-domainobjs"
 import { MaciState } from "qaci-core"
 
@@ -102,9 +102,11 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     const { provider, wallet } = await connectToBlockchain(network)
     const balanceInEthers = ethers.utils.formatEther((await wallet.getBalance()).toString())
 
-    // const gasPrice = await provider.getGasPrice()
-    // const double = BigNumber.from("2")
-    // const doubleGasPrice = gasPrice.mul(double)
+    const gasPrice = await provider.getGasPrice()
+    const double = BigNumber.from("2")
+    const doubleGasPrice = gasPrice.mul(double)
+    const gasLimit = ethers.utils.hexlify(10000000)
+
     const deployer = wallet
     const { confirmation: preFlightCheck } = await askForConfirmation(
       "Ready to Start the Tally Process? This will conduct operations offchain"
@@ -454,15 +456,15 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
       `Expected Matching pool is ${matchingPoolAmount} xDAI, Are you ready to continue?`
     )
 
-    const preFlightCheck3 = parseInt(balanceInEthers) > (parseInt(matchingPoolAmount)+1)
+    const preFlightCheck3 = parseInt(balanceInEthers) > parseInt(matchingPoolAmount) + 1
     if (!preFlightCheck2) {
       console.log(`\n Make sure you have the matching pool amount in your account next time! 👋`)
       process.exit(0)
     }
-    // if (!preFlightCheck3) {
-    //   console.log(`\n Insufficient Funds: Make sure you have the matching pool amount + gas in your account next time! 👋`)
-    //   process.exit(0)
-    // }
+    if (!preFlightCheck3) {
+      console.log(`\n Insufficient Funds: Make sure you have the matching pool amount + gas in your account next time! 👋`)
+      process.exit(0)
+    }
 
     // TODO: replace with subgraph
     const projectNameByStateId = {
@@ -504,7 +506,9 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
       17: "0xC64F0115325E8cdc6f1F3dc26DdbC501eD855847"
     }
 
+
     console.log(`\n Calculating QF subsidy results`)
+    let subsidyTotal = 0
     const subsidyPerProject = squareOfTally.map((squareOfTally, index) => {
       if (squareOfTally > 0) {
         const subsidyPercent = squareOfTally / sumOfSquareOfTally
@@ -513,26 +517,37 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
             subsidyPercent * parseInt(matchingPoolAmount)
           } xDAI`
         )
-        return subsidyPercent
+        subsidyTotal += subsidyPercent * parseInt(matchingPoolAmount)
+        return { address: projectAddressByStateId[index], amount: subsidyPercent * parseInt(matchingPoolAmount) }
       }
-      return 0
+      return { address: projectAddressByStateId[index], amount: 0 }
     })
 
- 
-
-
     console.log(chalk.bold(`\n Subsidy results calculated`))
+    console.log(`Total: ${subsidyTotal}`)
 
-
-    console.log(chalk.bold(`\n you are about to pay out recipients`))
+    console.log(chalk.bold(`\n you are about to finalize results for recipients`))
     const { confirmation: preFlightCheck1 } = await askForConfirmation("Ready?")
-    // const preFlightCheck2 = balanceInEthers <= matchingPoolAmount;
     if (!preFlightCheck1) {
       console.log(`\nFarewell 1👋`)
       process.exit(0)
     }
 
-    console.log("Save Result Logs")
+    for await (const { address, amount } of subsidyPerProject) {
+      if (amount > 0) {
+        console.log(`\n${logSymbols.success} Verifying subsidy of ${amount.toString()} for  ${address}\n`)
+
+        const tx = await wallet.sendTransaction({
+          to: address,
+          value: ethers.utils.parseEther(amount.toString()),
+          gasPrice: doubleGasPrice,
+          gasLimit
+        })
+        await tx.wait()
+      }
+    }
+
+    console.log("Tally Complete: Saving Result Logs")
     await writeLocalJsonFile(signUpsFilePath, JSON.parse(JSON.stringify(signUps, null, 2)))
     await writeLocalJsonFile(grantRoundsFilePath, JSON.parse(JSON.stringify(grantRounds, null, 2)))
     await writeLocalJsonFile(votesFilePath, JSON.parse(JSON.stringify(votes, null, 2)))
