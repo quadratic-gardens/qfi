@@ -22,6 +22,7 @@ export const baseAddressDirName = `addresses`
 export const baseMnemonicDirName = `mnemonics`
 export const ethMnemonicsCsvFileName = `mnemonics`
 export const maciPrivateKeysCsvFileName = `secretKeys`
+export const maciPublicKeysCsvFileName = `publicKeys`
 export const deployedContractsFileName = `deployedContracts`
 export const csvUserSignupFileName = `userSignup`
 export const deployedContractsFileExt = `.json`
@@ -73,6 +74,8 @@ export const maciBaseSkFilePath = `${maciBaseSkDirPath}/${baseSkFileName}`
 
 export const ethBaseCsvFilePath = `${ethBaseMnemonicDirPath}/${ethMnemonicsCsvFileName}`
 export const maciBaseCsvFilePath = `${maciBaseSkDirPath}/${maciPrivateKeysCsvFileName}`
+
+export const maciPkBaseCsvFilePath = `${maciBasePkDirPath}/${maciPublicKeysCsvFileName}`
 export const csvUserSignupBaseDirPath = `${outputDirPath}/${csvUserSignupFileName}`
 export const deployedContractsBaseDirPath = `${outputDirPath}/${deployedContractsFileName}`
 export const usersStateIndexesBaseDirPath = `${outputDirPath}/${usersStateIndexesFileName}`
@@ -108,7 +111,7 @@ export const networks = {
   },
   xdai: {
     name: "xdai",
-    rpcUrl: "https://rpc.xdaichain.com/",
+    rpcUrl: "https://rpc.gnosischain.com/",
     chainId: 100,
     explorer: "https://blockscout.com/xdai/mainnet/"
   },
@@ -118,9 +121,9 @@ export const networks = {
     chainId: 42,
     explorer: "https://kovan.etherscan.io/"
   },
-  polygon: {
-    name: "Polygon",
-    rpcUrl: "https://rpc-mainnet.maticvigil.com",
+  matic: {
+    name: "matic",
+    rpcUrl: "https://polygon-mainnet.g.alchemy.com/v2/qHaHEpMjoWGXBM0NYyPfBgTdqe0bdX69",
     chainId: 137,
     explorer: "https://polygonscan.com/"
   }

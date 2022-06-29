@@ -32,6 +32,7 @@ import {
   generatedKeysGlobalDirPath,
   header,
   maciBaseCsvFilePath,
+  maciPkBaseCsvFilePath,
   maciBaseDirPath,
   maciBasePkDirPath,
   maciBasePkQrPngDirPath,
@@ -132,6 +133,7 @@ async function genkeys(amount: number) {
 
     const mnemonics = []
     const maciSks = []
+    const maciPks = []
 
     for (let i = 0; i < amount; i += 1) {
       // Generate an Ethereum keypair.
@@ -183,6 +185,7 @@ async function genkeys(amount: number) {
       // Store rows for CSV files.
       mnemonics.push({ mnemonic: ethKeyPair.mnemonic })
       maciSks.push({ maci_sk: maciKeyPair.privateKey })
+      maciPks.push({ maci_pk: maciKeyPair.publicKey })
 
       console.log(`Keypair #${i} - ${logSymbols.success} Ethereum / ${logSymbols.success} MACI`)
     }
@@ -190,6 +193,7 @@ async function genkeys(amount: number) {
     // Create CSV files.
     jsonToCsv(ethBaseCsvFilePath, [`mnemonic`], mnemonics)
     jsonToCsv(maciBaseCsvFilePath, [`maci_sk`], maciSks)
+    jsonToCsv(maciPkBaseCsvFilePath, [`maci_pk`], maciPks)
 
     console.log(
       `\n${logSymbols.info} Generated keypairs for Ethereum in the ${ethBaseDirPath} folder\n${logSymbols.info} Generated keypairs for MACI in the ${maciBaseDirPath} folder

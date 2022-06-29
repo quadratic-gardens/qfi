@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 
 contract BaseERC20Token is ERC20 {
   constructor(uint256 initialSupply)
-    ERC20('Prague Pool Token', 'PRG')
+    ERC20('Barcelona Pool Token', 'BRC')
   {
     _mint(msg.sender, initialSupply);
   }

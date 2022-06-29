@@ -3,7 +3,7 @@
 import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 import { PoseidonT3__factory } from "../../../contracts/typechain/factories/PoseidonT3__factory.js"
 import { PoseidonT4__factory } from "../../../contracts/typechain/factories/PoseidonT4__factory.js"
@@ -70,7 +70,8 @@ async function deploy(network: string) {
 
     const { wallet, provider } = await connectToBlockchain(network)
     const gasPrice = await provider.getGasPrice()
-
+    const doubleGasPrice = gasPrice.mul(BigNumber.from(2))
+    const gasLimit = ethers.utils.hexlify(20000000)
     /** DEPLOY MACI/QFI SMART CONTRACTS */
     const deployer = wallet
     const deployerAddress = wallet.address
@@ -85,7 +86,7 @@ async function deploy(network: string) {
     let spinner = customSpinner(`Deploying PoseidonT3 smart contract..`, "point")
     spinner.start()
 
-    const PoseidonT3 = await PoseidonT3Factory.deploy({ gasPrice })
+    const PoseidonT3 = await PoseidonT3Factory.deploy({ gasPrice: doubleGasPrice, gasLimit })
     await PoseidonT3.deployed()
     spinner.stop()
 
@@ -94,7 +95,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying PoseidonT4 smart contract...`, "point")
     spinner.start()
 
-    const PoseidonT4 = await PoseidonT4Factory.deploy({ gasPrice })
+    const PoseidonT4 = await PoseidonT4Factory.deploy({ gasPrice: doubleGasPrice, gasLimit })
     await PoseidonT4.deployed()
     spinner.stop()
 
@@ -103,7 +104,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying PoseidonT5 smart contract...`, "point")
     spinner.start()
 
-    const PoseidonT5 = await PoseidonT5Factory.deploy({ gasPrice })
+    const PoseidonT5 = await PoseidonT5Factory.deploy({ gasPrice: doubleGasPrice, gasLimit })
     await PoseidonT5.deployed()
     spinner.stop()
 
@@ -112,7 +113,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying PoseidonT6 smart contract...`, "point")
     spinner.start()
 
-    const PoseidonT6 = await PoseidonT6Factory.deploy({ gasPrice })
+    const PoseidonT6 = await PoseidonT6Factory.deploy({ gasPrice: doubleGasPrice, gasLimit })
     await PoseidonT6.deployed()
     spinner.stop()
 
@@ -140,7 +141,8 @@ async function deploy(network: string) {
     spinner.start()
 
     const simpleHackathon = await SimpleHackathonFactory.deploy(initialVoiceCreditBalance, deployerAddress, {
-      gasPrice
+      gasPrice: doubleGasPrice,
+      gasLimit
     })
     await simpleHackathon.deployed()
     spinner.stop()
@@ -150,7 +152,10 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying GrantRoundFactory smart contract...`, "point")
     spinner.start()
 
-    const grantRoundFactory = await GrantRoundFactory.deploy({ gasPrice })
+    const grantRoundFactory = await GrantRoundFactory.deploy({
+      gasPrice: doubleGasPrice,
+      gasLimit: ethers.utils.hexlify(20000000)
+    })
     await grantRoundFactory.deployed()
     spinner.stop()
 
@@ -162,7 +167,10 @@ async function deploy(network: string) {
     )
     spinner.start()
 
-    const tx = await grantRoundFactory.setRecipientRegistry(simpleHackathon.address, { gasPrice })
+    const tx = await grantRoundFactory.setRecipientRegistry(simpleHackathon.address, {
+      gasPrice: doubleGasPrice,
+      gasLimit
+    })
     await tx.wait()
     spinner.stop()
 
@@ -171,7 +179,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying PollFactory smart contract...`, "point")
     spinner.start()
 
-    const pollFactory = await PollFactoryFactory.deploy({ gasPrice })
+    const pollFactory = await PollFactoryFactory.deploy({ gasPrice: doubleGasPrice, gasLimit })
     await pollFactory.deployed()
     spinner.stop()
 
@@ -180,7 +188,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying MessageAqFactory smart contract...`, "point")
     spinner.start()
 
-    const messageAqFactory = await MessageAqFactoryFactory.deploy({ gasPrice })
+    const messageAqFactory = await MessageAqFactoryFactory.deploy({ gasPrice: doubleGasPrice, gasLimit })
     await messageAqFactory.deployed()
     spinner.stop()
 
@@ -189,7 +197,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying MessageAqFactoryGrants smart contract...`, "point")
     spinner.start()
 
-    const messageAqFactoryGrants = await MessageAqFactoryFactory.deploy({ gasPrice })
+    const messageAqFactoryGrants = await MessageAqFactoryFactory.deploy({ gasPrice: doubleGasPrice, gasLimit })
     await messageAqFactoryGrants.deployed()
     spinner.stop()
 
@@ -200,7 +208,7 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying VKRegistry smart contract...`, "point")
     spinner.start()
 
-    const vkRegistry = await VKRegistryFactory.deploy({ gasPrice })
+    const vkRegistry = await VKRegistryFactory.deploy({ gasPrice: doubleGasPrice })
     await vkRegistry.deployed()
     spinner.stop()
 
@@ -210,17 +218,17 @@ async function deploy(network: string) {
     spinner.start()
 
     const baseERC20Token = await BaseERC20TokenFactory.deploy(ethers.BigNumber.from(baseERC20TokenInitialSupply), {
-      gasPrice
+      gasPrice: doubleGasPrice
     })
     await baseERC20Token.deployed()
     spinner.stop()
 
-    console.log(`${logSymbols.success} Prage Pool Token [PRG] deployed at ${chalk.bold(baseERC20Token.address)}`)
+    console.log(`${logSymbols.success} Barcelona Pool Token deployed at ${chalk.bold(baseERC20Token.address)}`)
 
     spinner = customSpinner(`Deploying MockVerifier smart contract...`, "point")
     spinner.start()
 
-    const mockVerifier = await MockVerifierFactory.deploy({ gasPrice })
+    const mockVerifier = await MockVerifierFactory.deploy({ gasPrice: doubleGasPrice })
     await mockVerifier.deployed()
     spinner.stop()
 
@@ -229,7 +237,10 @@ async function deploy(network: string) {
     spinner = customSpinner(`Deploying PollProcessorAndTallyer smart contract...`, "point")
     spinner.start()
 
-    const pollProcessorAndTallyer = await PollProcessorAndTallyerFactory.deploy(mockVerifier.address, { gasPrice })
+    const pollProcessorAndTallyer = await PollProcessorAndTallyerFactory.deploy(mockVerifier.address, {
+      gasPrice: doubleGasPrice,
+      gasLimit
+    })
     await pollProcessorAndTallyer.deployed()
     spinner.stop()
 
@@ -246,7 +257,7 @@ async function deploy(network: string) {
       pollFactory.address,
       simpleHackathon.address,
       simpleHackathon.address,
-      { gasPrice }
+      { gasPrice: doubleGasPrice, gasLimit }
     )
     await qfi.deployed()
     spinner.stop()
@@ -254,22 +265,23 @@ async function deploy(network: string) {
     console.log(`${logSymbols.success} QFI deployed at ${chalk.bold(qfi.address)}`)
 
     // Store addresses in a local JSON file.
+
     const contractsInJson = `{
-        "PoseidonT3": \"${PoseidonT3.address}\",
-        "PoseidonT4": \"${PoseidonT4.address}\",
-        "PoseidonT5": \"${PoseidonT5.address}\",
-        "PoseidonT6": \"${PoseidonT6.address}\",
-        "GrantRoundFactory": \"${grantRoundFactory.address}\",
-        "PollFactory": \"${pollFactory.address}\",
-        "MessageAqFactory": \"${messageAqFactory.address}\",
-        "MessageAqFactoryGrants": \"${messageAqFactoryGrants.address}\",
-        "SimpleHackathon": \"${simpleHackathon.address}\",
-        "VKRegistry": \"${vkRegistry.address}\",
-        "BaseERC20Token": \"${baseERC20Token.address}\", 
-        "MockVerifier": \"${mockVerifier.address}\", 
-        "PollProcessorAndTallier": \"${pollProcessorAndTallyer.address}\", 
-        "QFI": \"${qfi.address}\"
-    }`
+      "PoseidonT3": \"${PoseidonT3.address}\",
+      "PoseidonT4": \"${PoseidonT4.address}\",
+      "PoseidonT5": \"${PoseidonT5.address}\",
+      "PoseidonT6": \"${PoseidonT6.address}\",
+      "GrantRoundFactory": \"${grantRoundFactory.address}\",
+      "PollFactory": \"${pollFactory.address}\",
+      "MessageAqFactory": \"${messageAqFactory.address}\",
+      "MessageAqFactoryGrants": \"${messageAqFactoryGrants.address}\",
+      "SimpleHackathon": \"${simpleHackathon.address}\",
+      "VKRegistry": \"${vkRegistry.address}\",
+      "BaseERC20Token": \"${baseERC20Token.address}\", 
+      "MockVerifier": \"${mockVerifier.address}\", 
+      "PollProcessorAndTallier": \"${pollProcessorAndTallyer.address}\", 
+      "QFI": \"${qfi.address}\"
+  }`
 
     writeLocalJsonFile(deployedContractsFilePath, JSON.parse(contractsInJson))
 
