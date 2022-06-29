@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/compare/v1.5.0...v1.6.0) (2022-06-29)
+
+
+### Features
+
+* **ethbarcelona cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
+* **polygon support:** gas price tweaks, eject csv of public keys on key gen ([0ff3ab0](https://github.com/commit/0ff3ab0526069b21e808d73239c0d1c19d706826))
+
+
+
+
+
 # [1.5.0](https://github.com/compare/v1.4.1...v1.5.0) (2022-06-11)
 
 
