@@ -28,13 +28,13 @@ export const Settings = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="2xl">How it works?</Heading>
           <Text fontFamily={"archivo"}>
-            Casting a Ballot requires you to have a wallet on Gnosis Chain, xDai to pay for gas, and a valid ballot key. Voting is anonymous, but ballot registration happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your ballot keys.
+            Casting a Ballot requires you to have a wallet on Polygon Chain, MATIC to pay for gas, and a valid ballot key. Voting is anonymous, but ballot registration happens in person as a sybil check. At the event, visit the Quadratic Funding booth to get your ballot keys.
           </Text>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
-          <Heading size="md">GnosisChain (xDai) Wallet</Heading>
+          <Heading size="md">Polygon (MATIC) Wallet</Heading>
           <Text fontFamily={"archivo"}>
-            You will receive keys for an xDai address that is whitelisted for this voting round, pre-loaded with enough gas to cover the transaction fees for ballot submission.
+            You will receive keys for an MATIC address that is whitelisted for this voting round, pre-loaded with enough gas to cover the transaction fees for ballot submission.
           </Text>
           <MagikButton />
         </VStack>
@@ -170,13 +170,13 @@ export const Settings = () => {
         <VStack spacing={2} alignItems="flex-start">
           <Heading size="md">Confused or need help?</Heading>
           <Text fontSize="md" fontFamily={"archivo"}>
-            You can send us an email at privacy.scaling.explorations@gmail.com or join the ETHPrague Telegram group
-            <Link href='https://t.me/ethprague' isExternal>
+            You can send us an email at privacy.scaling.explorations@gmail.com or join the ETHBarcelona Telegram group
+            <Link href='https://t.me/ethbarcelona' isExternal>
               <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
             </Link>
           </Text>
           <Text fontSize="md" fontFamily={"archivo"}>
-            Visit us at the Quadratic Funding booth in the Looks Rare sponsor area at ETHPrague.
+            Visit us at the Quadratic Funding booth in the Looks Rare sponsor area at ETHBarcelona.
           </Text>
         </VStack>
       </VStack>

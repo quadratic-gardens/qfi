@@ -1,6 +1,6 @@
 import React from "react";
-import { VStack, Container, Flex, Text, Heading, Button, useColorModeValue } from "@chakra-ui/react";
-import { Link, useSearchParams } from "react-router-dom";
+import { VStack, Container, Flex, Text, Heading, Button, useColorModeValue, Link } from "@chakra-ui/react";
+import {  useSearchParams } from "react-router-dom";
 import { animateText, MagikText } from "@qfi/ui";
 import { Hero } from "../components/Hero";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
@@ -46,7 +46,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             mt={{ base: "80px", xl: "60px" }}>
             <MagikText
               fontFamily="Arial"
-              text="VOTING CLOSED :("
+              text="QF @ ETHBarcelona"
               charPoses={animateText.bottomLeft(0)}
               mt={10}
               fontWeight={"black"}
@@ -57,46 +57,46 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             />
             <Heading></Heading>
             <Text maxW={"50ch"} fontFamily={"archivo"} display={{ base: "flex", xl: "none" }}>
-              Quadratic Funding at ETH Prague!
+              Magik Prize Pool
             </Text>
 
             <VStack display={{ base: "flex", xl: "none" }} pt="0" alignItems={"flex-start"} w="full">
-              <Button as={Link} to="/begin" h="60px" w="full" background="#FFFF00" color="black" variant={"solid"}>
+              {/* <Button as={Link} to="/begin" h="60px" w="full" background="#FFFF00" color="black" variant={"solid"}>
                 <Text fontSize="lg" color={color} fontWeight={"black"}>
                   Get Started
                 </Text>
-              </Button>
+              </Button> */}
               <Button
                 as={Link}
-                to="/projects"
+                href='https://bit.ly/ethbcn-clr' isExternal
                 fontSize="lg"
                 fontWeight={"black"}
                 bg={"black"}
                 color="white"
                 h="60px"
                 w="full"
-                background="#5400FF">
-                Checkout The Projects
+                background="rgb(53, 75, 55)">
+                Sign Up!
               </Button>
             </VStack>
 
             <VStack w="full" display={{ base: "none", xl: "flex" }} pt="10" justifyContent={"center"}>
-              <Button as={Link} to="/begin" h="80px" w="full" background="#FFFF00" color={color} variant={"solid"}>
+              {/* <Button as={Link} to="/begin" h="80px" w="full" background="#FFFF00" color={color} variant={"solid"}>
                 <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
                   Get Started
                 </Text>
-              </Button>
+              </Button> */}
               <Button
                 as={Link}
-                to="/projects"
+                href='https://bit.ly/ethbcn-clr' isExternal
                 fontSize="lg"
                 fontWeight={"black"}
                 bg={"black"}
                 color="white"
                 h="60px"
                 w="full"
-                background="#5400FF">
-                Checkout The Projects
+                background="rgb(53, 75, 55)">
+                Sign Up!
               </Button>
             </VStack>
           </VStack>

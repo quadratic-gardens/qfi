@@ -30,7 +30,7 @@ export const Layout = ({
         w="full"
         position={"relative"}
         overflow={"hidden"}>
-        <Quickstart />
+        <RecipientGuide />
         <SettingsDrawer isOpen={isSettingsOpen} onClose={onSettingsClose} />
         <GuideDrawer isOpen={isGuideOpen} onClose={onGuideClose} />
       </Flex>

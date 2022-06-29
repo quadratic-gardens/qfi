@@ -35,7 +35,7 @@ export const RecipientGuide = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Recipient Guide</Heading>
           <Text fontFamily={"archivo"}>
-            Welcome! If you’re here, you’re probably working on something awesome in the Prague community - thanks for
+            Welcome! If you’re here, you’re probably working on something awesome in the Spain community - thanks for
             everything you do!
           </Text>
         </VStack>
@@ -52,7 +52,7 @@ export const RecipientGuide = () => {
           <Heading size="md">What does it mean to sign up as a recipient?</Heading>
           <Text fontFamily={"archivo"}>
             Adding your project makes you eligible to receive funds from the matching pool, but doesn’t guarantee
-            funding. How much each project receives will be decided by ETHPrague attendees who vote during the event.
+            funding. How much each project receives will be decided by ETHBarcelona attendees who vote during the event.
             You will need to be able to receive cryptocurrency (wxDAI) in order to receive funds in the QF round; if
             you’re uncertain about this feel free to get in touch and we’ll be happy to help.
           </Text>
@@ -73,7 +73,7 @@ export const RecipientGuide = () => {
 
           {/* <List spacing={1} px={3}>
             <ListItem>
-              <Text fontFamily={"archivo"}>• Local to Prague</Text>
+              <Text fontFamily={"archivo"}>• Local to Spain</Text>
             </ListItem>
             <ListItem>
               <Text fontFamily={"archivo"}>• Valuable to the Ethereum community</Text>
