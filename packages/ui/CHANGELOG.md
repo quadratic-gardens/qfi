@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/quadratic-funding/qfi/compare/v1.5.0...v2.0.0) (2022-06-29)
+
+**Note:** Version bump only for package @qfi/ui
+
+
+
+
+
 # [1.5.0](https://github.com/quadratic-funding/qfi/compare/v1.4.1...v1.5.0) (2022-06-11)
 
 **Note:** Version bump only for package @qfi/ui
