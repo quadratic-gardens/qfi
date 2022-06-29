@@ -30,7 +30,7 @@ program
   .action((amount: number) => {
     genkeys(amount)
   })
-  .addHelpCommand(`ethpraguecli genkeys 3000`)
+  .addHelpCommand(`ethbarcelonacli genkeys 3000`)
 
 program
   .command("initialize")

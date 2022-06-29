@@ -117,6 +117,12 @@ export const networks = {
     rpcUrl: "https://kovan.poa.network",
     chainId: 42,
     explorer: "https://kovan.etherscan.io/"
+  },
+  polygon: {
+    name: "Polygon",
+    rpcUrl: "https://rpc-mainnet.maticvigil.com",
+    chainId: 137,
+    explorer: "https://polygonscan.com/"
   }
 }
 

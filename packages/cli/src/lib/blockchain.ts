@@ -15,6 +15,7 @@ export const getNetworkExplorerUrl = (networkName: string): string => {
   if (networkName === networks.xdai.name) return networks.xdai.explorer
   if (networkName === networks.arbitrumRinkeby.name) return networks.arbitrumRinkeby.explorer
   if (networkName === networks.kovan.name) return networks.kovan.explorer
+  if (networkName === networks.polygon.name) return networks.polygon.explorer
   return networks.localhost.explorer
 }
 
@@ -30,6 +31,7 @@ export const getProvider = (network: string): JsonRpcProvider => {
   if (network === networks.xdai.name) selectedNetwork = networks.xdai
   else if (network === networks.arbitrumRinkeby.name) selectedNetwork = networks.arbitrumRinkeby
   else if (network === networks.kovan.name) selectedNetwork = networks.kovan
+  else if (network === networks.polygon.name) selectedNetwork = networks.polygon
   else selectedNetwork = networks.localhost
 
   const provider = new JsonRpcProvider(selectedNetwork.rpcUrl, selectedNetwork.name)
