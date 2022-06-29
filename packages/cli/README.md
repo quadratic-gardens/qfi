@@ -1,12 +1,12 @@
 <p align="center">
     <h1 align="center">
-       QFI x ETHPrague CLI
+       QFI x ETHBarcelona CLI
     </h1>
-    <p align="center">All-in-one command-line for running QFI Round x ETHPrague as administrator/operator</p>
+    <p align="center">All-in-one command-line for running QFI Round x ETHBarcelona as administrator/operator</p>
 </p>
 
 <p align="center">
-    <a href="https://github.com/quadratic-funding/qfi/tree/cohort/ethPrague/packages/cli" target="_blank">
+    <a href="https://github.com/quadratic-funding/qfi/tree/cohort/ethBarcelona/packages/cli" target="_blank">
         <img src="https://img.shields.io/badge/project-cli-blue">
     </a>
     <a href="https://eslint.org/" target="_blank">
@@ -73,7 +73,7 @@ yarn >= 1.22.18
 ```bash
 https://github.com/quadratic-funding/qfi.git
 cd qfi
-git checkout cohort/ethPrague
+git checkout cohort/ethBarcelona
 yarn
 yarn build
 cd packages/cli
