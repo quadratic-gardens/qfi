@@ -20,6 +20,7 @@ import { createSearchParams, Link, useLocation, useNavigate, useParams, useSearc
 import { getProject } from "../data";
 
 export function Project() {
+  const backgroundColor = useColorModeValue("#FAFAFA", "gray.700");
   const toast = useToast();
   let { projectId } = useParams();
   let navigate = useNavigate();
@@ -82,6 +83,8 @@ export function Project() {
   }, [searchParams, isInBallot, projectId, navigate, toast]);
   return (
     <Flex
+      bg={backgroundColor}
+      zIndex={99}
       as="main"
       h="full"
       flex={1}
