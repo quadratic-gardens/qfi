@@ -1,6 +1,6 @@
 import React from "react";
 import { ChakraProvider, Text, useDisclosure } from "@chakra-ui/react";
-import { theme } from "@qfi/ui";
+import { theme, Fonts } from "@qfi/ui";
 import { Route, Routes } from "react-router-dom";
 
 import { HowItWorks } from "./pages/HowItWorks";
@@ -17,6 +17,7 @@ export const App = () => {
   const { isOpen: isGuideOpen, onOpen: onGuideOpen, onClose: onGuideClose } = useDisclosure();
   return (
     <ChakraProvider theme={theme}>
+      <Fonts />
       <Routes>
         <Route
           path="/"

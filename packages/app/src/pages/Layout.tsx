@@ -2,7 +2,7 @@ import React from "react";
 import { HStack, Flex, useColorModeValue } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import { LayoutProps } from "../propTypes";
-import { SideNav } from "../components/prague/SideNav";
+import { Navbar, SideNav } from "../components/prague/SideNav";
 import { Quickstart } from "../components/prague/Quickstart";
 import { RecipientGuide } from "../components/prague/RecipientGuide";
 import { SettingsDrawer } from "../components/prague/Settings";
@@ -19,18 +19,19 @@ export const Layout = ({
   const backgroundColor = useColorModeValue("gray.100", "gray.700");
   return (
     <HStack h="100vh" w="full" spacing={0}>
+      <Navbar onSettingsOpen={onSettingsOpen} onGuideOpen={onGuideOpen} ></Navbar>
       <Flex as="nav" h="full" maxW={16} w="full" bg={backgroundColor}>
         <SideNav onSettingsOpen={onSettingsOpen} onGuideOpen={onGuideOpen} />
       </Flex>
       <Flex
         as="aside"
-        display={{ base: "none", xl: "flex" }}
+        display={{ base: "none", xl: "none" }}
         h="full"
         maxW={{ lg: "md" }}
         w="full"
         position={"relative"}
         overflow={"hidden"}>
-        <RecipientGuide />
+      
         <SettingsDrawer isOpen={isSettingsOpen} onClose={onSettingsClose} />
         <GuideDrawer isOpen={isGuideOpen} onClose={onGuideClose} />
       </Flex>

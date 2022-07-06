@@ -61,10 +61,11 @@ export const Projects = () => {
             h="full"
             w="full"
             maxWidth={{ base: "container.sm", md: "container.sm", lg: "container.md" }}
-            px={0}>
+            px={0}
+            pt={20}>
             <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
               <VStack pl={4} spacing={0} alignItems={"flex-start"} w="full">
-                <Heading fontSize={"5xl"} mb={0}>
+                <Heading fontSize={"5xl"} mb={0} fontWeight="">
                   Project Directory
                 </Heading>
 

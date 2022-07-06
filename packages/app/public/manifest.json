@@ -1,6 +1,6 @@
 {
   "short_name": "QF",
-  "name": "QF @ ETHPrage",
+  "name": "QF @ ETHBarcelona",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,7 +11,7 @@
     { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
   ],
   "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "background_color": "#F5C34B",
   "start_url": "./",
   "display": "standalone"
 }

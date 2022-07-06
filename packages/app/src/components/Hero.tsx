@@ -20,9 +20,9 @@ export const Logo = forwardRef<ImageProps, "img">((props, ref) => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const SwitchIcon = useColorModeValue(logo, logo);
-  const animation = prefersReducedMotion ? undefined : `${spin} infinite 60s linear`;
+  // const animation = prefersReducedMotion ? undefined : `${spin} infinite 60s linear`;
 
-  return <chakra.img animation={animation} src={SwitchIcon} ref={ref} {...props} rounded="full" />;
+  return <chakra.img  src={SwitchIcon} ref={ref} {...props} rounded="full" />;
 });
 
 export const Hero = forwardRef<ImageProps, "img">((props, ref) => {

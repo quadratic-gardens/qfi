@@ -1,7 +1,9 @@
-import { ColorMode, extendTheme } from "@chakra-ui/react";
+import { ColorMode, extendTheme,  } from "@chakra-ui/react";
 import { theme as defaultTheme } from "@chakra-ui/theme";
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { lighten, darken } from "polished";
+import { mode } from '@chakra-ui/theme-tools';
+
 
 import Badge from "./core/badge";
 import Button from "./core/button";
@@ -32,9 +34,9 @@ const brand = {
   }, {}),
 };
 // Add color mode config
-const mode: ColorMode | undefined = "light";
+const colormode: ColorMode | undefined = "light";
 const config = {
-  initialColorMode: mode,
+  initialColorMode: colormode,
   useSystemColorMode: false,
 };
 
@@ -110,10 +112,9 @@ export const theme = extendTheme({
     bgImg: brand.bgImg,
   },
   fonts: {
-    heading: brand.headingFont,
-    body: brand.bodyFont,
+    heading: `'Dahlia', serif`,
+    body: `'Montserrat', sans-serif`,
     mono: brand.monoFont,
-    hub: "Mirza",
     accessory: "Roboto Mono",
     space: "Space Mono",
   },
@@ -170,18 +171,22 @@ export const theme = extendTheme({
   },
   styles: {
     bgOverlayOpacity: brand.bgOverlayOpacity,
-    global: {
+    global: (props: any) => ({
       "html, body": {
         fontSize: "m",
         color: "mode.900",
         lineHeight: "tall",
+      },
+      body:{
+        bg: mode(`gray.100`, `gray.800`)(props),
+        color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },
       a: {
         transition: "all 0.15s linear",
         color: "secondary.400",
         _hover: { textDecoration: "none", color: "secondary.500" },
       },
-    },
+    }),
   },
   config,
 });

@@ -97,7 +97,7 @@ function Web3State() {
 function ConnectState() {
   return (
     <VStack spacing={0.5} alignItems={"flex-start"} pl={3}>
-      <Text fontSize="lg" fontWeight={"extrabold"} fontFamily={"Helvetica"}>
+      <Text fontSize="lg" fontWeight={"extrabold"} >
         CONNECT
       </Text>
     </VStack>

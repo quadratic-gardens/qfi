@@ -72,7 +72,7 @@ export const Admin = () => {
 
             <VStack w="full" display={{ base: "none", xl: "flex" }} pt="10" justifyContent={"center"}>
               <Button h="80px" w="full" background="#FFFF00" color={color} variant={"solid"} onClick={onClickSetOpenQRCodeReader}>
-                <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
+                <Text fontSize="xl" fontWeight={"black"} >
                   {" "}
                   Scan key QR Code{" "}
                 </Text>
@@ -98,10 +98,10 @@ export const Admin = () => {
                     } />
                 </Container>
               }
-              <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
+              <Text fontSize="xl" fontWeight={"black"} >
                 {keyType}
               </Text>
-              <Text fontSize="sm" fontWeight={"black"} fontFamily={"archivo"}>
+              <Text fontSize="sm" fontWeight={"black"} >
                 {key}
               </Text>
               {!!key && !!keyType && (keyType === KeyType.MACI_PRIVATEKEY || keyType === KeyType.ETH_PRIVATEKEY) &&

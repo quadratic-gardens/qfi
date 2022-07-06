@@ -17,7 +17,7 @@ export const BallotExplainer = () => {
     <Accordion fontSize="xs" allowToggle>
       <AccordionItem border="none">
         <VStack>
-          <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
+          <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
             On this screen you can add votes to each project in your ballot. Each time you click the button it will add another vote to your project. Feel free to experiment with the votes you want to give, then you submit once you are happy with the ballot! 
             <AccordionIcon></AccordionIcon>
           </Text>

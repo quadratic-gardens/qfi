@@ -140,7 +140,7 @@ export function Project() {
                 />
               </VStack>
               <VStack alignItems="flex-start" w="full" spacing={0} overflow="hidden">
-                <Heading my={0.5} px={2} fontSize={"lg"} lineHeight={"24px"} fontWeight="700">
+                <Heading my={0.5} px={2} fontSize={"lg"} lineHeight={"24px"} fontWeight="">
                   {project.name}
                 </Heading>
                 <Text px={2} color={"gray.600"} fontSize={"xs"} lineHeight={"16px"} fontWeight="400">

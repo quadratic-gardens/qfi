@@ -158,7 +158,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   mt={{ base: "80px", xl: "60px" }}>
                   <VStack spacing={6} alignItems="flex-start">
                     <Heading size="4xl">How it works?</Heading>
-                    <Text fontFamily={"archivo"}>
+                    <Text >
                       Casting a Ballot requires you to have a wallet on Polygon Chain, MATIC to pay for gas, and a valid
                       ballot key. Voting is anonymous, but ballot registration happens in person as a sybil check. At
                       the event, visit the Quadratic Funding booth to get your ballot keys.
@@ -166,7 +166,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   </VStack>
                   <VStack spacing={6} alignItems="flex-start">
                     <Heading size="md">Polygon (MATIC) Wallet</Heading>
-                    <Text fontFamily={"archivo"}>
+                    <Text >
                       You will receive keys for an Polygon address that is whitelisted for this voting round, pre-loaded
                       with enough gas to cover the transaction fees for ballot submission.
                     </Text>
@@ -174,7 +174,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Ballot (MACI) passphrase</Heading>
-                    <Text fontFamily={"archivo"}>
+                    <Text >
                       MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against
                       censorship and collusion in blockchain voting. Each voter gets a pseudo-random MACI key which is
                       used to encrypt and validate your votes. This is the only way to vote in the round, and can be
@@ -190,7 +190,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                       color={color}
                       variant={"solid"}
                       onClick={onClickSetOpenQRCodeReader}>
-                      <Text fontSize="xl" fontWeight={"black"} fontFamily={"archivo"}>
+                      <Text fontSize="xl" fontWeight={"black"} >
                         {" "}
                         Scan key QR Code{" "}
                       </Text>
@@ -323,14 +323,13 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Confused or need help?</Heading>
-                    <Text fontSize="md" fontFamily={"archivo"}>
-                      You can send us an email at privacy.scaling.explorations@gmail.com or join the ETHBarcelona Telegram
-                      group
+                    <Text fontSize="md" >
+                    You can send us an email at qf@ethbarcelona.com or join the ETHBarcelona Telegram group use the #QF hashtag in your post https://t.me/ethbarcelona
                       <Link href="https://t.me/ethbarcelona" isExternal>
                         <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                       </Link>
                     </Text>
-                    <Text fontSize="md" fontFamily={"archivo"}>
+                    <Text fontSize="md" >
                       Visit us at the Quadratic Funding booth in the Looks Rare sponsor area at ETHBarcelona.
                     </Text>
                   </VStack>
