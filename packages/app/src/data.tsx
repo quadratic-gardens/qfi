@@ -11,8 +11,8 @@ let projects = [
     id: "1",
     recipientId: 1,
     url: "https://ethbarcelona.com/",
-    logo: "https://ethbarcelona.com/static/media/logo.838b30821a4c989d9ba8af2788736ad4.svg",
-    banner: "https://ethbarcelona.com/static/media/NFT.669a33168c6dc52dd290.png",
+    logo: "https://source.unsplash.com/random",
+    banner: "https://source.unsplash.com/random",
   }
 ];
 

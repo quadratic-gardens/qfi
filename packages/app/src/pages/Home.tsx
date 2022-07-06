@@ -16,7 +16,7 @@ import {
   AccordionPanel,
   HStack,
 } from "@chakra-ui/react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link as RouterLink } from "react-router-dom";
 import { animateText, MagikText } from "@qfi/ui";
 import { Hero } from "../components/Hero";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
@@ -32,6 +32,7 @@ export type HomeProps = {
 export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
   const color = useColorModeValue("gray.800", "gray.700");
   const backgroundColor = useColorModeValue("#FAFAFA", "gray.700");
+  let [searchParams] = useSearchParams();
   return (
     <Flex
       as="main"
@@ -103,12 +104,13 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                   transform: "rotate(-6.41deg)",
                   width: "122px",
                 }}>
-                <Button variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }}>
+                <Button as={Link} variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }}  href="https://bit.ly/ethbcn-clr"
+                          isExternal>
                   Sign Up!
                 </Button>
               </Box>
 
-              <Text fontFamily={"Dahlia"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
+              <Text as={RouterLink} color={"gray.700"} to={`/projects?${searchParams.toString()}`} fontFamily={"Dahlia"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
                 View Projects
               </Text>
             </HStack>

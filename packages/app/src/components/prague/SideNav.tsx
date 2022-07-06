@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack, Tooltip, IconButton, Icon, useColorModeValue, HStack, Box, Button } from "@chakra-ui/react";
+import { VStack, Tooltip, IconButton, Icon, useColorModeValue, HStack, Box, Button, Link as ExternalLink } from "@chakra-ui/react";
 import { MdDashboard, MdSettings } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
@@ -12,7 +12,7 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   let [searchParams] = useSearchParams();
 
   return (
-    <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full"   bg={backgroundColor}>
+    <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
       <VStack>
         <IconButton
           bg={backgroundColor}
@@ -88,7 +88,7 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
 
   return (
     <HStack
-    zIndex={9}
+      zIndex={9}
       position={"fixed"}
       top={0}
       left={0}
@@ -98,8 +98,7 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
       alignItems="center"
       w="full"
       minH={"32px"}>
-
-<HStack>
+      <HStack>
         {/* <IconButton
           w={"40px"}
           bg={backgroundColor}
@@ -121,36 +120,36 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
             </Tooltip> */}
       </HStack>
 
-      
       <HStack>
-      <Tooltip label="How it Works" placement="right">
-              <Box sx={
-                {
-                  height: "50px",
-                  boxSizing: "border-box",
-                  color: "white",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "50%",
-                  border: '0.8px solid rgb(53, 75, 55)',
-                  transition: "all 0s linear",
-      _hover: {  transform: "rotate(6.41deg)", scale: "1" },
-      
-                  transform: "rotate(-6.41deg)",
-                  width: "122px",
-                }
-              }>              <Button
-                variant={"barcelona"}
-                fontSize={{ base: "lg", xl: "xl" }}
-                >
-                Tickets!
-              </Button>
-                  </Box>
-            </Tooltip>
-  
-        <ColorModeSwitcher color="gray.500"
-      
-            aria-label="dark mode" />
+        <Tooltip label="5% of ticket sales go toward the QF pool" placement="right">
+          <Box
+            sx={{
+              height: "50px",
+              boxSizing: "border-box",
+              color: "white",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "50%",
+              border: "0.8px solid rgb(53, 75, 55)",
+              transition: "all 0s linear",
+              _hover: { transform: "rotate(6.41deg)", scale: "1" },
+
+              transform: "rotate(-6.41deg)",
+              width: "122px",
+            }}>
+            {" "}
+            <Button
+              as={ExternalLink}
+              variant={"barcelona"}
+              fontSize={{ base: "lg", xl: "xl" }}
+              href="https://doingud.com/creation/0xe570d586fbeb0dc23c46bfcf047ec3e46e88e5a7000000000023"
+              isExternal>
+              Tickets!
+            </Button>
+          </Box>
+        </Tooltip>
+
+        <ColorModeSwitcher color="gray.500" aria-label="dark mode" />
       </HStack>
     </HStack>
   );

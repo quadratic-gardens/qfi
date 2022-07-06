@@ -27,6 +27,7 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Box,
 } from "@chakra-ui/react";
 
 import { EaseInBottom, MagikButton } from "@qfi/ui";
@@ -510,16 +511,35 @@ export const Ballot = () => {
               </VStack>
             ) : (
               <VStack spacing={0} alignItems={"center"} w="full">
-                <Button
-                  as={Link}
-                  variant="barcelona"
-                  to="/projects"
-                  fontSize="lg"
-                  h="360px"
-                  w="full"
-                  background="#5400FF">
-                  Checkout The Projects
-                </Button>
+               
+                <Box
+            sx={{
+           
+              boxSizing: "border-box",
+              color: "white",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "50%",
+              border: "0.8px solid rgb(53, 75, 55)",
+              transition: "all 0s linear",
+              _hover: { transform: "rotate(6.41deg)", scale: "1" },
+
+              transform: "rotate(-6.41deg)",
+              width:"322px",
+              height:"60px",
+            }}>
+         
+            <Button
+            width="322px"
+            height={"60px"}
+               as={Link}
+               variant="barcelona"
+               to="/projects"
+              fontSize={{ base: "lg", xl: "xl" }}
+              >
+              Checkout the Projects!
+            </Button>
+          </Box>
               </VStack>
             )}
 
