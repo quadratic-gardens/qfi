@@ -2,7 +2,17 @@
 import dotenv from "dotenv"
 import { createCommand } from "commander"
 import { readLocalJsonFile } from "./lib/files.js"
-import { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing, fund } from "./commands/index.js"
+import {
+  auth,
+  genkeys,
+  deploy,
+  initialize,
+  addRecipients,
+  signup,
+  doTheThing,
+  fund,
+  recover
+} from "./commands/index.js"
 
 dotenv.config()
 
@@ -84,6 +94,15 @@ program
   .argument("<network>", "the network where the contracts has been deployed")
   .action((network: string) => {
     fund(network)
+  })
+
+program
+  .command("recover")
+  .description("continues signups at specified stateindex")
+  .argument("<network>", "the network where the contracts has been deployed")
+  .argument("<maciIndex>", "the next MACI key index to continue registering users")
+  .action((network: string, maciIndex: string) => {
+    recover(network, maciIndex)
   })
 
 program.parseAsync()

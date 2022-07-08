@@ -6,5 +6,6 @@ import addRecipients from "./addRecipients.js"
 import signup from "./signup.js"
 import doTheThing from "./doTheThing.js"
 import fund from "./fund.js"
+import recover from "./recover.js"
 
-export { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing, fund }
+export { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing, fund, recover }

@@ -279,7 +279,6 @@ async function doTheThing(network: string) {
     console.log(`\n${logSymbols.info} ou are about to register [16] projects\n`)
 
     // Get CSV records.
-
     let i = 0
     for await (const recipientRecord of jsonRecipientsRecords) {
       const spinner = customSpinner(`Adding recipient in position ${chalk.bold(i)}`, "point")
