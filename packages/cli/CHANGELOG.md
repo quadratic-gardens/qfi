@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/quadratic-funding/qfi/compare/v2.0.1...v2.1.0) (2022-07-08)
+
+
+### Features
+
+* **ethbarcelona: cli easy setup:** change max projects ([9a88f84](https://github.com/quadratic-funding/qfi/commit/9a88f843f621ac6e83ded42dc64a7059b51ecc7b))
+
+
+
+
+
 ## [2.0.1](https://github.com/quadratic-funding/qfi/compare/v2.0.0...v2.0.1) (2022-06-29)
 
 **Note:** Version bump only for package @qfi/ethbarcelonacli

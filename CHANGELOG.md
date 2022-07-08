@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/compare/v2.0.1...v2.1.0) (2022-07-08)
+
+
+### Features
+
+* **all:** ethBarcelona changes ([5e59b1a](https://github.com/commit/5e59b1add68fe141269e8d42a08e605af3c916cb))
+* **ethbarcelona: cli easy setup:** change max projects ([9a88f84](https://github.com/commit/9a88f843f621ac6e83ded42dc64a7059b51ecc7b))
+
+
+
+
+
 ## [2.0.1](https://github.com/compare/v2.0.0...v2.0.1) (2022-06-29)
 
 **Note:** Version bump only for package @qfi/qfi

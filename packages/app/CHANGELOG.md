@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/quadratic-funding/qfi/compare/v2.0.1...v2.1.0) (2022-07-08)
+
+
+### Features
+
+* **all:** ethBarcelona changes ([5e59b1a](https://github.com/quadratic-funding/qfi/commit/5e59b1add68fe141269e8d42a08e605af3c916cb))
+
+
+
+
+
 # [2.0.0](https://github.com/quadratic-funding/qfi/compare/v1.5.0...v2.0.0) (2022-06-29)
 
 **Note:** Version bump only for package @qfi/app
