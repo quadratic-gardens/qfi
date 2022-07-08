@@ -3858,7 +3858,7 @@
 
 "@qfi/ethbarcelonacli@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/cli":
   "resolved" "file:packages/cli"
-  "version" "2.1.2"
+  "version" "2.1.3"
   dependencies:
     "chalk" "^5.0.1"
     "clear" "^0.1.0"

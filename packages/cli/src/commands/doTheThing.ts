@@ -276,7 +276,6 @@ async function doTheThing(network: string) {
     console.log(`${logSymbols.success} Set Vks`)
     console.log(`\n${logSymbols.info} contracts connected, continuing to project sign up step!\n`)
 
-    
     console.log(`\n${logSymbols.info} ou are about to register [16] projects\n`)
 
     // Get CSV records.
@@ -319,9 +318,9 @@ async function doTheThing(network: string) {
 
     console.log(`\n${logSymbols.success} You have successfully registered the recipients on-chain 🎊\n`)
 
-    
-    console.log(`\n${logSymbols.success} You are about to register [400] ballots, DO NOT EXIT RECOVERY FROM HERE IS HARD 🎊\n`)
-
+    console.log(
+      `\n${logSymbols.success} You are about to register ballots, DO NOT EXIT RECOVERY FROM HERE IS HARD 🎊\n`
+    )
 
     const stateIndexes = []
 
@@ -336,19 +335,16 @@ async function doTheThing(network: string) {
       const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
       const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
 
-      // Create tx.
-      const { logs } = await qfi
-        .connect(deployer)
-        .signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData, {
-          gasPrice: doubleGasPrice,
-          gasLimit: ethers.utils.hexlify(10000000)
-        })
-        .then((tx: any) => tx.wait())
+      const tx = await qfi.connect(deployer).signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData, {
+        gasPrice: doubleGasPrice,
+        gasLimit: ethers.utils.hexlify(10000000)
+      })
+      await tx.wait()
 
       // Read the event from logs.
-      const iface = qfi.interface
-      const signUpEvent = iface.parseLog(logs[logs.length - 1])
-      const stateIndex: string = signUpEvent.args._stateIndex.toString()
+      // const iface = qfi.interface
+      // const signUpEvent = iface.parseLog(logs[logs.length - 1])
+      const stateIndex: string = j.toString()
 
       stateIndexes.push(stateIndex)
 
@@ -373,15 +369,13 @@ async function doTheThing(network: string) {
 
     writeLocalJsonFile(hacksFilePath, JSON.parse(JSON.stringify(hacks)))
 
-    console.log(`\n${logSymbols.success} You have successfully registered [400] users on-chain 🎊\n`)
+    console.log(`\n${logSymbols.success} You have successfully registered users on-chain 🎊\n`)
 
-    console.log(`\n${logSymbols.success} We will now start the grant round. It will be active for [3] days. 🎊\n`)
-
-
+    console.log(`\n${logSymbols.success} We will now start the grant round. It will be active for [7] days. 🎊\n`)
 
     const SEVENDAYS = 60 * 60 * 24 * 7
 
-    const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam();
+    const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam()
     const grantRoundTx = await qfi
       .connect(deployer)
       .deployGrantRound(SEVENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
