@@ -379,12 +379,12 @@ async function doTheThing(network: string) {
 
 
 
-    const THREEDAYS = 60 * 60 * 24 * 3
+    const SEVENDAYS = 60 * 60 * 24 * 7
 
     const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam();
     const grantRoundTx = await qfi
       .connect(deployer)
-      .deployGrantRound(THREEDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
+      .deployGrantRound(SEVENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
         gasPrice: doubleGasPrice,
         gasLimit: ethers.utils.hexlify(30000000)
       })
