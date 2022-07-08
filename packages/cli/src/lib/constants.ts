@@ -274,7 +274,7 @@ export const jsonRecipientsRecords: Recipient[] = [
     tagline: "DeFi 4 Good!",
     description:
       "We want to offer a way to gain a positive return on investment while simultaneously contributing to social impact projects.",
-    ethereumAddress: "umq.eth",
+    ethereumAddress: "0x90bf93475687df4d67360d6db99d20ab00543857",
     website: "popcorndao.finance",
     thumbnailImageLink: "https://picsum.photos/200",
     logoCdnUrl: "https://picsum.photos/200",
@@ -307,7 +307,7 @@ export const jsonRecipientsRecords: Recipient[] = [
     tagline: "Creating self sustaining communities of color utilizing blockchain.",
     description:
       "We focus onboarding marginalized communities into Web 3, through exit three Es. Education. Engagement. Empowerment.",
-    ethereumAddress: "40acres.eth",
+    ethereumAddress: "0xe9fe783a3f784b045db9bb42e3612d0ccef739fd",
     website: "https://twitter.com/40acresdao",
     thumbnailImageLink: "https://picsum.photos/200",
     logoCdnUrl: "https://picsum.photos/200",
