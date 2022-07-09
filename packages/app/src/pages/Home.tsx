@@ -81,8 +81,8 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
         </VStack> */}
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
-            <Heading fontFamily={"DahliaCondensed"} fontSize={{ base: "65px", xl: "96px" }}>
-              Recipient Guide
+            <Heading fontFamily={"DahliaCondensed"} fontSize={{ base: "76px", xl: "120px" }}>
+              QF @ ETH BARCELONA
             </Heading>
             <Text fontSize={"sm"} maxW="60ch">
               Welcome! If you’re here, you’re probably working on something awesome in the Eth Barcelona community -
@@ -104,20 +104,45 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                   transform: "rotate(-6.41deg)",
                   width: "122px",
                 }}>
-                <Button as={Link} variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }}  href="https://bit.ly/ethbcn-clr"
-                          isExternal>
-                  Sign Up!
+                <Button as={RouterLink} variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }}  to={`/begin?${searchParams.toString()}`} 
+                          >
+                  Get Started
                 </Button>
               </Box>
 
               <Text as={RouterLink} color={"gray.700"} to={`/projects?${searchParams.toString()}`} fontFamily={"Dahlia"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
-                View Projects
+                Checkout the Projects
               </Text>
             </HStack>
           </VStack>
           <VStack w="full" spacing={6}>
           <VStack spacing={6} alignItems="flex-start" w={"full"}>
             <Accordion allowToggle w={"full"} bg={backgroundColor} defaultIndex={0}>
+              <AccordionItem border="none" w={"full"}>
+                <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
+                  <Heading textAlign={"left"} size="md">
+                    What does it mean to VOTE?
+                  </Heading>
+                  <AccordionIcon></AccordionIcon>
+                </HStack>
+
+                <AccordionPanel pb={4}>
+                  <Text  fontSize="sm" py={2}>
+                  Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHBarcelona, but doesn’t guarantee funding. How much each project receives will be decided by ETHBarcelona attendees who vote during the event.
+                  </Text>
+                
+                  <Text  fontSize="sm"  py={2}>
+                  Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds.
+                  </Text>
+                  <Text fontSize={"sm"} py={2}>
+                  If you are posting on Twitter, remember to tag @ETHBarcelona and use the hashtags within to have more reach.
+                  </Text>
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+          </VStack>
+          <VStack spacing={6} alignItems="flex-start" w={"full"}>
+            <Accordion allowToggle w={"full"} bg={backgroundColor} >
               <AccordionItem border="none" w={"full"}>
                 <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                   <Heading size="md">What is Quadratic Funding?</Heading>
@@ -137,37 +162,8 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
 
             {/* <MagikButton /> */}
           </VStack>
-          <VStack spacing={6} alignItems="flex-start" w={"full"}>
-            <Accordion allowToggle w={"full"} bg={backgroundColor}>
-              <AccordionItem border="none" w={"full"}>
-                <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
-                  <Heading textAlign={"left"} size="md">
-                    What does it mean to sign up as a recipient?
-                  </Heading>
-                  <AccordionIcon></AccordionIcon>
-                </HStack>
-
-                <AccordionPanel pb={4}>
-                  <Text  fontSize="sm" py={2}>
-                  Adding your project makes you eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHBarcelona, but doesn’t guarantee funding. This funding is a donation and has no associated reporting, returns, or obligations on the part of the project. How much each project receives will be decided by ETHBarcelona attendees who vote during the event.
-                  </Text>
-                  <Text  fontSize="sm"  py={2}>
-                  The donation will be sent as a stablecoin (DAI) over Polygon (Ethereum Layer 2) to the wallet submitted during the registration process. Once they are sent the transaction is irreversible, so be 100% certain of the address you are submitting and who has control of the wallet/private keys.  If you are uncertain about this, feel free to get in touch with the team at qf@ethbarcelona.com. 
-                  </Text>
-                  <Text  fontSize="sm"  py={2}>
-                  Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your donated funds.
-                  </Text>
-                  <Text  fontSize="sm"  py={2}>
-                  Unfortunately the projects or teams will be unable to present during ETHBarcelona on-stage, but we do empower you to use the #ETHBCN or #ETHBarcelona hashtags on posts about your social media to show and tell more about your public good impact to the attendees.
-                  </Text>
-                  <Text fontSize={"sm"} py={2}>
-                  If you are posting on Twitter, remember to tag @ETHBarcelona and use the hashtags within to have more reach. You can also post within the event’s Telegram using the #QF hashtag: https://t.me/ethbarcelona. Projects that are part of the ETHBarcelona hackathon can also apply if they fulfill the above criteria.
-                  </Text>
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          </VStack>
-          <VStack spacing={6} alignItems="flex-start" w={"full"}>
+          
+          {/* <VStack spacing={6} alignItems="flex-start" w={"full"}>
             <Accordion allowToggle w={"full"} bg={backgroundColor}>
               <AccordionItem border="none" w={"full"}>
                 <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
@@ -196,9 +192,9 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
-          </VStack>
+          </VStack> */}
         </VStack>
-          <VStack spacing={6} h="full" pb={8} alignItems={{ base: "flex-start", xl: "center" }} display="contents">
+          {/* <VStack spacing={6} h="full" pb={8} alignItems={{ base: "flex-start", xl: "center" }} display="contents">
             <MagikText
               fontFamily="Dahlia"
               fontWeight="400"
@@ -213,7 +209,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
               {" "}
               Stay Tuned! Projects will be announced soon after applications close.
             </Heading>
-          </VStack>
+          </VStack> */}
         </VStack>
       </Container>
     </Flex>

@@ -368,9 +368,13 @@ export const Ballot = () => {
   const handleSubmit = async () => {
     console.log(isMaciPrivKey(maciKey));
     const signer = provider.getSigner(address);
-    const grantRoundAddress = "0x98CfEF9169d670064D3caBa1891a29eeC3A1b7b1";
-    // const qfiAddress = "0x7718F3716e45C1bcCd538fF756f244978747ef4d"
+    const grantRoundAddress = "0x0079765D34B80aeD96Cd96D345071C9A2b3a4471";
+
     // const qfiContract = new Contract(qfiAddress, QFI__factory.abi, signer);
+
+    // const roundAddress = await qfiContract.currentGrantRound();
+
+    // console.log(roundAddress)
     const grantRound = new ethers.Contract(grantRoundAddress, GrantRound__factory.abi, signer);
 
     setTxLoading(true);
@@ -569,7 +573,7 @@ export const Ballot = () => {
                       <FormLabel>MACI SK</FormLabel>
                       <FormHelperText>{numChars}/71</FormHelperText>
                       <HStack spacing={2}>
-                        <VStack w="full" pt="10" justifyContent={"center"} alignItems="flex-start">
+                        {/* <VStack w="full" pt="10" justifyContent={"center"} alignItems="flex-start">
                           <Button
                             h="40px"
                             w="full"
@@ -582,7 +586,7 @@ export const Ballot = () => {
                               Scan key QR Code{" "}
                             </Text>
                           </Button>
-                        </VStack>
+                        </VStack> */}
                         <VStack w="full" pt="10" justifyContent={"center"}>
                           <Button
                             fontSize="md"
@@ -601,7 +605,7 @@ export const Ballot = () => {
                     </FormControl>
                   </form>
                 </VStack>
-                {openQRCodeReader && (
+                {/* {openQRCodeReader && (
                   <Container h="full" w="full" maxWidth="container.sm">
                     <QrReader
                       scanDelay={1000}
@@ -618,7 +622,7 @@ export const Ballot = () => {
                       constraints={{ facingMode: "environment" }}
                     />
                   </Container>
-                )}
+                )} */}
 
                 <Divider></Divider>
               </VStack>

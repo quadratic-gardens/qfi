@@ -20,7 +20,7 @@ import { createSearchParams, Link, useLocation, useNavigate, useParams, useSearc
 import { getProject } from "../data";
 
 export function Project() {
-  const backgroundColor = useColorModeValue("#FAFAFA", "gray.700");
+  const backgroundColor = useColorModeValue("gray.100", "gray.800");
   const toast = useToast();
   let { projectId } = useParams();
   let navigate = useNavigate();

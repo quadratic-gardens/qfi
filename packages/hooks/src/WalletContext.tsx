@@ -37,19 +37,19 @@ export const SUPPORTED_NETWORKS: NetworkConfig = {
     explorer: "https://blockscout.com/xdai/mainnet/",
     rpc: "https://rpc.gnosischain.com/",
   },
+  "0x89": {
+    chainId: "0x89",
+    name: "Polygon Mainnet",
+    symbol: "MATIC",
+    explorer: "https://polygonscan.com/",
+    rpc: "https://polygon-mainnet.g.alchemy.com/v2/7afvptVsZxjFBz8Mcdm4dpu84IekOGds",
+  },
   "0x539": {
     chainId: "0x539",
     name: "Hardhat",
     symbol: "ETH",
     explorer: "http://localhost:1234",
     rpc: "http://localhost:8545",
-  },
-  "0x89": {
-    chainId: "0x89",
-    name: "Polygon",
-    symbol: "MATIC",
-    explorer: "https://polygonscan.com",
-    rpc: "https://polygon-rpc.com/",
   },
   "0x13881": {
     chainId: "0x13881",
@@ -388,6 +388,8 @@ export const nameToChainId = (name: string): string | undefined => {
   switch (name) {
     case "xdai":
       return "0x64";
+    case "polygon":
+      return "0x89";
     case "Mainnet":
       return "0x1";
     case "Hardhat":

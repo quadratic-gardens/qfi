@@ -140,7 +140,7 @@ export const theme = extendTheme({
     Steps,
     Form: {
       variants: {
-        floating: {
+        floating: (props: any) => ({
           container: {
             _focusWithin: {
               label: {
@@ -155,7 +155,7 @@ export const theme = extendTheme({
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: "white",
+              backgroundColor: mode(`gray.100`, `gray.800`)(props),
               pointerEvents: "none",
               mx: 3,
               px: 1,
@@ -163,7 +163,7 @@ export const theme = extendTheme({
               transformOrigin: "left top",
             },
           },
-        },
+        }),
       },
     },
 
