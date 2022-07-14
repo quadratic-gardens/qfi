@@ -388,6 +388,22 @@ let projects = [
     banner: "https://res.cloudinary.com/pse-qf-maci/image/upload/v1657297869/ETHBarcelona/polis_parallela_banner.png",
     recipientId: 26,
     id: "26",
+  },
+  {
+    name: "It-willbe.org",
+    tagline:
+      "We are committed to technological innovation to face the great social challenges. Efficient Solidarity-Collaboration-Transparency-Innovation-People",
+    description:
+      "At it-willbe we see technology as the necessary tool to increase the efficiency of the projects we support and generate greater impact. These are the technological tools that we are implementing or using in our management and in the projects we support: 1. Food Bank App : App that reduces food waste and makes the connection between donor and beneficiary companies more efficient. [ In design] See project in which it is applied. 2. Child PPa : Biometric recognition system for the reliable identification of undocumented persons (Installed in India, Sierra Leone and Senegal) See project in which it is applied . 3. ComGo : Project management and impact measurement platform, based on blockchain technology. Know more . 4. SHGs Platform : Collaborative platform for women's savings groups to empower them and boost their businesses and livelihoods. [ In design] See project in which it is applied .",
+      problemSpace:
+      "At it-willbe we see technology as the necessary tool to increase the efficiency of the projects we support and generate greater impact. These are the technological tools that we are implementing or using in our management and in the projects we support: 1. Food Bank App : App that reduces food waste and makes the connection between donor and beneficiary companies more efficient. [ In design] See project in which it is applied. 2. Child PPa : Biometric recognition system for the reliable identification of undocumented persons (Installed in India, Sierra Leone and Senegal) See project in which it is applied . 3. ComGo : Project management and impact measurement platform, based on blockchain technology. Know more . 4. SHGs Platform : Collaborative platform for women's savings groups to empower them and boost their businesses and livelihoods. [ In design] See project in which it is applied .",
+    
+      address: "0xa6237BEEAD7C00AE7058907228E722d15A46A43A",
+    url: "https://twitter.com/itwillbeorg",
+    logo: "https://pbs.twimg.com/profile_images/775309770316193792/e4580OHQ_400x400.jpg",
+    banner: "https://it-willbe.org/wp-content/uploads/2022/03/Anciana-itwillbe-2022.jpg",
+    recipientId: 27,
+    id: "27",
   }
 ];
 
