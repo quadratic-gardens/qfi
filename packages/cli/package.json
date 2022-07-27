@@ -24,6 +24,7 @@
     "start": "node dist/cli/src/index.js",
     "auth": "yarn start auth",
     "genkeys": "yarn start genkeys",
+    "tally": "yarn start tally",
     "initialize": "yarn start initialize",
     "dothething": "yarn start dothething",
     "recover": "yarn start recover",

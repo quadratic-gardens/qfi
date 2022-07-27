@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "strict": true,
+    "strict": false,
     "target": "ES5",
     "module": "esnext",
     "moduleResolution": "node",
@@ -13,7 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "typeRoots": ["node_modules/@types", "types"],
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "sourceMap": true,
     "outDir": "dist/",
     "declarationDir": "dist/types",

@@ -11,7 +11,8 @@ import {
   signup,
   doTheThing,
   fund,
-  recover
+  recover,
+  tally
 } from "./commands/index.js"
 
 dotenv.config()
@@ -103,6 +104,15 @@ program
   .argument("<maciIndex>", "the next MACI key index to continue registering users")
   .action((network: string, maciIndex: string) => {
     recover(network, maciIndex)
+  })
+  program
+  .command("tally")
+  .description("calculates the tally of the current vote offchain")
+  .argument("<network>", "the network where the contracts has been deployed")
+  .argument("<coordinatorPrivkey>", "MACI privatekey used by coodinator in Diffie Hellman Secret")
+  .argument("<matchingPoolAmount>", "Amount of xDAI to use for matching pool (dollar amount)")
+  .action((network: string, coordinatorPrivkey:string, matchingPoolAmount: string) => {
+    tally(network, coordinatorPrivkey, matchingPoolAmount)
   })
 
 program.parseAsync()

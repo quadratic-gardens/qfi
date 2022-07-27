@@ -7,5 +7,6 @@ import signup from "./signup.js"
 import doTheThing from "./doTheThing.js"
 import fund from "./fund.js"
 import recover from "./recover.js"
+import tally from "./coordinatorTallyOffChain.js"
 
-export { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing, fund, recover }
+export { auth, genkeys, deploy, initialize, addRecipients, signup, doTheThing, fund, recover, tally }
