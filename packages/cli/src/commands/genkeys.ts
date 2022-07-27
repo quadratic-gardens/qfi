@@ -140,7 +140,13 @@ async function genkeys(amount: number) {
       const ethKeyPair: EthKeyPair = generateEthereumKeyPair()
 
       // Generate a MACI keypair.
-      const maciKeyPair: KeyPair = generateMaciKeyPair()
+      let maciKeyPair: KeyPair = generateMaciKeyPair()
+      let validKey = maciKeyPair.privateKey.length === 71
+      while (!validKey) {
+        maciKeyPair = generateMaciKeyPair()
+        const ok = maciKeyPair.privateKey.length === 71
+        validKey = ok
+      }
 
       /* Files */
       const ethMnemonicFile = `${baseMnemonicFileName}_${i}`

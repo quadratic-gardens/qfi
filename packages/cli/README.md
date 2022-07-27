@@ -1,12 +1,12 @@
 <p align="center">
     <h1 align="center">
-       QFI x ETHBarcelona CLI
+       QFI x ETHLatam CLI
     </h1>
-    <p align="center">All-in-one command-line for running QFI Round x ETHBarcelona as administrator/operator</p>
+    <p align="center">All-in-one command-line for running QFI Round x ETHLatam as administrator/operator</p>
 </p>
 
 <p align="center">
-    <a href="https://github.com/quadratic-funding/qfi/tree/cohort/ethBarcelona/packages/cli" target="_blank">
+    <a href="https://github.com/quadratic-funding/qfi/tree/cohort/ethLatam/packages/cli" target="_blank">
         <img src="https://img.shields.io/badge/project-cli-blue">
     </a>
     <a href="https://eslint.org/" target="_blank">
@@ -38,24 +38,24 @@
 
 ## Commands
 
-- `ethbarcelonacli`: CLI entry point.
-- `ethbarcelonacli auth \"<mnemonic>\"`: Allow to interact with the blockchain-related commands (e.g., deploy) with a wallet by passing in wallet's mnemonic.
+- `ethlatamcli`: CLI entry point.
+- `ethlatamcli auth \"<mnemonic>\"`: Allow to interact with the blockchain-related commands (e.g., deploy) with a wallet by passing in wallet's mnemonic.
   - `<mnemonic>`: the secret mnemonic phrase (e.g., 12 words) separated by spaces (e.g., "test test test test test test test test test test test junk"). _nb. the double quotes are mandatory!_
-- `ethbarcelonacli genkeys <amount>`: Generate a new specified amount of MACI and ETH keypairs (QR Codes inclueded).
+- `ethlatamcli genkeys <amount>`: Generate a new specified amount of MACI and ETH keypairs (QR Codes inclueded).
   - `<amount>`: amount of MACI and ETH keypairs to be generated (e.g., 3000)
-- `ethbarcelonacli contracts:deploy <network>`: Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network.
+- `ethlatamcli contracts:deploy <network>`: Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network.
   - `<network>`: the network where the contracts will be deployed (e.g., matic)
-- `ethbarcelonacli contracts:add-recipients <network> <path>`: Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path.
+- `ethlatamcli contracts:add-recipients <network> <path>`: Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path.
   - `<network>`: the network where the contracts has been deployed (e.g., matic)
   - `<path>`: the path of the CSV input file where the recipients data is stored (e.g., ~/Desktop/my*recipients_data.csv`).
     \_nb. The CSV file must contain rows organized as follows:* \* _name_ \* _tagline_ \* _description_ \* _problemSpace_ \* _ethereumAddress_ \* _contactEmail_ \* _teamName (optional)_ \* _teamDescription (optional)_ \* _githubUrl (optional)_ \* _radicleUrl (optional)_ \* _websiteUrl (optional)_ \* _twitterUr (optional)_ \* _discordUrl (optional)_ \* _bannerImageHash_ \* _thumbnailImageHash_
 
 ## Examples
 
-- `ethbarcelonacli auth "test test test test test test test test test test test junk"`
-- `ethbarcelonacli genkeys 3000`
-- `ethbarcelonacli contracts:deploy matic`
-- `ethbarcelonacli contracts:add-recipients matic ~/Desktop/my_recipients_data.csv`
+- `ethlatamcli auth "test test test test test test test test test test test junk"`
+- `ethlatamcli genkeys 3000`
+- `ethlatamcli contracts:deploy matic`
+- `ethlatamcli contracts:add-recipients matic ~/Desktop/my_recipients_data.csv`
 
 ## Getting Started
 
@@ -73,7 +73,7 @@ yarn >= 1.22.18
 ```bash
 https://github.com/quadratic-funding/qfi.git
 cd qfi
-git checkout cohort/ethBarcelona
+git checkout cohort/ethLatam
 yarn
 yarn build
 cd packages/cli

@@ -8,7 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **ethbarcelona: cli easy setup:** change max projects ([9a88f84](https://github.com/quadratic-funding/qfi/commit/9a88f843f621ac6e83ded42dc64a7059b51ecc7b))
+* **ethlatam: cli easy setup:** change max projects ([9a88f84](https://github.com/quadratic-funding/qfi/commit/9a88f843f621ac6e83ded42dc64a7059b51ecc7b))
 
 
 
@@ -16,7 +16,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.0.1](https://github.com/quadratic-funding/qfi/compare/v2.0.0...v2.0.1) (2022-06-29)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 
 
@@ -27,7 +27,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **ethbarcelona cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
+* **ethlatam cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
 * **polygon support:** gas price tweaks, eject csv of public keys on key gen ([0ff3ab0](https://github.com/quadratic-funding/qfi/commit/0ff3ab0526069b21e808d73239c0d1c19d706826))
 
 
@@ -39,7 +39,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **ethbarcelona cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
+* **ethlatam cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
 * **polygon support:** gas price tweaks, eject csv of public keys on key gen ([0ff3ab0](https://github.com/quadratic-funding/qfi/commit/0ff3ab0526069b21e808d73239c0d1c19d706826))
 
 
@@ -48,7 +48,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.5.0](https://github.com/quadratic-funding/qfi/compare/v1.4.1...v1.5.0) (2022-06-11)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 
 
@@ -56,7 +56,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.4.1](https://github.com/quadratic-funding/qfi/compare/v1.4.0...v1.4.1) (2022-06-11)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 
 
@@ -86,7 +86,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.2.0](https://github.com/quadratic-funding/qfi/compare/v1.1.0...v1.2.0) (2022-06-10)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 
 
@@ -148,15 +148,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 ## [0.2.1](https://github.com/quadratic-funding/qfi/compare/v0.2.0...v0.2.1) (2022-06-08)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 # [0.2.0](https://github.com/quadratic-funding/qfi/compare/v0.1.0...v0.2.0) (2022-06-03)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 # [0.1.0](https://github.com/quadratic-funding/qfi/compare/v0.0.4...v0.1.0) (2022-06-02)
 
@@ -166,7 +166,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.0.4](https://github.com/quadratic-funding/qfi/compare/v0.0.3...v0.0.4) (2022-06-01)
 
-**Note:** Version bump only for package @qfi/ethbarcelonacli
+**Note:** Version bump only for package @qfi/ethlatamcli
 
 ## [0.0.3](https://github.com/quadratic-funding/qfi/compare/v0.0.2...v0.0.3) (2022-06-01)
 

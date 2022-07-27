@@ -79,7 +79,7 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
 
     const gasPrice = await provider.getGasPrice()
     const double = BigNumber.from("2")
-    const  = gasPrice.mul(double)
+    const  doubleGasPrice = gasPrice.mul(double)
     const gasLimit = ethers.utils.hexlify(10000000)
 
     const deployer = wallet
