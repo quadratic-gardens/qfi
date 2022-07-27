@@ -79,7 +79,7 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
 
     const gasPrice = await provider.getGasPrice()
     const double = BigNumber.from("2")
-    const doubleGasPrice = gasPrice.mul(double)
+    const  = gasPrice.mul(double)
     const gasLimit = ethers.utils.hexlify(10000000)
 
     const deployer = wallet
@@ -451,27 +451,6 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
 
     console.log(chalk.bold(`\n Subsidy results calculated`))
     console.log(`Total: ${subsidyTotal}`)
-
-    // console.log(chalk.bold(`\n you are about to finalize results for recipients`))
-    // const { confirmation: preFlightCheck1 } = await askForConfirmation("Ready?")
-    // if (!preFlightCheck1) {
-    //   console.log(`\nFarewell 1👋`)
-    //   process.exit(0)
-    // }
-
-    // for await (const { address, amount } of subsidyPerProject) {
-    //   if (amount > 0) {
-    //     console.log(`\n${logSymbols.success} Verifying subsidy of ${amount.toString()} for  ${address}\n`)
-
-    //     const tx = await wallet.sendTransaction({
-    //       to: address,
-    //       value: ethers.utils.parseEther(amount.toString()),
-    //       gasPrice: doubleGasPrice,
-    //       gasLimit
-    //     })
-    //     await tx.wait()
-    //   }
-    // }
 
     console.log("Tally Complete: Saving Result Logs")
     await writeLocalJsonFile(signUpsFilePath, JSON.parse(JSON.stringify(signUps, null, 2)))
