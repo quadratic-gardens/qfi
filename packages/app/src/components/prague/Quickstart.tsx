@@ -57,13 +57,13 @@ export const Quickstart = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Voter Guide</Heading>
           <Text>
-            As an ETHBarcelona participant, you can play an important role in both supporting the local community, and
+            As an ETHLatam participant, you can play an important role in both supporting the local community, and
             exploring new ways of funding public goods through secure quadratic voting. The future is now.
           </Text>
           <Text>
             Below you will find instructions to help support local projects through a Quadratic Funding (QF) round
-            taking place only at ETHBarcelona. You will need access to your polygon wallet with the NFT ticket to vote,
-            some MATIC to transmit the transaction (a few cents worth will be airdropped to you), and the MACI key that
+            taking place only at ETHLatam. You will need access to a Gnosis Chain walletto vote,
+            some xDai to transmit the transaction, and the MACI key that
             will be sent to your email address.
           </Text>
           <Text>
@@ -76,16 +76,15 @@ export const Quickstart = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="xl">How it works?</Heading>
           <Text>
-            All wallets that hold a redeemed NFT ticket are able to cast a Ballot for which project should get the
-            funding. Casting a Ballot requires you to have a Polygon/Etherum wallet with some MATIC to pay for the
-            transaction gas (a small amount of MATIC will be airdropped to all NFT ticket holders) and a valid ballot
+            All event attendes that bought tickets are able to cast a Ballot for which project should get the
+            funding. Casting a Ballot requires you to have a Gnosis Chain/Etherum wallet with some xDai to pay for the
+            transaction gas and a valid ballot
             key. Voting is pseudoanonymous, but to submit your Ballot you will be sent your MACI key to your email
-            address by the ETHBarcelona team.
+            address by the ETHLatam team.
           </Text>
           <Text>
             During the event you can ask questions to the team behind this funding process and make have a workaround if
-            you are not able to use the MACI key sent to your email. The team will be on stage to briefly present this
-            process during the event, if in doubt ask any of the ETHBarcelona volunteers to point you to them if you
+            you are not able to use the MACI key sent to your email. If in doubt ask any of the ETHLatam volunteers to point you to them if you
             have questions.
           </Text>
           <Accordion allowToggle>
@@ -101,7 +100,7 @@ export const Quickstart = () => {
                   <Heading size="xs">A wallet ... that is also a ballot</Heading>
                   <Image h="full" w="auto" position="relative" src={ethCard} alt={"Ethereum card"} />
                   <Text fontSize="xs">
-                    On the left side of your inventory card is a mnemonic and QR code. These are keys to a Polygon Chain
+                    On the left side of your inventory card is a mnemonic and QR code. These are keys to a Gnosis Chain Chain
                     wallet which you will use to build your ballot for the Quadratic Funding round.
                   </Text>
                   <Image h="full" w="auto" position="relative" src={maciCard} alt={"MACI card"} />
@@ -121,7 +120,7 @@ export const Quickstart = () => {
           <Heading size="xl">Register</Heading>
           <Text>Once you have got your keys, it is time to register!</Text>
           <Text>
-            We recommend the Status app for the smoothest experience since it has wallet, browser and Polygon RPC
+            We recommend the Status app for the smoothest experience since it has wallet, browser and Gnosis Chain RPC
             already integrated (plus you can use it to send super-private messages to all your new hackathon friends!).
           </Text>
           <Accordion allowToggle>
@@ -150,13 +149,13 @@ export const Quickstart = () => {
                   </Text>
                   <Heading size="xs">Change network</Heading>
                   <Text fontSize="xs">
-                    In your profile, go to Advanced =`{">"}` Network and change to Polygon Chain. You will need to
+                    In your profile, go to Advanced =`{">"}` Network and change to Gnosis Chain Chain. You will need to
                     restart the app for the network change to take effect.
                   </Text>
                   <Heading size="xs">Set up your ballot</Heading>
                   <Text fontSize="xs">
                     In the Status browser, tap the colored icon at the bottom center of the screen to connect the
-                    account you just added. Go to qf.ethbarcelona.com/#/begin. Hit “Connect” and authorize the app to
+                    account you just added. Go to qf.ethlatam.com/#/begin. Hit “Connect” and authorize the app to
                     access your address. Scan the QR to add your MACI key and hit “Save” - and you are all set! Go forth
                     and vote.
                   </Text>
@@ -185,9 +184,9 @@ export const Quickstart = () => {
                     In your wallet app:
                     <OrderedList>
                       <ListItem>
-                        Switch network to Polygon Chain. There are instructions for MetaMask{" "}
+                        Switch network to Gnosis Chain Chain. There are instructions for MetaMask{" "}
                         <Link
-                          href="https://metamask.zendesk.com/hc/en-us/articles/360052711572-How-to-connect-to-the-Polygon-Chain-network-formerly-Polygon"
+                          href="https://metamask.zendesk.com/hc/en-us/articles/360052711572-How-to-connect-to-the-Gnosis Chain-Chain-network-formerly-Gnosis Chain"
                           isExternal>
                           <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                         </Link>{" "}
@@ -195,17 +194,17 @@ export const Quickstart = () => {
                         <Link href="https://chainlist.wtf/" isExternal>
                           <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                         </Link>{" "}
-                        to automatically add Polygon Chain in many Web3 wallets. Always use caution when connecting to
+                        to automatically add Gnosis Chain Chain in many Web3 wallets. Always use caution when connecting to
                         new networks!
                       </ListItem>
                       <ListItem>
-                        Create a new account using the Polygon mnemonic or private key QR from your card.
+                        Create a new account using the Gnosis Chain mnemonic or private key QR from your card.
                       </ListItem>
                     </OrderedList>
                   </Text>
                   <Text fontSize="xs">
                     Choose your favorite browser and navigate to
-                    <Link href="https://qf.ethbarcelona.com/#/begin"> qf.ethbarcelona.com/#/begin</Link>
+                    <Link href="https://qf.ethlatam.com/#/begin"> qf.ethlatam.com/#/begin</Link>
                   </Text>
                   <Text fontSize="xs">
                     Hit “Connect” and follow the instructions to connect your wallet of choice. Once your wallet is

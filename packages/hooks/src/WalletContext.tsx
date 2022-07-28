@@ -33,8 +33,8 @@ export const SUPPORTED_NETWORKS: NetworkConfig = {
   "0x64": {
     chainId: "0x64",
     name: "Gnosis Chain",
-    symbol: "xDai",
-    explorer: "https://blockscout.com/xdai/mainnet/",
+    symbol: "Gnosis Chain",
+    explorer: "https://blockscout.com/Gnosis Chain/mainnet/",
     rpc: "https://rpc.gnosischain.com/",
   },
   "0x89": {
@@ -386,7 +386,7 @@ export const useWallet = (): WalletContextType => useContext(WalletContext);
 
 export const nameToChainId = (name: string): string | undefined => {
   switch (name) {
-    case "xdai":
+    case "Gnosis Chain":
       return "0x64";
     case "polygon":
       return "0x89";

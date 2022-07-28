@@ -112,7 +112,7 @@ export const theme = extendTheme({
     bgImg: brand.bgImg,
   },
   fonts: {
-    heading: `'Dahlia', serif`,
+    heading: `'NeuePixelGrotesk', serif`,
     body: `'Montserrat', sans-serif`,
     mono: brand.monoFont,
     accessory: "Roboto Mono",

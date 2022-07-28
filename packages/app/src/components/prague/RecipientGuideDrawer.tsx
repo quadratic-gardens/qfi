@@ -66,8 +66,8 @@ const Guide = () => {
           <Heading size="md">What does it mean to sign up as a recipient?</Heading>
           <Text >
             Adding your project makes you eligible to receive funds from the matching pool, but doesn’t guarantee
-            funding. How much each project receives will be decided by ETHBarcelona attendees who vote during the event.
-            You will need to be able to receive cryptocurrency (DAI/MATIC) on Polygon in order to receive funds in the QF round; if
+            funding. How much each project receives will be decided by ETHLatam attendees who vote during the event.
+            You will need to be able to receive cryptocurrency (DAI/MATIC) on Gnosis Chain in order to receive funds in the QF round; if
             you’re uncertain about this feel free to get in touch and we’ll be happy to help.
           </Text>
           <IconButton w={36} h={12} color="gray.800" icon={<Icon as={HiQrcode} boxSize={10} />} aria-label="Scan" />

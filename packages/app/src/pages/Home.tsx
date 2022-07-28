@@ -81,11 +81,11 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
         </VStack> */}
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
-            <Heading fontFamily={"DahliaCondensed"} fontSize={{ base: "76px", xl: "120px" }}>
-              QF @ ETH BARCELONA
+            <Heading fontFamily={"NeuePixelGrotesk"} fontSize={{ base: "76px", xl: "120px" }}>
+              QF @ ETH LATAM
             </Heading>
             <Text fontSize={"sm"} maxW="60ch">
-              Welcome! If you’re here, you’re probably working on something awesome in the Eth Barcelona community -
+              Welcome! If you’re here, you’re probably working on something awesome in the Eth Latam community -
               Thanks for everything you do :)
             </Text>
             <HStack justifyContent={"space-around"} spacing={10}>
@@ -110,7 +110,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 </Button>
               </Box>
 
-              <Text as={RouterLink} color={"gray.700"} to={`/projects?${searchParams.toString()}`} fontFamily={"Dahlia"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
+              <Text as={RouterLink} color={"gray.700"} to={`/projects?${searchParams.toString()}`} fontFamily={"NeuePixelGrotesk"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
                 Checkout the Projects
               </Text>
             </HStack>
@@ -128,14 +128,14 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
 
                 <AccordionPanel pb={4}>
                   <Text  fontSize="sm" py={2}>
-                  Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHBarcelona, but doesn’t guarantee funding. How much each project receives will be decided by ETHBarcelona attendees who vote during the event.
+                  Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. How much each project receives will be decided by ETHLatam attendees who vote during the event.
                   </Text>
                 
                   <Text  fontSize="sm"  py={2}>
                   Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds.
                   </Text>
                   <Text fontSize={"sm"} py={2}>
-                  If you are posting on Twitter, remember to tag @ETHBarcelona and use the hashtags within to have more reach.
+                  If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach.
                   </Text>
                 </AccordionPanel>
               </AccordionItem>
@@ -187,7 +187,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                   - Public good can be one of the many impacts of the project but it must be explicit what you will use the funds for if you are granted them. For example: funding a free permaculture education course for children in a village in Catalunya.
                   </Text>
                   <Text  fontSize="sm"  py={2}>
-                  - Projects are not required to be web3 or crypto-native, but they must submit a Polygon wallet which they control as part of the application process. We encourage the use of self-custody solutions.
+                  - Projects are not required to be web3 or crypto-native, but they must submit a Gnosis Chain wallet which they control as part of the application process. We encourage the use of self-custody solutions.
                   </Text>
                 </AccordionPanel>
               </AccordionItem>
@@ -196,7 +196,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
         </VStack>
           {/* <VStack spacing={6} h="full" pb={8} alignItems={{ base: "flex-start", xl: "center" }} display="contents">
             <MagikText
-              fontFamily="Dahlia"
+              fontFamily="NeuePixelGrotesk"
               fontWeight="400"
               text="Featured Projects"
               charPoses={animateText.bottomLeft(0)}
@@ -205,7 +205,7 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
               fontSize={{ base: "65px", xl: "100px" }}
               textAlign={{ base: "left", xl: "center" }}
             />
-            <Heading my={10} py={"40px"} fontFamily="Dahlia" fontWeight="400">
+            <Heading my={10} py={"40px"} fontFamily="NeuePixelGrotesk" fontWeight="400">
               {" "}
               Stay Tuned! Projects will be announced soon after applications close.
             </Heading>

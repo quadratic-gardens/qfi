@@ -59,13 +59,12 @@ const Guide = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Voter Guide</Heading>
           <Text>
-            As an ETHBarcelona participant, you can play an important role in both supporting the local community, and
+            As an ETHLatam participant, you can play an important role in both supporting the local community, and
             exploring new ways of funding public goods through secure quadratic voting. The future is now!
           </Text>
           <Text>
             Below you will find instructions to help support local projects through a Quadratic Funding (QF) round
-            taking place only at ETHBarcelona. In order to vote, you will need access to the Polygon/Ethereum wallet used for buying the NFT ticket for the event
-            and the email you indicated in the form. You will be airdropped with some MATIC for sending the transaction and you will receive the MACI private key by email.
+            taking place only at ETHLatam. In order to vote, you will need access to a Gnosis Chain/Ethereum wallet and will receive the MACI private key by email.
           </Text>
           <Text>
             Learn more about QF{" "}
@@ -77,10 +76,9 @@ const Guide = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="xl">How it works?</Heading>
           <Text>
-            All wallets that hold a redeemed NFT ticket are able to cast a Ballot for which project should get the
-            funding. Casting a Ballot requires you to have a Polygon/Etherum wallet with some MATIC to pay for the
-            transaction gas (a small amount of MATIC will be airdropped to all NFT ticket holders) and a valid ballot
-            key. Voting is pseudonymous because to submit your Ballot you will need the MACI private key sent by the ETHBarcelona team to your signup email
+            All event ticket holders will receive a MACI key used to vote via email. Casting a Ballot requires you to have a Gnosis Chain/Etherum wallet with some xDai to pay for the
+            transaction gas and a valid ballot
+            key. Voting is pseudonymous because to submit your Ballot you will need the MACI private key sent by the ETHLatam team to your signup email
             address.
           </Text>
           {/* <Accordion allowToggle>
@@ -96,7 +94,7 @@ const Guide = () => {
                   <Heading size="xs">A wallet ... that is also a ballot</Heading>
                   <Image h="full" w="auto" position="relative" src={ethCard} alt={"Ethereum card"} />
                   <Text fontSize="xs">
-                    On the left side of your inventory card is a mnemonic and QR code. These are keys to a Polygon Chain
+                    On the left side of your inventory card is a mnemonic and QR code. These are keys to a Gnosis Chain Chain
                     wallet which you will use to build your ballot for the Quadratic Funding round.
                   </Text>
                   <Image h="full" w="auto" position="relative" src={maciCard} alt={"MACI card"} />
@@ -127,7 +125,7 @@ const Guide = () => {
                   </VStack>
                   <AccordionPanel pb={4}>
                     <VStack spacing={6} alignItems="flex-start">
-                      <Text fontSize="xs">ETHBarcelona team will email you with the MACI private key to your signup email. If this email is inaccessible, get in touch with the team in-person at the event if you are experiencing difficulties with getting your MACI private key for casting your ballot.</Text>
+                      <Text fontSize="xs">ETHLatam team will email you with the MACI private key to your signup email. If this email is inaccessible, get in touch with the team in-person at the event if you are experiencing difficulties with getting your MACI private key for casting your ballot.</Text>
                     </VStack>
                   </AccordionPanel>
                 </AccordionItem>
@@ -143,12 +141,12 @@ const Guide = () => {
                   <AccordionPanel pb={4}>
                     <VStack spacing={6} alignItems="flex-start">
                       <Text fontSize="xs">Just tap the “Connect” button within the page and follow the instructions to connect the wallet that you have used to buy your ticket (both MetaMask and Wallet Connect are available).
-                        Switch network to Polygon Chain (the one you used to buy the ticket). There are instructions for MetaMask <Link href='https://metamask.zendesk.com/hc/en-us/articles/360052711572-How-to-connect-to-the-Polygon-Chain-network-formerly-Polygon' isExternal>
+                        Switch network to Gnosis Chain Chain (the one you used to buy the ticket). There are instructions for MetaMask <Link href='https://metamask.zendesk.com/hc/en-us/articles/360052711572-How-to-connect-to-the-Gnosis Chain-Chain-network-formerly-Gnosis Chain' isExternal>
                           <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                         </Link> or you can use Chainlist
                         <Link href='https://chainlist.wtf/' isExternal>
                           <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
-                        </Link> to automatically add Polygon Chain in many Web3 wallets. Always use caution when connecting to new networks!</Text>
+                        </Link> to automatically add Gnosis Chain Chain in many Web3 wallets. Always use caution when connecting to new networks!</Text>
                       <Text fontSize="xs">Once your wallet is connected, enter your MACI key in the field below it and tap “Save”. You are now successfully registered to vote in the QF Round</Text>
                     </VStack>
                   </AccordionPanel>
@@ -176,7 +174,7 @@ const Guide = () => {
                   </Text>
                   <Heading size="xs">Change network</Heading>
                   <Text fontSize="xs" >
-                    In your profile, go to Advanced =`{'>'}` Network and change to Polygon Chain. You will need to restart the app for the network change to take effect.
+                    In your profile, go to Advanced =`{'>'}` Network and change to Gnosis Chain Chain. You will need to restart the app for the network change to take effect.
                   </Text>
                   <Heading size="xs">Set up your ballot</Heading>
                   <Text fontSize="xs" >
@@ -206,13 +204,13 @@ const Guide = () => {
                   <Text fontSize="xs" >
                     In your wallet app:
                     <OrderedList>
-                      <ListItem>Switch network to Polygon Chain. There are instructions for MetaMask <Link href='https://metamask.zendesk.com/hc/en-us/articles/360052711572-How-to-connect-to-the-Polygon-Chain-network-formerly-Polygon' isExternal>
+                      <ListItem>Switch network to Gnosis Chain Chain. There are instructions for MetaMask <Link href='https://metamask.zendesk.com/hc/en-us/articles/360052711572-How-to-connect-to-the-Gnosis Chain-Chain-network-formerly-Gnosis Chain' isExternal>
                         <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                       </Link> or you can use Chainlist
                         <Link href='https://chainlist.wtf/' isExternal>
                           <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
-                        </Link> to automatically add Polygon Chain in many Web3 wallets. Always use caution when connecting to new networks!</ListItem>
-                      <ListItem>Create a new account using the Polygon mnemonic or private key QR from your card.</ListItem>
+                        </Link> to automatically add Gnosis Chain Chain in many Web3 wallets. Always use caution when connecting to new networks!</ListItem>
+                      <ListItem>Create a new account using the Gnosis Chain mnemonic or private key QR from your card.</ListItem>
                     </OrderedList>
                   </Text>
                   <Text fontSize="xs" >
@@ -287,7 +285,7 @@ const Guide = () => {
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs" >
                           Once you are happy with your votes, submit your ballot by tapping on the submit button on the website.
-                          You will get a transaction confirmation prompt within your wallet, and sign the transaction to send it via the Polygon network.
+                          You will get a transaction confirmation prompt within your wallet, and sign the transaction to send it via the Gnosis Chain network.
                         </Text>
                         <Text fontSize="xs" >
                           The ballot will be tallied at the end of the voting period, and the prize pool will be distributed between all the projects based on the number of votes received during the event (via QF).

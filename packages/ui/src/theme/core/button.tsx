@@ -23,7 +23,7 @@ const Button = {
       alignItems: "center",
       borderRadius: "50%",
       background: "rgb(53, 75, 55) none repeat scroll 0% 0%",
-      fontFamily: 'Dahlia',
+      fontFamily: 'NeuePixelGrotesk',
       fontWeight: "700",
       _hover: {   transition: "all 0s", transform: "rotate(-6.41deg)",  color: "white", scale: "1" },
       transform: "rotate(6.41deg)",

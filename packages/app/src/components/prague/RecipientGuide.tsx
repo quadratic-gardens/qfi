@@ -55,7 +55,7 @@ export const RecipientGuide = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">Recipient Guide</Heading>
           <Text >
-            Welcome! If you’re here, you’re probably working on something awesome in the Eth Barcelona community -
+            Welcome! If you’re here, you’re probably working on something awesome in the Eth Latam community -
             Thanks for everything you do :)
           </Text>
           <HStack justifyContent={"space-around"} spacing={10}>
@@ -80,7 +80,7 @@ export const RecipientGuide = () => {
               </Button>
             </Box>
 
-            <Text fontFamily={"Dahlia"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
+            <Text fontFamily={"NeuePixelGrotesk"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
               View Projects
             </Text>
           </HStack>
@@ -119,19 +119,19 @@ export const RecipientGuide = () => {
 
                 <AccordionPanel pb={4}>
                   <Text  fontSize="sm">
-                  Adding your project makes you eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHBarcelona, but doesn’t guarantee funding. This funding is a donation and has no associated reporting, returns, or obligations on the part of the project. How much each project receives will be decided by ETHBarcelona attendees who vote during the event.
+                  Adding your project makes you eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. This funding is a donation and has no associated reporting, returns, or obligations on the part of the project. How much each project receives will be decided by ETHLatam attendees who vote during the event.
                   </Text>
                   <Text  fontSize="sm">
-                  The donation will be sent as a stablecoin (DAI) over Polygon (Ethereum Layer 2) to the wallet submitted during the registration process. Once they are sent the transaction is irreversible, so be 100% certain of the address you are submitting and who has control of the wallet/private keys.  If you are uncertain about this, feel free to get in touch with the team at qf@ethbarcelona.com. 
+                  The donation will be sent as a stablecoin (xDAI) over Gnosis Chain to the wallet submitted during the registration process. Once they are sent the transaction is irreversible, so be 100% certain of the address you are submitting and who has control of the wallet/private keys.  If you are uncertain about this, feel free to get in touch with the team at qf@ethlatam.com. 
                   </Text>
                   <Text  fontSize="sm">
                   Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your donated funds.
                   </Text>
                   <Text  fontSize="sm">
-                  Unfortunately the projects or teams will be unable to present during ETHBarcelona on-stage, but we do empower you to use the #ETHBCN or #ETHBarcelona hashtags on posts about your social media to show and tell more about your public good impact to the attendees.
+                  Unfortunately the projects or teams will be unable to present during ETHLatam on-stage, but we do empower you to use the #ETHBCN or #ETHLatam hashtags on posts about your social media to show and tell more about your public good impact to the attendees.
                   </Text>
                   <Text fontSize={"sm"}>
-                  If you are posting on Twitter, remember to tag @ETHBarcelona and use the hashtags within to have more reach. You can also post within the event’s Telegram using the #QF hashtag: https://t.me/ethbarcelona. Projects that are part of the ETHBarcelona hackathon can also apply if they fulfill the above criteria.
+                  If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach. You can also post within the event’s Telegram using the #QF hashtag: https://t.me/ethlatam. Projects that are part of the ETHLatam hackathon can also apply if they fulfill the above criteria.
                   </Text>
                 </AccordionPanel>
               </AccordionItem>
@@ -161,7 +161,7 @@ export const RecipientGuide = () => {
                   Public good can be one of the many impacts of the project but it must be explicit what you will use the funds for if you are granted them. For example: funding a free permaculture education course for children in a village in Catalunya.
                   </Text>
                   <Text  fontSize="sm">
-                  Projects are not required to be web3 or crypto-native, but they must submit a Polygon wallet which they control as part of the application process. We encourage the use of self-custody solutions.
+                  Projects are not required to be web3 or crypto-native, but they must submit a Gnosis Chain wallet which they control as part of the application process. We encourage the use of self-custody solutions.
                   </Text>
                 </AccordionPanel>
               </AccordionItem>

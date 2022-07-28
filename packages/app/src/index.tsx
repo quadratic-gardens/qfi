@@ -11,7 +11,7 @@ import { nameToChainId } from "@qfi/hooks";
 import { App } from "./App";
 import { DappProvider } from "./context/DappContext";
 
-const DEFAULT_CHAIN_ID = nameToChainId("polygon"); // Used to switch to if the user is on an unsupported network
+const DEFAULT_CHAIN_ID = nameToChainId("xdai"); // Used to switch to if the user is on an unsupported network
 console.log(DEFAULT_CHAIN_ID)
 
 declare global {

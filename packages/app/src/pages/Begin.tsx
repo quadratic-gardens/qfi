@@ -159,15 +159,14 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   <VStack spacing={6} alignItems="flex-start">
                     <Heading size="4xl">How it works?</Heading>
                     <Text >
-                      Casting a Ballot requires you to have a wallet on Polygon Chain, MATIC to pay for gas, and a valid
-                      ballot key. Voting is anonymous. MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against
-                      censorship and collusion in blockchain voting.
+                      Casting a Ballot requires you to have a wallet on Gnosis Chain Chain, xDai to pay for gas, and a valid
+                      ballot key. Voting is anonymous.
                     </Text>
                   </VStack>
                   <VStack spacing={6} alignItems="flex-start">
-                    <Heading size="md">Polygon (MATIC) Wallet</Heading>
+                    <Heading size="md">Gnosis Chain (xDai) Wallet</Heading>
                     <Text >
-                      A small amount of MATIC will be airdropped to NFT ticket holders. To submit your votes you will receive your MACI private key to your email address (the one used when redeeming the ticket) sent by the ETHBarcelona team.
+                      To submit your votes you will receive your MACI private key to your email address (the one used when buying the ticket) sent by the ETHLatam team.
                     </Text>
                     <MagikButton />
                   </VStack>
@@ -323,8 +322,8 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">Confused or need help?</Heading>
                     <Text fontSize="md" >
-                    You can send us an email at qf@ethbarcelona.com or join the ETHBarcelona Telegram group use the #QF hashtag in your post 
-                      <Link href="https://t.me/ethbarcelona" isExternal>
+                    You can send us an email at qf@ethlatam.com or join the ETHLatam Telegram group use the #QF hashtag in your post 
+                      <Link href="https://t.me/ethlatam" isExternal>
                         <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                       </Link>
                     </Text>

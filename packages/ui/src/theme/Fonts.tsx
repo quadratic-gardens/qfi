@@ -3,41 +3,12 @@ import { Global } from "@emotion/react";
 export const Fonts = () => (
   <Global
     styles={`
+
       @font-face {
-        font-family: 'Dahlia';
-        font-style: normal;
-        font-weight: 400;
-        src: local('Dahlia'), url(./fonts/dahlia-regular.woff) format('woff');
-      }
-      @font-face {
-        font-family: 'Dahlia';
-        font-style: normal;
-        font-weight: 600;
-        src: local('Dahlia'), url(./fonts/dahlia-medium.woff) format('woff');
-      }
-      @font-face {
-        font-family: 'Dahlia';
+        font-family: 'NeuePixelGrotesk';
         font-style: normal;
         font-weight: 700;
-        src: local('Dahlia'), url(./fonts/dahlia-bold.woff) format('woff');
-      }
-      @font-face {
-        font-family: 'DahliaCondensed';
-        font-style: normal;
-        font-weight: 400;
-        src: url(./fonts/dahlia-boldcondensed.woff) format('woff');
-      }
-      @font-face {
-        font-family: 'DahliaCondensed';
-        font-style: normal;
-        font-weight: 600;
-        src: url(./fonts/dahlia-mediumcondensed.woff) format('woff');
-      }
-      @font-face {
-        font-family: 'DahliaCondensed';
-        font-style: normal;
-        font-weight: 700;
-        src: url(./fonts/dahlia-boldcondensed.woff) format('woff');
+        src: local('NeuePixelGrotesk'), url(./fonts/NeuePixelGrotesk.ttf) format('truetype');
       }
       /* Copied from https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&family=Raleway&display=swap */
       /* cyrillic-ext */
