@@ -1,6 +1,8 @@
 QFI (Quadratic Funding Infrastructure)
 ---
 
+[![codecov](https://codecov.io/gh/quadratic-funding/qfi/branch/main/graph/badge.svg?token=KMU9X6GE2E)](https://codecov.io/gh/quadratic-funding/qfi)
+
 ## Development
 
 ### Pre-commit hook
