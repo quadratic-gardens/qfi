@@ -1,6 +1,6 @@
 {
   "name": "@qfi/ethlatamcli",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
   "main": "dist/cli/src/index.js",
   "repository": "https://github.com/quadratic-funding/qfi",
@@ -75,6 +75,7 @@
     "ora": "^6.1.0",
     "prompts": "^2.4.2",
     "qaci-crypto": "^1.1.0",
+    "qaci-core": "^1.1.0",
     "qaci-domainobjs": "^1.1.0",
     "qrcode": "^1.5.0"
   },
