@@ -1,6 +1,6 @@
 {
   "name": "@qfi/ui",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "private": true,
   "main": "./src/index.tsx",
   "dependencies": {
