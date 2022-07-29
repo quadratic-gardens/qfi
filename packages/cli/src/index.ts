@@ -41,7 +41,7 @@ program
   .action((amount: number) => {
     genkeys(amount)
   })
-  .addHelpCommand(`ethlatamcli genkeys 3000`)
+  .addHelpCommand(`ethtaiwancli genkeys 3000`)
 
 program
   .command("initialize")

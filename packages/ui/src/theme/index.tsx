@@ -34,7 +34,7 @@ const brand = {
   }, {}),
 };
 // Add color mode config
-const colormode: ColorMode | undefined = "light";
+const colormode: ColorMode | undefined = "dark";
 const config = {
   initialColorMode: colormode,
   useSystemColorMode: false,

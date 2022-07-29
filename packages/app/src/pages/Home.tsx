@@ -82,11 +82,15 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
             <Heading fontFamily={"NeuePixelGrotesk"} fontSize={{ base: "76px", xl: "120px" }}>
-              QF @ ETH LATAM
+              平方募資法
             </Heading>
             <Text fontSize={"sm"} maxW="60ch">
-              Welcome! If you’re here, you’re probably working on something awesome in the Eth Latam community -
-              Thanks for everything you do :)
+            Quadratic Funding
+            </Text>
+            <Text fontSize={"sm"} maxW="60ch">
+在 Web3 的世界中，我們透過社群自治來解決各式問題。
+
+而平方投票法，則是一套消弭分配不均的實驗性工具。
             </Text>
             <HStack justifyContent={"space-around"} spacing={10}>
               <Box
@@ -106,12 +110,12 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 }}>
                 <Button as={RouterLink} variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }}  to={`/begin?${searchParams.toString()}`} 
                           >
-                  Get Started
+                  我是團隊
                 </Button>
               </Box>
 
               <Text as={RouterLink} color={"gray.700"} to={`/projects?${searchParams.toString()}`} fontFamily={"NeuePixelGrotesk"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
-                Checkout the Projects
+              我是觀眾
               </Text>
             </HStack>
           </VStack>
@@ -121,22 +125,20 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
               <AccordionItem border="none" w={"full"}>
                 <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                   <Heading textAlign={"left"} size="md">
-                    What does it mean to VOTE?
+                  跨界合作：總統盃黑客松
                   </Heading>
                   <AccordionIcon></AccordionIcon>
                 </HStack>
 
                 <AccordionPanel pb={4}>
                   <Text  fontSize="sm" py={2}>
-                  Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. How much each project receives will be decided by ETHLatam attendees who vote during the event.
+                  平方投票法是套集體決策程序。參與決策的投票者透過分配投票來表達偏好及偏好的程度。藉此，平方投票試圖解決多數決的常見難題，如投票悖論、棄保效應及配票。為推廣平方投票法的優點，本協會響應總統盃黑客松解決台灣永續相關議題之目標，並支持優良新創項目得以永續發展，將於 N24 台北方舟區塊鏈創新育成基地舉辦平方募資活動。
                   </Text>
                 
                   <Text  fontSize="sm"  py={2}>
-                  Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds.
+                  「2022 總統盃黑客松」以國家發展藍圖為本，超越 GDP (Beyond GDP) 的發展理念，融入國、內外發展情勢，以『安居永續‧均衡臺灣』為競賽主題，從「安居樂業」(SDGs 社會面)、「永續發展」(SDGs 經濟面) 及「均衡臺灣」(SDGs 環境面) 三大面向，號召全民許願、黑客解題，希冀透過公私協力，共創經濟、社會及環境都具幸福感的安居臺灣。
                   </Text>
-                  <Text fontSize={"sm"} py={2}>
-                  If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach.
-                  </Text>
+                  
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
@@ -145,16 +147,14 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             <Accordion allowToggle w={"full"} bg={backgroundColor} >
               <AccordionItem border="none" w={"full"}>
                 <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
-                  <Heading size="md">What is Quadratic Funding?</Heading>
+                  <Heading size="md">
+什麼是「平方募資法」？</Heading>
                   <AccordionIcon></AccordionIcon>
                 </HStack>
 
                 <AccordionPanel pb={4}>
                   <Text  fontSize="sm">
-                    Quadratic Funding (QF) is a more democratic way for communities to decide how to allocate funds to
-                    public goods. A pool of matching funds is distributed among recipient projects according to a
-                    formula that takes into account both how many people value something, and the strength of people’s
-                    individual preferences.
+                  為避免因棄保效應、配票、80/20 法則等，導致非主流項目遭忽視與資源分配不均，以太坊創辦人 Vitalik Buterin、哈佛大學經濟學者 Zoë Hitzig 以及微軟首席經濟研究員 Glen Weyl 在 2018 年底共同提出「平方募資法」(Quadratic Funding)，平方募資基於平方投票計算與分配資金（如政府預算、慈善或企業來源、直接從參與者收集），目的在於讓資源分配變得更加平均。
                   </Text>
                 </AccordionPanel>
               </AccordionItem>
