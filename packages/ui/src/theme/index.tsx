@@ -34,7 +34,7 @@ const brand = {
   }, {}),
 };
 // Add color mode config
-const colormode: ColorMode | undefined = "light";
+const colormode: ColorMode | undefined = "dark";
 const config = {
   initialColorMode: colormode,
   useSystemColorMode: false,
@@ -83,6 +83,7 @@ export const theme = extendTheme({
       900: darken(0.2, brand.primary),
     },
     background: {
+      0: '#FAF7F5',
       50: lighten(0.4, brand.background),
       100: lighten(0.3, brand.background),
       200: lighten(0.2, brand.background),
@@ -93,6 +94,7 @@ export const theme = extendTheme({
       700: darken(0.1, brand.background),
       800: darken(0.15, brand.background),
       900: darken(0.2, brand.background),
+      1000: '#1A1A1A'
     },
     secondary: {
       50: lighten(0.4, brand.secondary),
@@ -178,7 +180,7 @@ export const theme = extendTheme({
         lineHeight: "tall",
       },
       body:{
-        bg: mode(`gray.100`, `gray.800`)(props),
+        bg: mode(`gray.100`, `background.1000`)(props),
         color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },
       a: {

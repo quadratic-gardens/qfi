@@ -1,6 +1,6 @@
 import { rgba } from "polished";
-import BrandImg from "../assets/logo.png";
-import BgImg from "../assets/logo.png";
+import BrandImg from "../assets/logo.svg";
+import BgImg from "../assets/logo.svg";
 
 export const defaultTheme: {
   primary: string;
