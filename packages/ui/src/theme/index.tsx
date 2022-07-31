@@ -94,7 +94,7 @@ export const theme = extendTheme({
       700: darken(0.1, brand.background),
       800: darken(0.15, brand.background),
       900: darken(0.2, brand.background),
-      1000: '#1A1A1A'
+      1000: '#000000'
     },
     secondary: {
       50: lighten(0.4, brand.secondary),
@@ -180,7 +180,7 @@ export const theme = extendTheme({
         lineHeight: "tall",
       },
       body:{
-        bg: mode(`gray.100`, `background.500`)(props),
+        bg: mode(`gray.100`, `background.1000`)(props),
         color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },
       a: {
