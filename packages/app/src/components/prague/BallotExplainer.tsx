@@ -12,22 +12,22 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation, Trans } from "react-i18next";
 
 export const BallotExplainer = () => {
   const { t } = useTranslation();
 
   return (
-    <Accordion fontSize="xs" allowToggle>
+    <Accordion allowToggle mt={8}>
       <AccordionItem border="none">
         <VStack>
-          <Text px={0} textAlign={"justify"} as={AccordionButton} fontSize="xs">
+          <Text px={0} textAlign="justify" as={AccordionButton}>
             <Trans i18nKey="On this screen you can add votes to each project in your ballot. Each time you click the button it will add another vote to your project. Feel free to experiment with the votes you want to give, then you submit once you are happy with the ballot!" />
             <AccordionIcon></AccordionIcon>
           </Text>
         </VStack>
         <AccordionPanel pb={4}>
-          <UnorderedList marginInlineStart={"1rem !important"} fontSize="xs" w="full">
+          <UnorderedList marginInlineStart="1rem !important" w="full">
             <ListItem>
               <Trans i18nKey="This page will be updated once the event starts to let you vote for projects you meet at the event." />
             </ListItem>
@@ -50,7 +50,6 @@ export const BallotExplainer = () => {
 
             <ListItem>
               <Trans i18nKey="Casting a vote for a project will <strong>cost the square of the number of votes you want to cast</strong> in voice credits. For example, if you would like to cast 5 votes for Project A, that will cost 25 voice credits." />
-
             </ListItem>
             <ListItem>
               <Trans i18nKey="You <strong>cannot use more voice credits than you have</strong>. Since each voter starts with 99 voice credits, a vote of 10 (which would cost 100 voice credits) is more than any voter can afford to pay. This means that at most, a single voter can give 9 votes to a single project - at a cost of 81 voice credits - and have 18 voice credits left to vote for other projects." />
