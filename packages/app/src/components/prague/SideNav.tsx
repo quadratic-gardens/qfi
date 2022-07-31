@@ -1,11 +1,19 @@
 import React from "react";
-import { VStack, Tooltip, IconButton, Icon, useColorModeValue, HStack, Box, Button, Link as ExternalLink } from "@chakra-ui/react";
+import {
+  VStack,
+  Tooltip,
+  IconButton,
+  Icon,
+  useColorModeValue,
+  HStack,
+  Button,
+  Link as ExternalLink,
+} from "@chakra-ui/react";
 import { MdDashboard, MdSettings } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
 import { SideNavProps } from "../../propTypes";
-import { ColorModeSwitcher } from "../ColorModeSwitcher";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "background.1000");
@@ -13,8 +21,15 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   const { t } = useTranslation();
 
   return (
-    <div style={{ display: 'flex', paddingTop: 40 }}>
-      <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
+    <div style={{ display: "flex", paddingTop: 40 }}>
+      <VStack
+        zIndex={9}
+        p={4}
+        justifyContent="space-between"
+        alignItems="center"
+        w="full"
+        bg={backgroundColor}
+      >
         <VStack>
           <Tooltip label={t("Ballot")} placement="right">
             <IconButton
@@ -91,16 +106,23 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
       justifyContent="space-between"
       alignItems="center"
       w="full"
-      minH={"32px"}>
+      minH={"32px"}
+    >
       <IconButton
         bg={backgroundColor}
         to={`/?${searchParams.toString()}`}
         as={Link}
         p={4}
-        icon={<img style={{ height: 20 }} src="eth-latam-full-logo.svg" alt="ETH LATAM" />}
+        icon={
+          <img
+            style={{ height: 20 }}
+            src="eth-latam-full-logo.svg"
+            alt="ETH LATAM"
+          />
+        }
         aria-label="Home"
       />
-      
+
       <HStack>
         {/* <IconButton
           w={"40px"}
@@ -129,7 +151,8 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
           variant={"ethLatamGreen"}
           fontSize={{ base: "lg", xl: "xl" }}
           href="https://www.eventbrite.com/e/ethlatam-at-buenos-aires-tickets-374680147407"
-          isExternal>
+          isExternal
+        >
           {t("GET TICKETS!")}
         </Button>
       </HStack>

@@ -8,14 +8,9 @@ import {
   Button,
   Link,
   useColorModeValue,
-  Divider,
-  HStack,
-  PinInput,
-  PinInputField,
   Icon,
   useToast,
   FormControl,
-  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Input,
@@ -24,10 +19,9 @@ import { MagikButton } from "@qfi/ui";
 import { Keypair, PrivKey } from "qaci-domainobjs";
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 import { useDappState } from "../context/DappContext";
-import { QrReader } from "react-qr-reader";
 import { HiExternalLink } from "react-icons/hi";
 import { getStateIndex } from "../quickBallotConfig";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export type HomeProps = {
   isSettingsOpen: boolean;
@@ -52,7 +46,12 @@ const isMaciPrivKey = (key: string): boolean => {
   return false;
 };
 
-export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
+export const Begin = ({
+  isSettingsOpen,
+  onSettingsOpen,
+  isGuideOpen,
+  onGuideOpen,
+}: HomeProps) => {
   const { t } = useTranslation();
 
   const color = useColorModeValue("gray.800", "gray.700");
@@ -63,9 +62,6 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
       return key.length;
     }
   }, [key]);
-  const [keyType, setKeyType] = useState<string>();
-  const [openQRCodeReader, setOpenQRCodeReader] = useState(false);
-  const onClickSetOpenQRCodeReader = () => setOpenQRCodeReader(!openQRCodeReader);
 
   const { maciKey, setMaciKey } = useDappState();
 
@@ -78,9 +74,6 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
       setKey(maciKey);
     }
   }, [setKey, maciKey]);
-  const handleChange = (value: string) => {
-    setKey(value.trim);
-  };
 
   const handleInputChange = (e) => {
     setKey(String(e.target.value).trim());
@@ -94,7 +87,9 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
 
         toast({
           title: t("New Maci Key"),
-          description: t("You have updated your MACI key, and are registered to vote."),
+          description: t(
+            "You have updated your MACI key, and are registered to vote."
+          ),
           status: "success",
           duration: 6000,
           isClosable: true,
@@ -107,7 +102,9 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
     } catch (e) {
       toast({
         title: t("Invalid Maci Key"),
-        description: t("The MACI Key you have provided is either incorrect or not registered"),
+        description: t(
+          "The MACI Key you have provided is either incorrect or not registered"
+        ),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -143,13 +140,23 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
           background: "transparent",
           borderRadius: "0px",
         },
-      }}>
+      }}
+    >
       <VStack spacing={0} w="full">
         <Container h="full" w="full" maxWidth="container.sm">
           <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
-            <Container maxWidth={{ lg: "container.md", md: "container.md" }} py={100}>
+            <Container
+              maxWidth={{ lg: "container.md", md: "container.md" }}
+              py={100}
+            >
               <VStack spacing={0} w="full" alignItems={"flex-end"}>
-                <ColorModeSwitcher position="absolute" top={0} right={0} m={4} zIndex={1} />
+                <ColorModeSwitcher
+                  position="absolute"
+                  top={0}
+                  right={0}
+                  m={4}
+                  zIndex={1}
+                />
               </VStack>
               <VStack spacing={2} h="full" alignItems={"flex-start"}>
                 <VStack
@@ -158,24 +165,31 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   pb={8}
                   alignItems={{ base: "flex-start", xl: "center" }}
                   display="contents"
-                  mt={{ base: "80px", xl: "60px" }}>
+                  mt={{ base: "80px", xl: "60px" }}
+                >
                   <VStack spacing={6} alignItems="flex-start">
                     <Heading size="4xl">{t("How it works?")}</Heading>
-                    <Text >
-                      {t("Casting a Ballot requires you to have a wallet on Polygon, MATIC to pay for gas, and a valid ballot key. Voting is anonymous.")}
+                    <Text>
+                      {t(
+                        "Casting a Ballot requires you to have a wallet on Polygon, MATIC to pay for gas, and a valid ballot key. Voting is anonymous."
+                      )}
                     </Text>
                   </VStack>
                   <VStack spacing={6} alignItems="flex-start">
                     <Heading size="md">Polygon (MATIC) Wallet</Heading>
-                    <Text >
-                      {t("To submit your votes you will receive your MACI private key to your email address (the one used when buying the ticket) sent by the ETHLatam team.")}
+                    <Text>
+                      {t(
+                        "To submit your votes you will receive your MACI private key to your email address (the one used when buying the ticket) sent by the ETHLatam team."
+                      )}
                     </Text>
                     <MagikButton />
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">{t("Ballot (MACI) passphrase")}</Heading>
-                    <Text >
-                      {t("Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.")}
+                    <Text>
+                      {t(
+                        "Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe."
+                      )}
                     </Text>
                   </VStack>
 
@@ -214,8 +228,20 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
 
                   <VStack spacing={1} alignItems="flex-start" w="full">
                     <form style={{ width: "100%" }} onSubmit={handleSubmit}>
-                      <FormControl w="full" isInvalid={isError} variant="floating" id="key" isRequired>
-                        <Input w="full" type={"password"} placeholder="" value={key} onChange={handleInputChange} />
+                      <FormControl
+                        w="full"
+                        isInvalid={isError}
+                        variant="floating"
+                        id="key"
+                        isRequired
+                      >
+                        <Input
+                          w="full"
+                          type={"password"}
+                          placeholder=""
+                          value={key}
+                          onChange={handleInputChange}
+                        />
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel>MACI SK</FormLabel>
                         <FormHelperText>{numChars}/71</FormHelperText>
@@ -229,7 +255,8 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                           background="#5400FF"
                           type="submit"
                           width="full"
-                          mt={4}>
+                          mt={4}
+                        >
                           {t("SAVE")}
                         </Button>
                       </FormControl>
@@ -320,13 +347,18 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
                     <Heading size="md">{t("Confused or need help?")}</Heading>
-                    <Text fontSize="md" >
-                    {t("You can send us an email at qf@ethlatam.com or join the ETHLatam Telegram group use the #QF hashtag in your post")}
+                    <Text fontSize="md">
+                      {t(
+                        "You can send us an email at qf@ethlatam.com or join the ETHLatam Telegram group use the #QF hashtag in your post"
+                      )}
                       <Link href="https://t.me/ethlatam" isExternal>
-                        <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
+                        <Icon
+                          as={HiExternalLink}
+                          boxSize={4}
+                          color="gray.500"
+                        />
                       </Link>
                     </Text>
-                  
                   </VStack>
                 </VStack>
               </VStack>
