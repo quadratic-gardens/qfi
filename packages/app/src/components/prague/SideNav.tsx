@@ -5,16 +5,18 @@ import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
 import { SideNavProps } from "../../propTypes";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
+import { useTranslation } from 'react-i18next';
 
 export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "background.1000");
   let [searchParams] = useSearchParams();
+  const { t } = useTranslation();
 
   return (
     <div style={{ display: 'flex', paddingTop: 84 }}>
       <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
         <VStack>
-          <Tooltip label="Ballot" placement="right">
+          <Tooltip label={t("Ballot")} placement="right">
             <IconButton
               to={`/ballot?${searchParams.toString()}`}
               as={Link}
@@ -23,7 +25,7 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
               aria-label="Ballot"
             />
           </Tooltip>
-          <Tooltip label="Projects" placement="right">
+          <Tooltip label={t("Projects")} placement="right">
             <IconButton
               to={`/projects?${searchParams.toString()}`}
               as={Link}
@@ -52,7 +54,7 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
             </Tooltip> */}
         </VStack>
         <VStack>
-          <Tooltip label="Guide" placement="right">
+          <Tooltip label={t("Guide")} placement="right">
             <IconButton
               onClick={onGuideOpen}
               color="gray.500"
@@ -60,7 +62,7 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
               aria-label="Guide"
             />
           </Tooltip>
-          <Tooltip label="Settings" placement="right">
+          <Tooltip label={t("Settings")} placement="right">
             <IconButton
               onClick={onSettingsOpen}
               color="gray.500"
@@ -90,7 +92,14 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
       alignItems="center"
       w="full"
       minH={"32px"}>
-      <img style={{height: 20}} src="eth-latam-full-logo.svg" alt="ETH LATAM" />
+      <IconButton
+        bg={backgroundColor}
+        to={`/?${searchParams.toString()}`}
+        as={Link}
+        icon={<img style={{ height: 20 }} src="eth-latam-full-logo.svg" alt="ETH LATAM" />}
+        aria-label="Home"
+      />
+      
       <HStack>
         {/* <IconButton
           w={"40px"}

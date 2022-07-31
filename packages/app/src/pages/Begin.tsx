@@ -27,6 +27,7 @@ import { useDappState } from "../context/DappContext";
 import { QrReader } from "react-qr-reader";
 import { HiExternalLink } from "react-icons/hi";
 import { getStateIndex } from "../quickBallotConfig";
+import { useTranslation } from 'react-i18next';
 
 export type HomeProps = {
   isSettingsOpen: boolean;
@@ -52,6 +53,8 @@ const isMaciPrivKey = (key: string): boolean => {
 };
 
 export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
+  const { t } = useTranslation();
+
   const color = useColorModeValue("gray.800", "gray.700");
   const toast = useToast();
   const [key, setKey] = useState<string>();
@@ -90,8 +93,8 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
         setMaciKey(value);
 
         toast({
-          title: "New Maci Key",
-          description: "You have updated your MACI key, and are registered to vote.",
+          title: t("New Maci Key"),
+          description: t("You have updated your MACI key, and are registered to vote."),
           status: "success",
           duration: 6000,
           isClosable: true,
@@ -103,8 +106,8 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
       }
     } catch (e) {
       toast({
-        title: "Invalid Maci Key",
-        description: "The MACI Key you have provided is either incorrect or not registered",
+        title: t("Invalid Maci Key"),
+        description: t("The MACI Key you have provided is either incorrect or not registered"),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -157,26 +160,22 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                   display="contents"
                   mt={{ base: "80px", xl: "60px" }}>
                   <VStack spacing={6} alignItems="flex-start">
-                    <Heading size="4xl">How it works?</Heading>
+                    <Heading size="4xl">{t("How it works?")}</Heading>
                     <Text >
-                      Casting a Ballot requires you to have a wallet on Gnosis Chain Chain, xDai to pay for gas, and a valid
-                      ballot key. Voting is anonymous.
+                      {t("Casting a Ballot requires you to have a wallet on Polygon, MATIC to pay for gas, and a valid ballot key. Voting is anonymous.")}
                     </Text>
                   </VStack>
                   <VStack spacing={6} alignItems="flex-start">
-                    <Heading size="md">Gnosis Chain (xDai) Wallet</Heading>
+                    <Heading size="md">Polygon (MATIC) Wallet</Heading>
                     <Text >
-                      To submit your votes you will receive your MACI private key to your email address (the one used when buying the ticket) sent by the ETHLatam team.
+                      {t("To submit your votes you will receive your MACI private key to your email address (the one used when buying the ticket) sent by the ETHLatam team.")}
                     </Text>
                     <MagikButton />
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
-                    <Heading size="md">Ballot (MACI) passphrase</Heading>
+                    <Heading size="md">{t("Ballot (MACI) passphrase")}</Heading>
                     <Text >
-                       
-                      Each voter gets a pseudo-random MACI key which is
-                      used to encrypt and validate your votes. This is the only way to vote in the round, and can be
-                      used to change your ballot at any time while the round is active, so keep it safe.
+                      {t("Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.")}
                     </Text>
                   </VStack>
 
@@ -231,7 +230,7 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                           type="submit"
                           width="full"
                           mt={4}>
-                          SAVE
+                          {t("SAVE")}
                         </Button>
                       </FormControl>
                     </form>
@@ -320,9 +319,9 @@ export const Begin = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen
                     {/* <Divider></Divider> */}
                   </VStack>
                   <VStack spacing={2} alignItems="flex-start">
-                    <Heading size="md">Confused or need help?</Heading>
+                    <Heading size="md">{t("Confused or need help?")}</Heading>
                     <Text fontSize="md" >
-                    You can send us an email at qf@ethlatam.com or join the ETHLatam Telegram group use the #QF hashtag in your post 
+                    {t("You can send us an email at qf@ethlatam.com or join the ETHLatam Telegram group use the #QF hashtag in your post")}
                       <Link href="https://t.me/ethlatam" isExternal>
                         <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                       </Link>

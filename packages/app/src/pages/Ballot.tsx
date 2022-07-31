@@ -48,6 +48,7 @@ import { HiExternalLink } from "react-icons/hi";
 import { getStateIndex } from "../quickBallotConfig";
 import { QrReader } from "react-qr-reader";
 import { isError } from "util";
+import { useTranslation } from 'react-i18next';
 
 const isMaciPrivKey = (key: string): boolean => {
   if ((key.length === 71 || key.length === 70) && key.startsWith("macisk.")) {
@@ -66,6 +67,7 @@ const isMaciPrivKey = (key: string): boolean => {
 };
 
 export const Ballot = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
@@ -89,8 +91,8 @@ export const Ballot = () => {
         setMaciKey(value);
 
         toast({
-          title: "New Maci Key",
-          description: "You have updated your MACI key, and are registered to vote.",
+          title: t("New Maci Key"),
+          description: t("You have updated your MACI key, and are registered to vote."),
           status: "success",
           duration: 6000,
           isClosable: true,
@@ -102,8 +104,8 @@ export const Ballot = () => {
       }
     } catch (e) {
       toast({
-        title: "Invalid Maci Key",
-        description: "The MACI Key you have provided is either incorrect or not registered",
+        title: t("Invalid Maci Key"),
+        description: t("The MACI Key you have provided is either incorrect or not registered"),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -445,8 +447,8 @@ export const Ballot = () => {
       );
       await tx.wait();
       toast({
-        title: "Ballot Submitted",
-        description: "You have submitted your ballot! Feel free to resubmit if you change your mind.",
+        title: t("Ballot Submitted"),
+        description: t("You have submitted your ballot! Feel free to resubmit if you change your mind."),
         status: "success",
         duration: 10000,
         isClosable: true,
@@ -486,16 +488,16 @@ export const Ballot = () => {
       <VStack spacing={0} w="full">
         <Container pt={10} h="full" w="full" maxWidth="container.md">
           <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
-            <Heading mb={4}>Your Ballot</Heading>
+            <Heading mt={10} mb={4}>{t("Your Ballot")}</Heading>
             <VStack spacing={2} alignItems={"flex-start"} w="full">
               <BallotExplainer />
               <EaseInBottom duration={0.3} delay={0.5} heightStart={20} heightEnd={10}>
                 <Text fontSize={"xs"}>
-                  <b>Voice Credit balance: {voiceCreditBalance}</b>
+                  <b>{t("Voice Credit balance")}: {voiceCreditBalance}</b>
                 </Text>
               </EaseInBottom>
               <Text fontSize={"xs"} pt={2} px={"1px"}>
-                Voice Credits spent: {ballotOption1Votes ** 2} + {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +
+                {t("Voice Credits spent")}: {ballotOption1Votes ** 2} + {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +
                 {ballotOption4Votes ** 2} + {ballotOption5Votes ** 2} + {ballotOption6Votes ** 2} +{" "}
                 {ballotOption7Votes ** 2} + {ballotOption8Votes ** 2} = {totalVoiceCredits}
               </Text>
@@ -515,35 +517,35 @@ export const Ballot = () => {
               </VStack>
             ) : (
               <VStack spacing={0} alignItems={"center"} w="full">
-               
-                <Box
-            sx={{
-           
-              boxSizing: "border-box",
-              color: "white",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "50%",
-              border: "0.8px solid rgb(53, 75, 55)",
-              transition: "all 0s linear",
-              _hover: { transform: "rotate(6.41deg)", scale: "1" },
 
-              transform: "rotate(-6.41deg)",
-              width:"322px",
-              height:"60px",
-            }}>
-         
-            <Button
-            width="322px"
-            height={"60px"}
-               as={Link}
-               variant="barcelona"
-               to="/projects"
-              fontSize={{ base: "lg", xl: "xl" }}
-              >
-              Checkout the Projects!
-            </Button>
-          </Box>
+                <Box
+                  sx={{
+
+                    boxSizing: "border-box",
+                    color: "white",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: "50%",
+                    border: "0.8px solid rgb(53, 75, 55)",
+                    transition: "all 0s linear",
+                    _hover: { transform: "rotate(6.41deg)", scale: "1" },
+
+                    transform: "rotate(-6.41deg)",
+                    width: "322px",
+                    height: "60px",
+                  }}>
+
+                  <Button
+                    width="322px"
+                    height={"60px"}
+                    as={Link}
+                    variant="barcelona"
+                    to="/projects"
+                    fontSize={{ base: "lg", xl: "xl" }}
+                  >
+                    {t("Checkout the Projects!")}
+                  </Button>
+                </Box>
               </VStack>
             )}
 
@@ -556,14 +558,10 @@ export const Ballot = () => {
               w="full">
               <VStack spacing={2} alignItems={{ base: "center", md: "flex-start" }}>
                 <Heading fontSize={"xs"} fontWeight={"bold"} alignSelf={"flex-start"}>
-                  Ballot (MACI) Passphrase
+                {t("Ballot (MACI) Passphrase")}
                 </Heading>
                 <Text fontSize={"xs"}>
-                  MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship
-                  and collusion in blockchain voting. (read more about MACI at this page). Each voter gets a
-                  pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote
-                  in the round, and can be used to change your ballot at any time while the round is active, so keep it
-                  safe (”not you MACI key, not your vote”)
+                {t("MACI (Minimal Anti-Collusion Infrastructure) uses")}
                 </Text>
                 <VStack spacing={1} alignItems="flex-start" w="full">
                   <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
@@ -598,7 +596,7 @@ export const Ballot = () => {
                             background="#5400FF"
                             type="submit"
                             width="full">
-                            SAVE
+                            {t("SAVE")}
                           </Button>
                         </VStack>
                       </HStack>
@@ -641,17 +639,17 @@ export const Ballot = () => {
                     variant="solid"
                     w="full"
                     mt={4}>
-                    SUBMIT BALLOT
+                    {t("SUBMIT BALLOT")}
                   </Button>
                 ) : (
                   <Center textAlign="center">
                     <VStack spacing={6} textAlign="center" w="full">
                       <Text display={isConnected ? "none" : "flex"} fontSize={"xs"} fontWeight="extrabold">
-                        Not Connected: Sign in to continue
+                      {t("Not Connected: Sign in to continue")}
                       </Text>
 
                       <Text fontSize={"xs"} display={isValidMaciKey ? "none" : "flex"} fontWeight="extrabold">
-                        Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.
+                      {t("Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.")}
                       </Text>
                     </VStack>
                   </Center>

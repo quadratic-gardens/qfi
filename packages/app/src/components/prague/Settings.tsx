@@ -19,33 +19,31 @@ import {
 import { MagikButton } from "@qfi/ui";
 import { HiExternalLink } from "react-icons/hi";
 
+import { useTranslation, Trans } from 'react-i18next';
+
 export const Settings = () => {
   const [values, setValues] = React.useState(["", "", ""]);
+  const { t } = useTranslation();
 
   return (
     <Container h="full" w="full" overflowY={"scroll"} right="-24px" top={0} left={0} position="absolute">
       <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
         <VStack spacing={6} alignItems="flex-start">
-          <Heading size="2xl">How it works?</Heading>
+          <Heading size="2xl">{t("How it works?")}</Heading>
 
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
-          <Heading size="md">Gnosis Chain Wallet</Heading>
+          <Heading size="md">{t("Polygon Wallet")}</Heading>
           <Text>
-            Casting a Ballot requires you to have a Gnosis Chain/Etherum wallet with some xDai to pay for the transaction gas ( a valid MACI private key will be sent to all Conference ticket holders .
-          </Text>
-          <Text>
-            Voting is pseudoanonymous but to submit your votes you will receive your MACI private key to your email address (the one used when buying the ticket) sent by the ETHLatam team.
+            {t("Casting a Ballot requires you to have a wallet on Polygon, MATIC to pay for gas, and a valid ballot key. Voting is anonymous.")}
           </Text>
           <MagikButton />
         </VStack>
         <VStack spacing={2} alignItems="flex-start">
-          <Heading size="md">Ballot (MACI) passphrase</Heading>
+          <Heading size="md">{t("Ballot (MACI) passphrase")}</Heading>
           <Text >
-             Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe (”not you MACI, not your vote”)
+            {t("Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe.")}
           </Text>
-
-
         </VStack>
 
         <VStack spacing={1} alignItems="flex-start">
@@ -166,13 +164,13 @@ export const Settings = () => {
           </HStack>
           <Divider></Divider>
           <Button colorScheme="blue" variant="outline" w="full" mt={4}>
-            Save
+            {t("SAVE")}
           </Button>
         </VStack>
         <VStack spacing={2} alignItems="flex-start">
-          <Heading size="md">Confused or need help?</Heading>
+          <Heading size="md">{t("Confused or need help?")}</Heading>
           <Text fontSize="md" >
-            You can send us an email at qf@ethlatam.com or join the ETHLatam Telegram group use the #QF hashtag in your post https://t.me/ethlatam
+            {t("You can send us an email at qf@ethlatam.com or join the ETHLatam Telegram group use the #QF hashtag in your post")}
             <Link href='https://t.me/ethlatam' isExternal>
               <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
             </Link>

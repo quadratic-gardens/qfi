@@ -23,6 +23,8 @@ import { Link, Outlet, useSearchParams } from "react-router-dom";
 import { getProjects, getShuffledProjects } from "../data";
 import { Option } from "../propTypes";
 
+import { useTranslation, Trans } from 'react-i18next';
+
 const shortenEthAddress = (address: string) => {
   return address.substring(0, 6) + "..." + address.substring(address.length - 4);
 };
@@ -31,6 +33,9 @@ export const Projects = () => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
   const color = useColorModeValue("gray.800", "gray.700");
   let [searchParams] = useSearchParams();
+
+  const { t } = useTranslation();
+
   return (
     <>
       <Flex
@@ -66,63 +71,51 @@ export const Projects = () => {
             <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
               <VStack pl={4} spacing={0} alignItems={"flex-start"} w="full">
                 <Heading fontSize={"5xl"} mb={0} fontWeight="">
-                  Project Directory
+                  {t("Project Directory")}
                 </Heading>
 
                 <Accordion fontSize="xs" allowToggle>
                   <AccordionItem border="none">
                     <VStack>
                       <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
-                        This is a directory of projects! This page will be updated once the event starts to let you add
-                        projects to a real ballot and vote for projects that you meet at the event. Tap here to learn
-                        more 📖🧐.
+                        {t("This is a directory of projects! This page will be updated once the event starts to let you add projects to a real ballot and vote for projects that you meet at the event. Tap here to learn more 📖🧐.")}
                         <AccordionIcon></AccordionIcon>
                       </Text>
                     </VStack>
                     <AccordionPanel pb={4}>
                       <UnorderedList marginInlineStart={"1rem !important"} fontSize="xs" w="full">
                         <ListItem>
-                          When a voter is whitelisted they receive a{" "}
+                          {t("When a voter is whitelisted they receive a")}{" "}
                           <Tooltip label="pseudo-randomly assigned" placement="top">
-                            <b>MACI passphrase</b>
+                            <b>{t("MACI passphrase")}</b>
                           </Tooltip>{" "}
-                          and voice credits.
+                          {t("and voice credits.")}
                         </ListItem>
                         <ListItem>
-                          Everyone will begin with 99 <b>voice credits</b>
+                          <Trans i18nKey="Everyone will begin with 99 <strong>voice credits</strong>" />
                         </ListItem>
                         <ListItem>
-                          These<b> voice credits </b> are used to cast <b>votes</b> for projects on your ballot
+                          <Trans i18nKey="These <strong>voice credits</strong> are used to cast <strong>votes</strong> for projects on your ballot" />
                         </ListItem>
                         <ListItem>
-                          You can add up to <b>8 projects</b> to your ballot and distribute your voice credits between
-                          them. Choose wisely.
-                        </ListItem>
-
-                        <ListItem>
-                          Casting a vote for a project will{" "}
-                          <b>cost the square of the number of votes you want to cast</b> in voice credits. For example,
-                          if you would like to cast 5 votes for Project A, that will cost 25 voice credits.
-                        </ListItem>
-                        <ListItem>
-                          {" "}
-                          You <b>cannot use more voice credits than you have</b>. Since each voter starts with 99 voice
-                          credits, a vote of 10 (which would cost 100 voice credits) is more than any voter can afford
-                          to pay. This means that at most, a single voter can give 9 votes to a single project - at a
-                          cost of 81 voice credits - and have 18 voice credits left to vote for other projects.{" "}
-                        </ListItem>
-                        <ListItem>
-                          {" "}
-                          You <b>can submit many ballots</b> during the voting period.{" "}
+                          <Trans i18nKey="You can add up to <strong>8 projects</strong> to your ballot and distribute your voice credits between them. Choose wisely." />
                         </ListItem>
 
                         <ListItem>
-                          Only the <b>final submitted ballot will be counted</b> toward the final tally. Trust no one.
+                          <Trans i18nKey="Casting a vote for a project will <strong>cost the square of the number of votes you want to cast</strong> in voice credits. For example, if you would like to cast 5 votes for Project A, that will cost 25 voice credits." />
                         </ListItem>
                         <ListItem>
-                          The ballot will be tallied at the end of the voting period, and the{" "}
-                          <b>prize pool will be distributed between all the projects</b> based on the number of votes
-                          received during the event (via quadratic funding).
+                          <Trans i18nKey="You <strong>cannot use more voice credits than you have</strong>. Since each voter starts with 99 voice credits, a vote of 10 (which would cost 100 voice credits) is more than any voter can afford to pay. This means that at most, a single voter can give 9 votes to a single project - at a cost of 81 voice credits - and have 18 voice credits left to vote for other projects." />
+                        </ListItem>
+                        <ListItem>
+                          <Trans i18nKey="You <strong>can submit many ballots</strong> during the voting period." />
+                        </ListItem>
+
+                        <ListItem>
+                          <Trans i18nKey="Only the <strong>final submitted ballot will be counted</strong> toward the final tally. Trust no one." />
+                        </ListItem>
+                        <ListItem>
+                          <Trans i18nKey="The ballot will be tallied at the end of the voting period, and the<strong>prize pool will be distributed between all the projects</strong> based on the number of votesreceived during the event (via quadratic funding)." /> 
                         </ListItem>
                       </UnorderedList>
                     </AccordionPanel>

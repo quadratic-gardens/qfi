@@ -19,7 +19,11 @@ import { HiArrowLeft } from "react-icons/hi";
 import { createSearchParams, Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getProject } from "../data";
 
+import { useTranslation } from 'react-i18next';
+
 export function Project() {
+  const { t } = useTranslation();
+
   const backgroundColor = useColorModeValue("gray.100", "gray.800");
   const toast = useToast();
   let { projectId } = useParams();
@@ -38,8 +42,8 @@ export function Project() {
             option: filtered,
           });
           toast({
-            title: "Removed from ballot",
-            description: "You can add it back to the ballot later",
+            title: t("Removed from ballot"),
+            description: t("You can add it back to the ballot later"),
             status: "success",
             duration: 3000,
             isClosable: true,
@@ -59,8 +63,8 @@ export function Project() {
   const handleAddToBallot = useCallback(() => {
     if (searchParams.getAll("option").length >= 8) {
       toast({
-        title: "Too many options",
-        description: "You can only add up to 8 options to your ballot",
+        title: t("Too many options"),
+        description: t("You can only add up to 8 options to your ballot"),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -71,8 +75,8 @@ export function Project() {
     if (!isInBallot && projectId) {
       searchParams.append("option", projectId);
       toast({
-        title: "Added to ballot",
-        description: "You can now vote on this project",
+        title: t("Added to ballot"),
+        description: t("You can now vote on this project"),
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -237,10 +241,10 @@ export function Project() {
 
               <VStack alignItems="flex-start" w="full" spacing={1}>
                 <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-                  <b> Project Ballot ID:</b> {project.id}
+                  <b> {t("Project Ballot ID")}:</b> {project.id}
                 </Text>
                 <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-                  <b> Project Website:</b> {project.url}
+                  <b> {t("Project Website")}:</b> {project.url}
                 </Text>
               </VStack>
             </VStack>

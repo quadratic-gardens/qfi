@@ -16,6 +16,7 @@ import {
   AccordionPanel,
   HStack,
 } from "@chakra-ui/react";
+import { useTranslation } from 'react-i18next';
 import { useSearchParams, Link as RouterLink } from "react-router-dom";
 import { animateText, MagikText } from "@qfi/ui";
 import { Hero } from "../components/Hero";
@@ -30,6 +31,7 @@ export type HomeProps = {
 };
 
 export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
+  const { t } = useTranslation();
   const color = useColorModeValue("gray.800", "gray.700");
   const backgroundColor = useColorModeValue("#FAFAFA", "gray.700");
   let [searchParams] = useSearchParams();
@@ -84,10 +86,6 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
             <Heading fontFamily={"NeuePixelGrotesk"} fontSize={{ base: "76px", xl: "88px" }}>
               <img src="title.svg" alt="QF @ ETH LATAM" />
             </Heading>
-            <Text fontSize={"sm"} maxW="60ch">
-              Welcome! If you’re here, you’re probably working on something awesome in the Eth Latam community -
-              Thanks for everything you do :)
-            </Text>
             <HStack justifyContent={"space-around"} spacing={10}>
               <Box
                 sx={{
@@ -106,12 +104,12 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 }}>
                 <Button as={RouterLink} variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }} to={`/begin?${searchParams.toString()}`}
                 >
-                  Get Started
+                  {t("Get Started")}
                 </Button>
               </Box>
 
-              <Text as={RouterLink} color={"gray.700"} to={`/projects?${searchParams.toString()}`} fontFamily={"NeuePixelGrotesk"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
-                Checkout the Projects
+              <Text as={RouterLink} color={"gray.200"} to={`/projects?${searchParams.toString()}`} fontFamily={"NeuePixelGrotesk"} fontSize={{ base: "lg", xl: "xl" }}>
+                {t("Checkout the Projects")}
               </Text>
             </HStack>
           </VStack>
@@ -121,21 +119,21 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
                 <AccordionItem border="none" w={"full"}>
                   <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                     <Heading textAlign={"left"} size="md">
-                      What does it mean to VOTE?
+                      {t("What does it mean to VOTE?")}
                     </Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm" py={2}>
-                      Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. How much each project receives will be decided by ETHLatam attendees who vote during the event.
+                      {t("Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. How much each project receives will be decided by ETHLatam attendees who vote during the event.")}
                     </Text>
 
                     <Text fontSize="sm" py={2}>
-                      Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds.
+                      {t("Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds.")}
                     </Text>
                     <Text fontSize={"sm"} py={2}>
-                      If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach.
+                      {t("If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach.")}
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
@@ -145,16 +143,13 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
               <Accordion allowToggle w={"full"} bg={backgroundColor} >
                 <AccordionItem border="none" w={"full"}>
                   <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
-                    <Heading size="md">What is Quadratic Funding?</Heading>
+                    <Heading size="md">{t("What is Quadratic Funding?")}</Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm">
-                      Quadratic Funding (QF) is a more democratic way for communities to decide how to allocate funds to
-                      public goods. A pool of matching funds is distributed among recipient projects according to a
-                      formula that takes into account both how many people value something, and the strength of people’s
-                      individual preferences.
+                      {t("Quadratic Functing (QF) is")}
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
