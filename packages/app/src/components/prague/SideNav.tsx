@@ -13,7 +13,7 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   const { t } = useTranslation();
 
   return (
-    <div style={{ display: 'flex', paddingTop: 84 }}>
+    <div style={{ display: 'flex', paddingTop: 40 }}>
       <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
         <VStack>
           <Tooltip label={t("Ballot")} placement="right">
@@ -79,6 +79,7 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
 export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "background.0");
   let [searchParams] = useSearchParams();
+  const { t } = useTranslation();
 
   return (
     <HStack
@@ -87,7 +88,6 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
       top={0}
       left={0}
       bg={backgroundColor}
-      p={4}
       justifyContent="space-between"
       alignItems="center"
       w="full"
@@ -96,6 +96,7 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
         bg={backgroundColor}
         to={`/?${searchParams.toString()}`}
         as={Link}
+        p={4}
         icon={<img style={{ height: 20 }} src="eth-latam-full-logo.svg" alt="ETH LATAM" />}
         aria-label="Home"
       />
@@ -124,31 +125,14 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
 
       <HStack>
         <Tooltip label="5% of ticket sales go toward the QF pool" placement="right">
-          <Box
-            sx={{
-              height: "50px",
-              boxSizing: "border-box",
-              color: "white",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: "50%",
-              border: "0.8px solid rgb(53, 75, 55)",
-              transition: "all 0s linear",
-              _hover: { transform: "rotate(6.41deg)", scale: "1" },
-
-              transform: "rotate(-6.41deg)",
-              width: "122px",
-            }}>
-            {" "}
-            <Button
-              as={ExternalLink}
-              variant={"barcelona"}
-              fontSize={{ base: "lg", xl: "xl" }}
-              href="https://doingud.com/creation/0xe570d586fbeb0dc23c46bfcf047ec3e46e88e5a7000000000023"
-              isExternal>
-              Tickets!
-            </Button>
-          </Box>
+          <Button
+            as={ExternalLink}
+            variant={"ethLatamGreen"}
+            fontSize={{ base: "lg", xl: "xl" }}
+            href="https://doingud.com/creation/0xe570d586fbeb0dc23c46bfcf047ec3e46e88e5a7000000000023"
+            isExternal>
+            {t("GET TICKETS!")}
+          </Button>
         </Tooltip>
       </HStack>
     </HStack>

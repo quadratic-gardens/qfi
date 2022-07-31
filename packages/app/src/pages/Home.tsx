@@ -87,30 +87,12 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
               <img src="title.svg" alt="QF @ ETH LATAM" />
             </Heading>
             <HStack justifyContent={"space-around"} spacing={10}>
-              <Box
-                sx={{
-                  height: "50px",
-                  boxSizing: "border-box",
-                  color: "white",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "50%",
-                  border: "0.8px solid rgb(53, 75, 55)",
-                  transition: "all 0s linear",
-                  _hover: { transform: "rotate(6.41deg)", scale: "1" },
-
-                  transform: "rotate(-6.41deg)",
-                  width: "122px",
-                }}>
-                <Button as={RouterLink} variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }} to={`/begin?${searchParams.toString()}`}
-                >
-                  {t("Get Started")}
-                </Button>
-              </Box>
-
-              <Text as={RouterLink} color={"gray.200"} to={`/projects?${searchParams.toString()}`} fontFamily={"NeuePixelGrotesk"} fontSize={{ base: "lg", xl: "xl" }}>
-                {t("Checkout the Projects")}
-              </Text>
+              <Button as={RouterLink} variant={"ethLatamPurple"} fontSize={{ base: "lg", xl: "xl" }} to={`/begin?${searchParams.toString()}`}>
+                {t("GET STARTED")}
+              </Button>
+              <Button as={RouterLink} variant={"ethLatamWhite"} fontSize={{ base: "lg", xl: "xl" }} to={`/projects?${searchParams.toString()}`}>
+                {t("CHECK OUT THE PROJECTS")}
+              </Button>
             </HStack>
           </VStack>
           <VStack w="full" spacing={6}>
