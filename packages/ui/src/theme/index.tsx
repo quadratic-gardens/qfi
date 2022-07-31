@@ -180,7 +180,7 @@ export const theme = extendTheme({
         lineHeight: "tall",
       },
       body:{
-        bg: mode(`gray.100`, `background.1000`)(props),
+        bg: mode(`gray.100`, `background.500`)(props),
         color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },
       a: {
