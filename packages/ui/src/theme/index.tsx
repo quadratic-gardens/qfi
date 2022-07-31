@@ -157,7 +157,7 @@ export const theme = extendTheme({
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: mode(`gray.100`, `gray.800`)(props),
+              backgroundColor: mode(`gray.100`, `background.1000`)(props),
               pointerEvents: "none",
               mx: 3,
               px: 1,

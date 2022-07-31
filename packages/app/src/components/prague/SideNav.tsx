@@ -124,16 +124,14 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
       </HStack>
 
       <HStack>
-        <Tooltip label="5% of ticket sales go toward the QF pool" placement="right">
-          <Button
-            as={ExternalLink}
-            variant={"ethLatamGreen"}
-            fontSize={{ base: "lg", xl: "xl" }}
-            href="https://doingud.com/creation/0xe570d586fbeb0dc23c46bfcf047ec3e46e88e5a7000000000023"
-            isExternal>
-            {t("GET TICKETS!")}
-          </Button>
-        </Tooltip>
+        <Button
+          as={ExternalLink}
+          variant={"ethLatamGreen"}
+          fontSize={{ base: "lg", xl: "xl" }}
+          href="https://www.eventbrite.com/e/ethlatam-at-buenos-aires-tickets-374680147407"
+          isExternal>
+          {t("GET TICKETS!")}
+        </Button>
       </HStack>
     </HStack>
   );

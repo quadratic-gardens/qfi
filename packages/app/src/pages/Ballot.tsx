@@ -28,6 +28,7 @@ import {
   FormLabel,
   Input,
   Box,
+  Tooltip,
 } from "@chakra-ui/react";
 
 import { EaseInBottom, MagikButton } from "@qfi/ui";
@@ -332,6 +333,8 @@ export const Ballot = () => {
   const [contractAddress, setContractAddress] = useState<string>("0x0dA71825182944234F45755989a8C96Ac1343E07");
   const [data, setData] = useState<(PubKey | Message)[][]>([[], []]);
 
+  const disableSubmitButton = !isConnected || !isValidMaciKey || txLoading;
+
   function createMessage(
     userStateIndex: number,
     userKeypair: Keypair,
@@ -488,7 +491,10 @@ export const Ballot = () => {
       <VStack spacing={0} w="full">
         <Container pt={10} h="full" w="full" maxWidth="container.md">
           <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
-            <Heading mt={10} mb={4}>{t("Your Ballot")}</Heading>
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+              <Heading>{t("Your Ballot")}</Heading>
+              <MagikButton maxWidth={200} />
+            </div>
             <VStack spacing={2} alignItems={"flex-start"} w="full">
               <BallotExplainer />
               <EaseInBottom duration={0.3} delay={0.5} heightStart={20} heightEnd={10}>
@@ -517,35 +523,9 @@ export const Ballot = () => {
               </VStack>
             ) : (
               <VStack spacing={0} alignItems={"center"} w="full">
-
-                <Box
-                  sx={{
-
-                    boxSizing: "border-box",
-                    color: "white",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "50%",
-                    border: "0.8px solid rgb(53, 75, 55)",
-                    transition: "all 0s linear",
-                    _hover: { transform: "rotate(6.41deg)", scale: "1" },
-
-                    transform: "rotate(-6.41deg)",
-                    width: "322px",
-                    height: "60px",
-                  }}>
-
-                  <Button
-                    width="322px"
-                    height={"60px"}
-                    as={Link}
-                    variant="barcelona"
-                    to="/projects"
-                    fontSize={{ base: "lg", xl: "xl" }}
-                  >
-                    {t("Checkout the Projects!")}
-                  </Button>
-                </Box>
+                <Button as={Link} variant={"ethLatamWhite"} fontSize={{ base: "lg", xl: "xl" }} to={`/projects?${searchParams.toString()}`}>
+                  {t("CHECK OUT THE PROJECTS")}
+                </Button>
               </VStack>
             )}
 
@@ -558,10 +538,10 @@ export const Ballot = () => {
               w="full">
               <VStack spacing={2} alignItems={{ base: "center", md: "flex-start" }}>
                 <Heading fontSize={"xs"} fontWeight={"bold"} alignSelf={"flex-start"}>
-                {t("Ballot (MACI) Passphrase")}
+                  {t("Ballot (MACI) Passphrase")}
                 </Heading>
-                <Text fontSize={"xs"}>
-                {t("MACI (Minimal Anti-Collusion Infrastructure) uses")}
+                <Text fontSize={"xs"} textAlign={"justify"}>
+                  {t("MACI (Minimal Anti-Collusion Infrastructure) uses")}
                 </Text>
                 <VStack spacing={1} alignItems="flex-start" w="full">
                   <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
@@ -624,32 +604,20 @@ export const Ballot = () => {
 
                 <Divider></Divider>
               </VStack>
-              <VStack spacing={6} alignItems="flex-start" w="full">
-                <MagikButton />
-                {isConnected && isValidMaciKey ? (
-                  <Button
-                    disabled={txLoading}
-                    onClick={handleSubmit}
-                    rounded={"full"}
-                    py={6}
-                    fontSize={"lg"}
-                    fontWeight="extrabold"
-                    bg="blue"
-                    color="white"
-                    variant="solid"
-                    w="full"
-                    mt={4}>
-                    {t("SUBMIT BALLOT")}
-                  </Button>
+              <VStack spacing={6} pl={8} alignItems="flex-start" w="full" h="95%">
+                {isConnected ? (
+                  <Tooltip isDisabled={!disableSubmitButton} label={t("Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.")} placement="top" shouldWrapChildren>
+                    <Button maxWidth={"150px"} width={"100%"} height={"auto"} display={"block"} disabled={disableSubmitButton}
+                      onClick={handleSubmit} variant={(!disableSubmitButton) ? "ethLatamPurple" : "ethLatamDisabled"} fontSize={{ base: "md", xl: "lg" }}>
+                      <div>{t("SUBMIT")}</div>
+                      <div>{t("BALLOT")}</div>
+                    </Button>
+                  </Tooltip>
                 ) : (
                   <Center textAlign="center">
                     <VStack spacing={6} textAlign="center" w="full">
                       <Text display={isConnected ? "none" : "flex"} fontSize={"xs"} fontWeight="extrabold">
-                      {t("Not Connected: Sign in to continue")}
-                      </Text>
-
-                      <Text fontSize={"xs"} display={isValidMaciKey ? "none" : "flex"} fontWeight="extrabold">
-                      {t("Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.")}
+                        {t("Not Connected: Sign in to continue")}
                       </Text>
                     </VStack>
                   </Center>

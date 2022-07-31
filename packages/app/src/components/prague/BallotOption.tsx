@@ -71,7 +71,7 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
         py={2.5}
         px={2}>
         <HStack alignItems={"flex-start"}>
-          <Heading fontSize={{ base: "md", md: "xl" }} fontWeight={"black"} letterSpacing={"-1px"}>
+          <Heading fontSize={{ base: "md", md: "xl" }} fontWeight={"black"}>
             {ballotOption?.name}
           </Heading>
 

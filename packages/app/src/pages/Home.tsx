@@ -33,7 +33,7 @@ export type HomeProps = {
 export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
   const { t } = useTranslation();
   const color = useColorModeValue("gray.800", "gray.700");
-  const backgroundColor = useColorModeValue("#FAFAFA", "gray.700");
+  const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
   let [searchParams] = useSearchParams();
   return (
     <Flex

@@ -25,7 +25,7 @@ const Button = {
       background: "rgb(53, 75, 55) none repeat scroll 0% 0%",
       fontFamily: 'NeuePixelGrotesk',
       fontWeight: "700",
-      _hover: {   transition: "all 0s", transform: "rotate(-6.41deg)",  color: "white", scale: "1" },
+      _hover: { transition: "all 0s", transform: "rotate(-6.41deg)", color: "white", scale: "1" },
       transform: "rotate(6.41deg)",
       width: "122px",
     },
@@ -41,6 +41,7 @@ const Button = {
       fontFamily: 'NeuePixelGrotesk',
       border: "1.79753px solid #E573E5",
       boxShadow: "-4.49382px 4.49382px 0px #E573E5",
+      _hover: { transition: "all 0s", color: "#E573E5", scale: "1", background: "#282828" },
     },
     ethLatamWhite: {
       height: "50px",
@@ -54,6 +55,25 @@ const Button = {
       fontFamily: 'NeuePixelGrotesk',
       border: "1.79753px solid #FAF7F5",
       boxShadow: "-4.49382px 4.49382px 0px #FAF7F5",
+      _hover: { transition: "all 0s", color: "#FAF7F5", scale: "1", background: "#282828" },
+    },
+    ethLatamDisabled: {
+      height: "50px",
+      color: "#949494",
+      justifyContent: "center",
+      padding: "18px 36px 13.5px",
+      borderRadius: 0,
+      alignItems: "center",
+      background: "#1A1A1A",
+      fontWeight: 400,
+      fontFamily: 'NeuePixelGrotesk',
+      border: "1.79753px solid #949494",
+      boxShadow: "-4.49382px 4.49382px 0px #949494",
+      _hover: { transition: "all 0s", color: "white", scale: "1" },
+      _disabled: {
+        border: "1.79753px solid #949494",
+        boxShadow: "-4.49382px 4.49382px 0px #949494",
+      }
     },
     ethLatamGreen: {
       color: "black",
@@ -64,6 +84,7 @@ const Button = {
       background: "#80FF9F",
       fontWeight: 400,
       fontFamily: 'NeuePixelGrotesk',
+      _hover: { background: "#80FF9F", color: "black" },
     },
     sideNav: {
       bg: "transparent",
