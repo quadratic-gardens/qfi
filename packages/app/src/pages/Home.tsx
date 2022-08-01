@@ -7,8 +7,6 @@ import {
   Heading,
   Button,
   useColorModeValue,
-  Link,
-  Box,
   Accordion,
   AccordionButton,
   AccordionIcon,
@@ -16,12 +14,8 @@ import {
   AccordionPanel,
   HStack,
 } from "@chakra-ui/react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { useSearchParams, Link as RouterLink } from "react-router-dom";
-import { animateText, MagikText } from "@qfi/ui";
-import { Hero } from "../components/Hero";
-import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
-import { RecipientGuide } from "../components/prague/RecipientGuide";
 
 export type HomeProps = {
   isSettingsOpen: boolean;
@@ -30,11 +24,17 @@ export type HomeProps = {
   onGuideOpen: () => void;
 };
 
-export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
+export const Home = ({
+  isSettingsOpen,
+  onSettingsOpen,
+  isGuideOpen,
+  onGuideOpen,
+}: HomeProps) => {
   const { t } = useTranslation();
   const color = useColorModeValue("gray.800", "gray.700");
   const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
   let [searchParams] = useSearchParams();
+
   return (
     <Flex
       as="main"
@@ -43,7 +43,8 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
       borderRightColor={color}
       borderRightWidth={1}
       position={"relative"}
-      overflow="hidden">
+      overflow="hidden"
+    >
       {/* <Hero
         position={"absolute"}
         overflow="hidden"
@@ -77,29 +78,53 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
           },
         }}
         maxWidth={{ lg: "container.lg", md: "container.md" }}
-        py={8}>
+        py={8}
+      >
         {/* <VStack spacing={0} w="full" alignItems={"flex-end"}>
           <ColorModeSwitcher position="absolute" top={0} right={0} m={4} zIndex={1} />
         </VStack> */}
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
-            <Heading fontFamily={"NeuePixelGrotesk"} fontSize={{ base: "76px", xl: "88px" }}>
+            <Heading
+              fontFamily={"NeuePixelGrotesk"}
+              fontSize={{ base: "76px", xl: "88px" }}
+            >
               <img src="title.svg" alt="QF @ ETH LATAM" />
             </Heading>
             <HStack justifyContent={"space-around"} spacing={10}>
-              <Button as={RouterLink} variant={"ethLatamPurple"} fontSize={{ base: "lg", xl: "xl" }} to={`/begin?${searchParams.toString()}`}>
+              <Button
+                as={RouterLink}
+                variant={"ethLatamPurple"}
+                fontSize={{ base: "lg", xl: "xl" }}
+                to={`/begin?${searchParams.toString()}`}
+              >
                 {t("GET STARTED")}
               </Button>
-              <Button as={RouterLink} variant={"ethLatamWhite"} fontSize={{ base: "lg", xl: "xl" }} to={`/projects?${searchParams.toString()}`}>
+              <Button
+                as={RouterLink}
+                variant={"ethLatamWhite"}
+                fontSize={{ base: "lg", xl: "xl" }}
+                to={`/projects?${searchParams.toString()}`}
+              >
                 {t("CHECK OUT THE PROJECTS")}
               </Button>
             </HStack>
           </VStack>
           <VStack w="full" spacing={6}>
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
-              <Accordion allowToggle w={"full"} bg={backgroundColor} defaultIndex={0}>
+              <Accordion
+                allowToggle
+                w={"full"}
+                bg={backgroundColor}
+                defaultIndex={0}
+              >
                 <AccordionItem border="none" w={"full"}>
-                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
+                  <HStack
+                    as={AccordionButton}
+                    w={"full"}
+                    justifyContent={"space-between"}
+                    py={4}
+                  >
                     <Heading textAlign={"left"} size="md">
                       {t("What does it mean to VOTE?")}
                     </Heading>
@@ -108,31 +133,42 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm" py={2}>
-                      {t("Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. How much each project receives will be decided by ETHLatam attendees who vote during the event.")}
+                      {t(
+                        "Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. How much each project receives will be decided by ETHLatam attendees who vote during the event."
+                      )}
                     </Text>
 
                     <Text fontSize="sm" py={2}>
-                      {t("Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds.")}
+                      {t(
+                        "Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds."
+                      )}
                     </Text>
                     <Text fontSize={"sm"} py={2}>
-                      {t("If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach.")}
+                      {t(
+                        "If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach."
+                      )}
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
             </VStack>
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
-              <Accordion allowToggle w={"full"} bg={backgroundColor} >
+              <Accordion allowToggle w={"full"} bg={backgroundColor}>
                 <AccordionItem border="none" w={"full"}>
-                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
-                    <Heading size="md">{t("What is Quadratic Funding?")}</Heading>
+                  <HStack
+                    as={AccordionButton}
+                    w={"full"}
+                    justifyContent={"space-between"}
+                    py={4}
+                  >
+                    <Heading size="md">
+                      {t("What is Quadratic Funding?")}
+                    </Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
-                    <Text fontSize="sm">
-                      {t("Quadratic Functing (QF) is")}
-                    </Text>
+                    <Text fontSize="sm">{t("Quadratic Functing (QF) is")}</Text>
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>

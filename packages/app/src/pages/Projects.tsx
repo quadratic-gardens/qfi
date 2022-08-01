@@ -20,13 +20,15 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
-import { getProjects, getShuffledProjects } from "../data";
+import { getShuffledProjects } from "../data";
 import { Option } from "../propTypes";
 
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation, Trans } from "react-i18next";
 
 const shortenEthAddress = (address: string) => {
-  return address.substring(0, 6) + "..." + address.substring(address.length - 4);
+  return (
+    address.substring(0, 6) + "..." + address.substring(address.length - 4)
+  );
 };
 
 export const Projects = () => {
@@ -60,14 +62,20 @@ export const Projects = () => {
             background: "transparent",
             borderRadius: "0px",
           },
-        }}>
+        }}
+      >
         <VStack spacing={0} w="full">
           <Container
             h="full"
             w="full"
-            maxWidth={{ base: "container.sm", md: "container.sm", lg: "container.md" }}
+            maxWidth={{
+              base: "container.sm",
+              md: "container.sm",
+              lg: "container.md",
+            }}
             px={0}
-            pt={20}>
+            pt={20}
+          >
             <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
               <VStack pl={4} spacing={0} alignItems={"flex-start"} w="full">
                 <Heading fontSize={"5xl"} mb={0} fontWeight="">
@@ -77,16 +85,30 @@ export const Projects = () => {
                 <Accordion fontSize="xs" allowToggle>
                   <AccordionItem border="none">
                     <VStack>
-                      <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
-                        {t("This is a directory of projects! This page will be updated once the event starts to let you add projects to a real ballot and vote for projects that you meet at the event. Tap here to learn more 📖🧐.")}
+                      <Text
+                        px={0}
+                        textAlign={"left"}
+                        as={AccordionButton}
+                        fontSize="xs"
+                      >
+                        {t(
+                          "This is a directory of projects! This page will be updated once the event starts to let you add projects to a real ballot and vote for projects that you meet at the event. Tap here to learn more 📖🧐."
+                        )}
                         <AccordionIcon></AccordionIcon>
                       </Text>
                     </VStack>
                     <AccordionPanel pb={4}>
-                      <UnorderedList marginInlineStart={"1rem !important"} fontSize="xs" w="full">
+                      <UnorderedList
+                        marginInlineStart={"1rem !important"}
+                        fontSize="xs"
+                        w="full"
+                      >
                         <ListItem>
                           {t("When a voter is whitelisted they receive a")}{" "}
-                          <Tooltip label="pseudo-randomly assigned" placement="top">
+                          <Tooltip
+                            label="pseudo-randomly assigned"
+                            placement="top"
+                          >
                             <b>{t("MACI passphrase")}</b>
                           </Tooltip>{" "}
                           {t("and voice credits.")}
@@ -115,7 +137,7 @@ export const Projects = () => {
                           <Trans i18nKey="Only the <strong>final submitted ballot will be counted</strong> toward the final tally. Trust no one." />
                         </ListItem>
                         <ListItem>
-                          <Trans i18nKey="The ballot will be tallied at the end of the voting period, and the<strong>prize pool will be distributed between all the projects</strong> based on the number of votesreceived during the event (via quadratic funding)." /> 
+                          <Trans i18nKey="The ballot will be tallied at the end of the voting period, and the<strong>prize pool will be distributed between all the projects</strong> based on the number of votesreceived during the event (via quadratic funding)." />
                         </ListItem>
                       </UnorderedList>
                     </AccordionPanel>
@@ -138,7 +160,8 @@ export const Projects = () => {
                     pb={3}
                     pl={4}
                     minH={"100px"}
-                    w={"full"}>
+                    w={"full"}
+                  >
                     <HStack spacing={0} alignItems="flex-start" w="full">
                       <AspectRatio
                         borderColor={"grey.800"}
@@ -147,12 +170,27 @@ export const Projects = () => {
                         w={{ base: "50px", md: "50px" }}
                         rounded="full"
                         ratio={1}
-                        mt={1}>
-                        <Image borderRadius="full" src={project.logo} alt={project.name} />
+                        mt={1}
+                      >
+                        <Image
+                          borderRadius="full"
+                          src={project.logo}
+                          alt={project.name}
+                        />
                       </AspectRatio>
-                      <VStack alignItems="flex-start" w="full" spacing={1.5} px={{ base: "4", md: "3" }}>
+                      <VStack
+                        alignItems="flex-start"
+                        w="full"
+                        spacing={1.5}
+                        px={{ base: "4", md: "3" }}
+                      >
                         <VStack alignItems="flex-start" w="full" spacing={0}>
-                          <Heading my={0.5} fontSize={"lg"} lineHeight={"24px"} fontWeight="700">
+                          <Heading
+                            my={0.5}
+                            fontSize={"lg"}
+                            lineHeight={"24px"}
+                            fontWeight="700"
+                          >
                             {project.name}
                           </Heading>
                           <Text
@@ -160,11 +198,16 @@ export const Projects = () => {
                             fontSize={"sm"}
                             lineHeight={"14px"}
                             fontWeight="400"
-                            overflow={"clip"}>
+                            overflow={"clip"}
+                          >
                             {shortenEthAddress(project.address)}
                           </Text>
                         </VStack>
-                        <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
+                        <Text
+                          fontSize={"sm"}
+                          lineHeight={"16px"}
+                          fontWeight="400"
+                        >
                           {project.tagline}
                         </Text>
                         {/* <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
