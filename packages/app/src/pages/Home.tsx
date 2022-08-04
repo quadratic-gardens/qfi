@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionPanel,
   HStack,
+  Stack
 } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams, Link as RouterLink } from "react-router-dom";
@@ -85,17 +86,14 @@ export const Home = ({
         </VStack> */}
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
-            <Heading
-              fontFamily={"NeuePixelGrotesk"}
-              fontSize={{ base: "76px", xl: "88px" }}
-            >
+            <div style={{ height: "auto", maxWidth: "100%" }}>
               <img src="title.svg" alt="QF @ ETH LATAM" />
-            </Heading>
-            <HStack justifyContent={"space-around"} spacing={10}>
+            </div>
+            <Stack spacing={10} direction={['column', 'row']}>
               <Button
                 as={RouterLink}
                 variant={"ethLatamPurple"}
-                fontSize={{ base: "lg", xl: "xl" }}
+                fontSize={{ base: "md", xl: "xl" }}
                 to={`/begin?${searchParams.toString()}`}
               >
                 {t("GET STARTED")}
@@ -103,12 +101,12 @@ export const Home = ({
               <Button
                 as={RouterLink}
                 variant={"ethLatamWhite"}
-                fontSize={{ base: "lg", xl: "xl" }}
+                fontSize={{ base: "md", xl: "xl" }}
                 to={`/projects?${searchParams.toString()}`}
               >
                 {t("CHECK OUT THE PROJECTS")}
               </Button>
-            </HStack>
+            </Stack>
           </VStack>
           <VStack w="full" spacing={6}>
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
@@ -153,7 +151,7 @@ export const Home = ({
               </Accordion>
             </VStack>
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
-              <Accordion allowToggle w={"full"} bg={backgroundColor}>
+              <Accordion mb={20} allowToggle w={"full"} bg={backgroundColor}>
                 <AccordionItem border="none" w={"full"}>
                   <HStack
                     as={AccordionButton}
@@ -172,8 +170,6 @@ export const Home = ({
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
-
-              {/* <MagikButton /> */}
             </VStack>
 
             {/* <VStack spacing={6} alignItems="flex-start" w={"full"}>
