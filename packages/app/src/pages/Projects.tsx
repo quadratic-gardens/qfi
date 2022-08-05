@@ -20,7 +20,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
-import { getShuffledProjects } from "../data";
 import { Option } from "../propTypes";
 
 import { useTranslation, Trans } from "react-i18next";
@@ -31,7 +30,7 @@ const shortenEthAddress = (address: string) => {
   );
 };
 
-export const Projects = () => {
+export const Projects = ({shuffledProjects}) => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
   const color = useColorModeValue("gray.800", "gray.700");
   let [searchParams] = useSearchParams();
@@ -145,7 +144,7 @@ export const Projects = () => {
                 </Accordion>
               </VStack>
               <VStack spacing={0} alignItems={"flex-start"} w="full">
-                {getShuffledProjects().map((project: Option) => (
+                {shuffledProjects.map((project: Option) => (
                   <Box
                     _hover={{
                       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",

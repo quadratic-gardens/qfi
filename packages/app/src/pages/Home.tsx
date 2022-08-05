@@ -19,15 +19,11 @@ import { useTranslation } from "react-i18next";
 import { useSearchParams, Link as RouterLink } from "react-router-dom";
 
 export type HomeProps = {
-  isSettingsOpen: boolean;
-  onSettingsOpen: () => void;
   isGuideOpen: boolean;
   onGuideOpen: () => void;
 };
 
 export const Home = ({
-  isSettingsOpen,
-  onSettingsOpen,
   isGuideOpen,
   onGuideOpen,
 }: HomeProps) => {
@@ -40,20 +36,14 @@ export const Home = ({
     <Flex
       as="main"
       h="full"
+      w="full"
       flex={1}
       borderRightColor={color}
       borderRightWidth={1}
       position={"relative"}
       overflow="hidden"
     >
-      {/* <Hero
-        position={"absolute"}
-        overflow="hidden"
-        zIndex={-1}
-        maxW={"1600px"}
-        left={{ base: "-260px", md: "0px", lg: "0px", xl: "-80px" }}
-        top={{ base: "100px", md: "0px", lg: "0px", xl: "160px" }}
-      /> */}
+
 
       <Container
         h="full"
@@ -94,7 +84,7 @@ export const Home = ({
                 as={RouterLink}
                 variant={"ethLatamPurple"}
                 fontSize={{ base: "md", xl: "xl" }}
-                to={`/begin?${searchParams.toString()}`}
+                to={`/ballot?${searchParams.toString()}`}
               >
                 {t("GET STARTED")}
               </Button>
@@ -107,6 +97,21 @@ export const Home = ({
                 {t("CHECK OUT THE PROJECTS")}
               </Button>
             </Stack>
+          </VStack>
+          <VStack width="100%">
+            <Text pb={4}>
+              {t("You can play a fundamental role as a part of the ETHLatam community, both in supporting the local community, and in exploring new ways to finance public goods through quadratic voting.")}
+            </Text>
+            <Text pb={4} w={"full"}>
+              {t("During the venue, our ETH Latam team will send you an email with a password. This is the “MACI” key you’ll use to vote.")}
+            </Text>
+            <Text pb={4} w={"full"}>
+              {t("Below you will find instructions to help support local projects. Learn more about Quadratic Funding")}
+              {" "}<a href={'https://wtfisqf.com/?grant=&grant=&grant=&grant=&match=1000'} target="_blank">{t("here")}</a>.
+            </Text>
+            <Text pb={4} w={"full"} fontFamily="NeuePixelGrotesk" fontSize={22}>
+              {t("The future is now.")}
+            </Text>
           </VStack>
           <VStack w="full" spacing={6}>
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
@@ -124,27 +129,21 @@ export const Home = ({
                     py={4}
                   >
                     <Heading textAlign={"left"} size="md">
-                      {t("What does it mean to VOTE?")}
+                      {t("Timeline")}
                     </Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
-                    <Text fontSize="sm" py={2}>
-                      {t(
-                        "Voting for your favorite project makes them eligible to receive funds from the pooled funds from donors and 5% of the ticket sales of ETHLatam, but doesn’t guarantee funding. How much each project receives will be decided by ETHLatam attendees who vote during the event."
-                      )}
-                    </Text>
-
-                    <Text fontSize="sm" py={2}>
-                      {t(
-                        "Please be aware the team will NEVER ask you to share the seed phrase or private key of this wallet, they will NEVER reach out to you via social media or other channels, and will not send you a seed phrase or private key to use. These are common scam tactics and we wish to avoid these bad actors stealing your funds."
-                      )}
-                    </Text>
-                    <Text fontSize={"sm"} py={2}>
-                      {t(
-                        "If you are posting on Twitter, remember to tag @ETHLatam and use the hashtags within to have more reach."
-                      )}
+                    <Text lineHeight={8} pl={8} fontSize="sm" py={2}>
+                      <ul>
+                        <li>{t("Project submission deadline: August 11th")}</li>
+                        <li>{t("ETHLatam: August 11th - 13th")}</li>
+                        <li>{t("Voting opens: August 13th @ 2:00 pm GTM-3")}</li>
+                        <li>{t("Voting closes: August 19th")}</li>
+                        <li>{t("Count of votes: August 22nd")}</li>
+                        <li>{t("Distribution of funds: September 2nd")}</li>
+                      </ul>
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
@@ -153,20 +152,28 @@ export const Home = ({
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
               <Accordion mb={20} allowToggle w={"full"} bg={backgroundColor}>
                 <AccordionItem border="none" w={"full"}>
-                  <HStack
-                    as={AccordionButton}
-                    w={"full"}
-                    justifyContent={"space-between"}
-                    py={4}
-                  >
-                    <Heading size="md">
-                      {t("What is Quadratic Funding?")}
-                    </Heading>
+
+                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
+                    <Heading size="md">{t("How does it work?")}</Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
-                    <Text fontSize="sm">{t("Quadratic Functing (QF) is")}</Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t("All ETH Latam attendees will receive an email with a MACI key.")}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t("This key will allow them to cast votes in favor of the projects that apply to receive funds. To vote, you must have an address in your self-custodial wallet connected to Gnosis, with some $MATIC to pay for the transaction fees and a valid voting key.")}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t("Voting is pseudo-anonymous, but to record the vote, your MACI key will be sent to your email address by the ETHLatam team.")}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t("During the event, you’ll be able to ask at the Ethereum Foundation booth about the funding process.")}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t("If you have any questions, please, feel free to ask any of the ETHLatam volunteers.")}
+                    </Text>
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>

@@ -60,18 +60,6 @@ export const Quickstart = () => {
       <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">{t("Voter Guide")}</Heading>
-          <Text>
-            {t("As an ETHLatam participant, you can play an important role in both supporting the local community, and exploring new ways of funding public goods through secure quadratic voting. The future is now!")}
-          </Text>
-          <Text>
-            {t("Below you will find instructions to help support local projects through a Quadratic Funding (QF) round taking place only at ETHLatam. In order to vote, you will need access to a Gnosis Chain/Ethereum wallet and will receive the MACI private key by email.")}
-          </Text>
-          <Text>
-            {t("Learn more about QF")}{" "}
-            <Link href="https://wtfisqf.com/" isExternal>
-              <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
-            </Link>
-          </Text>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="xl">{t("How it works?")}</Heading>
@@ -142,10 +130,10 @@ export const Quickstart = () => {
                   </Text>
                   <Heading size="xs">{t("Set up your ballot")}</Heading>
                   <Text fontSize="xs">
-                  {t("In the Status browser, tap the colored icon at the bottom center of the screen to connect the account you just added. Go to qf.ethlatam.com/#/begin. Hit “Connect” and authorize the app to access your address. Scan the QR to add your MACI key and hit “Save” - and you are all set! Go forth and vote.")}
+                    {t("In the Status browser, tap the colored icon at the bottom center of the screen to connect the account you just added. Go to qf.ethlatam.com/#/begin. Hit “Connect” and authorize the app to access your address. Scan the QR to add your MACI key and hit “Save” - and you are all set! Go forth and vote.")}
                   </Text>
                   <Text fontSize="xs">
-                  {t("You can get the Status app here")}
+                    {t("You can get the Status app here")}
                     <Link href="https://status.im/get/" isExternal>
                       <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
                     </Link>
@@ -158,7 +146,7 @@ export const Quickstart = () => {
             <AccordionItem border="none">
               <VStack>
                 <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
-                {t("Using browser + WalletConnect")}
+                  {t("Using browser + WalletConnect")}
                   <AccordionIcon></AccordionIcon>
                 </Text>
               </VStack>
@@ -166,10 +154,10 @@ export const Quickstart = () => {
                 <VStack spacing={6} alignItems="flex-start">
                   <Heading size="xs">{t("Add your wallet")}</Heading>
                   <Text fontSize="xs">
-                  {t("In your wallet app")}:
+                    {t("In your wallet app")}:
                     <OrderedList>
                       <ListItem>
-                      {t("Switch network to Gnosis Chain Chain. There are instructions for MetaMask")}{" "}
+                        {t("Switch network to Gnosis Chain Chain. There are instructions for MetaMask")}{" "}
                         <Link
                           href="https://metamask.zendesk.com/hc/en-us/articles/360052711572-How-to-connect-to-the-Gnosis Chain-Chain-network-formerly-Gnosis Chain"
                           isExternal>
@@ -182,16 +170,16 @@ export const Quickstart = () => {
                         {t("to automatically add Gnosis Chain Chain in many Web3 wallets. Always use caution when connecting to new networks!")}
                       </ListItem>
                       <ListItem>
-                      {t("Create a new account using the Gnosis Chain mnemonic or private key QR from your card.")}
+                        {t("Create a new account using the Gnosis Chain mnemonic or private key QR from your card.")}
                       </ListItem>
                     </OrderedList>
                   </Text>
                   <Text fontSize="xs">
-                  {t("Choose your favorite browser and navigate to")}
+                    {t("Choose your favorite browser and navigate to")}
                     <Link href="https://qf.ethlatam.com/#/begin"> qf.ethlatam.com/#/begin</Link>
                   </Text>
                   <Text fontSize="xs">
-                  {t("Hit “Connect” and follow the instructions to connect your wallet of choice. Once your wallet is connected, enter your MACI key and hit “Save”.")}
+                    {t("Hit “Connect” and follow the instructions to connect your wallet of choice. Once your wallet is connected, enter your MACI key and hit “Save”.")}
                   </Text>
                 </VStack>
               </AccordionPanel>
@@ -207,14 +195,14 @@ export const Quickstart = () => {
                   <AccordionItem border="none">
                     <VStack>
                       <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
-                      {t("Get to know the Recipients")}
+                        {t("Get to know the Recipients")}
                         <AccordionIcon></AccordionIcon>
                       </Text>
                     </VStack>
                     <AccordionPanel pb={4}>
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs">
-                        {t("Projects from across the Spain community have signed up to receive funding. Learn about them on the Project Directory page or in the Quadratic Funding booth, then add projects you like to your ballot. [image of ballot button]")}
+                          {t("Projects from across the Spain community have signed up to receive funding. Learn about them on the Project Directory page or in the Quadratic Funding booth, then add projects you like to your ballot. [image of ballot button]")}
                         </Text>
                         <Text fontSize="xs">{t("You can include up to 8 projects on your ballot.")}</Text>
                       </VStack>
@@ -225,14 +213,14 @@ export const Quickstart = () => {
                   <AccordionItem border="none">
                     <VStack>
                       <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
-                      {t("Pick your priorities")}
+                        {t("Pick your priorities")}
                         <AccordionIcon></AccordionIcon>
                       </Text>
                     </VStack>
                     <AccordionPanel pb={4}>
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs">
-                        {t("You can distribute your voice credits between them however you like, but voice credits and votes are not 1:1. This is where the “quadratic” part comes in: voting for a project will cost the square of the number of votes you want to cast. For example, if you want to cast 1 vote for Project A, it will cost you 1 voice credit; 2 votes cost 4 credits; 5 votes cost 25 credits and so on.")}
+                          {t("You can distribute your voice credits between them however you like, but voice credits and votes are not 1:1. This is where the “quadratic” part comes in: voting for a project will cost the square of the number of votes you want to cast. For example, if you want to cast 1 vote for Project A, it will cost you 1 voice credit; 2 votes cost 4 credits; 5 votes cost 25 credits and so on.")}
                         </Text>
                       </VStack>
                     </AccordionPanel>
@@ -242,17 +230,17 @@ export const Quickstart = () => {
                   <AccordionItem border="none">
                     <VStack>
                       <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
-                      {t("Submit your ballot")}
+                        {t("Submit your ballot")}
                         <AccordionIcon></AccordionIcon>
                       </Text>
                     </VStack>
                     <AccordionPanel pb={4}>
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs">
-                        {t("Once you are happy with your votes, just hit “Submit”. Changed your mind? You can always submit a new ballot - only the last one you submit will be counted.")}
+                          {t("Once you are happy with your votes, just hit “Submit”. Changed your mind? You can always submit a new ballot - only the last one you submit will be counted.")}
                         </Text>
                         <Text fontSize="xs">
-                        {t("Remember that as long as the vote is open, anyone who has your MACI key will be able to submit a new ballot and invalidate your old one. If you’re going to dispose of the card with your keys on it, do it securely - we recommend ritual burning. Better yet, take it home as proof that you voted in the FIRST EVER (as far as we know) in-person Quadratic Funding round!")}
+                          {t("Remember that as long as the vote is open, anyone who has your MACI key will be able to submit a new ballot and invalidate your old one. If you’re going to dispose of the card with your keys on it, do it securely - we recommend ritual burning. Better yet, take it home as proof that you voted in the FIRST EVER (as far as we know) in-person Quadratic Funding round!")}
                         </Text>
                       </VStack>
                     </AccordionPanel>

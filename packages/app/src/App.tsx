@@ -10,11 +10,11 @@ import { Projects } from "./pages/Projects";
 import { Ballot } from "./pages/Ballot";
 import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
-import { Begin } from "./pages/Begin";
 
-export const App = () => {
+export const App = ({shuffledProjects}) => {
   const { isOpen: isSettingsOpen, onOpen: onSettingsOpen, onClose: onSettingsClose } = useDisclosure();
   const { isOpen: isGuideOpen, onOpen: onGuideOpen, onClose: onGuideClose } = useDisclosure();
+
   return (
     <ChakraProvider theme={theme}>
       <Fonts />
@@ -23,9 +23,6 @@ export const App = () => {
           path="/"
           element={
             <Layout
-              isSettingsOpen={isSettingsOpen}
-              onSettingsOpen={onSettingsOpen}
-              onSettingsClose={onSettingsClose}
               onGuideOpen={onGuideOpen}
               onGuideClose={onGuideClose}
               isGuideOpen={isGuideOpen}
@@ -35,29 +32,16 @@ export const App = () => {
             index
             element={
               <Home
-                isSettingsOpen={isSettingsOpen}
-                onSettingsOpen={onSettingsOpen}
                 onGuideOpen={onGuideOpen}
                 isGuideOpen={isGuideOpen}
               />
             }
           />
           <Route path="ballot" element={<Ballot />} />
-          <Route path="projects" element={<Projects />}></Route>
+          <Route path="projects" element={<Projects shuffledProjects={shuffledProjects}/>}></Route>
           <Route path="projects/:projectId" element={<Project />} />
           <Route path="howitworks" element={<HowItWorks />} />
           <Route path="admin" element={<Admin />} />
-          <Route
-            path="begin"
-            element={
-              <Begin
-                isSettingsOpen={isSettingsOpen}
-                onSettingsOpen={onSettingsOpen}
-                onGuideOpen={onGuideOpen}
-                isGuideOpen={isGuideOpen}
-              />
-            }
-          />
           <Route path="*" element={<Text> 404 </Text>} />
         </Route>
       </Routes>

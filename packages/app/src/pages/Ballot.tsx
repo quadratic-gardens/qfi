@@ -203,8 +203,8 @@ export const Ballot = () => {
   const addBallotOption1Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption1Votes ** 2 -
-        (ballotOption1Votes + 1) ** 2 <
+      ballotOption1Votes ** 2 -
+      (ballotOption1Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption1Votes(0);
@@ -217,8 +217,8 @@ export const Ballot = () => {
   const addBallotOption2Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption2Votes ** 2 -
-        (ballotOption2Votes + 1) ** 2 <
+      ballotOption2Votes ** 2 -
+      (ballotOption2Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption2Votes(0);
@@ -231,8 +231,8 @@ export const Ballot = () => {
   const addBallotOption3Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption3Votes ** 2 -
-        (ballotOption3Votes + 1) ** 2 <
+      ballotOption3Votes ** 2 -
+      (ballotOption3Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption3Votes(0);
@@ -245,8 +245,8 @@ export const Ballot = () => {
   const addBallotOption4Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption4Votes ** 2 -
-        (ballotOption4Votes + 1) ** 2 <
+      ballotOption4Votes ** 2 -
+      (ballotOption4Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption4Votes(0);
@@ -259,8 +259,8 @@ export const Ballot = () => {
   const addBallotOption5Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption5Votes ** 2 -
-        (ballotOption5Votes + 1) ** 2 <
+      ballotOption5Votes ** 2 -
+      (ballotOption5Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption5Votes(0);
@@ -273,8 +273,8 @@ export const Ballot = () => {
   const addBallotOption6Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption6Votes ** 2 -
-        (ballotOption6Votes + 1) ** 2 <
+      ballotOption6Votes ** 2 -
+      (ballotOption6Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption6Votes(0);
@@ -287,8 +287,8 @@ export const Ballot = () => {
   const addBallotOption7Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption7Votes ** 2 -
-        (ballotOption7Votes + 1) ** 2 <
+      ballotOption7Votes ** 2 -
+      (ballotOption7Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption7Votes(0);
@@ -301,8 +301,8 @@ export const Ballot = () => {
   const addBallotOption8Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-        ballotOption8Votes ** 2 -
-        (ballotOption8Votes + 1) ** 2 <
+      ballotOption8Votes ** 2 -
+      (ballotOption8Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption8Votes(0);

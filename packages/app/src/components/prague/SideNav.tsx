@@ -9,13 +9,13 @@ import {
   Button,
   Link as ExternalLink,
 } from "@chakra-ui/react";
-import { MdDashboard, MdSettings } from "react-icons/md";
+import { MdDashboard } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
 import { SideNavProps } from "../../propTypes";
 import { useTranslation } from "react-i18next";
 
-export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
+export const SideNav = ({ onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "background.1000");
   let [searchParams] = useSearchParams();
   const { t } = useTranslation();
@@ -49,24 +49,6 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
               aria-label="Projects"
             />
           </Tooltip>
-          {/* <Tooltip label="How it Works" placement="right">
-              <IconButton
-                to="/howitworks"
-                as={Link}
-                color="gray.500"
-                icon={<Icon as={HiLightningBolt} boxSize={4} />}
-                aria-label="How it Works"
-              />
-            </Tooltip>
-            <Tooltip label="Admin" placement="right">
-              <IconButton
-                to="/admin"
-                as={Link}
-                color="gray.500"
-                icon={<Icon as={HiBriefcase} boxSize={4} />}
-                aria-label="Admin"
-              />
-            </Tooltip> */}
         </VStack>
         <VStack>
           <Tooltip label={t("Guide")} placement="right">
@@ -77,21 +59,13 @@ export const SideNav = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
               aria-label="Guide"
             />
           </Tooltip>
-          <Tooltip label={t("Settings")} placement="right">
-            <IconButton
-              onClick={onSettingsOpen}
-              color="gray.500"
-              icon={<Icon as={MdSettings} boxSize={5} />}
-              aria-label="Settings"
-            />
-          </Tooltip>
         </VStack>
       </VStack>
     </div>
   );
 };
 
-export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
+export const Navbar = ({ onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "background.0");
   let [searchParams] = useSearchParams();
   const { t } = useTranslation();

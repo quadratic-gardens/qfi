@@ -11,10 +11,14 @@ import { nameToChainId } from "@qfi/hooks";
 import { App } from "./App";
 import { DappProvider } from "./context/DappContext";
 
+import { getShuffledProjects } from "./data";
+
 import "./i18next";
 
 const DEFAULT_CHAIN_ID = nameToChainId("xdai"); // Used to switch to if the user is on an unsupported network
 console.log(DEFAULT_CHAIN_ID);
+
+const shuffledProjects = getShuffledProjects();
 
 declare global {
   interface WindowEventMap {
@@ -27,7 +31,7 @@ ReactDOM.render(
     <CSSReset />
     <DappProvider>
       <HashRouter>
-        <App />
+        <App shuffledProjects={shuffledProjects}/>
       </HashRouter>
     </DappProvider>
   </React.StrictMode>,

@@ -1,11 +1,7 @@
 export type SideNavProps = {
   onGuideOpen: () => void;
-  onSettingsOpen: () => void;
 };
 export type LayoutProps = {
-  isSettingsOpen: boolean;
-  onSettingsOpen: () => void;
-  onSettingsClose: () => void;
   onGuideOpen : () => void;
   onGuideClose : () => void;
   isGuideOpen : boolean;
