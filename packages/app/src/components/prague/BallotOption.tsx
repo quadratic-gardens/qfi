@@ -17,6 +17,7 @@ import {
 import { BallotOptionProps } from "../../propTypes";
 import { FaWindowClose } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { useMediaQuery } from "@chakra-ui/react";
 
 export const BallotOption = ({
   ballotOption,
@@ -25,6 +26,7 @@ export const BallotOption = ({
   lastOption,
 }: BallotOptionProps) => {
   const { t } = useTranslation();
+  const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   let [searchParams] = useSearchParams();
   let navigate = useNavigate();
   const isInBallot = useCallback(
@@ -61,37 +63,33 @@ export const BallotOption = ({
       borderBottomWidth={lastOption ? 2 : 0}
       spacing={0}
       alignItems="stretch"
-      justifyContent="center"
-      direction={{ base: "row", md: "row" }}
+      justifyContent={{ sm: "initial", md: "center" }}
+      direction="row"
       w="full"
-      h="90px"
+      h={{ sm: 150, md: 90 }}
     >
       <VStack
-        py={1.5}
         borderRightColor="#FAF7F5"
         borderRightWidth={2}
-        h="full"
         spacing={0}
         justifyContent="center"
         alignItems="center"
         textAlign="center"
-        w="140px"
+        w={isViewportMd ? 140 : "30%"}
       >
         <Text fontSize={20} fontWeight="bold" mx={2}>
           {votes ?? 0}
         </Text>
         <Text fontSize={20} fontFamily="NeuePixelGrotesk" mx={2}>
-          {t("CREDITS")}
+          {isViewportMd ? t("CREDITS") : "CREDS"}
         </Text>
       </VStack>
       <VStack
         spacing={0}
         position="relative"
-        borderRightColor="#FAF7F5"
-        borderRightWidth={2}
         justifyContent="flex-start"
         alignItems="stretch"
-        w={{ base: "full", md: "full" }}
+        w={{ base: "70%", md: "full" }}
         py={2.5}
         px={2}
       >
@@ -150,19 +148,23 @@ export const BallotOption = ({
           />
         </Tooltip>
       </VStack>
-      <VStack
-        h="full"
-        spacing={0}
-        justifyContent="center"
-        alignItems="center"
-        w="140px"
-      >
-        <img
-          style={{ height: "100%", maxWidth: 90 }}
-          src={ballotOption.logo}
-          alt="current project logo"
-        />
-      </VStack>
+      {isViewportMd && (
+        <VStack
+          h="full"
+          spacing={0}
+          borderLeftColor="#FAF7F5"
+          borderLeftWidth={2}
+          justifyContent="center"
+          alignItems="center"
+          w="140px"
+        >
+          <img
+            style={{ height: "100%", maxWidth: 90 }}
+            src={ballotOption.logo}
+            alt="current project logo"
+          />
+        </VStack>
+      )}
     </Stack>
   );
 };
