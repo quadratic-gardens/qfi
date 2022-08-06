@@ -30,7 +30,7 @@ export const MagikButton: React.FC<MagikButtonProps> = ({
   const BaseIcon = loading ? (
     <CircleLoader size={25} color={switchIconColor} />
   ) : (
-    <></>
+    undefined
   );
   const SwitchAvatar = avatar ? (
     <Image p={1} rounded="full" src={avatar} h={12} />
@@ -48,7 +48,7 @@ export const MagikButton: React.FC<MagikButtonProps> = ({
       h={20}
       leftIcon={SwitchIcon}
       onClick={() => !isConnecting && switchAction()}
-      variant={!isConnecting ? "ethLatamPurple" : "ethLatamDisabled"}
+      variant="ethLatamPurple"
       w="full"
       {...props}
     >
@@ -107,11 +107,9 @@ function Web3State() {
 
 function ConnectState() {
   return (
-    <VStack spacing={0.5} alignItems="flex-start" pl={3}>
-      <Text fontSize="lg" fontWeight="extrabold">
-        CONNECT WALLET
-      </Text>
-    </VStack>
+    <Text fontSize="lg" fontWeight="extrabold">
+      CONNECT WALLET
+    </Text>
   );
 }
 

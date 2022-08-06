@@ -738,6 +738,15 @@ export const Ballot = () => {
                 {t("SAVE")}
               </Button>
             </FormControl>
+            {!isViewportMd && (
+              <SubmitBallotButton
+                disableSubmitButton={disableSubmitButton}
+                isConnected={isConnected}
+                my={6}
+                onSubmit={handleSubmit}
+                t={t}
+              />
+            )}
           </form>
         </VStack>
       </Container>
