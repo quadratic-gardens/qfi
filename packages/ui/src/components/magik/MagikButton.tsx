@@ -10,6 +10,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import CircleLoader from "react-spinners/CircleLoader";
 import { formatAddress, useWallet, useENS } from "@qfi/hooks";
 import { ButtonProps } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 
 type MagikButtonProps = ButtonProps & {};
 
@@ -61,6 +62,7 @@ function Web3State() {
   const switchColor = useColorModeValue("black", "white");
   const { address } = useWallet();
   const { ens, loading } = useENS({ address: address ?? undefined });
+
   const randomPlaceHolder = useCallback(() => {
     const rand = Math.floor(Math.random() * 6) + 2;
     switch (rand) {
@@ -76,6 +78,7 @@ function Web3State() {
         return `(¬､¬)`;
     }
   }, []);
+
   const BaseName = useMemo(
     () =>
       ens ? (
@@ -106,9 +109,11 @@ function Web3State() {
 }
 
 function ConnectState() {
+  const { t } = useTranslation();
+
   return (
-    <Text fontSize="lg" fontWeight="extrabold">
-      CONNECT WALLET
+    <Text whiteSpace="break-spaces" fontSize="lg" fontWeight="extrabold">
+      {t("CONNECT WALLET")}
     </Text>
   );
 }

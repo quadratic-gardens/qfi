@@ -75,13 +75,13 @@ export const BallotOption = ({
         justifyContent="center"
         alignItems="center"
         textAlign="center"
-        w={isViewportMd ? 140 : "30%"}
+        w={isViewportMd ? 140 : "35%"}
       >
         <Text fontSize={20} fontWeight="bold" mx={2}>
           {votes ?? 0}
         </Text>
         <Text fontSize={20} fontFamily="NeuePixelGrotesk" mx={2}>
-          {isViewportMd ? t("CREDITS") : "CREDS"}
+          {t("CREDITS")}
         </Text>
       </VStack>
       <VStack
@@ -89,7 +89,7 @@ export const BallotOption = ({
         position="relative"
         justifyContent="flex-start"
         alignItems="stretch"
-        w={{ base: "70%", md: "full" }}
+        w={{ base: "65%", md: "full" }}
         py={2.5}
         px={2}
       >

@@ -85,8 +85,7 @@ const SubmitBallotButton = ({
         variant={!disableSubmitButton ? "ethLatamPurple" : "ethLatamDisabled"}
         fontSize={{ base: "md", xl: "lg" }}
       >
-        <div>{t("SUBMIT")}</div>
-        <div>{t("BALLOT")}</div>
+        <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
       </Button>
     </Tooltip>
   ) : (
@@ -101,13 +100,20 @@ const SubmitBallotButton = ({
     </VStack>
   );
 
+const headerYourBallotLogo = {
+  en: "your_ballot_EN.svg",
+  es: "your_ballot_ES.svg",
+};
+
 export const Ballot = () => {
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
   const [searchParams] = useSearchParams();
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const toast = useToast();
+
+  const currLang = i18n.language;
 
   const isValidMaciKey = useMemo(() => {
     return isMaciPrivKey(maciKey);
@@ -584,12 +590,15 @@ export const Ballot = () => {
       <Container style={{ marginTop: 64, maxWidth: 1042 }}>
         {isViewportMd ? (
           <Heading maxW={{ md: 595, base: 250 }}>
-            <img src="your_ballot_EN.svg" alt="page title in english" />
+            <img src={headerYourBallotLogo[currLang]} alt={t("YOUR BALLOT")} />
           </Heading>
         ) : (
           <Flex w="full" alignItems="center" flexDirection="column">
             <Heading maxW={{ md: 595, base: 250 }}>
-              <img src="your_ballot_EN.svg" alt="page title in english" />
+              <img
+                src={headerYourBallotLogo[currLang]}
+                alt={t("YOUR BALLOT")}
+              />
             </Heading>
             <MagikButton mt={6} maxWidth={{ md: 175 }} />
           </Flex>
