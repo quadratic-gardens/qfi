@@ -10,9 +10,12 @@ import { Ballot } from "./pages/Ballot";
 import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
 
-export const App = ({shuffledProjects}) => {
-  const { isOpen: isSettingsOpen, onOpen: onSettingsOpen, onClose: onSettingsClose } = useDisclosure();
-  const { isOpen: isGuideOpen, onOpen: onGuideOpen, onClose: onGuideClose } = useDisclosure();
+export const App = ({ shuffledProjects }) => {
+  const {
+    isOpen: isGuideOpen,
+    onOpen: onGuideOpen,
+    onClose: onGuideClose,
+  } = useDisclosure();
 
   return (
     <ChakraProvider theme={theme}>
@@ -26,18 +29,14 @@ export const App = ({shuffledProjects}) => {
               onGuideClose={onGuideClose}
               isGuideOpen={isGuideOpen}
             />
-          }>
-          <Route
-            index
-            element={
-              <Home
-                onGuideOpen={onGuideOpen}
-                isGuideOpen={isGuideOpen}
-              />
-            }
-          />
+          }
+        >
+          <Route index element={<Home />} />
           <Route path="ballot" element={<Ballot />} />
-          <Route path="projects" element={<Projects shuffledProjects={shuffledProjects}/>}></Route>
+          <Route
+            path="projects"
+            element={<Projects shuffledProjects={shuffledProjects} />}
+          ></Route>
           <Route path="projects/:projectId" element={<Project />} />
           <Route path="admin" element={<Admin />} />
           <Route path="*" element={<Text> 404 </Text>} />
