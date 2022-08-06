@@ -594,7 +594,10 @@ export const Ballot = () => {
             </Heading>
             <Flex mt={8} justifyContent="space-between">
               <Text textAlign="justify" w="80%">
-                {t("MACI (Minimal Anti-Collusion Infrastructure) uses")}
+                {t("The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page).")}{" "}
+                {t("Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it.")}{" "}
+                {t("'Not your MACI, not your vote'.")}{" "}
+                {t("Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count.")}
               </Text>
               {isConnected ? (
                 <Tooltip

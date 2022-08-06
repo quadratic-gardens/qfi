@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { HiExternalLink } from "react-icons/hi";
 
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 const Guide = () => {
   const { t } = useTranslation();
@@ -222,34 +222,37 @@ const Guide = () => {
                     <AccordionPanel pb={4}>
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs">
-                          {t(
+                          <Trans i18nKey=
                             "Go back to 'Your vote' using the navigation menu on the left of the screen (the 4 squares symbol) and you will see the projects you’ve selected. On this screen, you’ll be able to add voice credits to each selected project. Each time you click the button, a credit will be added to your selected project."
-                          )}
+                          />
                         </Text>
                         <Text fontSize="xs">
-                          {t(
-                            "You can distribute your voice credits between the projects as you see fit, but voice credits and votes are not 1:1. This is where the 'quadratic' part comes into play: voting on a project will cost the square of the number of votes you want to cast."
-                          )}
+                          <Trans i18nKey="You can distribute your voice credits between the projects as you see fit, but voice credits and votes are not 1:1."/>
                         </Text>
                         <Text fontSize="xs">
-                          {t(
-                            "For example, if you want to cast 1 vote for project A, it will cost you 1 voice credit; 2 votes will cost 4 credits; 5 votes will cost 25 credits, and so on."
-                          )}
+                          <Trans i18nKey="This is where the 'quadratic' part comes into play: voting on a project will cost the square of the number of votes you want to cast."/>
                         </Text>
                         <Text fontSize="xs">
-                          {t(
-                            "Everyone will start with 99 voice credits. These credits will be used to cast votes for projects you have selected to support. You can add up to 8 projects to your ballot, and distribute your voice credits among them. Choose wisely."
-                          )}
+                          <Trans i18nKey="For example, if you want to cast 1 vote for project A, it will cost you 1 voice credit; 2 votes will cost 4 credits; 5 votes will cost 25 credits, and so on."/>
                         </Text>
                         <Text fontSize="xs">
-                          {t(
-                            "Casting a vote on a project will cost you the square of the number of votes you want to cast in voice credits. For example, if you want to cast 5 votes for project A, it will cost you 25 voice credits."
-                          )}
+                          <Trans i18nKey=
+                            "Everyone will start with 99 <strong>voice credits</strong>."
+                          />{" "}
+                          <Trans i18nKey=
+                            "These credits will be used to cast votes for projects you have selected to support."
+                          />{" "}
+                          <Trans i18nKey=
+                            "You can add up to <strong>8 projects</strong> to your ballot, and distribute your voice credits among them. Choose wisely."
+                          />
                         </Text>
                         <Text fontSize="xs">
-                          {t(
-                            "You cannot use more voice credits than you have allotted. Since each voter starts with 99 voice credits, a vote of 10 (which costs 100 voice credits) is more than any one voter can afford. This means that at most, a voter can give 9 votes to a single project - at a cost of 81 voice credits - and will have 18 voice credits left to vote for other projects."
-                          )}
+                          <Trans i18nKey=
+                            "Casting a vote on a project will <strong>cost you the square of the number of votes you want to cast</strong> in voice credits. For example, if you want to cast 5 votes for project A, it will cost you 25 voice credits."
+                          />
+                        </Text>
+                        <Text fontSize="xs">
+                          <Trans i18nKey="You <strong>cannot use more voice credits than you have allotted</strong>. Since each voter starts with 99 voice credits, a vote of 10 (which costs 100 voice credits) is more than any one voter can afford. This means that at most, a voter can give 9 votes to a single project - at a cost of 81 voice credits - and will have 18 voice credits left to vote for other projects." />
                         </Text>
                       </VStack>
                     </AccordionPanel>
