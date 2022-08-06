@@ -727,7 +727,7 @@ export const Ballot = () => {
               <Input
                 w={{ base: "full", md: "80%" }}
                 type="password"
-                placeholder="MACI SK"
+                placeholder={t("MACI Key")}
                 variant="ethLatamWhite"
                 value={key}
                 onChange={handleInputChange}

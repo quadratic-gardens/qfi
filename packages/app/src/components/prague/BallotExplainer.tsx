@@ -38,7 +38,11 @@ export const BallotExplainer = () => {
               )}
             </VStack>
             <AccordionPanel pb={4}>
-              <UnorderedList marginInlineStart="1rem !important" w="full">
+              <UnorderedList
+                fontFamily="Helvetica"
+                marginInlineStart="1rem !important"
+                w="full"
+              >
                 <ListItem>
                   <Trans i18nKey="You can distribute your voice credits between the projects as you see fit, but voice credits and votes are not 1:1." />
                 </ListItem>

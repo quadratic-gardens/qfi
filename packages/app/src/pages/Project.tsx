@@ -144,7 +144,7 @@ export function Project() {
               mt={0.5}
               py={0.5}
               w="full"
-              borderBottomColor={"gray.100"}
+              borderBottomColor="gray.100"
               borderBottomWidth={1}
             >
               <VStack
@@ -155,8 +155,8 @@ export function Project() {
                 w="full"
               >
                 <IconButton
-                  boxSize={"34px"}
-                  variant={"ghost"}
+                  boxSize="34px"
+                  variant="ghost"
                   rounded="full"
                   to={`/projects?${searchParams.toString()}`}
                   as={Link}
@@ -170,20 +170,14 @@ export function Project() {
                 spacing={0}
                 overflow="hidden"
               >
-                <Heading
-                  my={0.5}
-                  px={2}
-                  fontSize={"lg"}
-                  lineHeight={"24px"}
-                  fontWeight=""
-                >
+                <Heading my={0.5} px={2} fontSize="lg" lineHeight="24px">
                   {project.name}
                 </Heading>
                 <Text
                   px={2}
-                  color={"gray.600"}
-                  fontSize={"xs"}
-                  lineHeight={"16px"}
+                  color="gray.600"
+                  fontSize="xs"
+                  lineHeight="16px"
                   fontWeight="400"
                 >
                   {project.address}
@@ -191,16 +185,16 @@ export function Project() {
               </VStack>
             </HStack>
             <VStack
-              display={"block"}
+              display="block"
               w="full"
               minH={{ base: "100px", md: "200px" }}
-              overflow={"hidden"}
+              overflow="hidden"
             >
               <Box
                 h="full"
                 w="full"
                 position="relative"
-                mt={"-13%"}
+                mt="-13%"
                 sx={{
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
@@ -227,14 +221,14 @@ export function Project() {
               spacing={0}
             >
               <AspectRatio
-                borderColor={"grey.300"}
+                borderColor="grey.300"
                 borderWidth={3}
                 zIndex="1"
                 w={{ base: "25%", md: "25%" }}
                 mt={{ sm: "-15%", md: "-15%" }}
                 mb="12px"
                 display="block"
-                overflow={"visible"}
+                overflow="visible"
                 rounded="full"
                 maxW="100%"
                 ratio={1}
@@ -247,7 +241,7 @@ export function Project() {
               </AspectRatio>
 
               <Button
-                fontSize={"15px"}
+                fontSize="15px"
                 variant="ethLatamBlack"
                 onClick={
                   isInBallot
@@ -267,8 +261,8 @@ export function Project() {
                     color="white"
                     position="relative"
                     z-index={20}
-                    boxSize={"15px"}
-                    fontWeight={"black"}
+                    boxSize="15px"
+                    fontWeight="black"
                     _hover={{
                       color: "black",
                       transform: "scale(1.1)",
@@ -285,7 +279,7 @@ export function Project() {
                     fontWeight="800"
                     ml={2}
                   >
-                    {isInBallot ? "Remove" : "Add to Ballot"}
+                    {t(isInBallot ? "Remove" : "Add to Ballot")}
                   </Text>
                 </HStack>
               </Button>
@@ -306,24 +300,24 @@ export function Project() {
                   {project.name}
                 </Heading>
                 <Text
-                  color={"gray.600"}
-                  fontSize={"xs"}
-                  lineHeight={"14px"}
+                  color="gray.600"
+                  fontSize="xs"
+                  lineHeight="14px"
                   fontWeight="400"
                 >
                   {project.address}
                 </Text>
               </VStack>
-              <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
+              <Text fontSize="sm" lineHeight="16px" fontWeight="400">
                 {project.description}
               </Text>
 
               <VStack alignItems="flex-start" w="full" spacing={1}>
-                <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-                  <b> {t("Project Ballot ID")}:</b> {project.id}
+                <Text fontSize="sm" lineHeight="16px" fontWeight="400">
+                  <b>{t("Project Ballot ID")}:</b> {project.id}
                 </Text>
-                <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-                  <b> {t("Project Website")}:</b> {project.url}
+                <Text fontSize="sm" lineHeight="16px" fontWeight="400">
+                  <b>{t("Project Website")}:</b> {project.url}
                 </Text>
               </VStack>
             </VStack>
