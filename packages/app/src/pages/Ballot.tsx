@@ -1,22 +1,23 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
 import {
+  Container,
   VStack,
-  HStack,
+  Grid,
+  GridItem,
   Flex,
   Text,
   Heading,
   Button,
-  Stack,
   useColorModeValue,
-  Center,
   useToast,
   FormControl,
   FormHelperText,
-  FormLabel,
   Input,
   Tooltip,
+  useMediaQuery,
 } from "@chakra-ui/react";
 
+import { MagikButton } from "@qfi/ui";
 import { getProject, getRecipientIdbyId } from "../data";
 import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
@@ -48,12 +49,71 @@ const isMaciPrivKey = (key: string): boolean => {
   return false;
 };
 
+interface SubmitBallotButtonProps {
+  isConnected: boolean;
+  disableSubmitButton: boolean;
+  my?: number;
+  onSubmit: () => React.ReactNode;
+  t: (arg: string) => any;
+}
+
+const SubmitBallotButton = ({
+  isConnected,
+  disableSubmitButton,
+  my = 0,
+  onSubmit,
+  t,
+}: SubmitBallotButtonProps) =>
+  isConnected ? (
+    <Tooltip
+      isDisabled={!disableSubmitButton}
+      label={t(
+        "Unregistered MACI Keypair: Enter a valid MACI passphrase to continue."
+      )}
+      placement="top"
+      shouldWrapChildren
+    >
+      <Button
+        m="auto"
+        my={my}
+        maxWidth={{ md: "150px" }}
+        width="100%"
+        h={20}
+        display="block"
+        disabled={disableSubmitButton}
+        onClick={onSubmit}
+        variant={!disableSubmitButton ? "ethLatamPurple" : "ethLatamDisabled"}
+        fontSize={{ base: "md", xl: "lg" }}
+      >
+        <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
+      </Button>
+    </Tooltip>
+  ) : (
+    <VStack my={my} textAlign="center" w="full">
+      <Text
+        display={isConnected ? "none" : "flex"}
+        fontSize="xs"
+        fontWeight="extrabold"
+      >
+        {t("Not Connected: Sign in to continue")}
+      </Text>
+    </VStack>
+  );
+
+const headerYourBallotLogo = {
+  en: "your_ballot_EN.svg",
+  es: "your_ballot_ES.svg",
+};
+
 export const Ballot = () => {
-  const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
+  const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
+  const [searchParams] = useSearchParams();
+  const { i18n, t } = useTranslation();
   const toast = useToast();
+
+  const currLang = i18n.language;
 
   const isValidMaciKey = useMemo(() => {
     return isMaciPrivKey(maciKey);
@@ -203,8 +263,8 @@ export const Ballot = () => {
   const addBallotOption1Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption1Votes ** 2 -
-      (ballotOption1Votes + 1) ** 2 <
+        ballotOption1Votes ** 2 -
+        (ballotOption1Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption1Votes(0);
@@ -217,8 +277,8 @@ export const Ballot = () => {
   const addBallotOption2Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption2Votes ** 2 -
-      (ballotOption2Votes + 1) ** 2 <
+        ballotOption2Votes ** 2 -
+        (ballotOption2Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption2Votes(0);
@@ -231,8 +291,8 @@ export const Ballot = () => {
   const addBallotOption3Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption3Votes ** 2 -
-      (ballotOption3Votes + 1) ** 2 <
+        ballotOption3Votes ** 2 -
+        (ballotOption3Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption3Votes(0);
@@ -245,8 +305,8 @@ export const Ballot = () => {
   const addBallotOption4Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption4Votes ** 2 -
-      (ballotOption4Votes + 1) ** 2 <
+        ballotOption4Votes ** 2 -
+        (ballotOption4Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption4Votes(0);
@@ -259,8 +319,8 @@ export const Ballot = () => {
   const addBallotOption5Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption5Votes ** 2 -
-      (ballotOption5Votes + 1) ** 2 <
+        ballotOption5Votes ** 2 -
+        (ballotOption5Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption5Votes(0);
@@ -273,8 +333,8 @@ export const Ballot = () => {
   const addBallotOption6Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption6Votes ** 2 -
-      (ballotOption6Votes + 1) ** 2 <
+        ballotOption6Votes ** 2 -
+        (ballotOption6Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption6Votes(0);
@@ -287,8 +347,8 @@ export const Ballot = () => {
   const addBallotOption7Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption7Votes ** 2 -
-      (ballotOption7Votes + 1) ** 2 <
+        ballotOption7Votes ** 2 -
+        (ballotOption7Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption7Votes(0);
@@ -301,8 +361,8 @@ export const Ballot = () => {
   const addBallotOption8Votes = useCallback(() => {
     if (
       voiceCreditBalance +
-      ballotOption8Votes ** 2 -
-      (ballotOption8Votes + 1) ** 2 <
+        ballotOption8Votes ** 2 -
+        (ballotOption8Votes + 1) ** 2 <
       0
     ) {
       return setBallotOption8Votes(0);
@@ -527,13 +587,26 @@ export const Ballot = () => {
         },
       }}
     >
-      <div style={{ marginTop: 64, maxWidth: 1042 }}>
-        <Heading maxW="595px">
-          <img src="your_ballot_EN.svg" alt="page title in english" />
-        </Heading>
+      <Container style={{ marginTop: 64, maxWidth: 1042 }}>
+        {isViewportMd ? (
+          <Heading maxW={{ md: 595, base: 250 }}>
+            <img src={headerYourBallotLogo[currLang]} alt={t("YOUR BALLOT")} />
+          </Heading>
+        ) : (
+          <Flex w="full" alignItems="center" flexDirection="column">
+            <Heading maxW={{ md: 595, base: 250 }}>
+              <img
+                src={headerYourBallotLogo[currLang]}
+                alt={t("YOUR BALLOT")}
+              />
+            </Heading>
+            <MagikButton mt={6} maxWidth={{ md: 175 }} />
+          </Flex>
+        )}
+
         <VStack spacing={2} alignItems="flex-start" w="full">
           <BallotExplainer />
-          <Heading style={{ marginTop: 56 }}>
+          <Heading style={{ marginTop: 56 }} textAlign={{ base: "center" }}>
             {t("VOICE CREDIT BALANCE")}: {voiceCreditBalance}
           </Heading>
           <Text px={"1px"}>
@@ -569,115 +642,123 @@ export const Ballot = () => {
               as={Link}
               variant="ethLatamWhite"
               fontSize={{ base: "lg", xl: "xl" }}
+              maxW={{ base: 250, md: 400 }}
               to={`/projects?${searchParams.toString()}`}
             >
               {t("CHECK OUT THE PROJECTS")}
             </Button>
           </VStack>
         )}
-        <Stack
+        <VStack
           spacing={3}
           py={8}
-          flexDirection={{ base: "column", md: "row" }}
-          alignItems="flex-start"
+          alignItems={{ base: "center", md: "flex-start" }}
           justifyContent={{ base: "center", md: "space-between" }}
           w="full"
         >
-          <VStack
-            mt={21}
-            spacing={2}
-            h="full"
-            alignItems={{ base: "center", md: "flex-start" }}
-          >
-            <Heading alignSelf="flex-start">
+          {isViewportMd ? (
+            <Flex w="full" alignItems="center" justifyContent="space-between">
+              <Heading textAlign={{ base: "center" }}>
+                {t("BALLOT (MACI) PASSPHRASE")}
+              </Heading>
+              <MagikButton maxWidth={{ md: 175 }} />
+            </Flex>
+          ) : (
+            <Heading textAlign={{ base: "center" }}>
               {t("BALLOT (MACI) PASSPHRASE")}
             </Heading>
-            <Flex mt={8} justifyContent="space-between">
-              <Text textAlign="justify" w="80%">
-                {t("The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page).")}{" "}
-                {t("Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it.")}{" "}
+          )}
+
+          <Grid
+            w="full"
+            minH={180}
+            mt={8}
+            gridTemplateColumns={{
+              base: "repeat(1, minmax(0, 1fr))",
+              md: "repeat(10, minmax(0, 1fr))",
+            }}
+            templateRows={{
+              base: "repeat(1, minmax(0, 1fr))",
+              md: "repeat(2, minmax(0, 1fr))",
+            }}
+          >
+            <GridItem colSpan={{ base: 1, md: 8 }} rowSpan={{ md: 2 }}>
+              <Text textAlign="justify">
+                {t(
+                  "The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page)."
+                )}{" "}
+                {t(
+                  "Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it."
+                )}{" "}
                 {t("'Not your MACI, not your vote'.")}{" "}
-                {t("Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count.")}
+                {t(
+                  "Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count."
+                )}
               </Text>
-              {isConnected ? (
-                <Tooltip
-                  isDisabled={!disableSubmitButton}
-                  label={t(
-                    "Unregistered MACI Keypair: Enter a valid MACI passphrase to continue."
-                  )}
-                  placement="top"
-                  shouldWrapChildren
-                >
-                  <Button
-                    maxWidth="150px"
-                    width="100%"
-                    height="auto"
-                    display="block"
-                    disabled={disableSubmitButton}
-                    onClick={handleSubmit}
-                    variant={
-                      !disableSubmitButton
-                        ? "ethLatamPurple"
-                        : "ethLatamDisabled"
-                    }
-                    fontSize={{ base: "md", xl: "lg" }}
-                  >
-                    <div>{t("SUBMIT")}</div>
-                    <div>{t("BALLOT")}</div>
-                  </Button>
-                </Tooltip>
-              ) : (
-                <Center textAlign="center">
-                  <VStack spacing={6} textAlign="center" w="full">
-                    <Text
-                      display={isConnected ? "none" : "flex"}
-                      fontSize="xs"
-                      fontWeight="extrabold"
-                    >
-                      {t("Not Connected: Sign in to continue")}
-                    </Text>
-                  </VStack>
-                </Center>
-              )}
-            </Flex>
-            <VStack spacing={1} alignItems="flex-start" w="full">
-              <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
-                <FormControl
-                  w="full"
-                  isInvalid={isError}
-                  variant="floating"
-                  id="key"
-                  isRequired
-                  my={4}
-                >
-                  <Input
-                    w="80%"
-                    type="password"
-                    placeholder=""
-                    value={key}
-                    onChange={handleInputChange}
-                  />
-                  {/* It is important that the Label comes after the Control due to css selectors */}
-                  <FormLabel>MACI SK</FormLabel>
-                  <FormHelperText>{numChars ?? "-"}/71</FormHelperText>
-                  <HStack spacing={2}>
-                    <VStack w="80%" pt="10" justifyContent="center">
-                      <Button
-                        variant="ethLatamBlack"
-                        fontSize={{ base: "lg", xl: "xl" }}
-                        type="submit"
-                        width="full"
-                      >
-                        {t("SAVE")}
-                      </Button>
-                    </VStack>
-                  </HStack>
-                </FormControl>
-              </form>
-            </VStack>
-          </VStack>
-        </Stack>
-      </div>
+            </GridItem>
+            {isViewportMd && (
+              <GridItem
+                colSpan={{ base: 1, md: 2 }}
+                w={{ base: "full", md: "90%" }}
+                m={{ base: "32px auto 0 auto", md: "auto" }}
+              >
+                <SubmitBallotButton
+                  disableSubmitButton={disableSubmitButton}
+                  isConnected={isConnected}
+                  onSubmit={handleSubmit}
+                  t={t}
+                />
+              </GridItem>
+            )}
+          </Grid>
+
+          <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
+            <FormControl
+              w="full"
+              display={{ base: "flex", md: "block" }}
+              flexDir={{ base: "column" }}
+              alignItems={{ base: "center" }}
+              isInvalid={isError}
+              variant="floating"
+              id="key"
+              isRequired
+              mt={{ base: 12 }}
+            >
+              <Input
+                w={{ base: "full", md: "80%" }}
+                type="password"
+                placeholder={t("MACI Key")}
+                variant="ethLatamWhite"
+                value={key}
+                onChange={handleInputChange}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormHelperText fontFamily="NeuePixelGrotesk">
+                {numChars ?? "-"} / 71
+              </FormHelperText>
+              <Button
+                variant="ethLatamBlack"
+                fontSize={{ base: "lg", xl: "xl" }}
+                type="submit"
+                w={{ base: "full", md: "80%" }}
+                mt={6}
+                alignItems="center"
+              >
+                {t("SAVE")}
+              </Button>
+            </FormControl>
+            {!isViewportMd && (
+              <SubmitBallotButton
+                disableSubmitButton={disableSubmitButton}
+                isConnected={isConnected}
+                my={6}
+                onSubmit={handleSubmit}
+                t={t}
+              />
+            )}
+          </form>
+        </VStack>
+      </Container>
     </Flex>
   );
 };

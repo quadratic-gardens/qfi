@@ -7,9 +7,7 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Icon,
   ListItem,
-  Link,
   Accordion,
   AccordionButton,
   AccordionIcon,
@@ -17,7 +15,6 @@ import {
   AccordionPanel,
   UnorderedList,
 } from "@chakra-ui/react";
-import { HiExternalLink } from "react-icons/hi";
 
 import { useTranslation, Trans } from "react-i18next";
 
@@ -76,9 +73,7 @@ const Guide = () => {
             )}
           </Text>
           <Text fontWeight={"bold"}>
-            {t(
-              "'Not your MACI, not your vote'."
-            )}
+            {t("'Not your MACI, not your vote'.")}
           </Text>
           <Text>
             {t(
@@ -86,23 +81,16 @@ const Guide = () => {
             )}
           </Text>
           <Heading size="md" fontWeight={"bold"}>
-            {t(
-              "We know this might be confusing, need help?"
-            )}
+            {t("We know this might be confusing, need help?")}
           </Heading>
           <Text>
-            {t(
-              "Drop us a line at sponsors@ethlatam.org or join the"
-            )}
-            {" "}
-            <a href={'https://t.me/ethlatam'} target="_blank">{t("ETHLatam Telegram group")}</a>
-            {" "}
-            {t(
-              "using the hashtag #QF in your post."
-            )}
+            {t("Drop us a line at sponsors@ethlatam.org or join the")}{" "}
+            <a href={"https://t.me/ethlatam"} rel="noreferrer" target="_blank">
+              {t("ETHLatam Telegram group")}
+            </a>{" "}
+            {t("using the hashtag #QF in your post.")}
           </Text>
         </VStack>
-
 
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="lg">{t("Registration")}</Heading>
@@ -149,9 +137,21 @@ const Guide = () => {
                     <VStack spacing={6} alignItems="flex-start">
                       <Text fontSize="xs">
                         <UnorderedList>
-                          <ListItem mb={4}>{t("Click on ‘START’ and it’ll direct you to the voting website.")}</ListItem>
-                          <ListItem mb={4}>{t("Tap 'Connect' and follow the instructions to successfully connect your Wallet, (WalletConnect is also available).")}</ListItem>
-                          <ListItem>{t("Once your wallet is connected, enter your MACI key in the field below and press 'Save'.")}</ListItem>
+                          <ListItem mb={4}>
+                            {t(
+                              "Click on ‘START’ and it’ll direct you to the voting website."
+                            )}
+                          </ListItem>
+                          <ListItem mb={4}>
+                            {t(
+                              "Tap 'Connect' and follow the instructions to successfully connect your Wallet, (WalletConnect is also available)."
+                            )}
+                          </ListItem>
+                          <ListItem>
+                            {t(
+                              "Once your wallet is connected, enter your MACI key in the field below and press 'Save'."
+                            )}
+                          </ListItem>
                         </UnorderedList>
                       </Text>
                     </VStack>
@@ -160,7 +160,9 @@ const Guide = () => {
               </ListItem>
             </UnorderedList>
           </Accordion>
-          <Text fontWeight="bold" fontSize="14">{t("Congratulations! You have just successfully registered.")}</Text>
+          <Text fontWeight="bold" fontSize="14">
+            {t("Congratulations! You have just successfully registered.")}
+          </Text>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="lg">{t("Vote")}</Heading>
@@ -222,34 +224,24 @@ const Guide = () => {
                     <AccordionPanel pb={4}>
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs">
-                          <Trans i18nKey=
-                            "Go back to 'Your vote' using the navigation menu on the left of the screen (the 4 squares symbol) and you will see the projects you’ve selected. On this screen, you’ll be able to add voice credits to each selected project. Each time you click the button, a credit will be added to your selected project."
-                          />
+                          <Trans i18nKey="Go back to 'Your vote' using the navigation menu on the left of the screen (the 4 squares symbol) and you will see the projects you’ve selected. On this screen, you’ll be able to add voice credits to each selected project. Each time you click the button, a credit will be added to your selected project." />
                         </Text>
                         <Text fontSize="xs">
-                          <Trans i18nKey="You can distribute your voice credits between the projects as you see fit, but voice credits and votes are not 1:1."/>
+                          <Trans i18nKey="You can distribute your voice credits between the projects as you see fit, but voice credits and votes are not 1:1." />
                         </Text>
                         <Text fontSize="xs">
-                          <Trans i18nKey="This is where the 'quadratic' part comes into play: voting on a project will cost the square of the number of votes you want to cast."/>
+                          <Trans i18nKey="This is where the 'quadratic' part comes into play: voting on a project will cost the square of the number of votes you want to cast." />
                         </Text>
                         <Text fontSize="xs">
-                          <Trans i18nKey="For example, if you want to cast 1 vote for project A, it will cost you 1 voice credit; 2 votes will cost 4 credits; 5 votes will cost 25 credits, and so on."/>
+                          <Trans i18nKey="For example, if you want to cast 1 vote for project A, it will cost you 1 voice credit; 2 votes will cost 4 credits; 5 votes will cost 25 credits, and so on." />
                         </Text>
                         <Text fontSize="xs">
-                          <Trans i18nKey=
-                            "Everyone will start with 99 <strong>voice credits</strong>."
-                          />{" "}
-                          <Trans i18nKey=
-                            "These credits will be used to cast votes for projects you have selected to support."
-                          />{" "}
-                          <Trans i18nKey=
-                            "You can add up to <strong>8 projects</strong> to your ballot, and distribute your voice credits among them. Choose wisely."
-                          />
+                          <Trans i18nKey="Everyone will start with 99 <strong>voice credits</strong>." />{" "}
+                          <Trans i18nKey="These credits will be used to cast votes for projects you have selected to support." />{" "}
+                          <Trans i18nKey="You can add up to <strong>8 projects</strong> to your ballot, and distribute your voice credits among them. Choose wisely." />
                         </Text>
                         <Text fontSize="xs">
-                          <Trans i18nKey=
-                            "Casting a vote on a project will <strong>cost you the square of the number of votes you want to cast</strong> in voice credits. For example, if you want to cast 5 votes for project A, it will cost you 25 voice credits."
-                          />
+                          <Trans i18nKey="Casting a vote on a project will <strong>cost you the square of the number of votes you want to cast</strong> in voice credits. For example, if you want to cast 5 votes for project A, it will cost you 25 voice credits." />
                         </Text>
                         <Text fontSize="xs">
                           <Trans i18nKey="You <strong>cannot use more voice credits than you have allotted</strong>. Since each voter starts with 99 voice credits, a vote of 10 (which costs 100 voice credits) is more than any one voter can afford. This means that at most, a voter can give 9 votes to a single project - at a cost of 81 voice credits - and will have 18 voice credits left to vote for other projects." />
