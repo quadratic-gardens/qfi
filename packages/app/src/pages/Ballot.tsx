@@ -12,7 +12,6 @@ import {
   useToast,
   FormControl,
   FormHelperText,
-  FormLabel,
   Input,
   Tooltip,
   useMediaQuery,
@@ -79,7 +78,7 @@ const SubmitBallotButton = ({
         my={my}
         maxWidth={{ md: "150px" }}
         width="100%"
-        height="auto"
+        h={20}
         display="block"
         disabled={disableSubmitButton}
         onClick={onSubmit}
@@ -104,10 +103,10 @@ const SubmitBallotButton = ({
 
 export const Ballot = () => {
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
-  const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
+  const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const toast = useToast();
 
   const isValidMaciKey = useMemo(() => {
@@ -719,13 +718,15 @@ export const Ballot = () => {
               <Input
                 w={{ base: "full", md: "80%" }}
                 type="password"
-                placeholder=""
+                placeholder="MACI SK"
+                variant="ethLatamWhite"
                 value={key}
                 onChange={handleInputChange}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel>MACI SK</FormLabel>
-              <FormHelperText>{numChars ?? "-"}/71</FormHelperText>
+              <FormHelperText fontFamily="NeuePixelGrotesk">
+                {numChars ?? "-"} / 71
+              </FormHelperText>
               <Button
                 variant="ethLatamBlack"
                 fontSize={{ base: "lg", xl: "xl" }}

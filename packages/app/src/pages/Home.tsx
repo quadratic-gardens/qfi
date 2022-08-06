@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionPanel,
   HStack,
-  Stack
+  Stack,
 } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams, Link as RouterLink } from "react-router-dom";
@@ -79,9 +79,10 @@ export const Home = ({
             <div style={{ height: "auto", maxWidth: "100%" }}>
               <img src="title.svg" alt="QF @ ETH LATAM" />
             </div>
-            <Stack spacing={10} direction={['column', 'row']}>
+            <Stack spacing={10} direction={["column", "row"]}>
               <Button
                 as={RouterLink}
+                h={50}
                 variant={"ethLatamPurple"}
                 fontSize={{ base: "md", xl: "xl" }}
                 to={`/ballot?${searchParams.toString()}`}

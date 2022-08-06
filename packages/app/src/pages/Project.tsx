@@ -248,9 +248,7 @@ export function Project() {
 
               <Button
                 fontSize={"15px"}
-                bg={isInBallot ? "red.400" : "blue"}
-                color="white"
-                rounded={"full"}
+                variant="ethLatamBlack"
                 onClick={
                   isInBallot
                     ? handleRemoveFromBallot(projectId?.toString() ?? "noop")
