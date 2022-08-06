@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  VStack,
-  Tooltip,
+  HStack,
   IconButton,
   Icon,
-  useColorModeValue,
-  HStack,
-  Button,
   Link as ExternalLink,
+  Select,
+  Tooltip,
+  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 import { MdDashboard } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
@@ -65,22 +65,29 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
   );
 };
 
-export const Navbar = ({ onGuideOpen }: SideNavProps) => {
+export const Navbar = () => {
+  const { i18n, t } = useTranslation();
+  const [selectedLang, setSelectedLang] = useState<string>(i18n.language);
   const backgroundColor = useColorModeValue("gray.100", "background.0");
+
   let [searchParams] = useSearchParams();
-  const { t } = useTranslation();
+
+  const handleLangChange = (langVal: string) => {
+    i18n.changeLanguage(langVal);
+    setSelectedLang(langVal);
+  };
 
   return (
     <HStack
       zIndex={9}
-      position={"fixed"}
+      position="fixed"
       top={0}
       left={0}
       bg={backgroundColor}
       justifyContent="space-between"
       alignItems="center"
       w="full"
-      minH={"32px"}
+      minH="32px"
     >
       <IconButton
         bg={backgroundColor}
@@ -98,37 +105,48 @@ export const Navbar = ({ onGuideOpen }: SideNavProps) => {
       />
 
       <HStack>
-        {/* <IconButton
-          w={"40px"}
+        <Select
           bg={backgroundColor}
-          to={`/?${searchParams.toString()}`}
-          as={Link}
-          icon={<Logo />}
-          aria-label="Home"
-        /> */}
+          color="black"
+          value={selectedLang}
+          fontFamily="NeuePixelGrotesk"
+          onChange={({ target: { value } }) => handleLangChange(value)}
+          w={20}
+          _focus={{ border: "none" }}
+        >
+          <option
+            value="en"
+            style={{
+              background: backgroundColor,
+              fontFamily: "NeuePixelGrotesk",
+              fontWeight: "bold",
+            }}
+          >
+            EN
+          </option>
+          <option
+            value="es"
+            style={{
+              background: backgroundColor,
+              fontFamily: "NeuePixelGrotesk",
+              fontWeight: "bold",
+            }}
+          >
+            ES
+          </option>
+        </Select>
 
-        {/* 
-            <Tooltip label="Admin" placement="right">
-              <IconButton
-                to="/admin"
-                as={Link}
-                color="gray.500"
-                icon={<Icon as={HiBriefcase} boxSize={4} />}
-                aria-label="Admin"
-              />
-            </Tooltip> */}
-      </HStack>
-
-      <HStack>
-        <Button
-          as={ExternalLink}
-          variant={"ethLatamGreen"}
+        <ExternalLink
+          display="flex"
+          variant="ethLatamGreen"
           fontSize={{ base: "lg", xl: "xl" }}
+          w={170}
+          h="40px"
           href="https://www.eventbrite.com/e/ethlatam-at-buenos-aires-tickets-374680147407"
           isExternal
         >
           {t("GET TICKETS!")}
-        </Button>
+        </ExternalLink>
       </HStack>
     </HStack>
   );

@@ -111,17 +111,6 @@ const Button = {
         boxShadow: "-4.49382px 4.49382px 0px #949494",
       },
     },
-    ethLatamGreen: {
-      color: "black",
-      justifyContent: "center",
-      padding: "0 32px",
-      borderRadius: 0,
-      alignItems: "center",
-      background: "#80FF9F",
-      fontWeight: 400,
-      fontFamily: "NeuePixelGrotesk",
-      _hover: { background: "#80FF9F", color: "black" },
-    },
     sideNav: {
       bg: "transparent",
       color: "whiteAlpha.900",
