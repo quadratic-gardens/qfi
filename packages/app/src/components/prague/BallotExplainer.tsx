@@ -29,40 +29,25 @@ export const BallotExplainer = () => {
         <AccordionPanel pb={4}>
           <UnorderedList marginInlineStart="1rem !important" w="full">
             <ListItem>
-              <Trans i18nKey="This page will be updated once the event starts to let you vote for projects you meet at the event." />
+              <Trans i18nKey="You can distribute your voice credits between the projects as you see fit, but voice credits and votes are not 1:1." />
             </ListItem>
             <ListItem>
-              <Trans i18nKey="When a voter is whitelisted they receive a" />{" "}
-              <Tooltip label="pseudo-randomly assigned" placement="top">
-                <strong>{t("MACI passphrase")}</strong>
-              </Tooltip>{" "}
-              {t("and voice credits.")}
+              <Trans i18nKey="This is where the 'quadratic' part comes into play: voting on a project will cost the square of the number of votes you want to cast." />
             </ListItem>
             <ListItem>
-              <Trans i18nKey="Everyone will begin with 99 <strong>voice credits</strong>" />
+              <Trans i18nKey="For example, if you want to cast 1 vote for project A, it will cost you 1 voice credit; 2 votes will cost 4 credits; 5 votes will cost 25 credits, and so on." />
             </ListItem>
             <ListItem>
-              <Trans i18nKey="These <strong>voice credits</strong> are used to cast <strong>votes</strong> for projects on your ballot" />
+              <Trans i18nKey="Everyone will start with 99 <strong>voice credits</strong>." />
             </ListItem>
             <ListItem>
-              <Trans i18nKey="You can add up to <strong>8 projects</strong> to your ballot and distribute your voice credits between them. Choose wisely." />
-            </ListItem>
-
-            <ListItem>
-              <Trans i18nKey="Casting a vote for a project will <strong>cost the square of the number of votes you want to cast</strong> in voice credits. For example, if you would like to cast 5 votes for Project A, that will cost 25 voice credits." />
+              <Trans i18nKey="These credits will be used to cast votes for projects you have selected to support." />
             </ListItem>
             <ListItem>
-              <Trans i18nKey="You <strong>cannot use more voice credits than you have</strong>. Since each voter starts with 99 voice credits, a vote of 10 (which would cost 100 voice credits) is more than any voter can afford to pay. This means that at most, a single voter can give 9 votes to a single project - at a cost of 81 voice credits - and have 18 voice credits left to vote for other projects." />
+              <Trans i18nKey="You can add up to <strong>8 projects</strong> to your ballot, and distribute your voice credits among them. Choose wisely." />
             </ListItem>
             <ListItem>
-              <Trans i18nKey="You <strong>can submit many ballots</strong> during the voting period." />
-            </ListItem>
-
-            <ListItem>
-              <Trans i18nKey="Only the <strong>final submitted ballot will be counted</strong> toward the final tally. Trust no one." />
-            </ListItem>
-            <ListItem>
-              <Trans i18nKey="The ballot will be tallied at the end of the voting period, and the<strong>prize pool will be distributed between all the projects</strong> based on the number of votesreceived during the event (via quadratic funding)." />
+              <Trans i18nKey="You <strong>cannot use more voice credits than you have allotted</strong>. Since each voter starts with 99 voice credits, a vote of 10 (which costs 100 voice credits) is more than any one voter can afford. This means that at most, a voter can give 9 votes to a single project - at a cost of 81 voice credits - and will have 18 voice credits left to vote for other projects." />
             </ListItem>
           </UnorderedList>
         </AccordionPanel>
