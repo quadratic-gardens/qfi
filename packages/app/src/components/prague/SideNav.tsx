@@ -139,7 +139,7 @@ export const Navbar = () => {
         <ExternalLink
           display="flex"
           variant="ethLatamGreen"
-          fontSize={{ base: "lg", xl: "xl" }}
+          fontSize={{ base: "lg" }}
           w={170}
           h="40px"
           href="https://www.eventbrite.com/e/ethlatam-at-buenos-aires-tickets-374680147407"
