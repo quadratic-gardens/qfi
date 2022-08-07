@@ -37,8 +37,8 @@ export const Apply = () => {
     const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
 
     const headerYourBallotLogo = {
-        en: "your_ballot_EN.svg",
-        es: "your_ballot_ES.svg",
+        en: "project_submission_EN.svg",
+        es: "project_submission_ES.svg",
     };
 
     return (
