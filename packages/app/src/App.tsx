@@ -9,6 +9,7 @@ import { Projects } from "./pages/Projects";
 import { Ballot } from "./pages/Ballot";
 import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
+import { Apply } from "./pages/Apply";
 
 export const App = ({ shuffledProjects }) => {
   const {
@@ -33,6 +34,7 @@ export const App = ({ shuffledProjects }) => {
         >
           <Route index element={<Home />} />
           <Route path="ballot" element={<Ballot />} />
+          <Route path="apply" element={<Apply />} />
           <Route
             path="projects"
             element={<Projects shuffledProjects={shuffledProjects} />}
