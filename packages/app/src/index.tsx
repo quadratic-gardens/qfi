@@ -31,7 +31,7 @@ ReactDOM.render(
     <CSSReset />
     <DappProvider>
       <HashRouter>
-        <App shuffledProjects={shuffledProjects}/>
+        <App shuffledProjects={[]}/>
       </HashRouter>
     </DappProvider>
   </React.StrictMode>,
