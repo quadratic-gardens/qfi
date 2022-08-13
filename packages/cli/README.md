@@ -44,9 +44,9 @@
 - `ethlatamcli genkeys <amount>`: Generate a new specified amount of MACI and ETH keypairs (QR Codes inclueded).
   - `<amount>`: amount of MACI and ETH keypairs to be generated (e.g., 3000)
 - `ethlatamcli contracts:deploy <network>`: Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network.
-  - `<network>`: the network where the contracts will be deployed (e.g., xdai)
+  - `<network>`: the network where the contracts will be deployed (e.g., MATIC)
 - `ethlatamcli contracts:add-recipients <network> <path>`: Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path.
-  - `<network>`: the network where the contracts has been deployed (e.g., xdai)
+  - `<network>`: the network where the contracts has been deployed (e.g., MATIC)
   - `<path>`: the path of the CSV input file where the recipients data is stored (e.g., ~/Desktop/my*recipients_data.csv`).
     \_nb. The CSV file must contain rows organized as follows:* \* _name_ \* _tagline_ \* _description_ \* _problemSpace_ \* _ethereumAddress_ \* _contactEmail_ \* _teamName (optional)_ \* _teamDescription (optional)_ \* _githubUrl (optional)_ \* _radicleUrl (optional)_ \* _websiteUrl (optional)_ \* _twitterUr (optional)_ \* _discordUrl (optional)_ \* _bannerImageHash_ \* _thumbnailImageHash_
 
@@ -54,8 +54,8 @@
 
 - `ethlatamcli auth "test test test test test test test test test test test junk"`
 - `ethlatamcli genkeys 3000`
-- `ethlatamcli contracts:deploy xdai`
-- `ethlatamcli contracts:add-recipients xdai ~/Desktop/my_recipients_data.csv`
+- `ethlatamcli contracts:deploy MATIC`
+- `ethlatamcli contracts:add-recipients MATIC ~/Desktop/my_recipients_data.csv`
 
 ## Getting Started
 

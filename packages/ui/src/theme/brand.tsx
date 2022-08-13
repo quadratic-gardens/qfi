@@ -1,6 +1,6 @@
 import { rgba } from "polished";
-import BrandImg from "../assets/logo.png";
-import BgImg from "../assets/logo.png";
+import BrandImg from "../assets/logo.svg";
+import BgImg from "../assets/logo.svg";
 
 export const defaultTheme: {
   primary: string;
@@ -22,9 +22,9 @@ export const defaultTheme: {
 } = {
   primary: "#9c1783",
   primaryAlpha: rgba("#10153d", 0.9),
-  secondary: rgba("#10153d", 0.5),
+  secondary: rgba("#8796FA", 0.85),
   secondaryAlpha: rgba("#10153d", 0.75),
-  background: "#0d152e",
+  background: "#1A1A1A",
   backgroundAlpha: "#03061B",
   backgroundOverlayOpacity: 0.75,
   mode: "#FFFFFF",
