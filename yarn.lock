@@ -19662,7 +19662,7 @@ qaci-contracts@^1.1.9:
     hardhat-contract-sizer "^2.0.3"
     module-alias "^2.2.2"
 
-qaci-core@^1.1.9:
+qaci-core@^1.1.0, qaci-core@^1.1.9:
   version "1.1.9"
   resolved "https://registry.npmjs.org/qaci-core/-/qaci-core-1.1.9.tgz"
   integrity sha512-Pcu5OZlKKMz4q/9G2hFkMeCiDmkq6tOAeftDQlBW9tlqZNayJESXdzrIQvZtUcEp2bw4ZNhorkytiLk89QzWHw==

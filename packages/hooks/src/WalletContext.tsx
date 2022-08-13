@@ -72,18 +72,6 @@ export const providerOptions: IProviderOptions = {
       },
     },
   },
-  walletlink: {
-    package: CoinbaseWalletSDK,
-    options: {
-      appName: "QFI",
-      infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
-      rpc: {
-        1: SUPPORTED_NETWORKS["0x1"].rpc,
-        100: SUPPORTED_NETWORKS["0x64"].rpc,
-        1337: SUPPORTED_NETWORKS["0x539"].rpc,
-      },
-    },
-  },
   // .. Other providers
 };
 

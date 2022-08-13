@@ -27,12 +27,17 @@ import {
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 
+function delay(n: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, n * 1000)
+  })
+}
 
 /**
  * Initialize command.
  * @param network <string> - the network where the contracts are going to be deployed.
  */
-async function recover(network: string, maciIndex: string) {
+async function recover(network: string) {
   clear()
 
   console.log(header)
@@ -94,15 +99,20 @@ async function recover(network: string, maciIndex: string) {
     // Send txs.
     let spinner = customSpinner(`SKIP: Set MACI instance for SimpleHackathon contract`, "point")
     spinner.start()
+    await delay(3)
 
     spinner.stop()
 
     // NOTE: Set up vk registry
 
-    spinner = customSpinner(`SKIP: Set VKs`, "point")
+    spinner = customSpinner(`Recovery Mode Detected: calculating state diff`, "point")
     spinner.start()
+    await delay(3)
 
-    console.log(`\n${logSymbols.info} SKIP: you are about to register [16] projects\n`)
+    spinner.stop()
+  
+
+    console.log(`\n${logSymbols.info} SKIP: you are about to register projects\n`)
 
     // Get CSV records.
 
@@ -112,12 +122,23 @@ async function recover(network: string, maciIndex: string) {
       `\n${logSymbols.success} You are about to register ballots, DO NOT EXIT RECOVERY FROM HERE IS HARD 🎊\n`
     )
 
+    spinner = customSpinner(`Waiting for next block to fetch user state index`, "point")
+    spinner.start()
+    await delay(30)
+
+    spinner.stop()
+
+    
+
     const stateIndexes = []
 
     const hacks: { [k: string]: string } = {}
-    let j = Number(maciIndex)
-    for await (const maciPK of userSignUps) {
-      const spinner = customSpinner(`Sign up for user in position ${chalk.bold(j)}`, "point")
+    const maciStateIndex = Number(await qfi.numSignUps())
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = maciStateIndex; i < userSignUps.length; i++) {
+      const maciPK = userSignUps[i]
+      const spinner = customSpinner(`Sign up for user in position ${chalk.bold(i)}`, "point")
       spinner.start()
 
       // Prepare data for tx.
@@ -131,16 +152,11 @@ async function recover(network: string, maciIndex: string) {
       })
       await tx.wait()
 
-      // Read the event from logs.
-      // const iface = qfi.interface
-      // const signUpEvent = iface.parseLog(logs[logs.length - 1])
-      const stateIndex: string = j.toString()
-
-      stateIndexes.push(stateIndex)
+      const stateIndex: string = i.toString()
 
       spinner.stop()
       console.log(
-        `${logSymbols.success} User #${chalk.bold(j)} (${chalk.bold(
+        `${logSymbols.success} User #${chalk.bold(i)} (${chalk.bold(
           maciPK
         )}) has been successfully registered on-chain with a state index of ${stateIndex}`
       )
@@ -151,7 +167,6 @@ async function recover(network: string, maciIndex: string) {
         stateIndex
       })
       hacks[maciPK] = stateIndex
-      j++
     }
 
     // Create CSV file.
@@ -170,7 +185,7 @@ async function recover(network: string, maciIndex: string) {
       .connect(deployer)
       .deployGrantRound(SEVENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
         gasPrice: doubleGasPrice,
-        gasLimit: ethers.utils.hexlify(30000000)
+        gasLimit: ethers.utils.hexlify(8000000)
       })
 
     await grantRoundTx.wait()

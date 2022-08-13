@@ -20,7 +20,6 @@ export const MagikButton: React.FC<MagikButtonProps> = ({
 }) => {
   const {
     connectWallet,
-    isConnecting,
     isConnected,
     disconnect,
     address,
@@ -44,11 +43,10 @@ export const MagikButton: React.FC<MagikButtonProps> = ({
 
   return (
     <Button
-      disabled={isConnecting}
       fontWeight="bold"
       h={20}
       leftIcon={SwitchIcon}
-      onClick={() => !isConnecting && switchAction()}
+      onClick={() => switchAction()}
       variant="ethLatamPurple"
       w="full"
       {...props}

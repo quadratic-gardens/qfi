@@ -101,9 +101,8 @@ program
   .command("recover")
   .description("continues signups at specified stateindex")
   .argument("<network>", "the network where the contracts has been deployed")
-  .argument("<maciIndex>", "the next MACI key index to continue registering users")
-  .action((network: string, maciIndex: string) => {
-    recover(network, maciIndex)
+  .action((network: string) => {
+    recover(network)
   })
   program
   .command("tally")
