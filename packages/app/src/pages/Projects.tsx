@@ -172,8 +172,8 @@ export const Projects = ({ shuffledProjects }) => {
                       >
                         <Image
                           borderRadius="full"
-                          src={project.logo}
-                          alt={project.name}
+                          src={project.logoCdnUrl}
+                          alt={project.projectName}
                         />
                       </AspectRatio>
                       <VStack
@@ -189,7 +189,7 @@ export const Projects = ({ shuffledProjects }) => {
                             lineHeight="24px"
                             fontWeight="700"
                           >
-                            {project.name}
+                            {project.projectName}
                           </Heading>
                           <Text
                             color="gray.600"
@@ -198,7 +198,7 @@ export const Projects = ({ shuffledProjects }) => {
                             fontWeight="400"
                             overflow="clip"
                           >
-                            {shortenEthAddress(project.address)}
+                            {shortenEthAddress(project.ethereumAddress)}
                           </Text>
                         </VStack>
                         <Text fontSize="sm" lineHeight="16px" fontWeight="400">
