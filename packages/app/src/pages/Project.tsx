@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 export function Project() {
   const { t } = useTranslation();
 
-  const backgroundColor = useColorModeValue("gray.100", "gray.800");
+  const backgroundColor = useColorModeValue("gray.100", "#000000");
   const toast = useToast();
   let { projectId } = useParams();
   let navigate = useNavigate();
@@ -171,7 +171,7 @@ export function Project() {
                 overflow="hidden"
               >
                 <Heading my={0.5} px={2} fontSize="lg" lineHeight="24px">
-                  {project.name}
+                  {project.projectName}
                 </Heading>
                 <Text
                   px={2}
@@ -180,7 +180,7 @@ export function Project() {
                   lineHeight="16px"
                   fontWeight="400"
                 >
-                  {project.address}
+                  {project.ethereumAddress}
                 </Text>
               </VStack>
             </HStack>
@@ -198,7 +198,7 @@ export function Project() {
                 sx={{
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  background: `rgb(26, 31, 41) url('${project?.banner}') `,
+                  background: `rgb(26, 31, 41) url('${project?.bannerImageLink}') `,
                   backgroundSize: "cover",
                 }}
               >
@@ -207,8 +207,8 @@ export function Project() {
                     h="full"
                     w="auto"
                     position="relative"
-                    src={project.banner}
-                    alt={project.name}
+                    src={project.bannerImageLink}
+                    alt={project.projectName}
                   />
                 </AspectRatio>
               </Box>
@@ -235,8 +235,8 @@ export function Project() {
               >
                 <Image
                   borderRadius="full"
-                  src={project.logo}
-                  alt={project.name}
+                  src={project.logoCdnUrl}
+                  alt={project.projectName}
                 />
               </AspectRatio>
 
@@ -297,7 +297,7 @@ export function Project() {
                   lineHeight={"24px"}
                   fontWeight="700"
                 >
-                  {project.name}
+                  {project.projectName}
                 </Heading>
                 <Text
                   color="gray.600"
@@ -305,7 +305,7 @@ export function Project() {
                   lineHeight="14px"
                   fontWeight="400"
                 >
-                  {project.address}
+                  {project.ethereumAddress}
                 </Text>
               </VStack>
               <Text fontSize="sm" lineHeight="16px" fontWeight="400">
@@ -317,7 +317,7 @@ export function Project() {
                   <b>{t("Project Ballot ID")}:</b> {project.id}
                 </Text>
                 <Text fontSize="sm" lineHeight="16px" fontWeight="400">
-                  <b>{t("Project Website")}:</b> {project.url}
+                  <b>{t("Project Website")}:</b> {project.website}
                 </Text>
               </VStack>
             </VStack>

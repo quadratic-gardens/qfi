@@ -41,7 +41,7 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
               aria-label="Ballot"
             />
           </Tooltip>
-          {/* <Tooltip label={t("Projects")} placement="right">
+          <Tooltip label={t("Projects")} placement="right">
             <IconButton
               to={`/projects?${searchParams.toString()}`}
               as={Link}
@@ -49,7 +49,7 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
               icon={<Icon as={HiCollection} boxSize={4} />}
               aria-label="Projects"
             />
-          </Tooltip> */}
+          </Tooltip>
         </VStack>
         <VStack>
           <Tooltip label={t("Guide")} placement="right">
