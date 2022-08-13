@@ -6,7 +6,6 @@ import {
   Flex,
   Image,
   AspectRatio,
-  Tooltip,
   Text,
   Heading,
   Box,
@@ -14,23 +13,28 @@ import {
   ListItem,
   Accordion,
   AccordionButton,
-  AccordionIcon,
   AccordionItem,
   AccordionPanel,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
-import { getProjects, getShuffledProjects } from "../data";
 import { Option } from "../propTypes";
 
+import { useTranslation, Trans } from "react-i18next";
+
 const shortenEthAddress = (address: string) => {
-  return address.substring(0, 6) + "..." + address.substring(address.length - 4);
+  return (
+    address.substring(0, 6) + "..." + address.substring(address.length - 4)
+  );
 };
 
-export const Projects = () => {
+export const Projects = ({ shuffledProjects }) => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
   const color = useColorModeValue("gray.800", "gray.700");
   let [searchParams] = useSearchParams();
+
+  const { t } = useTranslation();
+
   return (
     <>
       <Flex
@@ -55,82 +59,91 @@ export const Projects = () => {
             background: "transparent",
             borderRadius: "0px",
           },
-        }}>
+        }}
+      >
         <VStack spacing={0} w="full">
           <Container
             h="full"
             w="full"
-            maxWidth={{ base: "container.sm", md: "container.sm", lg: "container.md" }}
+            maxWidth={{
+              base: "container.sm",
+              md: "container.sm",
+              lg: "container.md",
+            }}
             px={0}
-            pt={20}>
+            pt={20}
+          >
             <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
-              <VStack pl={4} spacing={0} alignItems={"flex-start"} w="full">
-                <Heading fontSize={"5xl"} mb={0} fontWeight="">
-                  Project Directory
+              <VStack pl={4} spacing={0} alignItems="flex-start" w="full">
+                <Heading fontSize="5xl" mb={0}>
+                  {t("Project Directory")}
                 </Heading>
 
-                <Accordion fontSize="xs" allowToggle>
+                <Accordion allowToggle>
                   <AccordionItem border="none">
-                    <VStack>
-                      <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="xs">
-                        This is a directory of projects! This page will be updated once the event starts to let you add
-                        projects to a real ballot and vote for projects that you meet at the event. Tap here to learn
-                        more 📖🧐.
-                        <AccordionIcon></AccordionIcon>
-                      </Text>
-                    </VStack>
-                    <AccordionPanel pb={4}>
-                      <UnorderedList marginInlineStart={"1rem !important"} fontSize="xs" w="full">
-                        <ListItem>
-                          When a voter is whitelisted they receive a{" "}
-                          <Tooltip label="pseudo-randomly assigned" placement="top">
-                            <b>MACI passphrase</b>
-                          </Tooltip>{" "}
-                          and voice credits.
-                        </ListItem>
-                        <ListItem>
-                          Everyone will begin with 99 <b>voice credits</b>
-                        </ListItem>
-                        <ListItem>
-                          These<b> voice credits </b> are used to cast <b>votes</b> for projects on your ballot
-                        </ListItem>
-                        <ListItem>
-                          You can add up to <b>8 projects</b> to your ballot and distribute your voice credits between
-                          them. Choose wisely.
-                        </ListItem>
-
-                        <ListItem>
-                          Casting a vote for a project will{" "}
-                          <b>cost the square of the number of votes you want to cast</b> in voice credits. For example,
-                          if you would like to cast 5 votes for Project A, that will cost 25 voice credits.
-                        </ListItem>
-                        <ListItem>
-                          {" "}
-                          You <b>cannot use more voice credits than you have</b>. Since each voter starts with 99 voice
-                          credits, a vote of 10 (which would cost 100 voice credits) is more than any voter can afford
-                          to pay. This means that at most, a single voter can give 9 votes to a single project - at a
-                          cost of 81 voice credits - and have 18 voice credits left to vote for other projects.{" "}
-                        </ListItem>
-                        <ListItem>
-                          {" "}
-                          You <b>can submit many ballots</b> during the voting period.{" "}
-                        </ListItem>
-
-                        <ListItem>
-                          Only the <b>final submitted ballot will be counted</b> toward the final tally. Trust no one.
-                        </ListItem>
-                        <ListItem>
-                          The ballot will be tallied at the end of the voting period, and the{" "}
-                          <b>prize pool will be distributed between all the projects</b> based on the number of votes
-                          received during the event (via quadratic funding).
-                        </ListItem>
-                      </UnorderedList>
-                    </AccordionPanel>
+                    {({ isExpanded }) => (
+                      <>
+                        <VStack
+                          px={0}
+                          flexDirection="row"
+                          justifyContent="space-between"
+                          alignItems="start"
+                          as={AccordionButton}
+                        >
+                          <Text
+                            w={{ base: "85%", md: "95%" }}
+                            textAlign="justify"
+                          >
+                            <Trans i18nKey="This is a directory of projects!" />
+                          </Text>
+                          {isExpanded ? (
+                            <Image src="chevron_up.svg" alt={t("Collapse")} />
+                          ) : (
+                            <Image src="chevron_down.svg" alt={t("Expand")} />
+                          )}
+                        </VStack>
+                        <AccordionPanel pb={4}>
+                          <UnorderedList
+                            fontFamily="Helvetica"
+                            marginInlineStart="1rem !important"
+                            w="full"
+                          >
+                            <ListItem>
+                              <Trans i18nKey="When a voter is whitelisted" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="Everyone will begin with 99 voice credits" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="These voice credits are used to cast votes" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="You can add up to 8 projects" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="Casting a vote" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="You cannot use more voice credits than you have" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="You can submit many ballots" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="Only the final submitted ballot will be counted" />
+                            </ListItem>
+                            <ListItem>
+                              <Trans i18nKey="The ballot will be tallied at the end of the voting period" />
+                            </ListItem>
+                          </UnorderedList>
+                        </AccordionPanel>
+                      </>
+                    )}
                   </AccordionItem>
                 </Accordion>
               </VStack>
-              <VStack spacing={0} alignItems={"flex-start"} w="full">
-                {getShuffledProjects().map((project: Option) => (
+              <VStack spacing={0} alignItems="flex-start" w="full">
+                {shuffledProjects.map((project: Option) => (
                   <Box
                     _hover={{
                       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
@@ -145,7 +158,8 @@ export const Projects = () => {
                     pb={3}
                     pl={4}
                     minH={"100px"}
-                    w={"full"}>
+                    w={"full"}
+                  >
                     <HStack spacing={0} alignItems="flex-start" w="full">
                       <AspectRatio
                         borderColor={"grey.800"}
@@ -154,29 +168,42 @@ export const Projects = () => {
                         w={{ base: "50px", md: "50px" }}
                         rounded="full"
                         ratio={1}
-                        mt={1}>
-                        <Image borderRadius="full" src={project.logo} alt={project.name} />
+                        mt={1}
+                      >
+                        <Image
+                          borderRadius="full"
+                          src={project.logo}
+                          alt={project.name}
+                        />
                       </AspectRatio>
-                      <VStack alignItems="flex-start" w="full" spacing={1.5} px={{ base: "4", md: "3" }}>
+                      <VStack
+                        alignItems="flex-start"
+                        w="full"
+                        spacing={1.5}
+                        px={{ base: "4", md: "3" }}
+                      >
                         <VStack alignItems="flex-start" w="full" spacing={0}>
-                          <Heading my={0.5} fontSize={"lg"} lineHeight={"24px"} fontWeight="700">
+                          <Heading
+                            my={0.5}
+                            fontSize="lg"
+                            lineHeight="24px"
+                            fontWeight="700"
+                          >
                             {project.name}
                           </Heading>
                           <Text
-                            color={"gray.600"}
-                            fontSize={"sm"}
-                            lineHeight={"14px"}
+                            color="gray.600"
+                            fontSize="sm"
+                            lineHeight="14px"
                             fontWeight="400"
-                            overflow={"clip"}>
+                            overflow="clip"
+                          >
                             {shortenEthAddress(project.address)}
                           </Text>
                         </VStack>
-                        <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
+                        <Text fontSize="sm" lineHeight="16px" fontWeight="400">
                           {project.tagline}
                         </Text>
-                        {/* <Text fontSize={"sm"} lineHeight={"16px"} fontWeight="400">
-           
-          </Text> */}
                       </VStack>
                     </HStack>
                   </Box>
