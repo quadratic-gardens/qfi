@@ -737,7 +737,7 @@ export const Ballot = () => {
                 {numChars ?? "-"} / 71
               </FormHelperText>
               <Button
-                variant="ethLatamBlack"
+                variant="ethLatamGreen"
                 fontSize={{ base: "lg", xl: "xl" }}
                 type="submit"
                 w={{ base: "full", md: "80%" }}
