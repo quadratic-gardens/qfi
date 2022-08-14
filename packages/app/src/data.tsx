@@ -163,6 +163,19 @@ let projects = [
     bannerImageLink: "https://pbs.twimg.com/profile_banners/1446942496093790208/1634817188/1500x500",
     recipientId: 12,
     id: "12",
+  },
+  {
+    projectName: "Expediente Cripto",
+    tagline: "Expediente Cripto es un proyecto educativo legal vinculado con la Tecnología Blockchain",
+    description:
+      "Somos un grupo de tres estudiantes de abogacía que queremos compartir lo que sabemos de cripto y derecho. Comenzamos con una temporada de spaces e invitados abogados y abogadas: 1) Token en el Derecho, 2) NFT y Propiedad Intelectual, 3) Top 5 países criptofriendly en regulación, 4) Sueldos en cripto , 5) Demandas en Web3, 6) Smart Contracts y Derecho, 7) Estafas en Web3, 8) Cibercrimen, 9) Derecho Informático y programación, 10) Metaverso y Derecho. Queremos ser el primer proyecto de comunicación legal cripto para educar sobre estos temas. Ademas contamos con el armado de un panel que realizamos en eventos sobre 5 tips criptojuridicos que cualquier proyecto Web3 debe considerar a la hora de comenzar.",
+    ethereumAddress: "0x1854e5e725C2e55B0C4C323a13e1ca26333F40a2",
+    website: "https://twitter.com/naticchain",
+    thumbnailImageLink: "https://pbs.twimg.com/profile_images/1504102639801413641/9gNRInhu_400x400.jpg",
+    logoCdnUrl: "https://pbs.twimg.com/profile_images/1504102639801413641/9gNRInhu_400x400.jpg",
+    bannerImageLink: "https://pbs.twimg.com/profile_banners/265023873/1647441035/1500x500",
+    recipientId: 13,
+    id: "13",
   }
 
 ];
@@ -174,7 +187,7 @@ export function getProjects() {
 export function getRecipientIdbyId(id) {
   console.log(id)
   const p = projects.find((p) => p.id === id);
-  
+
 
   return p.recipientId;
 }
@@ -187,7 +200,7 @@ export function getProject(id: string) {
       description: "404 Description not found",
       ethereumAddress: "404 Address not found",
       website: "404 URL not found",
-      thumbnailImageLink:"https://source.unsplash.com/random",
+      thumbnailImageLink: "https://source.unsplash.com/random",
       logoCdnUrl: "https://source.unsplash.com/random",
       bannerImageLink: "https://source.unsplash.com/random",
       recipientId: 0,
