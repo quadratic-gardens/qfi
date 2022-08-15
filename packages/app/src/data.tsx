@@ -60,9 +60,11 @@ let projects = [
     ethereumAddress: "0x0087a081a9B430fd8f688c6ac5dD24421BfB060D",
     website: "https://twitter.com/DeFi_LATAM",
     thumbnailImageLink:
-      "https://drive.google.com/file/d/1dITfiQgJrPlbTA8M_cNNRmhE_hRzHVXf/view?usp=sharing",
-    logoCdnUrl: "https://defilatam.com/img/logo.svg",
-    bannerImageLink: "https://defilatam.com/img/logo.svg",
+      "https://pbs.twimg.com/profile_images/1523097375316840459/tBMAmMIz_400x400.jpg",
+    logoCdnUrl:
+      "https://pbs.twimg.com/profile_images/1523097375316840459/tBMAmMIz_400x400.jpg",
+    bannerImageLink:
+      "https://pbs.twimg.com/profile_banners/1252210377858965504/1649808165/1500x500",
     recipientId: 4,
     id: "4",
   },

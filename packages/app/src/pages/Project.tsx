@@ -199,8 +199,6 @@ export function Project() {
               <Box
                 h="full"
                 w="full"
-                position="relative"
-                mt="-13%"
                 sx={{
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
@@ -208,15 +206,14 @@ export function Project() {
                   backgroundSize: "cover",
                 }}
               >
-                <AspectRatio position="relative" ratio={16 / 9}>
-                  <Image
-                    h="full"
-                    w="auto"
-                    position="relative"
-                    src={project.bannerImageLink}
-                    alt={project.projectName}
-                  />
-                </AspectRatio>
+                <Image
+                  h="full"
+                  w="full"
+                  src={project.bannerImageLink}
+                  alt={project.projectName}
+                  objectFit="cover"
+                  backgroundRepeat="no-repeat"
+                />
               </Box>
             </VStack>
             <HStack
