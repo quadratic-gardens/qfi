@@ -73,7 +73,7 @@ export const BallotOption = ({
       h={{ sm: 150, md: 90 }}
     >
       <VStack
-      
+
         borderRightColor="#FAF7F5"
         borderRightWidth={2}
         spacing={0}
@@ -94,7 +94,7 @@ export const BallotOption = ({
         position="relative"
         justifyContent="flex-start"
         alignItems="stretch"
-        w={{ base: "full", md: "full" }}
+        w={{ base: "40%", md: "full" }}
         py={2.5}
         px={2}
       >
@@ -126,21 +126,24 @@ export const BallotOption = ({
         <Text
           as={Link}
           to={`${to}?${searchParams.toString()}` ?? "/projects"}
-          display={{ base: "flex", md: "none" }}
+          display={{ base: "block", md: "none" }}
           fontSize="xs"
           fontWeight="light"
         >
           {ballotOption?.website}
         </Text>
-
+      </VStack>
+      <VStack
+        position="relative"
+        justifyContent="flex-start"
+        alignItems="stretch"
+        spacing={0}
+        maxW={{ base: "fit-content", md: "70px" }}>
         <Tooltip
           label={`remove ${ballotOption?.projectName} from ballot`}
           placement="left"
         >
           <IconButton
-            position="absolute"
-            right={0}
-            top={0}
             rounded="0"
             size="sm"
             fontSize="lg"
@@ -152,13 +155,6 @@ export const BallotOption = ({
             aria-label={`remove ${ballotOption?.projectName} from ballot`}
           />
         </Tooltip>
-      </VStack>
-      <VStack
-        h="full"
-        spacing={0}
-        justifyContent="center"
-        alignItems="center"
-        maxW={{ base: "fit-content", md: "70px" }}>
         <Center boxSize={"60px"}>
           <Tooltip
             label={`Add one more vote for ${((votes ?? 0) + 1) ** 2 - (votes ?? 0) ** 2} more voice credits`}
@@ -203,7 +199,7 @@ export const BallotOption = ({
                   zIndex={1}
                   boxSize={"8"}
                   letterSpacing="-0.5px"
-               
+
                   _hover={{
                     color: "#80FF9F",
                     transform: "scale(1.1)",

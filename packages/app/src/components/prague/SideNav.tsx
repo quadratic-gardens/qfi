@@ -24,7 +24,7 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
   return (
     <div style={{ display: "flex", paddingTop: 40 }}>
       <VStack
-        zIndex={9}
+        zIndex={1}
         p={4}
         justifyContent="space-between"
         alignItems="center"

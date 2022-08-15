@@ -27,6 +27,12 @@ import { getProject } from "../data";
 
 import { useTranslation } from "react-i18next";
 
+const shortenEthAddress = (address: string) => {
+  return (
+    address.substring(0, 6) + "..." + address.substring(address.length - 4)
+  );
+};
+
 export function Project() {
   const { t } = useTranslation();
 
@@ -180,7 +186,7 @@ export function Project() {
                   lineHeight="16px"
                   fontWeight="400"
                 >
-                  {project.ethereumAddress}
+                  {shortenEthAddress(project.ethereumAddress)}
                 </Text>
               </VStack>
             </HStack>
@@ -305,7 +311,7 @@ export function Project() {
                   lineHeight="14px"
                   fontWeight="400"
                 >
-                  {project.ethereumAddress}
+                  {shortenEthAddress(project.ethereumAddress)}
                 </Text>
               </VStack>
               <Text fontSize="sm" lineHeight="16px" fontWeight="400">

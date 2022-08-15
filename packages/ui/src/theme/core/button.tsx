@@ -51,7 +51,7 @@ const Button = {
         background: "#282828",
       },
     },
-    ethLatamBlack: {
+    ethLatamGreen: {
       height: "50px",
       color: "#80FF9F",
       justifyContent: "center",
@@ -72,6 +72,31 @@ const Button = {
       _focus: {
         transition: "all 0s",
         color: "#80FF9F",
+        scale: "1",
+        background: "#3D3D3D",
+      },
+    },
+    ethLatamBlack: {
+      height: "50px",
+      color: "#FAF7F5",
+      justifyContent: "center",
+      padding: "0 36px",
+      borderRadius: 0,
+      alignItems: "center",
+      background: "#0B0C0D",
+      fontWeight: 400,
+      fontFamily: "NeuePixelGrotesk",
+      border: "1.79753px solid #FAF7F5",
+      boxShadow: "-4.49382px 4.49382px 0px #FAF7F5",
+      _hover: {
+        transition: "all 0s",
+        color: "#FAF7F5",
+        scale: "1",
+        background: "#282828",
+      },
+      _focus: {
+        transition: "all 0s",
+        color: "#FAF7F5",
         scale: "1",
         background: "#3D3D3D",
       },

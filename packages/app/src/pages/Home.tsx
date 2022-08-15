@@ -76,21 +76,13 @@ export const Home = () => {
               >
                 {t("GET STARTED")}
               </Button>
-              {/* <Button
+              <Button
                 as={RouterLink}
                 variant={"ethLatamWhite"}
                 fontSize={{ base: "md", xl: "xl" }}
                 to={`/projects?${searchParams.toString()}`}
               >
                 {t("CHECK OUT THE PROJECTS")}
-              </Button> */}
-              <Button
-                as={RouterLink}
-                variant={"ethLatamWhite"}
-                fontSize={{ base: "md", xl: "xl" }}
-                to={`/apply?${searchParams.toString()}`}
-              >
-                {t("APPLY FOR FUNDING")}
               </Button>
             </Stack>
           </VStack>
