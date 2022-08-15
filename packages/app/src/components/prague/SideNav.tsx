@@ -8,7 +8,6 @@ import {
   Tooltip,
   useColorModeValue,
   VStack,
-  Text
 } from "@chakra-ui/react";
 import { MdDashboard } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
