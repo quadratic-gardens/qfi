@@ -5,6 +5,7 @@ import {
   Grid,
   GridItem,
   Flex,
+  Image,
   Text,
   Heading,
   Button,
@@ -698,10 +699,19 @@ export const Ballot = () => {
             </GridItem>
             {isViewportMd && (
               <GridItem
-                colSpan={{ base: 1, md: 2 }}
-                w={{ base: "full", md: "90%" }}
-                m={{ base: "32px auto 0 auto", md: "auto" }}
+                colSpan={2}
+                rowSpan={2}
+                w="90%"
+                justifySelf={{ md: "center", xl: "end" }}
               >
+                <Image
+                  mt={2}
+                  mb={4}
+                  w="full"
+                  src="vote_on_polygon.svg"
+                  alt={t("VOTE ON POLYGON")}
+                />
+
                 <SubmitBallotButton
                   disableSubmitButton={disableSubmitButton}
                   isConnected={isConnected}
@@ -748,13 +758,16 @@ export const Ballot = () => {
               </Button>
             </FormControl>
             {!isViewportMd && (
-              <SubmitBallotButton
-                disableSubmitButton={disableSubmitButton}
-                isConnected={isConnected}
-                my={6}
-                onSubmit={handleSubmit}
-                t={t}
-              />
+              <VStack mt={6}>
+                <Image src="vote_on_polygon.svg" alt={t("VOTE ON POLYGON")} />
+                <SubmitBallotButton
+                  disableSubmitButton={disableSubmitButton}
+                  isConnected={isConnected}
+                  my={2}
+                  onSubmit={handleSubmit}
+                  t={t}
+                />
+              </VStack>
             )}
           </form>
         </VStack>
