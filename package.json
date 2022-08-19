@@ -8,6 +8,7 @@
   },
   "private": true,
   "devDependencies": {
+    "cz-conventional-changelog": "3.3.0",
     "husky": "^7.0.0",
     "lerna": "^4.0.0",
     "lint-staged": "^12.3.7"
@@ -33,7 +34,7 @@
     "build:hooks": "yarn workspace @qfi/hooks run build",
     "test": "yarn workspaces run test",
     "test:contracts": "yarn workspace @qfi/contracts run test",
-    "deploy:subgraph":"yarn workspace @qfi/subgraph run deploy",
+    "deploy:subgraph": "yarn workspace @qfi/subgraph run deploy",
     "prepare": "husky install"
   },
   "keywords": [
@@ -43,5 +44,10 @@
   "bugs": {
     "url": "https://github.com/"
   },
-  "homepage": "https://github.com/"
+  "homepage": "https://github.com/",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
