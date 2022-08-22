@@ -15,4 +15,4 @@ concurrency:
 jobs:
 
   build:
-    uses: ./.github/workflows/reusable-subgraoh-build.yml
+    uses: ./.github/workflows/reusable-subgraph-build.yml
