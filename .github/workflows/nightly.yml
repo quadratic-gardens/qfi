@@ -1,0 +1,15 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  contracts:
+    uses: ./.github/workflows/reusable-contracts-build.yml
+
+  frontend:
+    uses: ./.github/workflows/reusable-frontend-build.yml
+
+  subgraph:
+    uses: ./.github/workflows/reusable-subgraph-build.yml

@@ -1,0 +1,43 @@
+name: Publish-NPM
+
+on:
+  push: 
+    branches: [ main, dev ]
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable-contracts-build.yml
+
+  publish:
+    needs: build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+          
+      - name: Build
+        run: |
+          CI=false yarn run build:contracts
+          CI=false yarn workspace @quadratic-funding/subgraph codegen
+          CI=false yarn run build:subgraph
+
+      - name: Publish NPM
+        run: |
+          # Prevent `git commit error` when running `lerna version`
+          # It will not pushed to GitHub. It is ephemeral
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          
+          npx lerna version 0.0.0-${GITHUB_REF##*/}.$(git rev-parse --short HEAD) --no-push --yes
+          npx lerna publish from-git --dist-tag ${GITHUB_REF##*/} --yes
+        env:
+           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
