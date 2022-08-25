@@ -127,6 +127,12 @@ contract GrantRound is Poll {
         Message[] calldata _messages,
         PubKey[] calldata _encPubKeys
     ) external {
+        // Check that the two arrays have the same length
+        require(
+            _messages.length == _encPubKeys.length, 
+            "GrantRound: _messages and _encPubKeys should be the same length"
+        );
+
         uint256 batchSize = _messages.length;
         for (uint8 i = 0; i < batchSize; i++) {
             publishMessage(_messages[i], _encPubKeys[i]);

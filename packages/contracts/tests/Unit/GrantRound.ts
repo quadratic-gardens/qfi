@@ -329,6 +329,28 @@ describe("Grant Round", () => {
       ).to.be.revertedWith("PollE03");
     });
 
+    it("revert - array length mismatch", async () => {
+      // Mocks.
+      // nb. in this case the return from enqueue() it is not useful.
+      await mockMessageAq.mock.enqueue
+        .withArgs(hashMessangeAndEncPubKey)
+        .returns(0);
+
+      // Sending batchMessage with mismatched arrays
+      await expect(
+        grantRound
+          .connect(voter)
+          .publishMessageBatch(
+            [message, message, message, message], // Extra message (4 messages and 3 public keys)
+            [
+              coordinatorMaciPublicKey.asContractParam(),
+              coordinatorMaciPublicKey.asContractParam(),
+              coordinatorMaciPublicKey.asContractParam(),
+            ]
+          )
+      ).to.be.revertedWith("GrantRound: _messages and _encPubKeys should be the same length"); 
+    });
+
     it("revert - max number of messages reached", async () => {
       // Mocks.
       await mockMessageAq.mock.enqueue
