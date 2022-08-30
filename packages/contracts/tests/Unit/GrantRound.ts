@@ -1425,4 +1425,37 @@ describe("Grant Round", () => {
       // );
     });
   });
+  // TODO look how to make this work with recipient registry 
+  describe("transferMatchingFunds()", async () => {
+    it("revert - not enough funds for payout", async () => {
+      const voteOptionIndex = 1;
+      // First cancel
+      await expect(grantRound.connect(deployer).cancel())
+        .to.emit(grantRound, "GrantRoundCancelled")
+        .withArgs(true, true);
+ 
+      expect(await grantRound.isFinalized()).to.be.true;
+      expect(await grantRound.isCancelled()).to.be.true;
+
+      // Mocks.
+      const dummyBalance = 100;
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(grantRound.address)
+        .returns(dummyBalance);
+
+      const deployTD = await grantRound.connect(deployer).getDeployTimeAndDuration()
+
+      // Mock 
+      await mockRecipientRegistry.mock.getRecipientAddress
+        .withArgs(1, deployTD[0], Number(deployTD[0]) + Number(deployTD[1]))
+        .returns(recipientAddress);
+      
+      // Now that the state is both cancelled and finalized we can call transferMatchingFunds()
+      await expect(grantRound.connect(deployer).transferMatchingFunds(
+          voteOptionIndex,
+          dummyBalance + 1,
+          mockBaseERC20Token.address,
+      )).to.be.revertedWith("GrantRound: not enough funds in the contract to transfer matching funds")
+    });
+  });
 });

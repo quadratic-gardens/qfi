@@ -304,9 +304,15 @@ contract GrantRound is Poll {
         );
         // Factory contract is the default funding source
         uint256 balance = roundToken.balanceOf(address(this));
-        if (balance >= _payoutAmount) {
-            roundToken.safeTransfer(recipient, _payoutAmount);
-        }
+        
+        // Check that we have enough funds to do the transfer
+        require(
+            balance >= _payoutAmount,
+            "GrantRound: not enough funds in the contract to transfer matching funds"
+        );
+        // Do the transfer
+        roundToken.safeTransfer(recipient, _payoutAmount);
+        
         emit FundsClaimed(recipient, _voteOptionIndex, _payoutAmount);
     }
 }

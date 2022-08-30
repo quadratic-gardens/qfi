@@ -446,7 +446,7 @@ contract QFI is MACI, FundsManager {
         GrantRound g = currentGrantRound;
 
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
-        transferMatchingFunds(g);
+        _transferMatchingFunds(g);
         //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
         g.finalize(_alphaDenominator);
 

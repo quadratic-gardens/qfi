@@ -1284,7 +1284,6 @@ describe("QFI", () => {
       await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
       await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
 
-      
       await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
         .to.emit(qfi, "GrantRoundFinalized")
         .withArgs(mockGrantRound.address, 4);

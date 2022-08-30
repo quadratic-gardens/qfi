@@ -76,7 +76,7 @@ contract FundsManager is Ownable {
      * @param _totalSpent Total amount of spent voice credits.
      * @param _totalSpentSalt The salt.
      */
-    function transferMatchingFunds(
+    function _transferMatchingFunds(
         // uint256 _totalSpent,
         // uint256 _totalSpentSalt,
         GrantRound currentRound
