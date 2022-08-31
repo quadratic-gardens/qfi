@@ -90,6 +90,7 @@ contract GrantRoundFactory is
      * @param _coordinatorPubKey PubKey stored in memory, MACI pubkey of the coordinator of the GrantRound
      * @param _maci VkRegistry
      * @param _grantRoundOwner address stored in memory
+     
      */
     /*
      * Deploy a new Poll contract and AccQueue contract for messages.

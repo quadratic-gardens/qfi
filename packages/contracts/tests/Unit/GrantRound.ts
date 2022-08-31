@@ -1442,6 +1442,9 @@ describe("Grant Round", () => {
       await mockBaseERC20Token.mock.balanceOf
         .withArgs(grantRound.address)
         .returns(dummyBalance);
+      await mockBaseERC20Token.mock.balanceOf 
+        .withArgs(recipientAddress)
+        .returns(dummyBalance)
 
       const deployTD = await grantRound.connect(deployer).getDeployTimeAndDuration()
 
@@ -1455,7 +1458,48 @@ describe("Grant Round", () => {
           voteOptionIndex,
           dummyBalance + 1,
           mockBaseERC20Token.address,
-      )).to.be.revertedWith("GrantRound: not enough funds in the contract to transfer matching funds")
+      )).to.be.revertedWith("GrantRound: not enough funds in the contract to transfer matching funds");
+    });
+
+    it("revert - transfer using a fee on transfer token", async () => {
+      const voteOptionIndex = 1;
+      // First cancel
+      await expect(grantRound.connect(deployer).cancel())
+        .to.emit(grantRound, "GrantRoundCancelled")
+        .withArgs(true, true);
+ 
+      expect(await grantRound.isFinalized()).to.be.true;
+      expect(await grantRound.isCancelled()).to.be.true;
+
+      // Mocks.
+      const dummyBalance = 100;
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(grantRound.address)
+        .returns(dummyBalance);
+      const dummyReceiverBalance = 0;
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(recipientAddress)
+        .returns(dummyReceiverBalance);
+      await mockBaseERC20Token.mock.transfer
+        .withArgs(recipientAddress, 100)
+        .returns(true)
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(recipientAddress)
+        .returns(dummyBalance - 5)
+
+      const deployTD = await grantRound.connect(deployer).getDeployTimeAndDuration();
+
+      // Mock 
+      await mockRecipientRegistry.mock.getRecipientAddress
+        .withArgs(1, deployTD[0], Number(deployTD[0]) + Number(deployTD[1]))
+        .returns(recipientAddress);
+      
+      // Now that the state is both cancelled and finalized we can call transferMatchingFunds()
+      await expect(grantRound.connect(deployer).transferMatchingFunds(
+        voteOptionIndex,
+        dummyBalance,
+        mockBaseERC20Token.address,
+      )).to.be.revertedWith("GrantRound: the transfer was not correct");
     });
   });
 });

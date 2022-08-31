@@ -19,6 +19,7 @@ import {
   MessageAqFactory__factory,
   PollProcessorAndTallyer__factory,
   GrantRound__factory,
+  BaseERC20Token,
 } from "../../typechain";
 import { Keypair } from "qaci-domainobjs";
 
@@ -40,6 +41,9 @@ describe("QFI", () => {
 
   // QFI instance.
   let qfi: QFI;
+  let qfiDeployedtoken: QFI;
+
+  let baseERC20Token: BaseERC20Token;
 
   // Mock contracts.
   let mockBaseERC20Token: MockContract;
@@ -130,6 +134,13 @@ describe("QFI", () => {
       deployer
     );
 
+    // nb. workaround due to Waffle not allowing to mock the same function with two different 
+    // return values https://github.com/TrueFiEng/Waffle/issues/714
+    const baseERC20TokenFactory = new BaseERC20Token__factory(deployer);
+    baseERC20Token = await baseERC20TokenFactory.deploy(
+      50000000 * 10 ** 5
+    );
+
     // Mock decimals value (used when deploying QFI).
     // nb. for testing purposes, w/ 5 decimals we have a voiceCreditFactor of 1.
     await mockBaseERC20Token.mock.decimals.withArgs().returns(decimals);
@@ -142,6 +153,15 @@ describe("QFI", () => {
       mockFreeForAllGateKeeper.address,
       mockConstantInitialVoiceCreditProxy.address
     );
+
+    // Deploy a second QFI.
+    qfiDeployedtoken = await QFIFactory.deploy(
+      baseERC20Token.address,
+      mockGrantRoundFactory.address,
+      mockPollFactory.address,
+      mockFreeForAllGateKeeper.address,
+      mockConstantInitialVoiceCreditProxy.address
+    )
 
     // Prepare input parameters.
     signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["address", "uint256"], [contributorAddress, 100]);
@@ -398,7 +418,8 @@ describe("QFI", () => {
     });
   });
 
-  describe("contribute()", () => {
+  // Testing contribute() using mocks 
+  describe("contribute() with mocks", () => {
     beforeEach(async () => {
       // Initialize.
       await mockGrantRoundFactory.mock.owner.withArgs().returns(qfi.address);
@@ -426,14 +447,23 @@ describe("QFI", () => {
         .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
     });
 
-    it("allows anyone to contribute", async () => {
+    // Added check with a mocked new balance that doesn't match the transfer amount 
+    it ("revert - contributing using a fee on transfer token", async () => {
       // Mocks.
       await mockBaseERC20Token.mock.balanceOf.withArgs(contributorAddress).returns(contributionAmount);
       await mockBaseERC20Token.mock.allowance.withArgs(contributorAddress, qfi.address).returns(contributionAmount);
+      
+      const dummyBalance = 100;
+      await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(dummyBalance);
 
       await mockBaseERC20Token.mock.transferFrom
         .withArgs(contributorAddress, qfi.address, contributionAmount)
         .returns(true);
+      
+      // Returning a balance which is not equal balanceBefore + amount to mock a fee on transfer token 
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(qfi.address)
+        .returns(dummyBalance + contributionAmount - 10);
 
       await mockFreeForAllGateKeeper.mock.register.withArgs(contributorAddress, signUpGatekeeperData).returns();
 
@@ -441,21 +471,11 @@ describe("QFI", () => {
         .withArgs(contributorAddress, initialVoiceCreditProxyData)
         .returns(expectedTotalAmountofVoiceCredits);
 
-      // Should send a contribution correctly.
-      const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
       await expect(qfi.connect(contributor).contribute(contributorMaciPubKey, contributionAmount))
-        .to.emit(qfi, "SignUp")
-        .withArgs(
-          expectedStateIndex,
-          Object.values(contributorMaciPubKey),
-          expectedTotalAmountofVoiceCredits,
-          expectedTimestamp
-        )
-        .to.emit(qfi, "ContributionSent")
-        .withArgs(contributorAddress, contributionAmount);
+        .to.be.revertedWith("QFI: the transfer was not successful");
     });
 
-    // TODO: Simulate 10**5 signups. How we could test it if the QFI is not mockable here?.
+     // TODO: Simulate 10**5 signups. How we could test it if the QFI is not mockable here?.
     // it("revert - maximum number of signups reached", async () => {
     // });
 
@@ -518,17 +538,89 @@ describe("QFI", () => {
         qfi.connect(contributor).contribute(contributorMaciPubKey, defaultMaxContributionAmount + BigInt(1))
       ).to.revertedWith("QFI: Contribution amount is too large");
     });
+  });
 
+  describe("contribute() with deployed token", () => {
+    beforeEach(async () => {
+      // Initialize.
+      await mockGrantRoundFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
+      await mockGrantRoundFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryGrantRounds.address).returns();
+      await mockGrantRoundFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryGrantRounds.address);
+      await mockMessageAqFactoryGrantRounds.mock.owner.withArgs().returns(mockGrantRoundFactory.address);
+      await mockMessageAqFactoryPolls.mock.owner.withArgs().returns(mockPollFactory.address);
+      await mockPollFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
+      await mockPollFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryPolls.address).returns();
+      await mockPollFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryPolls.address);
+      await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
+      const expectedStage = 1; //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
+      await expect(
+        qfiDeployedtoken
+          .connect(deployer)
+          .initialize(
+            mockVkRegistry.address,
+            mockMessageAqFactoryPolls.address,
+            mockMessageAqFactoryGrantRounds.address
+          )
+      )
+        .to.emit(qfiDeployedtoken, "Init")
+        .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
+        .to.emit(qfiDeployedtoken, "QfiInitialized")
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
+    });
+
+    it("allows anyone to contribute", async () => {
+      // Transfer tokens to the contributorAddress
+      expect(
+        await baseERC20Token.connect(deployer).
+        transfer(contributorAddress, contributionAmount)
+      );
+
+      // Aprove the contract 
+      expect (
+        await baseERC20Token.connect(contributor)
+        .approve(qfiDeployedtoken.address, contributionAmount)
+      );
+
+      await mockFreeForAllGateKeeper.mock.register
+        .withArgs(contributorAddress, signUpGatekeeperData)
+        .returns();
+
+      await mockConstantInitialVoiceCreditProxy.mock.getVoiceCredits
+        .withArgs(contributorAddress, initialVoiceCreditProxyData)
+        .returns(expectedTotalAmountofVoiceCredits);
+
+      // Should send a contribution correctly.
+      const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1; 
+      await expect(
+        qfiDeployedtoken.connect(contributor)
+        .contribute(contributorMaciPubKey, contributionAmount)
+        ).to.emit(qfiDeployedtoken, "SignUp")
+          .withArgs(
+            expectedStateIndex,
+            Object.values(contributorMaciPubKey),
+            expectedTotalAmountofVoiceCredits,
+            expectedTimestamp
+          )
+        .to.emit(qfiDeployedtoken, "ContributionSent")
+        .withArgs(contributorAddress, contributionAmount);
+    });
+   
     it("revert - cannot contribute twice", async () => {
-      // Mocks.
-      await mockBaseERC20Token.mock.balanceOf.withArgs(contributorAddress).returns(contributionAmount);
-      await mockBaseERC20Token.mock.allowance.withArgs(contributorAddress, qfi.address).returns(contributionAmount);
+      // Transfer tokens to the contributorAddress
+      expect(
+        await baseERC20Token.connect(deployer).
+        transfer(contributorAddress, contributionAmount)
+      );
 
-      await mockBaseERC20Token.mock.transferFrom
-        .withArgs(contributorAddress, qfi.address, contributionAmount)
-        .returns(true);
+      // Aprove the contract 
+      expect (
+        await baseERC20Token.connect(contributor)
+        .approve(qfiDeployedtoken.address, contributionAmount)
+      );
 
-      await mockFreeForAllGateKeeper.mock.register.withArgs(contributorAddress, signUpGatekeeperData).returns();
+      await mockFreeForAllGateKeeper.mock.register
+        .withArgs(contributorAddress, signUpGatekeeperData)
+        .returns();
 
       await mockConstantInitialVoiceCreditProxy.mock.getVoiceCredits
         .withArgs(contributorAddress, initialVoiceCreditProxyData)
@@ -536,40 +628,46 @@ describe("QFI", () => {
 
       // Should send a contribution correctly.
       const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
-      await expect(qfi.connect(contributor).contribute(contributorMaciPubKey, contributionAmount))
-        .to.emit(qfi, "SignUp")
+      await expect(qfiDeployedtoken.connect(contributor).contribute(contributorMaciPubKey, contributionAmount))
+        .to.emit(qfiDeployedtoken, "SignUp")
         .withArgs(
           expectedStateIndex,
           Object.values(contributorMaciPubKey),
           expectedTotalAmountofVoiceCredits,
           expectedTimestamp
         )
-        .to.emit(qfi, "ContributionSent")
+        .to.emit(qfiDeployedtoken, "ContributionSent")
         .withArgs(contributorAddress, contributionAmount);
 
       // Should revert the second contribution correctly.
-      await expect(qfi.connect(contributor).contribute(contributorMaciPubKey, contributionAmount)).to.revertedWith(
+      await expect(qfiDeployedtoken.connect(contributor).contribute(contributorMaciPubKey, contributionAmount)).to.revertedWith(
         "QFI: top ups not supported, donate to matching pool instead"
       );
     });
 
     it("revert - pubKey values should be less than the snark scalar field", async () => {
-      // Mocks.
-      await mockBaseERC20Token.mock.balanceOf.withArgs(contributorAddress).returns(contributionAmount);
-      await mockBaseERC20Token.mock.allowance.withArgs(contributorAddress, qfi.address).returns(contributionAmount);
+      // Transfer tokens to the contributorAddress
+      expect(
+        await baseERC20Token.connect(deployer).
+        transfer(contributorAddress, contributionAmount)
+      );
 
-      await mockBaseERC20Token.mock.transferFrom
-        .withArgs(contributorAddress, qfi.address, contributionAmount)
-        .returns(true);
+      // Aprove the contract 
+      expect (
+        await baseERC20Token.connect(contributor)
+        .approve(qfiDeployedtoken.address, contributionAmount)
+      );
 
-      await mockFreeForAllGateKeeper.mock.register.withArgs(contributorAddress, signUpGatekeeperData).returns();
+      await mockFreeForAllGateKeeper.mock.register
+        .withArgs(contributorAddress, signUpGatekeeperData)
+        .returns();
 
       const badContributorMaciPubKey = {
         x: "21888242871839275222246405745257275088548364400416034343698204186575808495617",
         y: "0", // < SNARK_SCALAR_FIELD
       };
 
-      await expect(qfi.connect(contributor).contribute(badContributorMaciPubKey, contributionAmount)).to.revertedWith(
+      await expect(qfiDeployedtoken.connect(contributor).contribute(badContributorMaciPubKey, contributionAmount)).to.revertedWith(
         "MACI: _pubKey values should be less than the snark scalar field"
       );
     });
@@ -582,18 +680,18 @@ describe("QFI", () => {
 
     beforeEach(async () => {
       // Initialize.
-      await mockGrantRoundFactory.mock.owner.withArgs().returns(qfi.address);
+      await mockGrantRoundFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
       await mockGrantRoundFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryGrantRounds.address).returns();
       await mockGrantRoundFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryGrantRounds.address);
       await mockMessageAqFactoryGrantRounds.mock.owner.withArgs().returns(mockGrantRoundFactory.address);
       await mockMessageAqFactoryPolls.mock.owner.withArgs().returns(mockPollFactory.address);
-      await mockPollFactory.mock.owner.withArgs().returns(qfi.address);
+      await mockPollFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
       await mockPollFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryPolls.address).returns();
       await mockPollFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
       const expectedStage = 1; //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
-        qfi
+        qfiDeployedtoken
           .connect(deployer)
           .initialize(
             mockVkRegistry.address,
@@ -601,42 +699,56 @@ describe("QFI", () => {
             mockMessageAqFactoryGrantRounds.address
           )
       )
-        .to.emit(qfi, "Init")
+        .to.emit(qfiDeployedtoken, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
-        .to.emit(qfi, "QfiInitialized")
+        .to.emit(qfiDeployedtoken, "QfiInitialized")
         .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
-      // Mocks.
-      await mockBaseERC20Token.mock.balanceOf.withArgs(contributorAddress).returns(contributionAmount);
-      await mockBaseERC20Token.mock.allowance.withArgs(contributorAddress, qfi.address).returns(contributionAmount);
+        const contributorBalance = 0;
+      expect(await baseERC20Token.balanceOf(contributorAddress)).to.be.equal(contributorBalance);
 
-      await mockBaseERC20Token.mock.transferFrom
-        .withArgs(contributorAddress, qfi.address, contributionAmount)
-        .returns(true);
+      // Transfer tokens to the contributorAddress
+      expect(
+        await baseERC20Token.connect(deployer).
+        transfer(contributorAddress, contributionAmount)
+      );
 
-      await mockFreeForAllGateKeeper.mock.register.withArgs(contributorAddress, signUpGatekeeperData).returns();
+      expect(await baseERC20Token.balanceOf(contributorAddress)).to.be.equal(contributionAmount);
+
+      // Aprove the contract 
+      expect (
+        await baseERC20Token.connect(contributor)
+        .approve(qfiDeployedtoken.address, contributionAmount)
+      );
+
+      await mockFreeForAllGateKeeper.mock.register
+        .withArgs(contributorAddress, signUpGatekeeperData)
+        .returns();
 
       await mockConstantInitialVoiceCreditProxy.mock.getVoiceCredits
         .withArgs(contributorAddress, initialVoiceCreditProxyData)
         .returns(expectedTotalAmountofVoiceCredits);
 
+      // Should send a contribution correctly.
       const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
-      await expect(qfi.connect(contributor).contribute(contributorMaciPubKey, contributionAmount))
-        .to.emit(qfi, "SignUp")
-        .withArgs(
-          expectedStateIndex,
-          Object.values(contributorMaciPubKey),
-          expectedTotalAmountofVoiceCredits,
-          expectedTimestamp
-        )
-        .to.emit(qfi, "ContributionSent")
+      await expect(
+        qfiDeployedtoken.connect(contributor)
+        .contribute(contributorMaciPubKey, contributionAmount)
+        ).to.emit(qfiDeployedtoken, "SignUp")
+          .withArgs(
+            expectedStateIndex,
+            Object.values(contributorMaciPubKey),
+            expectedTotalAmountofVoiceCredits,
+            expectedTimestamp
+          )
+        .to.emit(qfiDeployedtoken, "ContributionSent")
         .withArgs(contributorAddress, contributionAmount);
     });
 
     it("allow to get the amount of voice credits for a given address", async () => {
       data = ethers.utils.defaultAbiCoder.encode(["address"], [contributorAddress]);
 
-      const voiceCreditsAmount = await qfi.connect(deployer).getVoiceCredits(contributorAddress, data);
+      const voiceCreditsAmount = await qfiDeployedtoken.connect(deployer).getVoiceCredits(contributorAddress, data);
 
       expect(Number(voiceCreditsAmount)).to.be.equal(contributionAmount);
     });
@@ -644,7 +756,7 @@ describe("QFI", () => {
     it("revert - user does not have any voice credits", async () => {
       data = ethers.utils.defaultAbiCoder.encode(["address"], [deployerAddress]);
 
-      await expect(qfi.connect(deployer).getVoiceCredits(deployerAddress, data)).to.revertedWith(
+      await expect(qfiDeployedtoken.connect(deployer).getVoiceCredits(deployerAddress, data)).to.revertedWith(
         "FundingRound: User does not have any voice credits"
       );
     });
@@ -654,72 +766,83 @@ describe("QFI", () => {
     const contributionAmount = 100;
 
     beforeEach(async () => {
-      // Initialize.'
-      await mockGrantRoundFactory.mock.owner.withArgs().returns(qfi.address);
+      // Initialize.
+      await mockGrantRoundFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
       await mockGrantRoundFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryGrantRounds.address).returns();
       await mockGrantRoundFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryGrantRounds.address);
       await mockMessageAqFactoryGrantRounds.mock.owner.withArgs().returns(mockGrantRoundFactory.address);
       await mockMessageAqFactoryPolls.mock.owner.withArgs().returns(mockPollFactory.address);
-      await mockPollFactory.mock.owner.withArgs().returns(qfi.address);
+      await mockPollFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
       await mockPollFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryPolls.address).returns();
       await mockPollFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryPolls.address);
       await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
-      mockGrantRound = await deployMockContract(deployer, GrantRound__factory.abi);
-      mockGrantRound.mock.isCancelled.withArgs().returns(true);
       const expectedStage = 1; //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
       await expect(
-        qfi
+        qfiDeployedtoken
           .connect(deployer)
           .initialize(
             mockVkRegistry.address,
             mockMessageAqFactoryPolls.address,
             mockMessageAqFactoryGrantRounds.address
           )
-      )
-        .to.emit(qfi, "Init")
+      ).to.emit(qfiDeployedtoken, "Init")
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
-        .to.emit(qfi, "QfiInitialized")
+        .to.emit(qfiDeployedtoken, "QfiInitialized")
         .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
 
-      // Mocks.
-      await mockBaseERC20Token.mock.balanceOf.withArgs(contributorAddress).returns(contributionAmount);
-      await mockBaseERC20Token.mock.allowance.withArgs(contributorAddress, qfi.address).returns(contributionAmount);
+      const contributorBalance = 0;
+      expect(await baseERC20Token.balanceOf(contributorAddress)).to.be.equal(contributorBalance);
 
-      await mockBaseERC20Token.mock.transferFrom
-        .withArgs(contributorAddress, qfi.address, contributionAmount)
-        .returns(true);
+      // Transfer tokens to the contributorAddress
+      expect(
+        await baseERC20Token.connect(deployer).
+        transfer(contributorAddress, contributionAmount)
+      );
 
-      await mockFreeForAllGateKeeper.mock.register.withArgs(contributorAddress, signUpGatekeeperData).returns();
+      expect(await baseERC20Token.balanceOf(contributorAddress)).to.be.equal(contributionAmount);
+
+      // Aprove the contract 
+      expect (
+        await baseERC20Token.connect(contributor)
+        .approve(qfiDeployedtoken.address, contributionAmount)
+      );
+
+      await mockFreeForAllGateKeeper.mock.register
+        .withArgs(contributorAddress, signUpGatekeeperData)
+        .returns();
 
       await mockConstantInitialVoiceCreditProxy.mock.getVoiceCredits
         .withArgs(contributorAddress, initialVoiceCreditProxyData)
         .returns(expectedTotalAmountofVoiceCredits);
 
+      // Should send a contribution correctly.
       const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
-      await expect(qfi.connect(contributor).contribute(contributorMaciPubKey, contributionAmount))
-        .to.emit(qfi, "SignUp")
-        .withArgs(
-          expectedStateIndex,
-          Object.values(contributorMaciPubKey),
-          expectedTotalAmountofVoiceCredits,
-          expectedTimestamp
-        )
-        .to.emit(qfi, "ContributionSent")
+      await expect(
+        qfiDeployedtoken.connect(contributor)
+        .contribute(contributorMaciPubKey, contributionAmount)
+        ).to.emit(qfiDeployedtoken, "SignUp")
+          .withArgs(
+            expectedStateIndex,
+            Object.values(contributorMaciPubKey),
+            expectedTotalAmountofVoiceCredits,
+            expectedTimestamp
+          )
+        .to.emit(qfiDeployedtoken, "ContributionSent")
         .withArgs(contributorAddress, contributionAmount);
     });
 
     it("should withdraw the contribution", async () => {
       // Mocks.
-      await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
+      await mockBaseERC20Token.mock.balanceOf.withArgs(qfiDeployedtoken.address).returns(contributionAmount);
       
       await mockBaseERC20Token.mock.transfer.withArgs(contributorAddress, contributionAmount).returns(true);
-      await expect(qfi.connect(contributor).withdrawContribution())
-        .to.emit(qfi, "ContributionWithdrew")
+      await expect(qfiDeployedtoken.connect(contributor).withdrawContribution())
+        .to.emit(qfiDeployedtoken, "ContributionWithdrew")
         .withArgs(contributorAddress);
     });
 
     it("revert - nothing to withdraw", async () => {
-      await expect(qfi.connect(deployer).withdrawContribution()).to.revertedWith("FundingRound: Nothing to withdraw");
+      await expect(qfiDeployedtoken.connect(deployer).withdrawContribution()).to.revertedWith("FundingRound: Nothing to withdraw");
     });
   });
 
@@ -1193,7 +1316,251 @@ describe("QFI", () => {
     });
   });
 
-  describe("finalizeCurrentRound()", async () => {
+  describe("finalizeCurrentRound() with deployed token", async () => {
+    beforeEach(async () => {
+      // Initialize.
+      await mockGrantRoundFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
+      await mockGrantRoundFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryGrantRounds.address).returns();
+      await mockGrantRoundFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryGrantRounds.address);
+      await mockMessageAqFactoryGrantRounds.mock.owner.withArgs().returns(mockGrantRoundFactory.address);
+      await mockMessageAqFactoryPolls.mock.owner.withArgs().returns(mockPollFactory.address);
+      await mockPollFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
+      await mockPollFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryPolls.address).returns();
+      await mockPollFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryPolls.address);
+      await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
+      const expectedStage = 1; //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
+      await expect(
+        qfiDeployedtoken
+          .connect(deployer)
+          .initialize(
+            mockVkRegistry.address,
+            mockMessageAqFactoryPolls.address,
+            mockMessageAqFactoryGrantRounds.address
+          )
+      )
+        .to.emit(qfiDeployedtoken, "Init")
+        .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
+        .to.emit(qfiDeployedtoken, "QfiInitialized")
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
+    })
+
+    it("allow owner to finalize current grant round", async () => {
+      // Mocks.
+      await mockGrantRoundFactory.mock.deployGrantRound
+        .withArgs(
+          voiceCreditFactor,
+          coordinatorAddress,
+          baseERC20Token.address,
+          duration,
+          maxValues,
+          treeDepths,
+          batchSizes,
+          coordinatorMaciPublicKey,
+          mockVkRegistry.address,
+          qfiDeployedtoken.address,
+          await qfiDeployedtoken.owner()
+        )
+        .returns(mockGrantRound.address);
+
+      // Should deploy a new Grant Round.
+      const expectedThirdStage = 2;
+      await expect(
+        qfiDeployedtoken
+          .connect(deployer)
+          .deployGrantRound(duration, maxValues, treeDepths, coordinatorMaciPublicKey, coordinatorAddress)
+      )
+        .to.emit(qfiDeployedtoken, "GrantRoundDeployed")
+        .withArgs(
+          mockGrantRound.address,
+          duration,
+          Object.values(maxValues),
+          Object.values(treeDepths),
+          Object.values(batchSizes),
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
+        );
+
+      await mockGrantRound.mock.batchSizes.withArgs().returns(0, 0);
+      await mockGrantRound.mock.numSignUpsAndMessages.withArgs().returns(1, 1);
+
+      expect(Number(await qfiDeployedtoken.nextGrantRoundId())).to.equal(1);
+      expect(Number(await qfiDeployedtoken.currentStage())).to.equal(2);
+      expect(await qfiDeployedtoken.currentGrantRound()).to.equal(mockGrantRound.address);
+
+      // Close voting period and prepare for finalization.
+      await expect(qfiDeployedtoken.connect(deployer).closeVotingAndWaitForDeadline())
+        .to.emit(qfiDeployedtoken, "VotingPeriodClosed")
+        .withArgs(3);
+
+      // Set PPT contract.
+      await expect(qfiDeployedtoken.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
+        .to.emit(qfiDeployedtoken, "PollProcessorAndTallyerChanged")
+        .withArgs(mockPPT.address);
+
+      // Mocks.
+      await mockPPT.mock.tallyBatchNum.withArgs().returns(1);
+      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
+      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
+      await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockGrantRound.mock.nativeToken.withArgs().returns(baseERC20Token.address);
+      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
+
+      // Send contribution amout to grant round 
+      expect(await baseERC20Token.connect(deployer).transfer(qfiDeployedtoken.address, contributionAmount));
+
+      await expect(
+        qfiDeployedtoken.connect(deployer).
+        finalizeCurrentRound(
+          tallyResults.finalTallyCommitment, 
+          tallyResults.finalSbCommitment, 
+          tallyResults.alphaDenominator)
+        )
+        .to.emit(qfiDeployedtoken, "GrantRoundFinalized")
+        .withArgs(mockGrantRound.address, 4);
+    });
+    it("allow owner to finalize current grant round with other funding sources", async () => {
+      // Add a funding source.
+      await expect(qfiDeployedtoken.connect(deployer).addFundingSource(fundingSourceAddress))
+        .to.emit(qfiDeployedtoken, "FundingSourceAdded")
+        .withArgs(fundingSourceAddress);
+
+      // Mocks.
+      await mockGrantRoundFactory.mock.deployGrantRound
+        .withArgs(
+          voiceCreditFactor,
+          coordinatorAddress,
+          baseERC20Token.address,
+          duration,
+          maxValues,
+          treeDepths,
+          batchSizes,
+          coordinatorMaciPublicKey,
+          mockVkRegistry.address,
+          qfiDeployedtoken.address,
+          await qfiDeployedtoken.owner()
+        )
+        .returns(mockGrantRound.address);
+
+      // Should deploy a new Grant Round.
+      const expectedThirdStage = 2;
+      await expect(
+        qfiDeployedtoken
+          .connect(deployer)
+          .deployGrantRound(duration, maxValues, treeDepths, coordinatorMaciPublicKey, coordinatorAddress)
+      )
+        .to.emit(qfiDeployedtoken, "GrantRoundDeployed")
+        .withArgs(
+          mockGrantRound.address,
+          duration,
+          Object.values(maxValues),
+          Object.values(treeDepths),
+          Object.values(batchSizes),
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
+        );
+
+      expect(Number(await qfiDeployedtoken.nextGrantRoundId())).to.equal(1);
+      expect(Number(await qfiDeployedtoken.currentStage())).to.equal(2);
+      expect(await qfiDeployedtoken.currentGrantRound()).to.equal(mockGrantRound.address);
+
+      // Close voting period and prepare for finalization.
+      await expect(qfiDeployedtoken.connect(deployer).closeVotingAndWaitForDeadline())
+        .to.emit(qfiDeployedtoken, "VotingPeriodClosed")
+        .withArgs(3);
+
+      // Set PPT contract.
+      await expect(qfiDeployedtoken.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
+        .to.emit(qfiDeployedtoken, "PollProcessorAndTallyerChanged")
+        .withArgs(mockPPT.address);
+
+      // Mocks.
+      await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
+      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
+      await mockGrantRound.mock.nativeToken.withArgs().returns(baseERC20Token.address);
+
+      expect(await baseERC20Token.connect(deployer).transfer(qfiDeployedtoken.address, contributionAmount));
+      expect(await baseERC20Token.connect(fundingSource).approve(mockGrantRound.address, contributionAmount));
+
+      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
+      
+      await expect(qfiDeployedtoken.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
+        .to.emit(qfiDeployedtoken, "GrantRoundFinalized")
+        .withArgs(mockGrantRound.address, 4);
+    });
+    it("revert - cannot finalize grant round twice", async () => {
+      // Mocks.
+      await mockGrantRoundFactory.mock.deployGrantRound
+        .withArgs(
+          voiceCreditFactor,
+          coordinatorAddress,
+          baseERC20Token.address,
+          duration,
+          maxValues,
+          treeDepths,
+          batchSizes,
+          coordinatorMaciPublicKey,
+          mockVkRegistry.address,
+          qfiDeployedtoken.address,
+          await qfiDeployedtoken.owner()
+        )
+        .returns(mockGrantRound.address);
+
+      // Should deploy a new Grant Round.
+      const expectedThirdStage = 2;
+      await expect(
+        qfiDeployedtoken
+          .connect(deployer)
+          .deployGrantRound(duration, maxValues, treeDepths, coordinatorMaciPublicKey, coordinatorAddress)
+      )
+        .to.emit(qfiDeployedtoken, "GrantRoundDeployed")
+        .withArgs(
+          mockGrantRound.address,
+          duration,
+          Object.values(maxValues),
+          Object.values(treeDepths),
+          Object.values(batchSizes),
+          Object.values(coordinatorMaciPublicKey),
+          expectedThirdStage
+        );
+
+      expect(Number(await qfiDeployedtoken.nextGrantRoundId())).to.equal(1);
+      expect(Number(await qfiDeployedtoken.currentStage())).to.equal(2);
+      expect(await qfiDeployedtoken.currentGrantRound()).to.equal(mockGrantRound.address);
+
+      // Close voting period and prepare for finalization.
+      await expect(qfiDeployedtoken.connect(deployer).closeVotingAndWaitForDeadline())
+        .to.emit(qfiDeployedtoken, "VotingPeriodClosed")
+        .withArgs(3);
+
+      // Set PPT contract.
+      await expect(qfiDeployedtoken.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
+        .to.emit(qfiDeployedtoken, "PollProcessorAndTallyerChanged")
+        .withArgs(mockPPT.address);
+
+      // Mocks.
+      await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
+      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
+      await mockGrantRound.mock.nativeToken.withArgs().returns(baseERC20Token.address);
+      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
+
+      // Transfer tokens to QFI for finialization 
+      expect(await baseERC20Token.connect(deployer).transfer(qfiDeployedtoken.address, contributionAmount));
+
+      await expect(qfiDeployedtoken.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
+        .to.emit(qfiDeployedtoken, "GrantRoundFinalized")
+        .withArgs(mockGrantRound.address, 4);
+
+      // Should revert.
+      await expect(
+        qfiDeployedtoken.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
+      ).to.revertedWith("QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage");
+    });
+  })
+
+  // Tests on finalizeCurrentRoud with the token mocked 
+  describe("finalizeCurrentRound() with mocked token", async () => {
     beforeEach(async () => {
       // Initialize.
       await mockGrantRoundFactory.mock.owner.withArgs().returns(qfi.address);
@@ -1219,148 +1586,6 @@ describe("QFI", () => {
         .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
         .to.emit(qfi, "QfiInitialized")
         .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
-    });
-
-    it("allow owner to finalize current grant round", async () => {
-      // Mocks.
-      await mockGrantRoundFactory.mock.deployGrantRound
-        .withArgs(
-          voiceCreditFactor,
-          coordinatorAddress,
-          mockBaseERC20Token.address,
-          duration,
-          maxValues,
-          treeDepths,
-          batchSizes,
-          coordinatorMaciPublicKey,
-          mockVkRegistry.address,
-          qfi.address,
-          await qfi.owner()
-        )
-        .returns(mockGrantRound.address);
-
-      // Should deploy a new Grant Round.
-      const expectedThirdStage = 2;
-      await expect(
-        qfi
-          .connect(deployer)
-          .deployGrantRound(duration, maxValues, treeDepths, coordinatorMaciPublicKey, coordinatorAddress)
-      )
-        .to.emit(qfi, "GrantRoundDeployed")
-        .withArgs(
-          mockGrantRound.address,
-          duration,
-          Object.values(maxValues),
-          Object.values(treeDepths),
-          Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey),
-          expectedThirdStage
-        );
-
-      await mockGrantRound.mock.batchSizes.withArgs().returns(0, 0);
-      await mockGrantRound.mock.numSignUpsAndMessages.withArgs().returns(1, 1);
-
-      expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
-      expect(Number(await qfi.currentStage())).to.equal(2);
-      expect(await qfi.currentGrantRound()).to.equal(mockGrantRound.address);
-
-      // Close voting period and prepare for finalization.
-      await expect(qfi.connect(deployer).closeVotingAndWaitForDeadline())
-        .to.emit(qfi, "VotingPeriodClosed")
-        .withArgs(3);
-
-      // Set PPT contract.
-      await expect(qfi.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
-        .to.emit(qfi, "PollProcessorAndTallyerChanged")
-        .withArgs(mockPPT.address);
-
-      // Mocks.
-      await mockPPT.mock.tallyBatchNum.withArgs().returns(1);
-      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
-      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
-      await mockPPT.mock.processingComplete.withArgs().returns(true);
-      await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
-      await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
-      await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
-      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
-
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
-        .to.emit(qfi, "GrantRoundFinalized")
-        .withArgs(mockGrantRound.address, 4);
-    });
-
-    it("allow owner to finalize current grant round with other funding sources", async () => {
-      // Add a funding source.
-      await expect(qfi.connect(deployer).addFundingSource(fundingSourceAddress))
-        .to.emit(qfi, "FundingSourceAdded")
-        .withArgs(fundingSourceAddress);
-
-      // Mocks.
-      await mockGrantRoundFactory.mock.deployGrantRound
-        .withArgs(
-          voiceCreditFactor,
-          coordinatorAddress,
-          mockBaseERC20Token.address,
-          duration,
-          maxValues,
-          treeDepths,
-          batchSizes,
-          coordinatorMaciPublicKey,
-          mockVkRegistry.address,
-          qfi.address,
-          await qfi.owner()
-        )
-        .returns(mockGrantRound.address);
-
-      // Should deploy a new Grant Round.
-      const expectedThirdStage = 2;
-      await expect(
-        qfi
-          .connect(deployer)
-          .deployGrantRound(duration, maxValues, treeDepths, coordinatorMaciPublicKey, coordinatorAddress)
-      )
-        .to.emit(qfi, "GrantRoundDeployed")
-        .withArgs(
-          mockGrantRound.address,
-          duration,
-          Object.values(maxValues),
-          Object.values(treeDepths),
-          Object.values(batchSizes),
-          Object.values(coordinatorMaciPublicKey),
-          expectedThirdStage
-        );
-
-      expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
-      expect(Number(await qfi.currentStage())).to.equal(2);
-      expect(await qfi.currentGrantRound()).to.equal(mockGrantRound.address);
-
-      // Close voting period and prepare for finalization.
-      await expect(qfi.connect(deployer).closeVotingAndWaitForDeadline())
-        .to.emit(qfi, "VotingPeriodClosed")
-        .withArgs(3);
-
-      // Set PPT contract.
-      await expect(qfi.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
-        .to.emit(qfi, "PollProcessorAndTallyerChanged")
-        .withArgs(mockPPT.address);
-
-      // Mocks.
-      await mockPPT.mock.processingComplete.withArgs().returns(true);
-      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
-      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
-      await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
-      await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
-      await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
-      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
-      await mockBaseERC20Token.mock.allowance.withArgs(fundingSourceAddress, qfi.address).returns(contributionAmount);
-      await mockBaseERC20Token.mock.balanceOf.withArgs(fundingSourceAddress).returns(contributionAmount);
-      await mockBaseERC20Token.mock.transferFrom
-        .withArgs(fundingSourceAddress, mockGrantRound.address, contributionAmount)
-        .returns(true);
-
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
-        .to.emit(qfi, "GrantRoundFinalized")
-        .withArgs(mockGrantRound.address, 4);
     });
 
     it("revert - allow only owner to finalize current grant round", async () => {
@@ -1433,32 +1658,61 @@ describe("QFI", () => {
       ).to.revertedWith("QFI: messages have not been proccessed");
     });
 
-    it("revert - cannot finalize grant round twice", async () => {
+    
+  });
+
+  describe("acceptContributionsAndTopUpsBeforeNewRound() with deployed token", async () => {
+    beforeEach(async () => {
+      // Initialize.
+      await mockGrantRoundFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
+      await mockGrantRoundFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryGrantRounds.address).returns();
+      await mockGrantRoundFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryGrantRounds.address);
+      await mockMessageAqFactoryGrantRounds.mock.owner.withArgs().returns(mockGrantRoundFactory.address);
+      await mockMessageAqFactoryPolls.mock.owner.withArgs().returns(mockPollFactory.address);
+      await mockPollFactory.mock.owner.withArgs().returns(qfiDeployedtoken.address);
+      await mockPollFactory.mock.setMessageAqFactory.withArgs(mockMessageAqFactoryPolls.address).returns();
+      await mockPollFactory.mock.messageAqFactory.withArgs().returns(mockMessageAqFactoryPolls.address);
+      await mockVkRegistry.mock.owner.withArgs().returns(deployerAddress);
+      const expectedStage = 1; //"WAITING_FOR_SIGNUPS_AND_TOPUPS"
+      await expect(
+        qfiDeployedtoken
+          .connect(deployer)
+          .initialize(
+            mockVkRegistry.address,
+            mockMessageAqFactoryPolls.address,
+            mockMessageAqFactoryGrantRounds.address
+          )
+      )
+        .to.emit(qfiDeployedtoken, "Init")
+        .withArgs(mockVkRegistry.address, mockMessageAqFactoryPolls.address)
+        .to.emit(qfiDeployedtoken, "QfiInitialized")
+        .withArgs(mockMessageAqFactoryGrantRounds.address, expectedStage);
+
       // Mocks.
       await mockGrantRoundFactory.mock.deployGrantRound
         .withArgs(
           voiceCreditFactor,
           coordinatorAddress,
-          mockBaseERC20Token.address,
+          baseERC20Token.address,
           duration,
           maxValues,
           treeDepths,
           batchSizes,
           coordinatorMaciPublicKey,
           mockVkRegistry.address,
-          qfi.address,
-          await qfi.owner()
+          qfiDeployedtoken.address,
+          await qfiDeployedtoken.owner()
         )
         .returns(mockGrantRound.address);
 
       // Should deploy a new Grant Round.
       const expectedThirdStage = 2;
       await expect(
-        qfi
+        qfiDeployedtoken
           .connect(deployer)
           .deployGrantRound(duration, maxValues, treeDepths, coordinatorMaciPublicKey, coordinatorAddress)
       )
-        .to.emit(qfi, "GrantRoundDeployed")
+        .to.emit(qfiDeployedtoken, "GrantRoundDeployed")
         .withArgs(
           mockGrantRound.address,
           duration,
@@ -1469,41 +1723,43 @@ describe("QFI", () => {
           expectedThirdStage
         );
 
-      expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
-      expect(Number(await qfi.currentStage())).to.equal(2);
-      expect(await qfi.currentGrantRound()).to.equal(mockGrantRound.address);
+      expect(Number(await qfiDeployedtoken.nextGrantRoundId())).to.equal(1);
+      expect(Number(await qfiDeployedtoken.currentStage())).to.equal(2);
+      expect(await qfiDeployedtoken.currentGrantRound()).to.equal(mockGrantRound.address);
+    });
 
+    it("allow owner to start accepting contributions/signups for the next grant round", async () => {
       // Close voting period and prepare for finalization.
-      await expect(qfi.connect(deployer).closeVotingAndWaitForDeadline())
-        .to.emit(qfi, "VotingPeriodClosed")
+      await expect(qfiDeployedtoken.connect(deployer).closeVotingAndWaitForDeadline())
+        .to.emit(qfiDeployedtoken, "VotingPeriodClosed")
         .withArgs(3);
 
       // Set PPT contract.
-      await expect(qfi.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
-        .to.emit(qfi, "PollProcessorAndTallyerChanged")
+      await expect(qfiDeployedtoken.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
+        .to.emit(qfiDeployedtoken, "PollProcessorAndTallyerChanged")
         .withArgs(mockPPT.address);
 
       // Mocks.
-      await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockPPT.mock.tallyBatchNum.withArgs().returns(1);
       await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
       await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
-      await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
-      await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
-      await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
+      await mockPPT.mock.processingComplete.withArgs().returns(true);
+      await mockGrantRound.mock.nativeToken.withArgs().returns(baseERC20Token.address);
       await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
 
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
-        .to.emit(qfi, "GrantRoundFinalized")
-        .withArgs(mockGrantRound.address, 4);
-
-      // Should revert.
       await expect(
-        qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
-      ).to.revertedWith("QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage");
+        qfiDeployedtoken.connect(deployer).
+        finalizeCurrentRound(
+          tallyResults.finalTallyCommitment, 
+          tallyResults.finalSbCommitment, 
+          tallyResults.alphaDenominator)
+        )
+        .to.emit(qfiDeployedtoken, "GrantRoundFinalized")
+        .withArgs(mockGrantRound.address, 4);
     });
-  });
+  })
 
-  describe("acceptContributionsAndTopUpsBeforeNewRound()", async () => {
+  describe("acceptContributionsAndTopUpsBeforeNewRound() with mocked token", async () => {
     beforeEach(async () => {
       // Initialize.
       await mockGrantRoundFactory.mock.owner.withArgs().returns(qfi.address);
@@ -1568,36 +1824,6 @@ describe("QFI", () => {
       expect(Number(await qfi.nextGrantRoundId())).to.equal(1);
       expect(Number(await qfi.currentStage())).to.equal(2);
       expect(await qfi.currentGrantRound()).to.equal(mockGrantRound.address);
-    });
-
-    it("allow owner to start accepting contributions/signups for the next grant round", async () => {
-      // Close voting period and prepare for finalization.
-      await expect(qfi.connect(deployer).closeVotingAndWaitForDeadline())
-        .to.emit(qfi, "VotingPeriodClosed")
-        .withArgs(3);
-
-      // Set PPT contract.
-      await expect(qfi.connect(deployer).setPollProcessorAndTallyer(mockPPT.address))
-        .to.emit(qfi, "PollProcessorAndTallyerChanged")
-        .withArgs(mockPPT.address);
-
-      // Mocks.
-      await mockPPT.mock.processingComplete.withArgs().returns(true);
-      await mockPPT.mock.sbCommitment.withArgs().returns(tallyResults.finalSbCommitment); 
-      await mockPPT.mock.tallyCommitment.withArgs().returns(tallyResults.finalTallyCommitment);
-      await mockGrantRound.mock.nativeToken.withArgs().returns(mockBaseERC20Token.address);
-      await mockBaseERC20Token.mock.balanceOf.withArgs(qfi.address).returns(contributionAmount);
-      await mockBaseERC20Token.mock.transfer.withArgs(mockGrantRound.address, contributionAmount).returns(true);
-      await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
-
-      await expect(qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
-        .to.emit(qfi, "GrantRoundFinalized")
-        .withArgs(mockGrantRound.address, 4);
-
-      // Should start a new contribution/signup period.
-      await expect(qfi.connect(deployer).acceptContributionsAndTopUpsBeforeNewRound())
-        .to.emit(qfi, "PreRoundContributionPeriodStarted")
-        .withArgs(1);
     });
 
     it("revert - allow only owner to close the voting period", async () => {

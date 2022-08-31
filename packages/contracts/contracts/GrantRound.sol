@@ -271,7 +271,16 @@ contract GrantRound is Poll {
             recipient = owner();
         }
         uint256 allocatedAmount = getAllocatedAmount(_tallyResult, 0);
+        // Get the balance of the receiver before the transfer 
+        uint256 balanceBefore = nativeToken.balanceOf(recipient);
         nativeToken.safeTransfer(recipient, allocatedAmount);
+        // Get the balance of the receiver after the transfer 
+        uint256 balanceAfter = nativeToken.balanceOf(recipient);
+        // Check that the transfer amount was fully received
+        require(
+            balanceBefore + allocatedAmount == balanceAfter, 
+            "GrantRound: the transfer was not correct"
+        );
 
         emit FundsClaimed(recipient, _voteOptionIndex, allocatedAmount);
     }
@@ -304,14 +313,18 @@ contract GrantRound is Poll {
         );
         // Factory contract is the default funding source
         uint256 balance = roundToken.balanceOf(address(this));
-        
+        uint256 balanceBeforeRecipient = roundToken.balanceOf(recipient);
         // Check that we have enough funds to do the transfer
         require(
             balance >= _payoutAmount,
             "GrantRound: not enough funds in the contract to transfer matching funds"
         );
         // Do the transfer
-        roundToken.safeTransfer(recipient, _payoutAmount);
+        uint256 balanceAfterRecipient = roundToken.balanceOf(recipient);
+        require(
+            balanceBeforeRecipient + _payoutAmount == balanceAfterRecipient, 
+            "GrantRound: the transfer was not correct"
+        );
         
         emit FundsClaimed(recipient, _voteOptionIndex, _payoutAmount);
     }

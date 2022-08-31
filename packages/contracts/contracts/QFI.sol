@@ -268,7 +268,17 @@ contract QFI is MACI, FundsManager {
             msg.sender,
             voiceCredits
         );
+
+        uint256 balanceBefore = nativeToken.balanceOf(address(this));
+ 
         nativeToken.safeTransferFrom(msg.sender, address(this), amount);
+        
+        uint256 balanceAfter = nativeToken.balanceOf(address(this));
+       
+        require(
+            balanceBefore + amount == balanceAfter, 
+            "QFI: the transfer was not successful" 
+        );
 
         signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
 
@@ -301,12 +311,21 @@ contract QFI is MACI, FundsManager {
             currentStage == Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS,
             "QFI: Not accepting signups or top ups"
         );
+
         // Reconstruction of exact contribution amount from VCs may not be possible due to a loss of precision
         uint256 amount = contributors[msg.sender].voiceCredits *
             voiceCreditFactor;
         require(amount > 0, "FundingRound: Nothing to withdraw");
         contributors[msg.sender].voiceCredits = 0;
+
+        // Get the balance of the receiver before 
+        uint256 balanceBefore = nativeToken.balanceOf(msg.sender);
         nativeToken.safeTransfer(msg.sender, amount);
+        uint256 balanceAfter = nativeToken.balanceOf(msg.sender);
+        require (
+            balanceBefore + amount == balanceAfter, 
+            "QFI: the transfer was not successful"
+        );
 
         emit ContributionWithdrew(msg.sender);
     }
@@ -448,6 +467,7 @@ contract QFI is MACI, FundsManager {
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
         _transferMatchingFunds(g);
         //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
+
         g.finalize(_alphaDenominator);
 
         currentStage = Stage.FINALIZED;
