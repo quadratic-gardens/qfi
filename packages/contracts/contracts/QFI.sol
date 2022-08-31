@@ -190,6 +190,13 @@ contract QFI is MACI, FundsManager {
         MessageAqFactory _messageAqFactoryPolls,
         MessageAqFactory _messageAqFactoryGrantRounds
     ) public onlyOwner {
+        require(
+            currentStage == Stage.NOT_INITIALIZED, 
+            "QFI: Cannot initialize while not in the NOT_INITIALIZED stage"
+        );
+
+        currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
+
         // The VkRegistry owner must be the owner of this contract, this is checked in the init function
         init(_vkRegistry, _messageAqFactoryPolls);
 
@@ -208,7 +215,6 @@ contract QFI is MACI, FundsManager {
             messageAqFactoryGrants.owner() == address(grantRoundFactory),
             "MACI: MessageAqFactory owner incorrectly set"
         );
-        currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 
         emit QfiInitialized(
             address(_messageAqFactoryGrantRounds),
@@ -258,7 +264,7 @@ contract QFI is MACI, FundsManager {
             "QFI: top ups not supported, donate to matching pool instead"
         );
         uint256 voiceCredits = amount / voiceCreditFactor;
-        contributors[msg.sender] = ContributorStatus(voiceCredits, false);
+        contributors[msg.sender] = ContributorStatus(voiceCredits, true);
         contributorCount += 1;
         bytes memory signUpGatekeeperData = abi.encode(
             msg.sender,
@@ -269,18 +275,18 @@ contract QFI is MACI, FundsManager {
             voiceCredits
         );
 
+        signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
+
+        // Save the balance of the receiver before the transfer
         uint256 balanceBefore = nativeToken.balanceOf(address(this));
- 
         nativeToken.safeTransferFrom(msg.sender, address(this), amount);
-        
+        // Save the balance of the receiver after the transfer
         uint256 balanceAfter = nativeToken.balanceOf(address(this));
-       
+        // Confirm that the full transfer amount was received
         require(
             balanceBefore + amount == balanceAfter, 
             "QFI: the transfer was not successful" 
         );
-
-        signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
 
         emit ContributionSent(msg.sender, amount);
     }
@@ -352,6 +358,8 @@ contract QFI is MACI, FundsManager {
         uint256 pollId = nextPollId;
         uint256 grantRoundId = nextGrantRoundId;
 
+        currentStage = Stage.VOTING_PERIOD_OPEN;
+
         // The message batch size and the tally batch size
         BatchSizes memory batchSizes = BatchSizes(
             uint8(MESSAGE_TREE_ARITY)**uint8(_treeDepths.messageTreeSubDepth),
@@ -379,8 +387,6 @@ contract QFI is MACI, FundsManager {
         nextGrantRoundId++;
         // Increment the poll ID for the next poll
         nextPollId++;
-
-        currentStage = Stage.VOTING_PERIOD_OPEN;
 
         emit GrantRoundDeployed(
             address(currentGrantRound),
@@ -462,6 +468,8 @@ contract QFI is MACI, FundsManager {
             "QFI: finalTallyCommitment does not match the current grant round's tally commitment"
         );
 
+        currentStage = Stage.FINALIZED;
+
         GrantRound g = currentGrantRound;
 
         //NOTE: matching pool will be balance of the grant contract less the totalSpent * voiceCreditFactor
@@ -469,8 +477,6 @@ contract QFI is MACI, FundsManager {
         //NOTE: tansfer the funds to the grant round contract first before finalizing, so that the matching pool is calculated correctly
 
         g.finalize(_alphaDenominator);
-
-        currentStage = Stage.FINALIZED;
 
         emit GrantRoundFinalized(address(g), currentStage);
     }

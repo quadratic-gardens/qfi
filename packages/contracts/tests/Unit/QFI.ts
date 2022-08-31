@@ -376,7 +376,7 @@ describe("QFI", () => {
             mockMessageAqFactoryPolls.address,
             mockMessageAqFactoryGrantRounds.address
           )
-      ).to.revertedWith("MACI: already initialised");
+      ).to.revertedWith("QFI: Cannot initialize while not in the NOT_INITIALIZED stage");
     });
   });
 
