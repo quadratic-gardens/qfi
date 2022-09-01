@@ -1311,7 +1311,7 @@ describe("QFI", () => {
 
     it("revert - cannot close the voting period while not on voting period open", async () => {
       await expect(qfi.connect(deployer).closeVotingAndWaitForDeadline()).to.revertedWith(
-        "MACI: WAITING_FOR_SIGNUPS_AND_TOPUPS Cannot deploy a new grant round"
+        "QFI: Cannot finalize a grant round while not in the VOTING_PERIOD_OPEN stage"
       );
     });
   });
@@ -1834,7 +1834,7 @@ describe("QFI", () => {
 
     it("revert - cannot start accepting new contributions/signups while the current grant round is not finalized yet", async () => {
       await expect(qfi.connect(deployer).acceptContributionsAndTopUpsBeforeNewRound()).to.revertedWith(
-        "QFI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
+        "QFI: Cannot deploy a new grant round while not in the FINALIZED stage"
       );
     });
   });

@@ -264,6 +264,7 @@ contract QFI is MACI, FundsManager {
             "QFI: top ups not supported, donate to matching pool instead"
         );
         uint256 voiceCredits = amount / voiceCreditFactor;
+        // The user is marked as registered here upon contribution
         contributors[msg.sender] = ContributorStatus(voiceCredits, true);
         contributorCount += 1;
         bytes memory signUpGatekeeperData = abi.encode(
@@ -438,7 +439,7 @@ contract QFI is MACI, FundsManager {
     function closeVotingAndWaitForDeadline() public onlyOwner {
         require(
             currentStage == Stage.VOTING_PERIOD_OPEN,
-            "MACI: WAITING_FOR_SIGNUPS_AND_TOPUPS Cannot deploy a new grant round"
+            "QFI: Cannot finalize a grant round while not in the VOTING_PERIOD_OPEN stage"
         );
         //TODO: ACTUALLY CLOSE THE VOTING PERIOD on the grant round contract
         currentStage = Stage.WAITING_FOR_FINALIZATION;
@@ -484,9 +485,11 @@ contract QFI is MACI, FundsManager {
     function acceptContributionsAndTopUpsBeforeNewRound() public onlyOwner {
         require(
             currentStage == Stage.FINALIZED,
-            "QFI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage"
+            "QFI: Cannot deploy a new grant round while not in the FINALIZED stage"
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
+
+        // NOTE that contributors are not reset so that they do not need to signup again
 
         emit PreRoundContributionPeriodStarted(currentStage);
     }
