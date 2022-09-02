@@ -844,6 +844,21 @@ describe("QFI", () => {
     it("revert - nothing to withdraw", async () => {
       await expect(qfiDeployedtoken.connect(deployer).withdrawContribution()).to.revertedWith("FundingRound: Nothing to withdraw");
     });
+
+    it("should have decreased the number of contributions", async () => {
+      await mockBaseERC20Token.mock.balanceOf.withArgs(qfiDeployedtoken.address).returns(contributionAmount);
+
+      const numberOfContributors = await qfiDeployedtoken.contributorCount();
+      
+      await mockBaseERC20Token.mock.transfer.withArgs(contributorAddress, contributionAmount).returns(true);
+      await expect(qfiDeployedtoken.connect(contributor).withdrawContribution())
+        .to.emit(qfiDeployedtoken, "ContributionWithdrew")
+        .withArgs(contributorAddress);
+
+      expect(await qfiDeployedtoken.contributorCount())
+        .to.be.equal(Number(numberOfContributors) - 1);
+      
+    })
   });
 
   describe("deployGrantRound()", async () => {

@@ -1479,8 +1479,7 @@ describe("Grant Round", () => {
       // Now that the state is both cancelled and finalized we can call transferMatchingFunds()
       await expect(grantRound.connect(deployer).transferMatchingFunds(
           voteOptionIndex,
-          dummyBalance + 1,
-          mockBaseERC20Token.address,
+          dummyBalance + 1
       )).to.be.revertedWith("GrantRound: not enough funds in the contract to transfer matching funds");
     });
 
@@ -1520,8 +1519,7 @@ describe("Grant Round", () => {
       // Now that the state is both cancelled and finalized we can call transferMatchingFunds()
       await expect(grantRound.connect(deployer).transferMatchingFunds(
         voteOptionIndex,
-        dummyBalance,
-        mockBaseERC20Token.address,
+        dummyBalance
       )).to.be.revertedWith("GrantRound: the transfer was not correct");
     });
   });
