@@ -328,7 +328,7 @@ contract QFI is MACI, FundsManager {
             "QFI: Not accepting signups or top ups"
         );
 
-        // If a user withdraws their contribution, we shuold reduce the current number of contributors
+        // If a user withdraws their contribution, we should reduce the current number of contributors
         contributorCount--;
 
         // Reconstruction of exact contribution amount from VCs may not be possible due to a loss of precision
@@ -511,8 +511,7 @@ contract QFI is MACI, FundsManager {
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 
-        // NOTE that contributors are not reset so that they do not need to signup again
-        // Also, the total number of contributors is not reset so that it is possible 
+        // NOTE, the total number of contributors is not reset so that it is possible 
         // to keep track of the total contributions
 
         emit PreRoundContributionPeriodStarted(currentStage);

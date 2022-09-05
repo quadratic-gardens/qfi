@@ -61,12 +61,16 @@ contract FundsManager is Ownable {
      */
     function getMatchingFunds(ERC20 token) external view returns (uint256) {
         uint256 matchingPoolSize = token.balanceOf(address(this));
-        for (uint256 index = 0; index < fundingSources.length(); index++) {
+        uint256 fundingSourcesLength = fundingSources.length();
+        for (uint256 index = 0; index < fundingSourcesLength;) {
             address fundingSource = fundingSources.at(index);
             uint256 allowance = token.allowance(fundingSource, address(this));
             uint256 balance = token.balanceOf(fundingSource);
             uint256 contribution = allowance < balance ? allowance : balance;
             matchingPoolSize += contribution;
+            unchecked {
+                index++;
+            }
         }
         return matchingPoolSize;
     }
@@ -96,7 +100,8 @@ contract FundsManager is Ownable {
             roundToken.safeTransfer(address(currentRound), matchingPoolSize);
         }
         // Pull funds from other funding sources
-        for (uint256 index = 0; index < fundingSources.length(); index++) {
+        uint256 fundingSourceLength = fundingSources.length();
+        for (uint256 index = 0; index < fundingSourceLength;) {
             address fundingSource = fundingSources.at(index);
             uint256 allowance = roundToken.allowance(
                 fundingSource,
@@ -111,6 +116,9 @@ contract FundsManager is Ownable {
                     contribution
                 );
                 balanceTransferred += contribution;
+            }
+            unchecked {
+                index++;
             }
         }
         uint256 currentRoundBalanceAfter = roundToken.balanceOf(address(currentRound));

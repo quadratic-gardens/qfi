@@ -24,7 +24,7 @@ contract SimpleRecipientRegistry is Ownable, BaseRecipientRegistry {
      * @dev Deploy the registry.
      * @param _controller Controller address. Normally it's a funding round factory contract.
      */
-    constructor(address _controller) public Ownable() {
+    constructor(address _controller) Ownable() {
         controller = _controller;
     }
 
