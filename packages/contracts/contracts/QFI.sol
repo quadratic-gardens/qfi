@@ -276,16 +276,12 @@ contract QFI is MACI, FundsManager {
         // The user is marked as registered here upon contribution
         contributors[msg.sender] = ContributorStatus(voiceCredits, true);
         contributorCount += 1;
-        bytes memory signUpGatekeeperData = abi.encode(
-            msg.sender,
-            voiceCredits
-        );
-        bytes memory initialVoiceCreditProxyData = abi.encode(
+        bytes memory signUpGatekeeperAndVoiceCreditData = abi.encode(
             msg.sender,
             voiceCredits
         );
 
-        signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
+        signUp(pubKey, signUpGatekeeperAndVoiceCreditData, signUpGatekeeperAndVoiceCreditData);
 
         // Save the balance of the receiver before the transfer
         uint256 balanceBefore = nativeToken.balanceOf(address(this));
