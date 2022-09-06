@@ -12,6 +12,7 @@ describe("Funds Manager", () => {
   // Signers.
   let deployer: Signer;
   let fundingSource: Signer;
+  let otherSigner: Signer;
   let deployerAddress: string;
   let fundingSourceAddress: string;
 
@@ -23,7 +24,7 @@ describe("Funds Manager", () => {
 
   beforeEach(async () => {
     // Get signers.
-    [deployer, fundingSource] = await ethers.getSigners();
+    [deployer, fundingSource, otherSigner] = await ethers.getSigners();
     deployerAddress = await deployer.getAddress();
     fundingSourceAddress = await fundingSource.getAddress();
 
@@ -72,7 +73,7 @@ describe("Funds Manager", () => {
       // Should revert.
       await expect(
         fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
-      ).to.be.revertedWith("Factory: Funding source already added");
+      ).to.be.revertedWith("FundsManager: Funding source already added");
     });
   });
 
@@ -97,8 +98,24 @@ describe("Funds Manager", () => {
       // Should revert.
       await expect(
         fundsManager.connect(deployer).removeFundingSource(fundingSourceAddress)
-      ).to.be.revertedWith("Factory: Funding source not found");
+      ).to.be.revertedWith("FundsManager: Funding source not found");
     });
+
+    it("revert - only admin or funding source can remove", async () => {
+      // Add.
+      await expect(
+        fundsManager.connect(deployer).addFundingSource(fundingSourceAddress)
+      )
+        .to.emit(fundsManager, "FundingSourceAdded")
+        .withArgs(fundingSourceAddress);
+
+      // Fail 
+      await expect(
+        fundsManager.connect(otherSigner).removeFundingSource(fundingSourceAddress)
+      )
+        .to.be.revertedWith("FundsManager: Funding source not found");
+    });
+
   });
 
   describe("getMatchingFunds()", async () => {

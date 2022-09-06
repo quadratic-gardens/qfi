@@ -40,7 +40,7 @@ contract FundsManager is Ownable {
      */
     function addFundingSource(address _source) external {
         bool result = fundingSources.add(_source);
-        require(result, 'Factory: Funding source already added');
+        require(result, 'FundsManager: Funding source already added');
 
         emit FundingSourceAdded(_source);
     }
@@ -50,10 +50,14 @@ contract FundsManager is Ownable {
      * @param _source Address of the funding source.
      */
     function removeFundingSource(address _source) external {
-        bool result = fundingSources.remove(_source);
-        require(result, 'Factory: Funding source not found');
+        address source = _source;
+        if (msg.sender != owner()) {
+            source = msg.sender;
+        } 
+        bool result = fundingSources.remove(source);
+        require(result, 'FundsManager: Funding source not found');
 
-        emit FundingSourceRemoved(_source);
+        emit FundingSourceRemoved(source);
     }
 
     /**
