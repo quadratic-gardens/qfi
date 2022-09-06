@@ -148,7 +148,8 @@ contract QFI is MACI, FundsManager {
 
     // A mapping of grantRound IDs to GrantRound contracts.
     mapping(uint256 => GrantRound) public grantRounds;
-    mapping(address => ContributorStatus) private contributors;
+    // grantId => contributorAddress => contributorStatus
+    mapping(uint256 => mapping(address => ContributorStatus)) private grantToContributors;
 
     /**
      * @notice Constructor for the Quadratic Funding Infrastructure
@@ -250,7 +251,10 @@ contract QFI is MACI, FundsManager {
      * @param pubKey Contributor's public key.
      * @param amount Contribution amount.
      */
-    function contribute(PubKey calldata pubKey, uint256 amount) external {
+    function contribute(
+        PubKey calldata pubKey, 
+        uint256 amount
+        ) external {
         require(
             numSignUps < STATE_TREE_ARITY**stateTreeDepth,
             "MACI: maximum number of signups reached"
@@ -267,25 +271,30 @@ contract QFI is MACI, FundsManager {
             amount <= MAX_VOICE_CREDITS * voiceCreditFactor,
             "QFI: Contribution amount is too large"
         );
-        // TODO: TOP UP CHECK
+
+        // Check that the user has not contributed before
         require(
-            contributors[msg.sender].voiceCredits == 0,
+            grantToContributors[nextGrantRoundId][msg.sender].voiceCredits == 0,
             "QFI: top ups not supported, donate to matching pool instead"
         );
+
         uint256 voiceCredits = amount / voiceCreditFactor;
         // The user is marked as registered here upon contribution
-        contributors[msg.sender] = ContributorStatus(voiceCredits, true);
+        grantToContributors[nextGrantRoundId][msg.sender] = ContributorStatus(voiceCredits, true);
+        // Increase the number of total contributors
+        // TODO Does it make sense to store this value per round
         contributorCount += 1;
-        bytes memory signUpGatekeeperData = abi.encode(
-            msg.sender,
-            voiceCredits
-        );
-        bytes memory initialVoiceCreditProxyData = abi.encode(
+
+        bytes memory signUpGatekeeperAndInitialVoiceCreditProxyData = abi.encode(
             msg.sender,
             voiceCredits
         );
 
-        signUp(pubKey, signUpGatekeeperData, initialVoiceCreditProxyData);
+        signUp(
+            pubKey, 
+            signUpGatekeeperAndInitialVoiceCreditProxyData, 
+            signUpGatekeeperAndInitialVoiceCreditProxyData
+        );
 
         // Save the balance of the receiver before the transfer
         uint256 balanceBefore = nativeToken.balanceOf(address(this));
@@ -310,8 +319,10 @@ contract QFI is MACI, FundsManager {
         address, /* _caller */
         bytes memory _data
     ) public view returns (uint256) {
+
         address user = abi.decode(_data, (address));
-        uint256 initialVoiceCredits = contributors[user].voiceCredits;
+        uint256 initialVoiceCredits = grantToContributors[nextGrantRoundId][user].voiceCredits;
+
         require(
             initialVoiceCredits > 0,
             "FundingRound: User does not have any voice credits"
@@ -332,10 +343,11 @@ contract QFI is MACI, FundsManager {
         contributorCount--;
 
         // Reconstruction of exact contribution amount from VCs may not be possible due to a loss of precision
-        uint256 amount = contributors[msg.sender].voiceCredits *
-            voiceCreditFactor;
+        uint256 amount = grantToContributors[nextGrantRoundId][msg.sender].voiceCredits * voiceCreditFactor;
         require(amount > 0, "FundingRound: Nothing to withdraw");
-        contributors[msg.sender].voiceCredits = 0;
+
+        // Resets the voice credits
+        grantToContributors[nextGrantRoundId][msg.sender].voiceCredits = 0;
 
         // Get the balance of the receiver before 
         uint256 balanceBefore = nativeToken.balanceOf(msg.sender);
