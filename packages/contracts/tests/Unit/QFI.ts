@@ -201,7 +201,7 @@ describe("QFI", () => {
     expect(await qfi.currentGrantRound()).to.be.equal(constants.AddressZero);
     expect(await qfi.pollProcessorAndTallyer()).to.be.equal(constants.AddressZero);
     expect(await qfi.nextGrantRoundId()).to.be.equal(0);
-    expect(await qfi.contributorCount()).to.be.equal(0);
+    expect(await qfi.grantRoundToContributorsCount(Number(await qfi.nextGrantRoundId()))).to.be.equal(0);
     expect(await qfi.numSignUps()).to.be.equal(0);
     expect(await qfi.vkRegistry()).to.be.equal(constants.AddressZero);
     expect(await qfi.messageAqFactory()).to.be.equal(constants.AddressZero);
@@ -848,14 +848,18 @@ describe("QFI", () => {
     it("should have decreased the number of contributions", async () => {
       await mockBaseERC20Token.mock.balanceOf.withArgs(qfiDeployedtoken.address).returns(contributionAmount);
 
-      const numberOfContributors = await qfiDeployedtoken.contributorCount();
+      const numberOfContributors = await 
+        qfiDeployedtoken.grantRoundToContributorsCount(
+          await qfiDeployedtoken.nextGrantRoundId()
+        );
       
       await mockBaseERC20Token.mock.transfer.withArgs(contributorAddress, contributionAmount).returns(true);
       await expect(qfiDeployedtoken.connect(contributor).withdrawContribution())
         .to.emit(qfiDeployedtoken, "ContributionWithdrew")
         .withArgs(contributorAddress);
 
-      expect(await qfiDeployedtoken.contributorCount())
+      expect(await qfiDeployedtoken.grantRoundToContributorsCount(
+        await qfiDeployedtoken.nextGrantRoundId()))
         .to.be.equal(Number(numberOfContributors) - 1);
       
     })

@@ -143,13 +143,14 @@ contract QFI is MACI, FundsManager {
     PollProcessorAndTallyer public pollProcessorAndTallyer;
 
     uint256 public nextGrantRoundId;
-    uint256 public contributorCount;
     ERC20 public nativeToken;
 
+    // grantRoundId => contributorsCount 
+    mapping(uint256 => uint256) public grantRoundToContributorsCount;
     // A mapping of grantRound IDs to GrantRound contracts.
     mapping(uint256 => GrantRound) public grantRounds;
     // grantId => contributorAddress => contributorStatus
-    mapping(uint256 => mapping(address => ContributorStatus)) private grantToContributors;
+    mapping(uint256 => mapping(address => ContributorStatus)) private grantRoundToContributors;
 
     /**
      * @notice Constructor for the Quadratic Funding Infrastructure
@@ -274,16 +275,16 @@ contract QFI is MACI, FundsManager {
 
         // Check that the user has not contributed before
         require(
-            grantToContributors[nextGrantRoundId][msg.sender].voiceCredits == 0,
+            grantRoundToContributors[nextGrantRoundId][msg.sender].voiceCredits == 0,
             "QFI: top ups not supported, donate to matching pool instead"
         );
 
         uint256 voiceCredits = amount / voiceCreditFactor;
         // The user is marked as registered here upon contribution
-        grantToContributors[nextGrantRoundId][msg.sender] = ContributorStatus(voiceCredits, true);
-        // Increase the number of total contributors
-        // TODO Does it make sense to store this value per round
-        contributorCount += 1;
+        grantRoundToContributors[nextGrantRoundId][msg.sender] = ContributorStatus(voiceCredits, true);
+        
+        // Increase the number of contributors for this round
+        grantRoundToContributorsCount[nextGrantRoundId]++;
 
         bytes memory signUpGatekeeperAndInitialVoiceCreditProxyData = abi.encode(
             msg.sender,
@@ -321,7 +322,7 @@ contract QFI is MACI, FundsManager {
     ) public view returns (uint256) {
 
         address user = abi.decode(_data, (address));
-        uint256 initialVoiceCredits = grantToContributors[nextGrantRoundId][user].voiceCredits;
+        uint256 initialVoiceCredits = grantRoundToContributors[nextGrantRoundId][user].voiceCredits;
 
         require(
             initialVoiceCredits > 0,
@@ -339,15 +340,16 @@ contract QFI is MACI, FundsManager {
             "QFI: Not accepting signups or top ups"
         );
 
-        // If a user withdraws their contribution, we shuold reduce the current number of contributors
-        contributorCount--;
-
         // Reconstruction of exact contribution amount from VCs may not be possible due to a loss of precision
-        uint256 amount = grantToContributors[nextGrantRoundId][msg.sender].voiceCredits * voiceCreditFactor;
+        uint256 amount = grantRoundToContributors[nextGrantRoundId][msg.sender].voiceCredits * voiceCreditFactor;
         require(amount > 0, "FundingRound: Nothing to withdraw");
 
+        // If a user withdraws their contribution, we shuold reduce the current number of contributors
+        // Cannot underflow as if there weren't any contributors it would revert on the check above
+        grantRoundToContributorsCount[nextGrantRoundId]--;
+
         // Resets the voice credits
-        grantToContributors[nextGrantRoundId][msg.sender].voiceCredits = 0;
+        grantRoundToContributors[nextGrantRoundId][msg.sender].voiceCredits = 0;
 
         // Get the balance of the receiver before 
         uint256 balanceBefore = nativeToken.balanceOf(msg.sender);
@@ -422,6 +424,22 @@ contract QFI is MACI, FundsManager {
             _coordinatorPubKey,
             currentStage
         );
+    }
+
+    /**
+     * @notice Retrieves the total number of contributions
+     * @dev public view function, returns the total contributors
+     * @return returns the number of contributors so far
+     */
+    function getTotalContributions() public view returns(uint256) {
+        uint256 contributions;
+        for (uint256 i; i <= nextGrantRoundId;) {
+            contributions += grantRoundToContributorsCount[i];
+            unchecked {
+                i++;
+            }
+        }
+        return contributions;
     }
 
     /**
@@ -523,9 +541,8 @@ contract QFI is MACI, FundsManager {
         );
         currentStage = Stage.WAITING_FOR_SIGNUPS_AND_TOPUPS;
 
-        // NOTE that contributors are not reset so that they do not need to signup again
-        // Also, the total number of contributors is not reset so that it is possible 
-        // to keep track of the total contributions
+        // NOTE the contributors are stored for each round, therefore there is no need to 
+        // reset the count
 
         emit PreRoundContributionPeriodStarted(currentStage);
     }
