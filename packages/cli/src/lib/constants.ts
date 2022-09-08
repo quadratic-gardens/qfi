@@ -274,6 +274,18 @@ export const jsonRecipientsRecords: Recipient[] = [
     logoCdnUrl: "https://mobile.twitter.com/defiargentina/photo",
     bannerImageLink: "https://twitter.com/DefiArgentina/header_photo"
   }
+  ,
+  {
+    projectName: "Expediente Cripto",
+    tagline: "Expediente Cripto es un proyecto educativo legal vinculado con la Tecnología Blockchain",
+    description:
+      "Somos un grupo de tres estudiantes de abogacía que queremos compartir lo que sabemos de cripto y derecho. Comenzamos con una temporada de spaces e invitados abogados y abogadas: 1) Token en el Derecho, 2) NFT y Propiedad Intelectual, 3) Top 5 países criptofriendly en regulación, 4) Sueldos en cripto , 5) Demandas en Web3, 6) Smart Contracts y Derecho, 7) Estafas en Web3, 8) Cibercrimen, 9) Derecho Informático y programación, 10) Metaverso y Derecho. Queremos ser el primer proyecto de comunicación legal cripto para educar sobre estos temas. Ademas contamos con el armado de un panel que realizamos en eventos sobre 5 tips criptojuridicos que cualquier proyecto Web3 debe considerar a la hora de comenzar.",
+    ethereumAddress: "0x1854e5e725C2e55B0C4C323a13e1ca26333F40a2",
+    website: "https://twitter.com/naticchain",
+    thumbnailImageLink: "https://pbs.twimg.com/profile_images/1504102639801413641/9gNRInhu_400x400.jpg",
+    logoCdnUrl: "https://pbs.twimg.com/profile_images/1504102639801413641/9gNRInhu_400x400.jpg",
+    bannerImageLink: "https://drive.google.com/file/d/1QVNYE4MNkortrFY28bxnd-4CERDCvI0g/view?usp=sharing",
+  }
 ]
 
 export const deployedContracts = {"PoseidonT3":"0x6790f431a0684B1D834f1367c9998a1A1eeca137","PoseidonT4":"0x0AB6E7Fd9cFCC8f5a71391062BF0E8b13589835b","PoseidonT5":"0xe4257ADCE12F0f4e418fa525B1F8bf245139D9a0","PoseidonT6":"0x96f608f4C1105662752F6065A1b974C17154a007","GrantRoundFactory":"0x5cD56040172f100F60C95ef8BB6696642285599c","PollFactory":"0xe2Ff76E1a8ab67a6cB7Bc79F5906F0dE810F8766","MessageAqFactory":"0xC514790CEe4f17e4c0a96bdb2Ad515812AF90D8C","MessageAqFactoryGrants":"0x670fC7131B795727a7Ff2c5b36302C48DBA0E346","SimpleHackathon":"0x6aB37d373103Df0aA3887A88852af30548787E87","VKRegistry":"0xD8262d0962050a13724EcCAa624B130FcC29a97b","BaseERC20Token":"0x45C5A81641b75F9EE4eE13834fE28fA5d910B225","MockVerifier":"0xe1b1B83C76b1d8Cb29B2371AbeaA2bD3bc3A9986","PollProcessorAndTallier":"0x7c4440340E55a8d3fEF3D922ac426348fD5Fad64","QFI":"0xfbdD5cD00445812B0d06fAF13990f99649D3D2c1"}

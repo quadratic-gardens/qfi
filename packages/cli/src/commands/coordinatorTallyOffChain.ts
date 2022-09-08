@@ -101,10 +101,10 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
     const currentGrantRound = await qfi.currentGrantRound()
     const grantRound = new ethers.Contract(currentGrantRound, GrantRound__factory.abi, deployer)
-    const startBlock = 30496801
+    const startBlock = 31889151  
     const currentBlock = await provider.getBlockNumber()
 
-    const numBlocksPerRequest = 1000 // Around a day's worth of blocks
+    const numBlocksPerRequest = 100 // Around a day's worth of blocks
     /// //////////////////////////////////////////////////////////////////////////
     const spinner = customSpinner(`Read Smart Contracts`, "point")
     spinner.start()
@@ -117,8 +117,9 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     const dd = await grantRound.getDeployTimeAndDuration()
     const deployTime = Number(dd[0])
     const duration = Number(dd[1])
-    const lastBlockSignups = (2 / (60 * 60 * 24) + 1) * 43200 + startBlock
-    const lastBlockVotes = (duration / (60 * 60 * 24) + 1) * 43200 + startBlock
+    const lastBlockSignups = (8/24) * 43200 + startBlock
+    const lastBlockVotes = 32176267 - ((32176267 - 31889151 ) % numBlocksPerRequest)
+    // (2 / (60 * 60 * 24) + 1) * 43200 + startBlock
     const onChainMaxValues = await grantRound.maxValues()
     const onChainTreeDepths = await grantRound.treeDepths()
     const onChainBatchSizes = await grantRound.batchSizes()
