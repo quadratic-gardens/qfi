@@ -919,7 +919,12 @@ describe("QFI", () => {
       await expect(
         qfi
           .connect(deployer)
-          .deployGrantRound(duration, maxValues, treeDepths, coordinatorMaciPublicKey, coordinatorAddress)
+          .deployGrantRound(
+            duration, 
+            maxValues, 
+            treeDepths, 
+            coordinatorMaciPublicKey, 
+            coordinatorAddress)
       )
         .to.emit(qfi, "GrantRoundDeployed")
         .withArgs(

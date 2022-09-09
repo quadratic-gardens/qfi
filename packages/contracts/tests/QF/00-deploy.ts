@@ -151,7 +151,6 @@ describe("Deploy - QV Infrastructure Smart Contracts", () => {
         BigNumber.from(0),
       ])
     ).to.be.equal(BigNumber.from("0x2066be41bebe6caf7e079360abe14fbf9118c62eabc42e2fe75e342b160a95bc"));
-    
   });
 
   it("deploys GrantRoundFactory Contracts", async () => {

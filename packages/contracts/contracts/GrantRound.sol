@@ -325,7 +325,10 @@ contract GrantRound is Poll {
             "GrantRound: not enough funds in the contract to transfer matching funds"
         );
         // Do the transfer
+        nativeToken.safeTransfer(recipient, _payoutAmount);
+        // Get the balance after
         uint256 balanceAfterRecipient = nativeToken.balanceOf(recipient);
+        // Conferm that the balance is as expected
         require(
             balanceBeforeRecipient + _payoutAmount == balanceAfterRecipient, 
             "GrantRound: the transfer was not correct"

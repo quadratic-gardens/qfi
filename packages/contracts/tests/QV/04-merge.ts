@@ -395,6 +395,4 @@ describe("Merge - Merge Signup and Message leaves", () => {
          .withArgs(expectedStateRoot);
     });
   });
-
-  
 });
