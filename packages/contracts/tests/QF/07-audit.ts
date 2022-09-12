@@ -57,6 +57,7 @@ import { MockVerifier__factory } from "../../typechain/factories/MockVerifier__f
 
 import { MessageStruct } from "../../typechain/GrantRound";
 import { hash4, hash5 } from "qaci-crypto";
+import { MaciState } from 'qaci-core';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -317,7 +318,7 @@ describe("End to End testing", () => {
   });
 
   // Tests related to initialization of QFI
-  describe('Re-initialization', async () => {
+  describe('Initialization', async () => {
     it('reverts - cannot init twice', async () => {
       await expect(qfi.connect(deployer).initialize(
         vkRegistry.address,
@@ -325,6 +326,7 @@ describe("End to End testing", () => {
         messageAqFactoryGrants.address
       )).to.revertedWith('QFI: Cannot initialize while not in the NOT_INITIALIZED stage');
     });
+
     it('reverts - only admin can call initialize', async () => {
       await expect(qfi.connect(user1).initialize(
         vkRegistry.address,
@@ -708,7 +710,7 @@ describe("End to End testing", () => {
     });
 
     // Check that the baseDeposit was correct 
-    it('Confirms that the base deposit was set correctly', async () => {
+    it('confirms that the base deposit was set correctly', async () => {
       const baseDeposit = await optimisticRecipientRegistry.baseDeposit();
       expect(baseDeposit).to.equal(1 * 1e5);
     });
@@ -721,7 +723,7 @@ describe("End to End testing", () => {
     });
 
     // Add a recipient
-    it('Allows anyone to add a recipient', async () => {
+    it('allows anyone to add a recipient', async () => {
       const packed = ethers.utils.solidityPack(["address", "string"], [user2Address, "Metadata"]);
       const recipientId = ethers.utils.keccak256(packed);
       const blockTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
@@ -1064,7 +1066,7 @@ describe("End to End testing", () => {
       grantRound = await ethers.getContractAt('GrantRound', grantRoundAddress);
     });
 
-    it('Allows the owner to cancel', async () => {
+    it('allows the owner to cancel', async () => {
       await expect(grantRound.connect(deployer).cancel())
       .to.emit(grantRound, 'GrantRoundCancelled')
       .withArgs(true, true);
@@ -1082,6 +1084,105 @@ describe("End to End testing", () => {
 
       await expect(grantRound.connect(deployer).cancel())
       .to.revertedWith("GrantRound: Already finalized");
+    });
+  });
+
+  // Testing related to processing messages
+  describe('Processing messages', async () => {
+    beforeEach(async () => {
+      // Contribute
+      const contributionAmount = 10 * 1e5;
+      const contributors = [user1, user2];
+      const contributorsBefore = await qfi.grantRoundToContributorsCount(await qfi.nextGrantRoundId());
+  
+      for (const user of contributors) {
+        await baseERC20Token.connect(user).approve(qfi.address, contributionAmount);
+        await qfi.connect(user).contribute(
+          contributorMaciPubKey,
+          contributionAmount
+        )
+      }
+  
+      expect(
+        await qfi.grantRoundToContributorsCount(
+          await qfi.nextGrantRoundId()
+          )
+        ).to.be.equal(Number(contributorsBefore) + contributors.length);
+
+      // Deploy grant round 
+      await qfi.connect(deployer).deployGrantRound(
+        duration,
+        maxValues,
+        treeDepths,
+        contributorMaciPubKey,
+        coordinatorAddress
+      );
+
+      // Get the GrantRound address and create the testing object
+      const grantRoundAddress = await qfi.currentGrantRound()
+      grantRound = await ethers.getContractAt('GrantRound', grantRoundAddress);
+
+      // Vote 
+      const command = new Command(
+        BigInt(1),
+        contributorMaciKey.pubKey,
+        BigInt(0),
+        BigInt(9),
+        BigInt(1),
+        BigInt(0),
+        BigInt(0)
+      );
+      const signature = command.sign(contributorMaciKey.privKey);
+      const sharedKey = Keypair.genEcdhSharedKey(
+        contributorMaciKey.privKey,
+        coordinatorKey.pubKey
+      );
+      const encMessage = command.encrypt(signature, sharedKey);
+      message = <MessageStruct>encMessage.asContractParam();
+
+      const voters = [user2, user3];
+      for (const user of voters) {
+        expect(await 
+          grantRound.connect(user).publishMessageBatch(
+            [message],
+            [coordinatorPublicKey]
+          )
+        ).to.emit(grantRound, 'Voted').withArgs(await user.getAddress());
+      }
+    });
+
+    it('merges votes on GrantRound (Poll)', async () => {
+      // Get deploy time and duration 
+      const deployTimeAndDuration = await grantRound.getDeployTimeAndDuration();
+      const hardHatProvider = ethers.provider;
+      // Move forward 
+      await hardHatProvider.send("evm_increaseTime", [Number(deployTimeAndDuration[1]) + 30]);
+      await hardHatProvider.send("evm_mine", []);
+      await expect(grantRound.connect(deployer).mergeMessageAqSubRoots(0)).to.emit(
+        grantRound, 'MergeMessageAqSubRoots'
+      ).withArgs(0);
+      await expect(grantRound.mergeMessageAq()).to.emit(grantRound, "MergeMessageAq");
+    });
+
+    it('reverts - voting period not passed', async () => {
+      await expect(grantRound.connect(deployer).mergeMessageAqSubRoots(0))
+      .to.revertedWith('PollE04');
+    });
+
+    it('merges mergeMessageAqSubRoots', async () => {
+      // Get deploy time and duration 
+      const deployTimeAndDuration = await grantRound.getDeployTimeAndDuration();
+      const hardHatProvider = ethers.provider;
+      // Move forward 
+      await hardHatProvider.send("evm_increaseTime", [Number(deployTimeAndDuration[1]) + 30]);
+      await hardHatProvider.send("evm_mine", []);
+      // Merge
+      await expect(grantRound.connect(deployer).mergeMessageAqSubRoots(0)).to.emit(
+        grantRound, 'MergeMessageAqSubRoots'
+      ).withArgs(0);
+      await expect(grantRound.connect(deployer).mergeMessageAq()).to.emit(
+        grantRound, 'MergeMessageAq'
+      );
     });
   });
 
