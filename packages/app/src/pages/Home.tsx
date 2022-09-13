@@ -142,10 +142,8 @@ export const Home = () => {
                       <ul>
                         <li>{t("Project submission deadline: August 11th")}</li>
                         <li>{t("ETHLatam: August 11th - 13th")}</li>
-                        <li>
-                          {t("Voting opens: August 13th @ 2:00 pm GTM-3")}
-                        </li>
-                        <li>{t("Voting closes: August 19th")}</li>
+                        <li>{t("Voting opens")}</li>
+                        <li>{t("Voting closes")}</li>
                         <li>{t("Count of votes: August 22nd")}</li>
                         <li>{t("Distribution of funds: September 2nd")}</li>
                       </ul>
