@@ -176,8 +176,6 @@ public view function
 ### finalizeCurrentRound
 ```solidity
   function finalizeCurrentRound(
-    uint256 _finalTallyCommitment,
-    uint256 _finalTallyCommitment,
     uint256 _alphaDenominator
   ) external
 ```
@@ -188,8 +186,6 @@ Function that finalizes the current round by calling `finalize` and transfers ma
 #### Parameters:
 | Name | Type | Description                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
-|`_finalTallyCommitment` | uint256 | uint256, the tally commitment
-|`_finalTallyCommitment` | uint256 | uint256, the subsidy commitment
 |`_alphaDenominator` | uint256 | uint256, the denominator for calculations
 
 ### acceptContributionsAndTopUpsBeforeNewRound

@@ -35,7 +35,8 @@
     "argparse": "^1.0.10",
     "circomlib": "0.5.1",
     "mustache": "^4.2.0",
-    "qaci-contracts": "^1.1.9"
+    "qaci-contracts": "^1.1.9",
+    "solidity-docgen": "^0.6.0-beta.25"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
