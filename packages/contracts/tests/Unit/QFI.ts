@@ -590,17 +590,10 @@ describe("QFI", () => {
         .returns(expectedTotalAmountofVoiceCredits);
 
       // Should send a contribution correctly.
-      const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1; 
       await expect(
         qfiDeployedtoken.connect(contributor)
         .contribute(contributorMaciPubKey, contributionAmount)
         ).to.emit(qfiDeployedtoken, "SignUp")
-          .withArgs(
-            expectedStateIndex,
-            Object.values(contributorMaciPubKey),
-            expectedTotalAmountofVoiceCredits,
-            expectedTimestamp
-          )
         .to.emit(qfiDeployedtoken, "ContributionSent")
         .withArgs(contributorAddress, contributionAmount);
     });
@@ -627,15 +620,8 @@ describe("QFI", () => {
         .returns(expectedTotalAmountofVoiceCredits);
 
       // Should send a contribution correctly.
-      const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
       await expect(qfiDeployedtoken.connect(contributor).contribute(contributorMaciPubKey, contributionAmount))
         .to.emit(qfiDeployedtoken, "SignUp")
-        .withArgs(
-          expectedStateIndex,
-          Object.values(contributorMaciPubKey),
-          expectedTotalAmountofVoiceCredits,
-          expectedTimestamp
-        )
         .to.emit(qfiDeployedtoken, "ContributionSent")
         .withArgs(contributorAddress, contributionAmount);
 
@@ -816,19 +802,11 @@ describe("QFI", () => {
         .returns(expectedTotalAmountofVoiceCredits);
 
       // Should send a contribution correctly.
-      const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
       await expect(
         qfiDeployedtoken.connect(contributor)
         .contribute(contributorMaciPubKey, contributionAmount)
         ).to.emit(qfiDeployedtoken, "SignUp")
-          .withArgs(
-            expectedStateIndex,
-            Object.values(contributorMaciPubKey),
-            expectedTotalAmountofVoiceCredits,
-            expectedTimestamp
-          )
         .to.emit(qfiDeployedtoken, "ContributionSent")
-        .withArgs(contributorAddress, contributionAmount);
     });
 
     it("should withdraw the contribution", async () => {
@@ -842,7 +820,8 @@ describe("QFI", () => {
     });
 
     it("revert - nothing to withdraw", async () => {
-      await expect(qfiDeployedtoken.connect(deployer).withdrawContribution()).to.revertedWith("FundingRound: Nothing to withdraw");
+      await expect(qfiDeployedtoken.connect(deployer)
+        .withdrawContribution()).to.revertedWith("FundingRound: Nothing to withdraw");
     });
 
     it("should have decreased the number of contributions", async () => {
