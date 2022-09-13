@@ -1,3 +1,5 @@
+# QFI
+
 Top level contract for the Quadratic Funding Infrastructure
 
 Special type of MACI that allows for a quadratic funding scheme.
@@ -169,9 +171,6 @@ public view function
   function closeVotingAndWaitForDeadline(
   ) public
 ```
-
-
-
 
 ### finalizeCurrentRound
 ```solidity
