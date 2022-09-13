@@ -5,6 +5,7 @@
 /coverage 
 /typechain 
 /coverage.json
+/docsgen
 /docs/node_modules
 /docs/_book
 # dependencies

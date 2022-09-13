@@ -1,3 +1,5 @@
+# GrantRound
+
 This contract manages contributions, withdrawals, Voting and the distribution of funds for a particular grant round.
 
 Inherits from Poll Contract and uses the Poll Contract interface to manage the voting.
@@ -74,15 +76,13 @@ Publish the IPFS hash of the vote tally. Only coordinator can publish.
 ```
 
 
-
-
 ### cancel
 ```solidity
   function cancel(
   ) external
 ```
 
-Cancel funding round.
+Cancel a funding round.
 
 
 ### getAllocatedAmount
@@ -107,17 +107,11 @@ Get allocated token amount (without verification).
   ) external
 ```
 
-
-
-
 ### transferMatchingFunds
 ```solidity
   function transferMatchingFunds(
   ) external
 ```
-
-
-
 
 ## Events
 ### Voted

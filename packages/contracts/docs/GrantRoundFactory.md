@@ -1,3 +1,5 @@
+# GrantRoundFactory 
+
 Deploys new Quadratic Funding Round Contracts
 
 Factory Contract to deploy a special type of Poll called GrantRound.
@@ -26,7 +28,7 @@ public function, _messageAqFactory should deploy new AccQueueQuinaryMaci AccQueu
 ```
 Sets the recipientRegistry to use for the grant rounds
 
-public function,
+public function
 
 #### Parameters:
 | Name | Type | Description                                                          |
@@ -75,11 +77,11 @@ public function
 ```
 Event issued when the owner sets/changes the address of the MessageAqFactory smart contract.
 
-
 #### Parameters:
 | Name                           | Type          | Description                                    |
 | :----------------------------- | :------------ | :--------------------------------------------- |
 |`_messageAqFactory`| address | The Ethereum address of the new MessageAqFactory smart contract.
+
 ### RecipientRegistryChanged
 ```solidity
   event RecipientRegistryChanged(
