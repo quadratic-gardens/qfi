@@ -72,7 +72,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Configure - QV Infrastructure and vkRegistry", () => {
+describe("Configure - QF Infrastructure and vkRegistry", () => {
   let deployer: Signer;
   let deployerAddress: string;
   let PoseidonT3Factory: PoseidonT3__factory;

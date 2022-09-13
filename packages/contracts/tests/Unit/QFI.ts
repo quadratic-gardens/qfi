@@ -1435,8 +1435,6 @@ describe("QFI", () => {
       await expect(
         qfiDeployedtoken.connect(deployer).
         finalizeCurrentRound(
-          tallyResults.finalTallyCommitment, 
-          tallyResults.finalSbCommitment, 
           tallyResults.alphaDenominator)
         )
         .to.emit(qfiDeployedtoken, "GrantRoundFinalized")
@@ -1508,7 +1506,8 @@ describe("QFI", () => {
 
       await mockGrantRound.mock.finalize.withArgs(tallyResults.alphaDenominator).returns();
       
-      await expect(qfiDeployedtoken.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
+      await expect(qfiDeployedtoken.connect(deployer).finalizeCurrentRound(
+        tallyResults.alphaDenominator))
         .to.emit(qfiDeployedtoken, "GrantRoundFinalized")
         .withArgs(mockGrantRound.address, 4);
     });
@@ -1572,13 +1571,15 @@ describe("QFI", () => {
       // Transfer tokens to QFI for finialization 
       expect(await baseERC20Token.connect(deployer).transfer(qfiDeployedtoken.address, contributionAmount));
 
-      await expect(qfiDeployedtoken.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator))
+      await expect(qfiDeployedtoken.connect(deployer).finalizeCurrentRound(
+        tallyResults.alphaDenominator))
         .to.emit(qfiDeployedtoken, "GrantRoundFinalized")
         .withArgs(mockGrantRound.address, 4);
 
       // Should revert.
       await expect(
-        qfiDeployedtoken.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
+        qfiDeployedtoken.connect(deployer).finalizeCurrentRound(
+          tallyResults.alphaDenominator)
       ).to.revertedWith("QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage");
     });
   })
@@ -1614,13 +1615,15 @@ describe("QFI", () => {
 
     it("revert - allow only owner to finalize current grant round", async () => {
       await expect(
-        qfi.connect(contributor).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
+        qfi.connect(contributor).finalizeCurrentRound(
+          tallyResults.alphaDenominator)
       ).to.revertedWith("Ownable: caller is not the owner");
     });
 
     it("revert - cannot finalize the grant round while not on waiting for finalization", async () => {
       await expect(
-        qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
+        qfi.connect(deployer).finalizeCurrentRound(
+          tallyResults.alphaDenominator)
       ).to.revertedWith("QFI: Cannot finalize a grant round while not in the WAITING_FOR_FINALIZATION stage");
     });
 
@@ -1678,7 +1681,8 @@ describe("QFI", () => {
       await mockPPT.mock.processingComplete.withArgs().returns(false);
 
       await expect(
-        qfi.connect(deployer).finalizeCurrentRound(tallyResults.finalTallyCommitment, tallyResults.finalSbCommitment, tallyResults.alphaDenominator)
+        qfi.connect(deployer).finalizeCurrentRound(
+          tallyResults.alphaDenominator)
       ).to.revertedWith("QFI: messages have not been proccessed");
     });
 
@@ -1774,8 +1778,6 @@ describe("QFI", () => {
       await expect(
         qfiDeployedtoken.connect(deployer).
         finalizeCurrentRound(
-          tallyResults.finalTallyCommitment, 
-          tallyResults.finalSbCommitment, 
           tallyResults.alphaDenominator)
         )
         .to.emit(qfiDeployedtoken, "GrantRoundFinalized")

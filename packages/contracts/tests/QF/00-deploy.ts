@@ -50,7 +50,7 @@ import { PollProcessorAndTallyer__factory } from "../../typechain/factories/Poll
 chai.use(solidity);
 const { expect } = chai;
 
-describe("Deploy - QV Infrastructure Smart Contracts", () => {
+describe("Deploy - QF Infrastructure Smart Contracts", () => {
   let deployer: Signer;
   let deployerAddress: string;
   let PoseidonT3Factory: PoseidonT3__factory;

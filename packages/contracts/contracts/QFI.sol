@@ -492,13 +492,9 @@ contract QFI is MACI, FundsManager {
     /**
      * @notice Finalizes the current round and transfers the matching funds
      * @dev Function that finalizes the current round by calling `finalize` and transfers matching funds with FundsManager
-     * @param _finalTallyCommitment uint256, the tally commitment
-     * @param _finalTallyCommitment uint256, the subsidy commitment
      * @param _alphaDenominator uint256, the denominator for calculations
      */
     function finalizeCurrentRound(
-        uint256 _finalTallyCommitment,
-        uint256 _finalSbCommitment,
         uint256 _alphaDenominator
     ) external onlyOwner {
         require(
@@ -508,14 +504,6 @@ contract QFI is MACI, FundsManager {
         require(
             pollProcessorAndTallyer.processingComplete(),
             "QFI: messages have not been proccessed"
-        );
-        require(
-            _finalSbCommitment == pollProcessorAndTallyer.sbCommitment(),
-            "QFI: finalTallyCommitment does not match the current grant round's tally commitment"
-        );
-        require(
-            _finalTallyCommitment == pollProcessorAndTallyer.tallyCommitment(),
-            "QFI: finalTallyCommitment does not match the current grant round's tally commitment"
         );
 
         currentStage = Stage.FINALIZED;

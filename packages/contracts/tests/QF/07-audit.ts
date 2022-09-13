@@ -57,7 +57,6 @@ import { MockVerifier__factory } from "../../typechain/factories/MockVerifier__f
 
 import { MessageStruct } from "../../typechain/GrantRound";
 import { hash4, hash5 } from "qaci-crypto";
-import { MaciState } from 'qaci-core';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -77,7 +76,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("End to End testing", () => {
+describe("QFI audit fixes testing", () => {
   // Deployer and users to interact with the contracts
   let deployer: Signer;
   let user1: Signer;
@@ -134,13 +133,11 @@ describe("End to End testing", () => {
   let qfi: QFI;
   let grantRound: GrantRound;
 
-  // Keys for contributions
   const contributorMaciKey = new Keypair();
   const contributorMaciPubKey = contributorMaciKey.pubKey.asContractParam();
   const coordinatorKey = new Keypair();
   const coordinatorPublicKey = new Keypair().pubKey.asContractParam();
   let message: MessageStruct;
-  let hashMessangeAndEncPubKey: BigInt;
 
   const duration = 30;
   const maxValues = {
@@ -152,18 +149,6 @@ describe("End to End testing", () => {
     messageTreeDepth: 2,
     messageTreeSubDepth: 2,
     voteOptionTreeDepth: 2,
-  };
-  const defaultMessageTreeArity = 5;
-  const defaultStateTreeArity = 5;
-  const batchSizes = {
-    messageBatchSize: defaultMessageTreeArity ** treeDepths.messageTreeSubDepth,
-    tallyBatchSize: defaultStateTreeArity ** treeDepths.intStateTreeDepth,
-  };
-  // Finalize.
-  const tallyResults = {
-    alphaDenominator:BigInt(1),
-    finalSbCommitment: BigInt(999999999999),
-    finalTallyCommitment: BigInt(999999999999),
   };
 
   beforeEach(async () => {
@@ -212,6 +197,7 @@ describe("End to End testing", () => {
     messageAqFactory = await MessageAqFactoryFactory.deploy();
     messageAqFactoryGrants = await MessageAqFactoryFactory.deploy();
     freeForAllGateKeeper = await FreeForAllGateKeeperFactory.deploy();
+    // Give 100 credits to everyone
     constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(100);
     vkRegistry = await VKRegistryFactory.deploy();
     baseERC20Token = await BaseERC20TokenFactory.deploy(10000000 * 1e5);
@@ -452,7 +438,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -465,7 +451,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       )).to.revertedWith("Ownable: caller is not the owner");
     });
@@ -476,7 +462,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -488,7 +474,7 @@ describe("End to End testing", () => {
           duration,
           maxValues,
           treeDepths,
-          contributorMaciPubKey,
+          coordinatorPublicKey,
           coordinatorAddress
         )
       ).to.revertedWith('MACI: Cannot deploy a new grant round while not in the WAITING_FOR_SIGNUPS_AND_TOPUPS stage');
@@ -500,7 +486,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -534,7 +520,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -551,7 +537,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -570,7 +556,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -628,7 +614,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
 
@@ -653,30 +639,6 @@ describe("End to End testing", () => {
       );
       const encMessage = command.encrypt(signature, sharedKey);
       message = <MessageStruct>encMessage.asContractParam();
-
-      // Hash message and public key (necessary for mock).
-      // nb. can be calculated for one message because the batch is composed of three instances of the same message.
-      const n: any[] = [];
-      const m: any[] = [];
-
-      n.push(message.data[0]);
-      n.push(message.data[1]);
-      n.push(message.data[2]);
-      n.push(message.data[3]);
-      n.push(message.data[4]);
-
-      m.push(message.data[5]);
-      m.push(message.data[6]);
-      m.push(message.data[7]);
-      m.push(message.data[8]);
-      m.push(message.data[9]);
-
-      hashMessangeAndEncPubKey = hash4([
-        hash5(n),
-        hash5(m),
-        BigInt(coordinatorKey.pubKey.asContractParam().x),
-        BigInt(coordinatorKey.pubKey.asContractParam().y),
-      ]);
     });
 
     it('allows anyone to publish a batch of messages', async () => {
@@ -865,99 +827,6 @@ describe("End to End testing", () => {
     });
   });
 
-  // All tests related to finalizing a round
-  describe('Finalize a round', async () => {
-    beforeEach(async () => {
-      // Contribute
-      const contributionAmount = 10 * 1e5;
-      const contributors = [user1, user2];
-      const contributorsBefore = await qfi.grantRoundToContributorsCount(await qfi.nextGrantRoundId());
-  
-      for (const user of contributors) {
-        await baseERC20Token.connect(user).approve(qfi.address, contributionAmount);
-        await qfi.connect(user).contribute(
-          contributorMaciPubKey,
-          contributionAmount
-        )
-      }
-  
-      // Check that the contributors increased correctly
-      expect(
-        await qfi.grantRoundToContributorsCount(
-          await qfi.nextGrantRoundId()
-          )
-        ).to.be.equal(Number(contributorsBefore) + contributors.length);
-
-      // Deploy GrantRound
-      await qfi.connect(deployer).deployGrantRound(
-        duration,
-        maxValues,
-        treeDepths,
-        contributorMaciPubKey,
-        coordinatorAddress
-      );
-  
-      // Check that the grantRoundId increased
-      expect(await qfi.nextGrantRoundId()).to.be.equal(1);
-
-      // Save the GrantRound
-      const grantRoundAddress = await qfi.currentGrantRound()
-      grantRound = await ethers.getContractAt('GrantRound', grantRoundAddress);
-
-      // Add a funding source (fundingSource)
-      await expect (qfi.connect(user1).addFundingSource(
-        fundingSourceAddress
-      )).to.emit(qfi, 'FundingSourceAdded').withArgs(fundingSourceAddress);
-
-      // Add a recipient (user3)
-      await optimisticRecipientRegistry.connect(deployer).setBaseDeposit(
-        1 * 1e5
-      );
-      const packed = ethers.utils.solidityPack(["address", "string"], [user3Address, "Metadata"]);
-      const recipientId = ethers.utils.keccak256(packed);
-      const blockTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
-      await expect(optimisticRecipientRegistry.connect(user1).addRecipient(
-        user2Address, 'Metadata', {value: 1 * 1e5}
-        )).to.emit(optimisticRecipientRegistry, 'RequestSubmitted')
-        .withArgs(
-          recipientId,
-          0,
-          user2Address,
-          'Metadata',
-          blockTimestamp
-      );
-
-      // Vote
-      // Message generation.
-      const command = new Command(
-        BigInt(1),
-        contributorMaciKey.pubKey,
-        BigInt(0),
-        BigInt(9),
-        BigInt(1),
-        BigInt(0),
-        BigInt(0)
-      );
-
-      const signature = command.sign(contributorMaciKey.privKey);
-      const sharedKey = Keypair.genEcdhSharedKey(
-        contributorMaciKey.privKey,
-        coordinatorKey.pubKey
-      );
-      const encMessage = command.encrypt(signature, sharedKey);
-      message = <MessageStruct>encMessage.asContractParam();
-
-      // Cast the votes
-      const voters = [user1, user2];
-      for (const user of voters) {
-        await expect(grantRound.connect(user).publishMessageBatch(
-          [message],
-          [coordinatorPublicKey]
-        )).to.emit(grantRound, 'Voted').withArgs(await user.getAddress());
-      }
-    });
-  });
-
   // Testing related to claim of funds
   describe('Claim funds', async () => {
     beforeEach(async () => {
@@ -986,7 +855,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -1028,22 +897,6 @@ describe("End to End testing", () => {
         )
       ).to.be.revertedWith("GrantRound: Round has been cancelled");
     });
-
-    it.skip('reverts - Proof is not valid', async () => {
-      // Cancel works 
-      await expect(
-        grantRound.connect(user1).claimFunds(
-          1,
-          5,
-          [[5,5], [5,5]],
-          1,
-          1,
-          1,
-          1,
-          1,
-        )
-      ).to.be.revertedWith("FundingRound: Incorrect tally result");
-    });
   });
 
   // Tests related to cancelling a GrantRound
@@ -1054,7 +907,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
 
@@ -1114,7 +967,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
 
@@ -1214,7 +1067,7 @@ describe("End to End testing", () => {
         duration,
         maxValues,
         treeDepths,
-        contributorMaciPubKey,
+        coordinatorPublicKey,
         coordinatorAddress
       );
   
@@ -1225,13 +1078,6 @@ describe("End to End testing", () => {
       const grantRoundAddress = await qfi.currentGrantRound()
       grantRound = await ethers.getContractAt('GrantRound', grantRoundAddress);
     });
-
-    it.skip('reverts - GrantRound was not cancelled', async () => {
-      await expect(grantRound.connect(deployer).transferMatchingFunds(
-        1,
-        10
-      )).to.revertedWith('GrantRound: Round has been cancelled');
-    }); 
 
     it('transfers the funds to the recipient', async () => {
       // Set max recipients

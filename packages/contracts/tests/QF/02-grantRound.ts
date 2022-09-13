@@ -97,7 +97,7 @@ type IVerifyingKey = {
   }[];
 };
 
-describe("Poll - New QV Voting Round", () => {
+describe("Poll - New QF Voting Round", () => {
   let deployer: Signer;
   let user1: Signer;
   let user2: Signer;
