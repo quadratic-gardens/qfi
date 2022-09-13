@@ -716,17 +716,10 @@ describe("QFI", () => {
         .returns(expectedTotalAmountofVoiceCredits);
 
       // Should send a contribution correctly.
-      const expectedTimestamp = (await ethers.provider.getBlock("latest")).timestamp + 1;
       await expect(
         qfiDeployedtoken.connect(contributor)
         .contribute(contributorMaciPubKey, contributionAmount)
         ).to.emit(qfiDeployedtoken, "SignUp")
-          .withArgs(
-            expectedStateIndex,
-            Object.values(contributorMaciPubKey),
-            expectedTotalAmountofVoiceCredits,
-            expectedTimestamp
-          )
         .to.emit(qfiDeployedtoken, "ContributionSent")
         .withArgs(contributorAddress, contributionAmount);
     });
