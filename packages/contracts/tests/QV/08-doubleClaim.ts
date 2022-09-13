@@ -868,8 +868,6 @@ describe("Process - Tally QV poll votes", function() {
       await qfi.setPollProcessorAndTallyer(pollProcessorAndTallyer.address);
 
       await qfi.finalizeCurrentRound(
-        tallyFileData.newTallyCommitment,
-        maciNewSbCommitment,
         BigNumber.from(expectedAlphaDenominator).toString()
       );
 

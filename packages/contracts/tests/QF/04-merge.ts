@@ -394,7 +394,5 @@ describe("Merge - Merge Signup and Message leaves", () => {
          .to.emit(poll, "MergeMaciStateAq")
          .withArgs(expectedStateRoot);
     });
-  });
-
-  
+  });  
 });

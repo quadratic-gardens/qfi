@@ -76,7 +76,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Process - Tally QV poll votes", () => {
+describe("Process - Tally QF poll votes", () => {
   let deployer: Signer;
   let user1: Signer;
   let user2: Signer;
@@ -575,6 +575,5 @@ describe("Process - Tally QV poll votes", () => {
       expect(maciPoll.hasUnprocessedMessages()).to.equal(false);
       expect(maciPoll.messages.length).to.be.equal(users.length * 2); //every user sends an overide message
     });
-    
   });
 });

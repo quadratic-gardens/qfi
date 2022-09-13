@@ -10,4 +10,8 @@ contract BaseERC20Token is ERC20 {
   {
     _mint(msg.sender, initialSupply);
   }
+
+  function decimals() public view virtual override returns (uint8) {
+    return 5;
+  }
 }

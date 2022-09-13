@@ -50,7 +50,7 @@ import { PollProcessorAndTallyer__factory } from "../../typechain/factories/Poll
 chai.use(solidity);
 const { expect } = chai;
 
-describe("Deploy - QV Infrastructure Smart Contracts", () => {
+describe("Deploy - QF Infrastructure Smart Contracts", () => {
   let deployer: Signer;
   let deployerAddress: string;
   let PoseidonT3Factory: PoseidonT3__factory;
@@ -151,7 +151,6 @@ describe("Deploy - QV Infrastructure Smart Contracts", () => {
         BigNumber.from(0),
       ])
     ).to.be.equal(BigNumber.from("0x2066be41bebe6caf7e079360abe14fbf9118c62eabc42e2fe75e342b160a95bc"));
-    
   });
 
   it("deploys GrantRoundFactory Contracts", async () => {

@@ -74,7 +74,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Voting - Cast QV votes", () => {
+describe("Voting - Cast QF votes", () => {
   let deployer: Signer;
   let user1: Signer;
   let user2: Signer;

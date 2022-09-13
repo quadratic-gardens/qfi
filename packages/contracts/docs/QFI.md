@@ -1,4 +1,5 @@
 # QFI
+
 Top level contract for the Quadratic Funding Infrastructure
 
 Special type of MACI that allows for a quadratic funding scheme.
@@ -7,32 +8,48 @@ Special type of MACI that allows for a quadratic funding scheme.
 ### constructor
 ```solidity
   function constructor(
-    contract ERC20 _grantRoundFactory,
-    contract GrantRoundFactory _pollFactory,
-    contract PollFactory _signUpGatekeeper,
-    contract SignUpGatekeeper _initialVoiceCreditProxy
+    contract ERC20 _nativeToken,
+    contract GrantRoundFactory _grantRoundFactory,
+    contract PollFactory _pollFactory,
+    contract SignUpGatekeeper _signUpGatekeeper,
+    contract InitialVoiceCreditProxy _initialVoiceCreditProxy
   ) public
 ```
 Constructor for the Quadratic Funding Infrastructure
 
 Binds the contracts that are needed for the Quadratic Funding Infrastructure
 
+Please exercise caution when choosing the `_nativeToken` as this cannot be changed afterwards.  Choosing a token that charges fees on transfers will cause the contracts to revert. 
+Also, please consider that certain tokens such as USDC/USDT have the ability to blacklist addresses, therefore using these tokens might result in funds being stuck. 
+
 #### Parameters:
 | Name | Type | Description                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
-|`_grantRoundFactory` | contract ERC20 | GrantRoundFactory, the contract that will be used to create GrantRounds which are a special type of Poll
-|`_pollFactory` | contract GrantRoundFactory | PollFactory, the contract that will be used to create Polls
-|`_signUpGatekeeper` | contract PollFactory | SignUpGatekeeper, the contract that will be used to limit who can sign up to MACI
-|`_initialVoiceCreditProxy` | contract SignUpGatekeeper | InitialVoiceCreditProxy, the contract that will be used to set the initial voice credit balance for a user
+|`_nativeToken` | contract ERC20 | ERC20, the token that will be used in all of the contracts for funding
+|`_grantRoundFactory` | contract GrantRoundFactory | GrantRoundFactory, the contract that will be used to create GrantRounds which are a special type of Poll
+|`_pollFactory` | contract PollFactory | PollFactory, the contract that will be used to create Polls
+|`_signUpGatekeeper` | contract SignUpGatekeeper | SignUpGatekeeper, the contract that will be used to limit who can sign up to MACI
+|`_initialVoiceCreditProxy` | contract InitialVoiceCreditProxy | InitialVoiceCreditProxy, the contract that will be used to set the initial voice credit balance for a user
 
 ### initialize
 ```solidity
   function initialize(
+    contract VkRegistry _vkRegistry,
+    contract MessageAqFactory _messageAqFactoryPolls,
+    contract MessageAqFactory _messageAqFactoryGrantRounds
   ) public
 ```
+Initializer function for the Quadratic Funding Infrastructure
 
+Initialise the various factory/helper contracts. This should only be run
+once and it must be run before deploying the first Poll.
 
-
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`_vkRegistry` | contract VkRegistry | VkRegistry, the contract that stores verifying keys for the circuits
+|`_messageAqFactoryPolls` | contract MessageAqFactory | MessageAqFactory, the contract that will be used to deploy a new AccQueueQuinaryMaci contract for the Poll
+|`_messageAqFactoryGrantRounds` | contract MessageAqFactory | MessageAqFactory, the contract that will be used to deploy a new AccQueueQuinaryMaci contract for the GrantRounds
 
 ### setPollProcessorAndTallyer
 ```solidity
@@ -106,7 +123,7 @@ Deploys a special kind of Poll called a GrantRound.
 #### Parameters:
 | Name | Type | Description                                                          |
 | :--- | :--- | :------------------------------------------------------------------- |
-|`_duration` | uint256 | uint256  stored in memory, the duration of the GrantRound
+|`_duration` | uint256 | uint256 stored in memory, the duration of the GrantRound
 |`_maxValues` | struct Params.MaxValues | MaxValues stored in memory, the maxMessages and maxVoteOptions of the GrantRound as uint256 values
 |`_treeDepths` | struct Params.TreeDepths | TreeDepths stored in memory, intStateTreeDepth, messageTreeSubDepth, messageTreeDepth, and voteOptionTreeDepth as uint8 values
 |`_coordinatorPubKey` | struct IPubKey.PubKey | PubKey stored in memory, MACI pubkey of the coordinator of the GrantRounds
@@ -155,17 +172,20 @@ public view function
   ) public
 ```
 
-
-
-
 ### finalizeCurrentRound
 ```solidity
   function finalizeCurrentRound(
+    uint256 _alphaDenominator
   ) external
 ```
+Finalizes the current round and transfers the matching funds
 
+Function that finalizes the current round by calling `finalize` and transfers matching funds with FundsManager
 
-
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`_alphaDenominator` | uint256 | uint256, the denominator for calculations
 
 ### acceptContributionsAndTopUpsBeforeNewRound
 ```solidity
@@ -173,7 +193,7 @@ public view function
   ) public
 ```
 
-
+Resets the state so that a new round can be deployed
 
 
 ## Events

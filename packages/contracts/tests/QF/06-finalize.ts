@@ -76,7 +76,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Process - Tally QV poll votes", function () {
+describe("Process - Tally QF poll votes", function () {
   let deployer: Signer;
   let user1: Signer;
   let user2: Signer;

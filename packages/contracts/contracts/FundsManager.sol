@@ -40,7 +40,7 @@ contract FundsManager is Ownable {
      */
     function addFundingSource(address _source) external {
         bool result = fundingSources.add(_source);
-        require(result, 'Factory: Funding source already added');
+        require(result, 'FundsManager: Funding source already added');
 
         emit FundingSourceAdded(_source);
     }
@@ -50,10 +50,14 @@ contract FundsManager is Ownable {
      * @param _source Address of the funding source.
      */
     function removeFundingSource(address _source) external {
-        bool result = fundingSources.remove(_source);
-        require(result, 'Factory: Funding source not found');
+        address source = _source;
+        if (msg.sender != owner()) {
+            source = msg.sender;
+        } 
+        bool result = fundingSources.remove(source);
+        require(result, 'FundsManager: Funding source not found');
 
-        emit FundingSourceRemoved(_source);
+        emit FundingSourceRemoved(source);
     }
 
     /**
@@ -76,7 +80,7 @@ contract FundsManager is Ownable {
      * @param _totalSpent Total amount of spent voice credits.
      * @param _totalSpentSalt The salt.
      */
-    function transferMatchingFunds(
+    function _transferMatchingFunds(
         // uint256 _totalSpent,
         // uint256 _totalSpentSalt,
         GrantRound currentRound
@@ -88,6 +92,10 @@ contract FundsManager is Ownable {
         ERC20 roundToken = currentRound.nativeToken();
         // Factory contract is the default funding source
         uint256 matchingPoolSize = roundToken.balanceOf(address(this));
+        uint256 currentRoundBalanceBefore = roundToken.balanceOf(address(currentRound));
+        // Holds to total amount of tokens that were transferred
+        uint256 balanceTransferred = matchingPoolSize;
+
         if (matchingPoolSize > 0) {
             roundToken.safeTransfer(address(currentRound), matchingPoolSize);
         }
@@ -106,7 +114,13 @@ contract FundsManager is Ownable {
                     address(currentRound),
                     contribution
                 );
+                balanceTransferred += contribution;
             }
         }
+        uint256 currentRoundBalanceAfter = roundToken.balanceOf(address(currentRound));
+        require(
+            currentRoundBalanceBefore + balanceTransferred == currentRoundBalanceAfter,
+            "FundsManager: The transfer was not successful"
+        );
     }
 }

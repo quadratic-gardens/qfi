@@ -127,6 +127,12 @@ contract GrantRound is Poll {
         Message[] calldata _messages,
         PubKey[] calldata _encPubKeys
     ) external {
+        // Check that the two arrays have the same length
+        require(
+            _messages.length == _encPubKeys.length, 
+            "GrantRound: _messages and _encPubKeys should be the same length"
+        );
+        
         uint256 batchSize = _messages.length;
         for (uint8 i = 0; i < batchSize; i++) {
             publishMessage(_messages[i], _encPubKeys[i]);
@@ -271,20 +277,28 @@ contract GrantRound is Poll {
             recipient = owner();
         }
         uint256 allocatedAmount = getAllocatedAmount(_tallyResult, 0);
+        // Get the balance of the receiver before the transfer 
+        uint256 balanceBefore = nativeToken.balanceOf(recipient);
         nativeToken.safeTransfer(recipient, allocatedAmount);
+        // Get the balance of the receiver after the transfer 
+        uint256 balanceAfter = nativeToken.balanceOf(recipient);
+        // Check that the transfer amount was fully received
+        require(
+            balanceBefore + allocatedAmount == balanceAfter, 
+            "GrantRound: the transfer was not correct"
+        );
 
         emit FundsClaimed(recipient, _voteOptionIndex, allocatedAmount);
     }
 
     /*
      * @dev Transfer funds from matching pool to current funding round and finalize it.
-     * @param _totalSpent Total amount of spent voice credits.
-     * @param _totalSpentSalt The salt.
+     * @param _voteOptionIndex, uint256, The vote option index for payout.
+     * @param _payoutAmount, uint256 The total payout amount.
      */
     function transferMatchingFunds(
         uint256 _voteOptionIndex,
-        uint256 _payoutAmount,
-        address _erc20Address
+        uint256 _payoutAmount
     ) external payable onlyOwner {
         require(
             !isFinalized || isCancelled,
@@ -295,7 +309,7 @@ contract GrantRound is Poll {
             "FundingRound: Funds already claimed"
         );
         recipients[_voteOptionIndex] = true;
-        ERC20 roundToken = ERC20(_erc20Address);
+
         (uint256 deployTime, uint256 duration) = getDeployTimeAndDuration();
         address recipient = recipientRegistry.getRecipientAddress(
             _voteOptionIndex,
@@ -303,10 +317,23 @@ contract GrantRound is Poll {
             deployTime + duration
         );
         // Factory contract is the default funding source
-        uint256 balance = roundToken.balanceOf(address(this));
-        if (balance >= _payoutAmount) {
-            roundToken.safeTransfer(recipient, _payoutAmount);
-        }
+        uint256 balance = nativeToken.balanceOf(address(this));
+        uint256 balanceBeforeRecipient = nativeToken.balanceOf(recipient);
+        // Check that we have enough funds to do the transfer
+        require(
+            balance >= _payoutAmount,
+            "GrantRound: not enough funds in the contract to transfer matching funds"
+        );
+        // Do the transfer
+        nativeToken.safeTransfer(recipient, _payoutAmount);
+        // Get the balance after
+        uint256 balanceAfterRecipient = nativeToken.balanceOf(recipient);
+        // Conferm that the balance is as expected
+        require(
+            balanceBeforeRecipient + _payoutAmount == balanceAfterRecipient, 
+            "GrantRound: the transfer was not correct"
+        );
+        
         emit FundsClaimed(recipient, _voteOptionIndex, _payoutAmount);
     }
 }

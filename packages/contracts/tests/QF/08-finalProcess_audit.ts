@@ -56,7 +56,7 @@ import { PollProcessorAndTallyer__factory } from "../../typechain/factories/Poll
 import { MockVerifier } from "../../typechain/MockVerifier";
 import { MockVerifier__factory } from "../../typechain/factories/MockVerifier__factory";
 import { AccQueueQuinaryMaci } from "../../typechain/AccQueueQuinaryMaci";
-import { AccQueueQuinaryMaci__factory } from "../../typechain";
+import { AccQueueQuinaryMaci__factory, GrantRound, GrantRound__factory } from "../../typechain";
 
 chai.use(solidity);
 const { expect } = chai;
@@ -76,12 +76,12 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Merge - Merge Signup and Message leaves", () => {
+describe("Transfer matching funds", () => {
   let deployer: Signer;
   let user1: Signer;
   let user2: Signer;
   let user3: Signer;
-  let user4: Signer;
+  let coordinatorSigner: Signer;
   let user5: Signer;
   let user6: Signer;
   let user7: Signer;
@@ -92,7 +92,12 @@ describe("Merge - Merge Signup and Message leaves", () => {
   let project1: Signer;
   let project2: Signer;
   let project3: Signer;
+
+  let contributionAmount: BigNumberish;
   let deployerAddress: string;
+  let user1Address: string;
+  let user2Address: string;
+  let user3Address: string 
   let PoseidonT3Factory: PoseidonT3__factory;
   let PoseidonT4Factory: PoseidonT4__factory;
   let PoseidonT5Factory: PoseidonT5__factory;
@@ -128,6 +133,7 @@ describe("Merge - Merge Signup and Message leaves", () => {
   let messageAqFactoryGrants: MessageAqFactory;
   let messageAq: AccQueueQuinaryMaci;
 
+  let grantRound: GrantRound;
   let vkRegistry: VkRegistry;
   let constantInitialVoiceCreditProxy: ConstantInitialVoiceCreditProxy;
   let freeForAllGateKeeper: FreeForAllGatekeeper;
@@ -161,8 +167,11 @@ describe("Merge - Merge Signup and Message leaves", () => {
   let maciState: MaciState;
 
   beforeEach(async () => {
-    [deployer, user1, user2, user3, user4, user5, user6, user7, user8, user9, user10] = await ethers.getSigners();
+    [deployer, user1, user2, user3, coordinatorSigner, user5, user6, user7, user8, user9, user10] = await ethers.getSigners();
     deployerAddress = await deployer.getAddress();
+    user1Address = await user1.getAddress();
+    user2Address = await user2.getAddress();
+    user3Address = await user3.getAddress();
     PoseidonT3Factory = new PoseidonT3__factory(deployer);
     PoseidonT4Factory = new PoseidonT4__factory(deployer);
     PoseidonT5Factory = new PoseidonT5__factory(deployer);
@@ -202,7 +211,7 @@ describe("Merge - Merge Signup and Message leaves", () => {
     //NOTE: each user recieves 100 voice credits by default
     constantInitialVoiceCreditProxy = await ConstantInitialVoiceCreditProxyFactory.deploy(100);
     vkRegistry = await VKRegistryFactory.deploy();
-    baseERC20Token = await BaseERC20TokenFactory.deploy(100);
+    baseERC20Token = await BaseERC20TokenFactory.deploy(10000 * 1e5);
     mockVerifier = await MockVerifierFactory.deploy();
     pollProcessorAndTallyer = await PollProcessorAndTallyerFactory.deploy(mockVerifier.address);
 
@@ -218,6 +227,8 @@ describe("Merge - Merge Signup and Message leaves", () => {
     await messageAqFactory.transferOwnership(pollFactory.address);
     await messageAqFactoryGrants.transferOwnership(grantRoundFactory.address);
     await qfi.initialize(vkRegistry.address, messageAqFactory.address, messageAqFactoryGrants.address);
+    // Set pollProcessorAndTallier
+    await qfi.connect(deployer).setPollProcessorAndTallyer(pollProcessorAndTallyer.address);
 
     const stateTreeDepth = await qfi.stateTreeDepth();
     const _stateTreeDepth = stateTreeDepth.toString();
@@ -243,6 +254,12 @@ describe("Merge - Merge Signup and Message leaves", () => {
     coordinator = new Keypair();
     const coordinatorPubkey = coordinator.pubKey.asContractParam();
 
+    // Transfer tokens for contribution
+    await baseERC20Token.connect(deployer).transfer(user1Address, 100 * 1e5);
+    await baseERC20Token.connect(deployer).transfer(user2Address, 100 * 1e5);
+    await baseERC20Token.connect(deployer).transfer(user3Address, 100 * 1e5);
+    contributionAmount = 10e5;
+
     // NOTE: Create new local maci data structure
     maciState = new MaciState();
     const provider = deployer.provider ?? ethers.getDefaultProvider();
@@ -250,32 +267,33 @@ describe("Merge - Merge Signup and Message leaves", () => {
     const userSigners = [user1, user2, user3];
     users = [];
     for (const user of userSigners) {
-      const maciKey = new Keypair();
-      const _pubKey = maciKey.pubKey.asContractParam();
-      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [1]);
-      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0]);
+        const maciKey = new Keypair();
+        const _pubKey = maciKey.pubKey.asContractParam();
 
-      const { logs } = await qfi
-        .connect(user)
-        .signUp(_pubKey, _signUpGatekeeperData, _initialVoiceCreditProxyData)
-        .then((tx) => tx.wait());
+        // approve tokens
+        await baseERC20Token.connect(user).approve(qfi.address, contributionAmount);
 
-      const iface = qfi.interface;
-      const signUpEvent = iface.parseLog(logs[logs.length - 1]);
+        // Contribute
+        const { logs } = await qfi.connect(user).contribute(
+            _pubKey, contributionAmount
+        ).then((tx) => tx.wait());
 
-      users.push({ maciKey: maciKey, signer: user });
-      // NOTE: Signup users on local maci data structure
-      maciState.signUp(
-        maciKey.pubKey,
-        BigInt(signUpEvent.args._voiceCreditBalance.toString()),
-        BigInt(signUpEvent.args._timestamp.toString())
-      );
+        const iface = qfi.interface;
+        // First event is signup from inherited MACI 
+        const signUpEvent = iface.parseLog(logs[0]);
+        
+        users.push({ maciKey: maciKey, signer: user });
+        // NOTE: Signup users on local maci data structure
+        maciState.signUp(
+            maciKey.pubKey,
+            BigInt(signUpEvent.args._voiceCreditBalance.toString()),
+            BigInt(signUpEvent.args._timestamp.toString())
+        );
     }
 
-    const { blockHash } = await qfi
-      .connect(deployer)
-      .deployPoll(duration, maxValues, treeDepths, coordinatorPubkey, { gasLimit: 30000000 })
-      .then((tx) => tx.wait());
+    const { blockHash } = await qfi.connect(deployer).deployGrantRound(
+        duration, maxValues, treeDepths, coordinatorPubkey, await coordinatorSigner.getAddress()
+    ).then((tx) => tx.wait());
 
     // NOTE: Deploy the poll on local maci data structure
     const deployTime = (await provider.getBlock(blockHash)).timestamp;
@@ -287,8 +305,10 @@ describe("Merge - Merge Signup and Message leaves", () => {
       messageBatchSize,
       coordinator
     );
-    const pollContractAddress = await qfi.getPoll(0);
-    poll = new Poll__factory({ ...linkedLibraryAddresses }, deployer).attach(pollContractAddress);
+
+
+    const grantRoundContractAddress = await qfi.getPoll(0);
+    grantRound = new GrantRound__factory({ ...linkedLibraryAddresses }, deployer).attach(grantRoundContractAddress);
 
     for (const user of users) {
       const { maciKey, signer } = user;
@@ -306,7 +326,7 @@ describe("Merge - Merge Signup and Message leaves", () => {
       const message = command.encrypt(signature, sharedKey);
       const _message = <MessageStruct>message.asContractParam();
       const _encPubKey = maciKey.pubKey.asContractParam();
-      const { logs } = await poll
+      const { logs } = await grantRound
         .connect(signer)
         .publishMessage(_message, _encPubKey)
         .then((tx) => tx.wait());
@@ -315,84 +335,169 @@ describe("Merge - Merge Signup and Message leaves", () => {
       maciState.polls[_pollId].publishMessage(message, maciKey.pubKey);
     }
 
-    const dd = await poll.getDeployTimeAndDuration();
+    // Close voting on QFI
+    await qfi.connect(deployer).closeVotingAndWaitForDeadline();
+
+    // Move forward in time 
+    const dd = await grantRound.getDeployTimeAndDuration();
     const hardHatProvider = ethers.provider;
     await hardHatProvider.send("evm_increaseTime", [Number(dd[1]) + 1]);
     await hardHatProvider.send("evm_mine", []);
 
-    const extContracts = await poll.extContracts();
+    const extContracts = await grantRound.extContracts();
 
     const messageAqAddress = extContracts.messageAq;
     messageAq = MessageAq_Factory.attach(messageAqAddress);
+
+    // Merge stateAq
+    const maciPoll = maciState.polls[0];
+    maciPoll.messageAq.mergeSubRoots(0); //NOTE: 0 as input attempts to merge all subroots
+    maciPoll.messageAq.merge(treeDepths.messageTreeDepth);
+    const expectedMessageRoot = maciState.polls[0].messageAq.mainRoots[treeDepths.messageTreeDepth].toString();
+
+    await expect(grantRound.mergeMessageAqSubRoots(0)).to.emit(grantRound, "MergeMessageAqSubRoots").withArgs(0);
+    await expect(grantRound.mergeMessageAq()).to.emit(grantRound, "MergeMessageAq").withArgs(expectedMessageRoot);
+
+    const maciStateAq = maciState.stateAq;
+    maciStateAq.mergeSubRoots(0); // 0 as input attempts to merge all subroots
+    maciStateAq.merge(stateTreeDepth);
+    const expectedStateRoot = maciState.stateAq.mainRoots[stateTreeDepth].toString();
+
+    await expect(grantRound.mergeMaciStateAqSubRoots(0, 0)).to.emit(grantRound, "MergeMaciStateAqSubRoots").withArgs(0);
+    await expect(grantRound.mergeMaciStateAq(0))
+       .to.emit(grantRound, "MergeMaciStateAq")
+       .withArgs(expectedStateRoot);
+
+    //NOTE: new state root and ballot root commitment calculated off chain
+    const { newSbCommitment: maciNewSbCommitment } = maciPoll.processMessages(0);
+    //TODO: why does this work?
+    const dummyProof: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ] = [0, 0, 0, 0, 0, 0, 0, 0];
+    const { status } = await pollProcessorAndTallyer
+      .processMessages(grantRound.address, maciNewSbCommitment, dummyProof)
+      .then((tx) => tx.wait());
+    expect(status).to.equal(1);
+    expect(await pollProcessorAndTallyer.processingComplete()).to.be.true;
+
+    const onChainNewSbCommitment = await pollProcessorAndTallyer.sbCommitment();
+    expect(maciNewSbCommitment).to.equal(onChainNewSbCommitment.toString());
+
+    const maciGeneratedInputs = maciPoll.tallyVotes(0);
+    const { status: tallyVotesStatus } = await pollProcessorAndTallyer
+      .tallyVotes(grantRound.address, maciGeneratedInputs.newTallyCommitment, dummyProof)
+      .then((tx) => tx.wait());
+    expect(tallyVotesStatus).to.equal(1);
+
+    const onChainNewTallyCommitment = await pollProcessorAndTallyer.tallyCommitment();
+    expect(maciGeneratedInputs.newTallyCommitment).to.equal(onChainNewTallyCommitment);
+
   });
 
-  it("expect revert - voting period is over", async () => {
-    const keypair = users[0].maciKey;
+  it('allows to publish the tally hash', async () => {
+    const tallyHash = "QmYA2fn8cMbVWo4v95RwcwJVyQsNtnEwHerfWR8UNtEwoE";
 
-    const command = new Command(BigInt(1), keypair.pubKey, BigInt(0), BigInt(9), BigInt(1), BigInt(0), BigInt(0));
-
-    const signature = command.sign(keypair.privKey);
-    const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
-    const message = command.encrypt(signature, sharedKey);
-
-    const _message = <MessageStruct>message.asContractParam();
-    const _encPubKey = keypair.pubKey.asContractParam();
-
-    await expect(poll.publishMessage(_message, _encPubKey)).to.be.revertedWith("PollE03");
+    await expect(grantRound.connect(coordinatorSigner).publishTallyHash(
+        tallyHash
+    )).to.emit(grantRound, 'TallyPublished').withArgs(tallyHash);
   });
 
-  describe("Merge and calculate tree roots", () => {
-    // event MergeMaciStateAqSubRoots(uint256 _numSrQueueOps);
-    // event MergeMaciStateAq(uint256 _stateRoot);
-    // event MergeMessageAqSubRoots(uint256 _numSrQueueOps);
-    // event MergeMessageAq(uint256 _messageRoot);
-    it("verify - merge the message AccQueue", async () => {
-      await expect(poll.mergeMessageAqSubRoots(0)).to.emit(poll, "MergeMessageAqSubRoots").withArgs(0);
-      await expect(poll.mergeMessageAq()).to.emit(poll, "MergeMessageAq");
-    });
-    it("verify - merge the MaciStateAq ", async () => {
-      await expect(poll.mergeMaciStateAqSubRoots(0, 0)).to.emit(poll, "MergeMaciStateAqSubRoots").withArgs(0);
-      await expect(poll.mergeMaciStateAq(0)).to.emit(poll, "MergeMaciStateAq");
-    });
-    it("require fail - cannot merge messages twice", async () => {
-      await expect(poll.mergeMessageAqSubRoots(0)).to.emit(poll, "MergeMessageAqSubRoots");
-      await expect(poll.mergeMessageAq()).to.emit(poll, "MergeMessageAq");
-      await expect(poll.mergeMessageAqSubRoots(0)).to.be.revertedWith("AccQueue: subtrees already merged");
-    });
-    it("require fail - cannot merge state twice", async () => {
-      await expect(poll.mergeMaciStateAqSubRoots(0, 0)).to.emit(poll, "MergeMaciStateAqSubRoots");
-      await expect(poll.mergeMaciStateAq(0)).to.emit(poll, "MergeMaciStateAq");
-      await expect(poll.mergeMaciStateAqSubRoots(0, 0)).to.be.revertedWith("PollE07");
-      await expect(poll.mergeMaciStateAq(0)).to.be.revertedWith("PollE07");
-    });
-    it("verify - correctly merges messageAq", async () => {
-      const maciPoll = maciState.polls[0];
-      maciPoll.messageAq.mergeSubRoots(0); //NOTE: 0 as input attempts to merge all subroots
-      maciPoll.messageAq.merge(treeDepths.messageTreeDepth);
-      const expectedMessageRoot = maciState.polls[0].messageAq.mainRoots[treeDepths.messageTreeDepth].toString();
+  it('reverts - only coordinator can publish the tally hash', async () => {
+    await expect(grantRound.connect(user1).publishTallyHash('1')).to.revertedWith(
+        'GrantRound: Sender is not the coordinator');
+  });
 
-      await expect(poll.mergeMessageAqSubRoots(0)).to.emit(poll, "MergeMessageAqSubRoots").withArgs(0);
-      await expect(poll.mergeMessageAq()).to.emit(poll, "MergeMessageAq").withArgs(expectedMessageRoot);
-    });
+  it("finalizes current round", async () => {
+    // 1. publish tally Hash
+    const tallyHash = "QmYA2fn8cMbVWo4v95RwcwJVyQsNtnEwHerfWR8UNtEwoE";
+    await expect(grantRound.connect(coordinatorSigner).publishTallyHash(
+        tallyHash
+    )).to.emit(grantRound, 'TallyPublished').withArgs(tallyHash);
 
-    it("verify - correctly merges stateAq", async () => {
-      const maciPoll = maciState.polls[0];
-      maciPoll.messageAq.mergeSubRoots(0); //NOTE: 0 as input attempts to merge all subroots
-      maciPoll.messageAq.merge(treeDepths.messageTreeDepth);
-      const expectedMessageRoot = maciState.polls[0].messageAq.mainRoots[treeDepths.messageTreeDepth].toString();
+    // 2. finalize
+    await expect(qfi.connect(deployer).finalizeCurrentRound(
+        1
+    )).to.emit(qfi, 'GrantRoundFinalized').withArgs(grantRound.address, 4);
 
-      await expect(poll.mergeMessageAqSubRoots(0)).to.emit(poll, "MergeMessageAqSubRoots").withArgs(0);
-      await expect(poll.mergeMessageAq()).to.emit(poll, "MergeMessageAq").withArgs(expectedMessageRoot);
+    // Check that balances are correct
+    const balanceAfter = await baseERC20Token.balanceOf(grantRound.address);
 
-      const maciStateAq = maciState.stateAq;
-      maciStateAq.mergeSubRoots(0); // 0 as input attempts to merge all subroots
-      maciStateAq.merge(stateTreeDepth);
-      const expectedStateRoot = maciState.stateAq.mainRoots[stateTreeDepth].toString();
+    expect(balanceAfter).to.be.equal(Number(contributionAmount) * users.length);
+  });
 
-      await expect(poll.mergeMaciStateAqSubRoots(0, 0)).to.emit(poll, "MergeMaciStateAqSubRoots").withArgs(0);
-      await expect(poll.mergeMaciStateAq(0))
-         .to.emit(poll, "MergeMaciStateAq")
-         .withArgs(expectedStateRoot);
-    });
+  it('finalizes current round with matching funding sources', async () => {
+    // Add a funding source
+    await expect (qfi.connect(user1).addFundingSource(
+        user3Address
+    )).to.emit(qfi, 'FundingSourceAdded').withArgs(user3Address);
+
+    // approve tokens to QFI
+    await baseERC20Token.connect(user3).approve(qfi.address, 20e5);
+
+    const user3BalanceBefore = await baseERC20Token.balanceOf(user3Address);
+
+    // finalize
+    const tallyHash = "QmYA2fn8cMbVWo4v95RwcwJVyQsNtnEwHerfWR8UNtEwoE";
+    await expect(grantRound.connect(coordinatorSigner).publishTallyHash(
+        tallyHash
+    )).to.emit(grantRound, 'TallyPublished').withArgs(tallyHash);
+
+    await expect(qfi.connect(deployer).finalizeCurrentRound(
+        1
+    )).to.emit(qfi, 'GrantRoundFinalized').withArgs(grantRound.address, 4);
+
+    const user3BalanceAfter = await baseERC20Token.balanceOf(user3Address);
+    const grantRoundBalance = await baseERC20Token.balanceOf(grantRound.address);
+
+    // verify 
+    expect(Number(user3BalanceBefore) - 20e5).to.be.equal(user3BalanceAfter);
+    expect(Number(grantRoundBalance)).to.be.equal(Number(contributionAmount) * users.length + 20e5);
+  });
+
+  it('only transfers contributions because of no allowance on funding sources', async () => {
+    // Add funding sources
+    for (const user of [user2, user3]) {
+      await expect (qfi.connect(user).addFundingSource(
+        await user.getAddress()
+      )).to.emit(qfi, 'FundingSourceAdded').withArgs(await user.getAddress());
+    }
+
+    // finalize
+    const tallyHash = "QmYA2fn8cMbVWo4v95RwcwJVyQsNtnEwHerfWR8UNtEwoE";
+    await expect(grantRound.connect(coordinatorSigner).publishTallyHash(
+        tallyHash
+    )).to.emit(grantRound, 'TallyPublished').withArgs(tallyHash);
+
+    await expect(qfi.connect(deployer).finalizeCurrentRound(
+        1
+    )).to.emit(qfi, 'GrantRoundFinalized').withArgs(grantRound.address, 4);
+
+    const grantRoundBalance = await baseERC20Token.balanceOf(grantRound.address);
+    expect(Number(grantRoundBalance)).to.be.equal(Number(contributionAmount) * users.length);
+  });
+
+  it('reverts - user cannot withdraw contributions from previous rounds', async () => {
+    // 1. Finalize
+    const tallyHash = "QmYA2fn8cMbVWo4v95RwcwJVyQsNtnEwHerfWR8UNtEwoE";
+    await expect(grantRound.connect(coordinatorSigner).publishTallyHash(
+        tallyHash
+    )).to.emit(grantRound, 'TallyPublished').withArgs(tallyHash);
+
+    await expect(qfi.connect(deployer).finalizeCurrentRound(
+        1
+    )).to.emit(qfi, 'GrantRoundFinalized').withArgs(grantRound.address, 4);
+
+    // 2. Allow contributions again
+    await qfi.connect(deployer).acceptContributionsAndTopUpsBeforeNewRound();
+
+    // 3. Try to withdraw
+    expect(qfi.connect(user1).withdrawContribution()).to.revertedWith('FundingRound: Nothing to withdraw');
   });
 });

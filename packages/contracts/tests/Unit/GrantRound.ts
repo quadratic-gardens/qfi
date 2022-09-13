@@ -329,6 +329,29 @@ describe("Grant Round", () => {
       ).to.be.revertedWith("PollE03");
     });
 
+    // Test that passing mismatched arrays results in a revert
+    it("revert - array length mismatch", async () => {
+      // Mocks.
+      // nb. in this case the return from enqueue() it is not useful.
+      await mockMessageAq.mock.enqueue
+        .withArgs(hashMessangeAndEncPubKey)
+        .returns(0);
+
+      // Sending batchMessage with mismatched arrays
+      await expect(
+        grantRound
+          .connect(voter)
+          .publishMessageBatch(
+            [message, message, message, message], // Extra message (4 messages and 3 public keys)
+            [
+              coordinatorMaciPublicKey.asContractParam(),
+              coordinatorMaciPublicKey.asContractParam(),
+              coordinatorMaciPublicKey.asContractParam(),
+            ]
+          )
+      ).to.be.revertedWith("GrantRound: _messages and _encPubKeys should be the same length"); 
+    });
+
     it("revert - max number of messages reached", async () => {
       // Mocks.
       await mockMessageAq.mock.enqueue
@@ -1423,6 +1446,81 @@ describe("Grant Round", () => {
       // ).to.be.revertedWith(
       //   "GrantRound: Incorrect total amount of spent voice credits"
       // );
+    });
+  });
+  // TODO look how to make this work with recipient registry 
+  describe("transferMatchingFunds()", async () => {
+    it("revert - not enough funds for payout", async () => {
+      const voteOptionIndex = 1;
+      // First cancel
+      await expect(grantRound.connect(deployer).cancel())
+        .to.emit(grantRound, "GrantRoundCancelled")
+        .withArgs(true, true);
+ 
+      expect(await grantRound.isFinalized()).to.be.true;
+      expect(await grantRound.isCancelled()).to.be.true;
+
+      // Mocks.
+      const dummyBalance = 100;
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(grantRound.address)
+        .returns(dummyBalance);
+      await mockBaseERC20Token.mock.balanceOf 
+        .withArgs(recipientAddress)
+        .returns(dummyBalance)
+
+      const deployTD = await grantRound.connect(deployer).getDeployTimeAndDuration()
+
+      // Mock 
+      await mockRecipientRegistry.mock.getRecipientAddress
+        .withArgs(1, deployTD[0], Number(deployTD[0]) + Number(deployTD[1]))
+        .returns(recipientAddress);
+      
+      // Now that the state is both cancelled and finalized we can call transferMatchingFunds()
+      await expect(grantRound.connect(deployer).transferMatchingFunds(
+          voteOptionIndex,
+          dummyBalance + 1
+      )).to.be.revertedWith("GrantRound: not enough funds in the contract to transfer matching funds");
+    });
+
+    it("revert - transfer using a fee on transfer token", async () => {
+      const voteOptionIndex = 1;
+      // First cancel
+      await expect(grantRound.connect(deployer).cancel())
+        .to.emit(grantRound, "GrantRoundCancelled")
+        .withArgs(true, true);
+ 
+      expect(await grantRound.isFinalized()).to.be.true;
+      expect(await grantRound.isCancelled()).to.be.true;
+
+      // Mocks.
+      const dummyBalance = 100;
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(grantRound.address)
+        .returns(dummyBalance);
+      const dummyReceiverBalance = 0;
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(recipientAddress)
+        .returns(dummyReceiverBalance);
+      await mockBaseERC20Token.mock.transfer
+        .withArgs(recipientAddress, 100)
+        .returns(true)
+      await mockBaseERC20Token.mock.balanceOf
+        .withArgs(recipientAddress)
+        .returns(dummyBalance - 5)
+
+      const deployTD = await grantRound.connect(deployer).getDeployTimeAndDuration();
+
+      // Mock 
+      await mockRecipientRegistry.mock.getRecipientAddress
+        .withArgs(1, deployTD[0], Number(deployTD[0]) + Number(deployTD[1]))
+        .returns(recipientAddress);
+      
+      // Now that the state is both cancelled and finalized we can call transferMatchingFunds()
+      await expect(grantRound.connect(deployer).transferMatchingFunds(
+        voteOptionIndex,
+        dummyBalance
+      )).to.be.revertedWith("GrantRound: the transfer was not correct");
     });
   });
 });

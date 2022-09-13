@@ -1,4 +1,5 @@
-# GrantRoundFactory
+# GrantRound
+
 This contract manages contributions, withdrawals, Voting and the distribution of funds for a particular grant round.
 
 Inherits from Poll Contract and uses the Poll Contract interface to manage the voting.
@@ -75,15 +76,13 @@ Publish the IPFS hash of the vote tally. Only coordinator can publish.
 ```
 
 
-
-
 ### cancel
 ```solidity
   function cancel(
   ) external
 ```
 
-Cancel funding round.
+Cancel a funding round.
 
 
 ### getAllocatedAmount
@@ -108,71 +107,11 @@ Get allocated token amount (without verification).
   ) external
 ```
 
-
-
-
 ### transferMatchingFunds
 ```solidity
   function transferMatchingFunds(
   ) external
 ```
-
-
-
-### publishMessage
-```solidity
-  function publishMessage(
-    struct IMessage.Message _message,
-    struct IPubKey.PubKey _encPubKey
-  ) public
-```
-Allows anyone to publish a message (an encrypted command and signature).
-This function also enqueues the message.
-
-
-#### Parameters:
-| Name | Type | Description                                                          |
-| :--- | :--- | :------------------------------------------------------------------- |
-|`_message` | struct IMessage.Message | The message to publish
-|`_encPubKey` | struct IPubKey.PubKey | An epheremal public key which can be combined with the
-    coordinator's private key to generate an ECDH shared key with which
-    to encrypt the message.
-
-
-
-### verifyTallyResult
-```solidity
-  function verifyTallyResult(
-    uint256 _voteOptionIndex,
-    uint256 _tallyResult,
-    uint256[][] _tallyResultProof,
-    uint256 _tallyResultSalt,
-    uint256 _spentVoiceCreditsHash,
-    uint256 _perVOSpentVoiceCreditsHash,
-    uint256 _tallyCommitment
-  ) public returns (bool)
-```
-Verify the result generated of the tally.json
-
-
-#### Parameters:
-| Name | Type | Description                                                          |
-| :--- | :--- | :------------------------------------------------------------------- |
-|`_voteOptionIndex` | uint256 | the index of the vote option to verify the correctness of the tally
-|`_tallyResult` | uint256 | Flattened array of the tally 
-|`_tallyResultProof` | uint256[][] | Corresponding proof of the tally result
-|`_tallyResultSalt` | uint256 | the respective salt in the results object in the tally.json
-|`_spentVoiceCreditsHash` | uint256 | hashLeftRight(number of spent voice credits, spent salt) 
-|`_perVOSpentVoiceCreditsHash` | uint256 | hashLeftRight(merkle root of the no spent voice credits per vote option, perVOSpentVoiceCredits salt)
-|`_tallyCommitment` | uint256 | newTallyCommitment field in the tally.json
-
-#### Return Values:
-| Name                           | Type          | Description                                                                  |
-| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
-|`valid`| uint256 | a boolean representing successful verification
-
-
-
 
 ## Events
 ### Voted
