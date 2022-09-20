@@ -134,7 +134,7 @@ contract GrantRound is Poll {
         );
         
         uint256 batchSize = _messages.length;
-        for (uint8 i = 0; i < batchSize; i++) {
+        for (uint8 i = 0; i < batchSize; ++i) {
             publishMessage(_messages[i], _encPubKeys[i]);
         }
 

@@ -344,7 +344,7 @@ contract QFI is MACI, FundsManager {
         uint256 amount = grantRoundToContributors[nextGrantRoundId][msg.sender].voiceCredits * voiceCreditFactor;
         require(amount > 0, "FundingRound: Nothing to withdraw");
 
-        // If a user withdraws their contribution, we shuold reduce the current number of contributors
+        // If a user withdraws their contribution, we should reduce the current number of contributors
         // Cannot underflow as if there weren't any contributors it would revert on the check above
         grantRoundToContributorsCount[nextGrantRoundId]--;
 
