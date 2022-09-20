@@ -121,7 +121,7 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
       </HStack>
 
       <HStack>
-        <Tooltip label="5% of ticket sales go toward the QF pool" placement="right">
+        {/* <Tooltip label="5% of ticket sales go toward the QF pool" placement="right">
           <Box
             sx={{
               height: "50px",
@@ -147,7 +147,7 @@ export const Navbar = ({ onSettingsOpen, onGuideOpen }: SideNavProps) => {
               Tickets!
             </Button>
           </Box>
-        </Tooltip>
+        </Tooltip> */}
 
         <ColorModeSwitcher color="gray.500" aria-label="dark mode" />
       </HStack>
