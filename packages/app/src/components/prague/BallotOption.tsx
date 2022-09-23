@@ -85,7 +85,7 @@ export const BallotOption = ({
         <Text fontSize={20} fontWeight="bold" mx={2}>
           {votes ?? 0}
         </Text>
-        <Text fontSize={20} fontFamily="NeuePixelGrotesk" mx={2}>
+        <Text fontSize={20} fontFamily="Helvetica" mx={2}>
           {t("CREDITS")}
         </Text>
       </VStack>

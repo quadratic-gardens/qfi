@@ -84,9 +84,9 @@ const Guide = () => {
             {t("We know this might be confusing, need help?")}
           </Heading>
           <Text>
-            {t("Drop us a line at sponsors@ethlatam.org or join the")}{" "}
-            <a href={"https://t.me/ethlatam"} rel="noreferrer" target="_blank">
-              {t("ETHLatam Telegram group")}
+            {t("Drop us a line at sponsors@ETHCommunity.org or join the")}{" "}
+            <a href={"https://t.me/ETHCommunity"} rel="noreferrer" target="_blank">
+              {t("ETHCommunity Telegram group")}
             </a>{" "}
             {t("using the hashtag #QF in your post.")}
           </Text>
@@ -113,7 +113,7 @@ const Guide = () => {
                     <VStack spacing={6} alignItems="flex-start">
                       <Text fontSize="xs">
                         {t(
-                          "ETHLatam team will send your MACI key the email address you used to register for the event."
+                          "ETHCommunity team will send your MACI key the email address you used to register for the event."
                         )}
                       </Text>
                     </VStack>
