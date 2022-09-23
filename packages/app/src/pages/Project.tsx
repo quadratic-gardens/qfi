@@ -36,7 +36,7 @@ const shortenEthAddress = (address: string) => {
 export function Project() {
   const { t } = useTranslation();
 
-  const backgroundColor = useColorModeValue("gray.100", "#000000");
+  const backgroundColor = useColorModeValue("gray.100", "rgb(27, 34, 58)");
   const toast = useToast();
   let { projectId } = useParams();
   let navigate = useNavigate();
@@ -204,17 +204,18 @@ export function Project() {
                 sx={{
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  background: `rgb(26, 31, 41) url('${project?.bannerImageLink}') `,
+                  
+                  background: `linear-gradient(340deg, #FFB9E5 22.344970703125%, #ECF872 51.0040283203125%, #BEE0E6 76.86767578125%)  `,
                   backgroundSize: "cover",
                 }}
               >
                 <AspectRatio position="relative" ratio={16 / 9}>
-                  <Image
+                  <Box
                     h="full"
                     w="auto"
                     position="relative"
-                    src={project.bannerImageLink}
-                    alt={project.projectName}
+                    background= "linear-gradient(340deg, #FFB9E5 22.344970703125%, #ECF872 51.0040283203125%, #BEE0E6 76.86767578125%)"
+                    
                   />
                 </AspectRatio>
               </Box>

@@ -1,220 +1,132 @@
-import "@fontsource/archivo";
 let projects = [
   {
-    projectName: "Strigo",
-    tagline: "Hace que usar DeFi sea sencillo. Portfolio manager",
+    projectName: "守護者聯盟2.0",
+    tagline: "我們是「守護者聯盟2.0」，分別是由公、私部門及NGO共同組成的團隊， 我們的理念是運用科技，結合民間彼此的力量來配合政府，一同守護社會安...",
     description:
-      "Por ahora la app corre sobre Polygon. Está basada en otro proyecto muy similar que corre sobre Celo llamado Celo Tracker. Por un lado, permite llevar control de tus inversiones en distintos proyectos como Quickswap, Uniswap, Curve, Aave y estamos agregando otros todo el tiempo. Por otro lado, también hace sencillo invertir en ellos! No hace falta navegar por todas las páginas, algunas de las cuales son muy poco intuitivas. Tenemos algunos contratos 'helper' que permiten proveer liquidez o invertir directamente en los protocolos de la manera más sencilla posible. También permite swapear tokens, revisar precios y hay algunas features como bridgear y ver NFTs que están en construcción.",
-    ethereumAddress: "0x90783Eb98057E45BC08ea773B6625894CAe545F2",
-    website: "https://strigo.fi/",
+      "我們是「守護者聯盟2.0」，分別是由公、私部門及NGO共同組成的團隊， 我們的理念是運用科技，結合民間彼此的力量來配合政府，一同守護社會安全，用實際的行動用心守護我們珍視的每一個人，所以我們提出了「安居永續平安福」計畫，希望能達成全民安居、服務永續、平安是福的目標",
+    ethereumAddress: "-",
+    website: "https://www.facebook.com/SFGuardians",
     thumbnailImageLink:
-      "https://firebasestorage.googleapis.com/v0/b/celo-tracker-c537a.appspot.com/o/strigo-logo.png?alt=media&token=512cddcc-574b-4729-8890-a11122ce4dec",
+      "https://static.wixstatic.com/media/d21407_6655af4ef85d490bac38703af0170e5a~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E5%AE%88%E8%AD%B7%E8%80%85.png",
     logoCdnUrl:
-      "https://firebasestorage.googleapis.com/v0/b/celo-tracker-c537a.appspot.com/o/strigo-logo.png?alt=media&token=512cddcc-574b-4729-8890-a11122ce4dec",
+      "https://static.wixstatic.com/media/d21407_6655af4ef85d490bac38703af0170e5a~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E5%AE%88%E8%AD%B7%E8%80%85.png",
     bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/1473447680995115009/1652019941/1500x500",
+      "https://static.wixstatic.com/media/d21407_6655af4ef85d490bac38703af0170e5a~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E5%AE%88%E8%AD%B7%E8%80%85.png",
     recipientId: 1,
     id: "1",
   },
-
   {
-    projectName: "Cafecrypto.app",
-    tagline:
-      "Es una web de crowfounding 100% crypto, sin comisiones, anonimo y al estar atada al dolar crypto, no se devalúa tus ingresos",
+    projectName: "文譯之間",
+    tagline: "文譯之間團隊，有不同領域的工程師：醫院、半導體業、資訊安全、系統整合等，協力合作夥伴有公部門與NGO。這兩年疫情影響，醫院配合政策常需要快速更新當下的公告...",
     description:
-      "Es una web de crowfounding 100% crypto funcionando actualmente en la red bsc. Podes compartir proyectos para que te donen o vender contenido privado, lo diferente es que es 100% crypto, es anonimo y lo mas importante que es gratis, sin comisiones, solo tenes que tener una wallet en metamask. En argentina creo que es un punto muy importante por el tema de la inflación, al recobor BNB o BUSD (voy a agregar mas a futuro), no se te devalúa como el peso argentino hasta que llegas a tu objetivo",
-    ethereumAddress: "0xbF56263439f5e455d4F6b94EB725736B3D28123E",
-    website: "https://mobile.twitter.com/cafecrypto_app/",
+      "文譯之間團隊，有不同領域的工程師：醫院、半導體業、資訊安全、系統整合等，協力合作夥伴有公部門與NGO。這兩年疫情影響，醫院配合政策常需要快速更新當下的公告，通常會透過圖卡的形式發佈，以利民眾轉貼分享，這也是目前公部門政策宣導最常用的一種形式，然而，圖卡不利於翻譯、被搜尋等，而我們提供一種更友善的服務。",
+    ethereumAddress: "-",
+    website: "https://inkrosetta.tw/",
     thumbnailImageLink:
-      "https://pbs.twimg.com/profile_images/1535050423983276052/AxJ03VXq_400x400.jpg",
+      "https://static.wixstatic.com/media/d21407_0da45008ef03415daaa6f6411490e8fa~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/inkrosetta_logo.png",
     logoCdnUrl:
-      "https://pbs.twimg.com/profile_images/1535050423983276052/AxJ03VXq_400x400.jpg",
+      "https://static.wixstatic.com/media/d21407_0da45008ef03415daaa6f6411490e8fa~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/inkrosetta_logo.png",
     bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/1535048674409054215/1654819517/1500x500",
+      "https://static.wixstatic.com/media/d21407_0da45008ef03415daaa6f6411490e8fa~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/inkrosetta_logo.png",
     recipientId: 2,
     id: "2",
   },
   {
-    projectName: "CommNode",
-    tagline:
-      "CommNode es un proyecto de impacto social que ayuda y acompaña a la comunidad web3 de América Latina en la búsqueda de trabajo, además facilitamos el proceso de sourcing a empresas y proyectos del ecosistema, colaborando en sus búsquedas.",
+    projectName: "CEASEFIRE",
+    tagline: "解方主要效益：使林火發生後在最短時間偵測到，火勢初生即有效抑制和撲滅，使森林不受破壞繼續發揮其生態及固碳功能。建議林務局成立林火消防救護基金會...",
     description:
-      "En CommNode ayudamos a la comunidad web3 de LATAM en la búsqueda de trabajo en el ecosistema. También colaboramos con empresas y proyectos en las búsquedas que tengan activas, ofreciéndoles servicios de full recruitment y sourcing estratégico de perfiles web3. Todo lo hacemos gratuitamente, con el objetivo de ayudar y aportar a la comunidad desde nuestro lugar. Buscamos ser el nodo entre las empresas/proyectos del ecosistema y la comunidad web3 de América Latina. Tenemos la iniciativa de armar una plataforma web3 que permita facilitar el proceso de conseguir trabajo y reclutar gente del ecosistema.",
-    ethereumAddress: "0xDc22560f3fe53B957c1F9b626AD19A4524639337",
-    website: "https://commnode.carrd.co/",
+      "解方主要效益：使林火發生後在最短時間偵測到，火勢初生即有效抑制和撲滅，使森林不受破壞繼續發揮其生態及固碳功能。建議林務局成立林火消防救護基金會，作為土地活化平台，釋出國家未充分使用林地，供企業認養。基金會成員，由產官學民共同參與，Ceasefire團隊自願為創始成員，為竹林地活化展開新的合作模式。",
+    ethereumAddress: "-",
+    website: "https://www.linkedin.com/in/lin-harrison-378550b1/",
     thumbnailImageLink:
-      "https://pbs.twimg.com/profile_images/1554587867397103618/DSgFxerb_400x400.jpg",
+      "https://static.wixstatic.com/media/d21407_9033d1cd3ca0438aaf7f389c44c4d989~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ceasefire%20logo.png",
     logoCdnUrl:
-      "https://pbs.twimg.com/profile_images/1554587867397103618/DSgFxerb_400x400.jpg",
+      "https://static.wixstatic.com/media/d21407_9033d1cd3ca0438aaf7f389c44c4d989~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ceasefire%20logo.png",
     bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/1552385182170333184/1659139503/1500x500",
+      "https://static.wixstatic.com/media/d21407_9033d1cd3ca0438aaf7f389c44c4d989~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ceasefire%20logo.png",
     recipientId: 3,
     id: "3",
   },
   {
-    projectName: "DeFi LATAM",
-    tagline:
-      "Comunidad Web3 de educación y curación, análisis, desarrollo y difusión de tecnologías descentralizadas.",
+    projectName: "透明足跡",
+    tagline: "綠色公民行動聯盟透明足跡計畫致力於通過資訊公開與應用，推動企業永續轉型。目前推出的工具有:監督企業環境裁罰紀錄的透明足跡網站...",
     description:
-      " *Creamos y hacemos curaduría de contenidos - Artículos - Definiciones - Tutoriales - Información de Proyectos - Investigación de incidentes - Noticias * Participación en gobernanzas (primer paso en el Colectivo Optimism) * Realizamos Community Calls semanalmente donde exponemos y discutimos los temas más recientes y resolvemos preguntas y dudas de la comunidad. * Tenemos un podcast que se puede escuchar en spotify y youtube. * Twitter Spaces con referentes del ecosistema donde abordamos información y características de los proyectos a modo educativo. * Resumen diario de temas charlados por la comunidad. * Creamos nuestro propio sistema de distribución de link POAP * Realizamos una Meetup presencial mensual en diferentes provincias Argentinas.",
-    ethereumAddress: "0x0087a081a9B430fd8f688c6ac5dD24421BfB060D",
-    website: "https://twitter.com/DeFi_LATAM",
+      "綠色公民行動聯盟透明足跡計畫致力於通過資訊公開與應用，推動企業永續轉型。目前推出的工具有:監督企業環境裁罰紀錄的透明足跡網站、消費者環境運動APP掃了再買、整合企業永續資料的ESG 檢測儀、以及檢視企業減碳承諾與成效的淨零路徑模擬器。",
+    ethereumAddress: "-",
+    website: "https://thaubing.gcaa.org.tw/",
     thumbnailImageLink:
-      "https://drive.google.com/file/d/1dITfiQgJrPlbTA8M_cNNRmhE_hRzHVXf/view?usp=sharing",
-    logoCdnUrl: "https://defilatam.com/img/logo.svg",
-    bannerImageLink: "https://defilatam.com/img/logo.svg",
+      "https://static.wixstatic.com/media/d21407_d5ece5e722d34464b8389bdbf1675b47~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E9%80%8F%E6%98%8E%E8%B6%B3%E8%B7%A1-LOGO.png",
+    logoCdnUrl:
+      "https://static.wixstatic.com/media/d21407_d5ece5e722d34464b8389bdbf1675b47~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E9%80%8F%E6%98%8E%E8%B6%B3%E8%B7%A1-LOGO.png",
+    bannerImageLink:
+      "https://static.wixstatic.com/media/d21407_d5ece5e722d34464b8389bdbf1675b47~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E9%80%8F%E6%98%8E%E8%B6%B3%E8%B7%A1-LOGO.png",
     recipientId: 4,
     id: "4",
   },
   {
-    projectName: "Solow",
-    tagline:
-      "Es una ecosistema para que aprender cripto sea fácil, gratis y divertido.",
+    projectName: "Turing Certs",
+    tagline: "圖靈證書（Turing Certs）正在世界解決造假問題，透過區塊鏈為所有人建立一個數位身分與歷程檔案。目前已經有 9 個國家與地區的 120 間的政府、學校...",
     description:
-      "Solow empezó siendo un 'Duolingo para cripto'; una plataforma gratuita con cursos gamificados sobre cripto. Con el tiempo, evolucionó en una gran comunidad que hoy tiene 2500 miembros en Discord y mezcla contenido, juegos y tecnología para que cualquiera pueda aprender sobre cripto jugando: plataforma de cursos gamificados criptldle.com criptologos.com criptodex.solow.io - juego en vivo durante ETH Latam eventos y trivias en vivo Youtube, Spotify y Newsletter semanal Además, estamos construyendo una plataforma propia para incluir ejercicios prácticos con un token educativo. El usuario recibe sus primeras cripto, realiza su primer transacción, va a ver el resultado a la blockchain, deposita un contrato de staking y mintea un Soulbound Token personalizado como premio. Desarrollamos los contratos inteligentes necesarios para hacerlo posible y estamos realizando las últimas pruebas para hacer un deploy en Optimism sobre Gnosis. Demo: https://solow-alejozarate.vercel.app/ ",
-    ethereumAddress: "0xAb268da15170654904ac7E4922Ef101e111E2F8f",
-    website: "https://twitter.com/solowcripto",
+      "圖靈證書（Turing Certs）正在世界解決造假問題，透過區塊鏈為所有人建立一個數位身分與歷程檔案。目前已經有 9 個國家與地區的 120 間的政府、學校、機構開始使用我們的數位憑證工具，發行上萬張的數位證書，解決畢業證書、專業能力證明、不動產合約書、農產品歷程、綠電憑證、碳權憑證。讓我們一起建立一個無紙化、安全隱私、100% 零碳數位化的未來。",
+    ethereumAddress: "-",
+    website: "https://certs.turingchain.tech/",
     thumbnailImageLink:
-      "https://drive.google.com/drive/folders/15v5q5HYWRuEHE4u0belIUgMwv91up507",
+      "https://static.wixstatic.com/media/d21407_13ec422f15f74074b12b360e99abb052~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo-2.png",
     logoCdnUrl:
-      "https://pbs.twimg.com/profile_images/1517192513165090816/rh7QfSnS_400x400.jpg",
+      "https://static.wixstatic.com/media/d21407_13ec422f15f74074b12b360e99abb052~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo-2.png",
     bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/1352580840061104130/1650568233/1500x500",
+      "https://static.wixstatic.com/media/d21407_13ec422f15f74074b12b360e99abb052~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo-2.png",
     recipientId: 5,
     id: "5",
   },
   {
-    projectName: "CriptoTributos",
-    tagline:
-      "Charlas abiertas sobre temáticas de índole legal / tributaria nacional o internacional que impactan en el ecosistema crypto",
+    projectName: "FinTech大聯盟",
+    tagline: "FinTech大聯盟旨在是透過履行社會責任，了解人民真實需求，作為銜接人民與政府之監理協作及監理溝通之橋樑，並透過政府授權或合作來提前反映爭點...",
     description:
-      "Empezó como CryptoContadores & CryptoAbogados, un ciclo de charlas vía Twitter Spaces organizado por @cryptochica_arg. Con una frecuencia promedio de 1 vez por mes se desarrollan las charlas alrededor de una temática de índole legal / tributaria nacional o internacional sobre el ecosistema crypto. Ahora empezamos el camino a ser un 'Spin-off' independiente con el objetivo de consolidarse como un espacio propio y en virtud de ser de interés público y permanente el hablar sobre temáticas relativas a aspectos legales, tributarios y financieros del ecosistema crypto.",
-    ethereumAddress: "0x3d1736798391d4854E36A0c5b4e89e340CaDC9D1",
-    website:
-      "https://docs.google.com/document/d/1XKyc6N-VNZR7kgzC-vJEu2oWLxke60OZEhCeEe2_3Lk/preview",
+      "FinTech大聯盟旨在是透過履行社會責任，了解人民真實需求，作為銜接人民與政府之監理協作及監理溝通之橋樑，並透過政府授權或合作來提前反映爭點，降低未來新創與沙盒試驗之難度，同時因為教育之落實，理論與實作之經驗取得，金融科技教育得以向下普遍扎根。",
+    ethereumAddress: "-",
+    website: "https://presidential-hackathon.mic.org.tw/2020/ProposedContent.aspx",
     thumbnailImageLink:
-      "https://drive.google.com/file/d/1awjYbNwDyWWwcYmu7j3AVl0l_o5d8zKY/view",
+      "https://static.wixstatic.com/media/nsplsh_3049566f703576344d4d55~mv2_d_4139_2759_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/Image%20by%20Jonas%20Leupe.jpg",
     logoCdnUrl:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/CriptoTributos_l3kwls.jpg",
+      "https://static.wixstatic.com/media/nsplsh_3049566f703576344d4d55~mv2_d_4139_2759_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/Image%20by%20Jonas%20Leupe.jpg",
     bannerImageLink:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/CriptoTributos_l3kwls.jpg",
+      "https://static.wixstatic.com/media/nsplsh_3049566f703576344d4d55~mv2_d_4139_2759_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/Image%20by%20Jonas%20Leupe.jpg",
     recipientId: 6,
     id: "6",
   },
   {
-    projectName: "Podcast: Bitcoin para todos.",
-    tagline:
-      "Bitcoin para todos representa una comunidad educativa que facilita la adopción web3.",
+    projectName: "海闊天空隊",
+    tagline: "我們是一群熱愛海洋的人們，來自於學校、企業、NGOs、相關政府單位，我們共同看見台灣的海洋面臨著危險，平常一起參與淨灘的活動中...",
     description:
-      "Bitcoin para todos fomenta el conocimiento y la toma de decisiones responsable e informada en este nuevo ecosistema cripto. Durante los casi 100 episodios hemos evolucionado en el conocimiento y las capacidades de interactuar con protocolos descentralizados. Iniciamos con Bitcoin, seguimos con Ethereum, profundizamos en DeFi y DAOs, entre otros conceptos críticos de la Web3. Existen más de 27 episodios dirigidos específicamente al ecosistema de Ethereum.",
-    ethereumAddress: "0xAAE45BF6cC2eFc2f1BFE514c98b4c508e7f22eb7",
-    website: "https://anchor.fm/diego-torres3",
+      "我們是一群熱愛海洋的人們，來自於學校、企業、NGOs、相關政府單位，我們共同看見台灣的海洋面臨著危險，平常一起參與淨灘的活動中，發現海洋廢棄物可以重複再利用，經過企業夥伴們的嘗試，提出藍色經濟循環，希望將更多海廢清出大海，減少對海洋持續的破壞，並將每個環節都上鏈紀錄，為我們的海洋環境作出一些努力及貢獻。",
+    ethereumAddress: "-",
+    website: "-",
     thumbnailImageLink:
-      "https://drive.google.com/file/d/1TzQ9niNDuxclctCf_XeHa6Ree5u74qUk/view?usp=sharing",
+      "https://static.wixstatic.com/media/d21407_1e84e5929bdf4500ac5d96905d3e44f8~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E6%B5%B7%E9%97%8A%E5%A4%A9%E7%A9%BA-Logo.png",
     logoCdnUrl:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/Bitcoin_para_todos_w3bivn.jpg",
+      "https://static.wixstatic.com/media/d21407_1e84e5929bdf4500ac5d96905d3e44f8~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E6%B5%B7%E9%97%8A%E5%A4%A9%E7%A9%BA-Logo.png",
     bannerImageLink:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/Bitcoin_para_todos_w3bivn.jpg",
+      "https://static.wixstatic.com/media/d21407_1e84e5929bdf4500ac5d96905d3e44f8~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E6%B5%B7%E9%97%8A%E5%A4%A9%E7%A9%BA-Logo.png",
     recipientId: 7,
     id: "7",
   },
+
   {
-    projectName: "L2 en Español",
-    tagline:
-      "Una comunidad abierta al estudio y difusión de las soluciones de escalabilidad de Ethereum.",
+    projectName: "街道醫生",
+    tagline: "街道醫生團隊透過「全民參與街道改善決策方案平台」建置與民眾溝通的管道，藉由人行道現況、社經環境資料的大數據疊加分析以及民眾參與...",
     description:
-      "La comunidad L2 en Español se encarga de brindar un espacio gratuito dedicado para la educación sobre Layer 2 en Ethereum, noticias y todo tipo de contenido para impulsar la adopción de estas nuevas tecnologías con el ojo crítico e información de calidad con el que se merecen.",
-    ethereumAddress: "0xCc167c4b4c4E2b72eE2Aedd7BfF9bd0B6eABdacB",
-    website: "https://twitter.com/Layer2es",
+      "街道醫生團隊透過「全民參與街道改善決策方案平台」建置與民眾溝通的管道，藉由人行道現況、社經環境資料的大數據疊加分析以及民眾參與，找出最迫切需要改善之路段。我們結合社福團體-身心障礙者聯盟、中華視障聯盟的鞭策，政府單位-內政部營建署的資源及補助機制、新北市政府的案件配合執行，產業界-鼎漢工程顧問公司、台科大資工系的技術指導，更結合民眾倡議並通過中央政府經費協助，形成街道永續安全的共識，逐一排除街道步行阻礙，打通街道經脈，讓民眾都能夠通行無礙。",
+    ethereumAddress: "-",
+    website: "-",
     thumbnailImageLink:
-      "https://pbs.twimg.com/profile_images/1529509507210039296/5TmYmR0p_400x400.jpg",
+      "https://static.wixstatic.com/media/d21407_2d4a781193a248ba9f49fa0cdef3b66f~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E8%A1%97%E9%81%93%E9%86%AB%E7%94%9Flogo.png",
     logoCdnUrl:
-      "https://pbs.twimg.com/profile_images/1529509507210039296/5TmYmR0p_400x400.jpg",
+      "https://static.wixstatic.com/media/d21407_2d4a781193a248ba9f49fa0cdef3b66f~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E8%A1%97%E9%81%93%E9%86%AB%E7%94%9Flogo.png",
     bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/1529507056343973897/1653498629/1500x500",
+      "https://static.wixstatic.com/media/d21407_2d4a781193a248ba9f49fa0cdef3b66f~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E8%A1%97%E9%81%93%E9%86%AB%E7%94%9Flogo.png",
     recipientId: 8,
     id: "8",
-  },
-  {
-    projectName: "The Badge",
-    tagline:
-      "The Badge es una plataforma de certificación descentralizada construida en Ethereum blockchain, el objetivo es permitir tokenizar información tanto proveniente del mundo real como de la misma blockchain a través del concepto de badges.",
-    description:
-      "The Badge tiene como objetivo convertirse en una plataforma de certificación descentralizada que permita que los usuarios puedan obtener badges por eventos provenientes tanto de la blockchain como del exterior. Los badges tienen como características principales, ser NFTs intransferibles e inalienables de las wallets, y no se pueden obtener con dinero sino con habilidades que posee el dueño de dicha wallet o hitos logrados por el mismo. Ejemplos de eventos fuera de la blockchain son ser poseedor de una cuenta particular de Twitter, Github o Medium, o que el propietario de la cuenta tenga un diploma de una plataforma como Udemy, o incluso mejor, de una universidad. Ejemplos de eventos dentro de la blockchain son addresses que han tomado préstamos en Maker por un monto superior a 50k y nunca han sido liquidados por el mercado, o direcciones que han proporcionado más de 100k de liquidez a los cinco protocolos principales por un monto de tiempo mayor a un año. Habrá tres tipos de badges, on-chain badges, off-chain badges y third-party badges. Los on-chain badges se generan a través de información ya existente en la red y se generan utilizando The Graph. Los off-chain badge se generan por eventos e información del mundo exterior a la blockchain y se utiliza Kleros como mecanismo de verificación de la información. Por último están los Third-party badges, estos son generados por una entidad pública o privada que fue previamente verificada y obtuvo un permiso para emitir sus propios badges.",
-    ethereumAddress: "0x81379D61acd06D01e2443C66aa7eF97A0A3285b6",
-    website: "https://www.thebadge.xyz/",
-    thumbnailImageLink:
-      "https://drive.google.com/file/d/1eX95wpDYKWXtwXbv-McguNhY16uk2jtJ/view?usp=sharing",
-    logoCdnUrl:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/logo_thebadge_jtmosf.jpg",
-    bannerImageLink:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/banner_thebadge_kwmop2.png",
-    recipientId: 9,
-    id: "9",
-  },
-  {
-    projectName: "Mujeres en Crypto",
-    tagline:
-      "Onboarding de mujeres con el fin de aumentar el liderazgo femenino en el ecosistema WEB3 a través de herramientas que impulsen su crecimiento personal y financiero",
-    description:
-      "Incentivamos y acompañamos en sus primeros pasos en el mundo crypto a entusiastas aprendices. Todo esto lo hacemos con encuentros presenciales, Spaces en twitter con referentes del ecosistema, Mentorias y grupos de trabajo en Discord.",
-    ethereumAddress: "0x224d04AdeD92a2C422098FC924cdE41EE5Dc1B48",
-    website: "ttps://twitter.com/mujeresencrypto",
-    thumbnailImageLink:
-      "https://drive.google.com/file/d/1z7mfX1cQZXKRH2Xl19CUBIBXWS_Ylcfh/view?usp=sharing",
-    logoCdnUrl:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/Mujeres_en_CryptoLogo_ry3get.png",
-    bannerImageLink:
-      "https://res.cloudinary.com/pse-qf-maci/image/upload/v1660391628/Mujeres_en_CryptoBanner_nlajfe.jpg",
-    recipientId: 10,
-    id: "10",
-  },
-  {
-    projectName: "Deep Ecosystem",
-    tagline:
-      "Nuestra misión es descentralizar el acceso a los libros mientras democratizamos el hábito de la lectura.",
-    description:
-      "Somos Deep, una nueva forma de dominar tu conocimiento. Deep Ecosystem tiene 2 pilares fundamentales: Primero, Deep Platform. A través de nuestra plataforma tendrán la oportunidad de utilizar ese aprendizaje que obtienen de la lectura para construir algo real. Luego de leer un libro van a poder subir a Deep distintos contenidos (repositorio de GitHub, reseña, articulo, ficción complementaria) y reclamar el token que certifica que efectivamente leyeron el contenido. Por otro lado, Deep Editorial Descentralizada. Una página, un NFT. La nueva forma de apoyar a autores emergentes. Es una DAO que tiene por objetivo hacer crowd-founding, crear comunidades. Funciona como una estructura de espacios, categorizados por tipo de producción literaria donde cada autor puede presentar su preliminar, acceder al crowd-founding. Aquellos miembros de la DAO que apoyen el libro, acceden a beneficios exclusivos como contacto directo con el autor, voz y voto durante la edición, preventas exclusivas, y muchísimo más dentro de Deep.",
-    ethereumAddress: "0x3F2e0Cf799bdF01FBf0dee3823F764Ef3B41eC26",
-    website: "https://twitter.com/deep_ecosystem",
-    thumbnailImageLink:
-      "https://drive.google.com/file/d/1eipphk86Dl-KjuGnTh-EwEyt_IeTz-dn/view?usp=sharing",
-    logoCdnUrl:
-      "https://pbs.twimg.com/profile_images/1557368316364300289/Xw1Fvxnu_400x400.jpg",
-    bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/1557364851793711105/1660143118/1500x500",
-    recipientId: 11,
-    id: "11",
-  },
-  {
-    projectName: "DeFi Argentina",
-    tagline: "Asistencia a comedores merenderos en situacion de calle",
-    description:
-      "Recaudamos fondos,  brindamos educacion cripto de manera gratuita, para luego repartir en diferentes comedores,merenderos y dar asistencia a personas en situacion de calle, como tambien colaboramos con emergencias Nacionales que requieran ayuda en suministros",
-    ethereumAddress: "0x958D34aB7d992c8bDDa594e41E5BA478c7C9C92c",
-    website: "https://twitter.com/defiargentina",
-    thumbnailImageLink: "https://mobile.twitter.com/defiargentina/photo",
-    logoCdnUrl:
-      "https://pbs.twimg.com/profile_images/1451154572622417925/Alsg6gtj_400x400.jpg",
-    bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/1446942496093790208/1634817188/1500x500",
-    recipientId: 12,
-    id: "12",
-  },
-  {
-    projectName: "Expediente Cripto",
-    tagline:
-      "Expediente Cripto es un proyecto educativo legal vinculado con la Tecnología Blockchain",
-    description:
-      "Somos un grupo de tres estudiantes de abogacía que queremos compartir lo que sabemos de cripto y derecho. Comenzamos con una temporada de spaces e invitados abogados y abogadas: 1) Token en el Derecho, 2) NFT y Propiedad Intelectual, 3) Top 5 países criptofriendly en regulación, 4) Sueldos en cripto , 5) Demandas en Web3, 6) Smart Contracts y Derecho, 7) Estafas en Web3, 8) Cibercrimen, 9) Derecho Informático y programación, 10) Metaverso y Derecho. Queremos ser el primer proyecto de comunicación legal cripto para educar sobre estos temas. Ademas contamos con el armado de un panel que realizamos en eventos sobre 5 tips criptojuridicos que cualquier proyecto Web3 debe considerar a la hora de comenzar.",
-    ethereumAddress: "0x1854e5e725C2e55B0C4C323a13e1ca26333F40a2",
-    website: "https://twitter.com/naticchain",
-    thumbnailImageLink: "https://i.im.ge/2022/08/15/Orjl3T.image.png",
-    logoCdnUrl: "https://i.im.ge/2022/08/15/Orjl3T.image.png",
-    bannerImageLink:
-      "https://pbs.twimg.com/profile_banners/265023873/1647441035/1500x500",
-    recipientId: 13,
-    id: "13",
   },
 ];
 

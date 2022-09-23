@@ -564,7 +564,7 @@ export const Ballot = () => {
       as="main"
       h="full"
       w="full"
-      background="black"
+    
       alignItems="center"
       flexDir="column"
       borderRightColor={color}
@@ -733,7 +733,7 @@ export const Ballot = () => {
                 onChange={handleInputChange}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormHelperText fontFamily="NeuePixelGrotesk">
+              <FormHelperText fontFamily="Helvetica">
                 {numChars ?? "-"} / 71
               </FormHelperText>
               <Button

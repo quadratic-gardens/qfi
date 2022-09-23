@@ -23,7 +23,7 @@ const Button = {
       alignItems: "center",
       borderRadius: "50%",
       background: "rgb(53, 75, 55) none repeat scroll 0% 0%",
-      fontFamily: "NeuePixelGrotesk",
+      fontFamily: "Helvetica",
       fontWeight: "700",
       _hover: {
         transition: "all 0s",
@@ -41,7 +41,7 @@ const Button = {
       alignItems: "center",
       background: "#1A1A1A",
       fontWeight: 400,
-      fontFamily: "NeuePixelGrotesk",
+      fontFamily: "Helvetica",
       border: "1.79753px solid #E573E5",
       boxShadow: "-4.49382px 4.49382px 0px #E573E5",
       _hover: {
@@ -60,7 +60,7 @@ const Button = {
       alignItems: "center",
       background: "#0B0C0D",
       fontWeight: 400,
-      fontFamily: "NeuePixelGrotesk",
+      fontFamily: "Helvetica",
       border: "1.79753px solid #80FF9F",
       boxShadow: "-4.49382px 4.49382px 0px #80FF9F",
       _hover: {
@@ -85,7 +85,7 @@ const Button = {
       alignItems: "center",
       background: "#0B0C0D",
       fontWeight: 400,
-      fontFamily: "NeuePixelGrotesk",
+      fontFamily: "Helvetica",
       border: "1.79753px solid #FAF7F5",
       boxShadow: "-4.49382px 4.49382px 0px #FAF7F5",
       _hover: {
@@ -110,7 +110,7 @@ const Button = {
       alignItems: "center",
       background: "#1A1A1A",
       fontWeight: 400,
-      fontFamily: "NeuePixelGrotesk",
+      fontFamily: "Helvetica",
       border: "1.79753px solid #FAF7F5",
       boxShadow: "-4.49382px 4.49382px 0px #FAF7F5",
       _hover: {

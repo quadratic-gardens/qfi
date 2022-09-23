@@ -114,8 +114,8 @@ export const theme = extendTheme({
     bgImg: brand.bgImg,
   },
   fonts: {
-    heading: `'NeuePixelGrotesk', serif`,
-    body: `'Montserrat', sans-serif`,
+    heading: `'Helvetica', serif`,
+    body: `'Helvetica', sans-serif`,
     mono: brand.monoFont,
     accessory: "Roboto Mono",
     space: "Space Mono",
@@ -157,7 +157,7 @@ export const theme = extendTheme({
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: mode(`gray.100`, `background.1000`)(props),
+              backgroundColor: mode(`gray.100`, `gray.800`)(props),
               pointerEvents: "none",
               mx: 3,
               px: 1,
@@ -180,7 +180,7 @@ export const theme = extendTheme({
         lineHeight: "tall",
       },
       body:{
-        bg: mode(`gray.100`, `background.1000`)(props),
+        bg: mode(`gray.100`, `rgb(27, 34, 58)`)(props),
         color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },
       a: {
