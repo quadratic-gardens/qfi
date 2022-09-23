@@ -7,50 +7,33 @@ import {
   Heading,
   Button,
   useColorModeValue,
-  Link,
-  Box,
   Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
   HStack,
+  Stack,
 } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams, Link as RouterLink } from "react-router-dom";
-import { animateText, MagikText } from "@qfi/ui";
-import { Hero } from "../components/Hero";
-import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
-import { RecipientGuide } from "../components/prague/RecipientGuide";
 
-export type HomeProps = {
-  isSettingsOpen: boolean;
-  onSettingsOpen: () => void;
-  isGuideOpen: boolean;
-  onGuideOpen: () => void;
-};
-
-export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen }: HomeProps) => {
+export const Home = () => {
+  const { t } = useTranslation();
   const color = useColorModeValue("gray.800", "gray.700");
-  const backgroundColor = useColorModeValue("#FAFAFA", "gray.700");
+  const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
   let [searchParams] = useSearchParams();
+
   return (
     <Flex
       as="main"
       h="full"
+      w="full"
       flex={1}
       borderRightColor={color}
       borderRightWidth={1}
       position={"relative"}
       overflow="hidden">
-      {/* <Hero
-        position={"absolute"}
-        overflow="hidden"
-        zIndex={-1}
-        maxW={"1600px"}
-        left={{ base: "-260px", md: "0px", lg: "0px", xl: "-80px" }}
-        top={{ base: "100px", md: "0px", lg: "0px", xl: "160px" }}
-      /> */}
-
       <Container
         h="full"
         w="full"
@@ -76,140 +59,169 @@ export const Home = ({ isSettingsOpen, onSettingsOpen, isGuideOpen, onGuideOpen 
         }}
         maxWidth={{ lg: "container.lg", md: "container.md" }}
         py={8}>
-        {/* <VStack spacing={0} w="full" alignItems={"flex-end"}>
-          <ColorModeSwitcher position="absolute" top={0} right={0} m={4} zIndex={1} />
-        </VStack> */}
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
-            <Heading fontFamily={"NeuePixelGrotesk"} fontSize={{ base: "76px", xl: "120px" }}>
-              平方募資法
-            </Heading>
-            <Text fontSize={"sm"} maxW="60ch">
-            Quadratic Funding
+            <Heading fontSize={{ base: "76px", xl: "120px" }}>平方募資法</Heading>
+          </VStack>
+          <VStack width="100%" alignItems="flex-start">
+            <Text fontSize={"lg"} pb={2}>
+              Quadratic Funding
             </Text>
-            <Text fontSize={"sm"} maxW="60ch">
-在 Web3 的世界中，我們透過社群自治來解決各式問題。
-
-而平方投票法，則是一套消弭分配不均的實驗性工具。
+            <Text fontSize={"md"} pb={4}>
+              在 Web3 的世界中，我們透過社群自治來解決各式問題。 而平方投票法，則是一套消弭分配不均的實驗性工具。
             </Text>
-            <HStack justifyContent={"space-around"} spacing={10}>
-              <Box
-                sx={{
-                  height: "50px",
-                  boxSizing: "border-box",
-                  color: "white",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "50%",
-                  border: "0.8px solid rgb(53, 75, 55)",
-                  transition: "all 0s linear",
-                  _hover: { transform: "rotate(6.41deg)", scale: "1" },
 
-                  transform: "rotate(-6.41deg)",
-                  width: "122px",
-                }}>
-                <Button as={RouterLink} variant={"barcelona"} fontSize={{ base: "lg", xl: "xl" }}  to={`/begin?${searchParams.toString()}`} 
-                          >
-                  我是團隊
-                </Button>
-              </Box>
+            <Stack spacing={10} direction={["column", "row"]} pb={4}>
+              <Button
+                as={RouterLink}
+                h={50}
+                variant={"solid"}
+                colorScheme="cyan"
+                fontSize={{ base: "md", xl: "xl" }}
+                to={`/ballot?${searchParams.toString()}`}>
+                {t("GET STARTED")}
+              </Button>
+              <Button
+                as={RouterLink}
+                h={50}
+                variant={"outline"}
+                colorScheme={"cyan"}
+                fontSize={{ base: "md", xl: "xl" }}
+                to={`/projects?${searchParams.toString()}`}>
+                {t("CHECK OUT THE PROJECTS")}
+              </Button>
+            </Stack>
 
-              <Text as={RouterLink} color={"gray.700"} to={`/projects?${searchParams.toString()}`} fontFamily={"NeuePixelGrotesk"} fontWeight={"bold"} fontSize={{ base: "lg", xl: "xl" }}>
-              我是觀眾
-              </Text>
-            </HStack>
+            {/* 
+            <Text pb={4}>
+              {t(
+                "You can play a fundamental role as a part of the ETHCommunity community, both in supporting the local community, and in exploring new ways to finance public goods through quadratic voting."
+              )}
+            </Text>
+            <Text pb={4} w={"full"}>
+              {t(
+                "During the venue, our ETHCommunity team will send you an email with a password. This is the “MACI” key you’ll use to vote."
+              )}
+            </Text>
+            <Text pb={4} w={"full"}>
+              {t("Below you will find instructions to help support local projects. Learn more about Quadratic Funding")}{" "}
+              <a href={"https://wtfisqf.com/?grant=&grant=&grant=&grant=&match=1000"} rel="noreferrer" target="_blank">
+                {t("here")}
+              </a>
+              .
+            </Text>
+            <Text pb={4} w={"full"} fontFamily="Helvetica" fontSize={22}>
+              {t("The future is now.")}
+            </Text> */}
           </VStack>
           <VStack w="full" spacing={6}>
-          <VStack spacing={6} alignItems="flex-start" w={"full"}>
-            <Accordion allowToggle w={"full"} bg={backgroundColor} defaultIndex={0}>
-              <AccordionItem border="none" w={"full"}>
-                <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
-                  <Heading textAlign={"left"} size="md">
-                  跨界合作：總統盃黑客松
-                  </Heading>
-                  <AccordionIcon></AccordionIcon>
-                </HStack>
+            <VStack spacing={6} alignItems="flex-start" w={"full"}>
+              <Accordion allowToggle w={"full"} bg={backgroundColor} defaultIndex={0}>
+                <AccordionItem border="none" w={"full"}>
+                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
+                    <Heading textAlign={"left"} size="md">
+                      跨界合作：總統盃黑客松
+                    </Heading>
+                    <AccordionIcon></AccordionIcon>
+                  </HStack>
 
-                <AccordionPanel pb={4}>
-                  <Text  fontSize="sm" py={2}>
-                  平方投票法是套集體決策程序。參與決策的投票者透過分配投票來表達偏好及偏好的程度。藉此，平方投票試圖解決多數決的常見難題，如投票悖論、棄保效應及配票。為推廣平方投票法的優點，本協會響應總統盃黑客松解決台灣永續相關議題之目標，並支持優良新創項目得以永續發展，將於 N24 台北方舟區塊鏈創新育成基地舉辦平方募資活動。
-                  </Text>
-                
-                  <Text  fontSize="sm"  py={2}>
-                  「2022 總統盃黑客松」以國家發展藍圖為本，超越 GDP (Beyond GDP) 的發展理念，融入國、內外發展情勢，以『安居永續‧均衡臺灣』為競賽主題，從「安居樂業」(SDGs 社會面)、「永續發展」(SDGs 經濟面) 及「均衡臺灣」(SDGs 環境面) 三大面向，號召全民許願、黑客解題，希冀透過公私協力，共創經濟、社會及環境都具幸福感的安居臺灣。
-                  </Text>
-                  
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
+                  <AccordionPanel pb={4}>
+                    <Text fontSize="sm" py={2}>
+                      平方投票法是套集體決策程序。參與決策的投票者透過分配投票來表達偏好及偏好的程度。藉此，平方投票試圖解決多數決的常見難題，如投票悖論、棄保效應及配票。為推廣平方投票法的優點，本協會響應總統盃黑客松解決台灣永續相關議題之目標，並支持優良新創項目得以永續發展，將於
+                      N24 台北方舟區塊鏈創新育成基地舉辦平方募資活動。
+                    </Text>
+
+                    <Text fontSize="sm" py={2}>
+                      「2022 總統盃黑客松」以國家發展藍圖為本，超越 GDP (Beyond GDP)
+                      的發展理念，融入國、內外發展情勢，以『安居永續‧均衡臺灣』為競賽主題，從「安居樂業」(SDGs
+                      社會面)、「永續發展」(SDGs 經濟面) 及「均衡臺灣」(SDGs 環境面)
+                      三大面向，號召全民許願、黑客解題，希冀透過公私協力，共創經濟、社會及環境都具幸福感的安居臺灣。
+                    </Text>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </VStack>
+            <VStack spacing={6} alignItems="flex-start" w={"full"}>
+              <Accordion allowToggle w={"full"} bg={backgroundColor}>
+                <AccordionItem border="none" w={"full"}>
+                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
+                    <Heading size="md">什麼是「平方募資法」？</Heading>
+                    <AccordionIcon></AccordionIcon>
+                  </HStack>
+
+                  <AccordionPanel pb={4}>
+                    <Text fontSize="sm">
+                      為避免因棄保效應、配票、80/20 法則等，導致非主流項目遭忽視與資源分配不均，以太坊創辦人 Vitalik
+                      Buterin、哈佛大學經濟學者 Zoë Hitzig 以及微軟首席經濟研究員 Glen Weyl 在 2018
+                      年底共同提出「平方募資法」(Quadratic
+                      Funding)，平方募資基於平方投票計算與分配資金（如政府預算、慈善或企業來源、直接從參與者收集），目的在於讓資源分配變得更加平均。
+                    </Text>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+
+              {/* <MagikButton /> */}
+            </VStack>
+            {/* <VStack spacing={6} alignItems="flex-start" w={"full"}>
+              <Accordion allowToggle w={"full"} bg={backgroundColor}>
+                <AccordionItem border="none" w={"full"}>
+                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
+                    <Heading textAlign={"left"} size="md">
+                      {t("Timeline")}
+                    </Heading>
+                    <AccordionIcon></AccordionIcon>
+                  </HStack>
+
+                  <AccordionPanel pb={4}>
+                    <Text lineHeight={8} pl={8} fontSize="sm" py={2}>
+                      <ul>
+                        <li>{t("Project submission deadline: August 11th")}</li>
+                        <li>{t("ETHCommunity: August 11th - 13th")}</li>
+                        <li>{t("Voting opens: August 13th @ 2:00 pm GTM-3")}</li>
+                        <li>{t("Voting closes: August 19th")}</li>
+                        <li>{t("Count of votes: August 22nd")}</li>
+                        <li>{t("Distribution of funds: September 2nd")}</li>
+                      </ul>
+                    </Text>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </VStack> */}
+            <VStack spacing={6} alignItems="flex-start" w={"full"}>
+              <Accordion mb={20} allowToggle w={"full"} bg={backgroundColor}>
+                <AccordionItem border="none" w={"full"}>
+                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
+                    <Heading size="md">{t("How does it work?")}</Heading>
+                    <AccordionIcon></AccordionIcon>
+                  </HStack>
+
+                  <AccordionPanel pb={4}>
+                    <Text fontSize="sm" pb={8}>
+                      {t("All ETHCommunity attendees will receive an email with a MACI key.")}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t(
+                        "This key will allow them to cast votes in favor of the projects that apply to receive funds. To vote, you must have an address in your self-custodial wallet connected to Gnosis, with some $MATIC to pay for the transaction fees and a valid voting key."
+                      )}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t(
+                        "Voting is pseudo-anonymous, but to record the vote, your MACI key will be sent to your email address by the ETHCommunity team."
+                      )}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t(
+                        "During the event, you’ll be able to ask at the Ethereum Foundation booth about the funding process."
+                      )}
+                    </Text>
+                    <Text fontSize="sm" pb={8}>
+                      {t("If you have any questions, please, feel free to ask any of the ETHCommunity volunteers.")}
+                    </Text>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </VStack>
           </VStack>
-          <VStack spacing={6} alignItems="flex-start" w={"full"}>
-            <Accordion allowToggle w={"full"} bg={backgroundColor} >
-              <AccordionItem border="none" w={"full"}>
-                <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
-                  <Heading size="md">
-什麼是「平方募資法」？</Heading>
-                  <AccordionIcon></AccordionIcon>
-                </HStack>
-
-                <AccordionPanel pb={4}>
-                  <Text  fontSize="sm">
-                  為避免因棄保效應、配票、80/20 法則等，導致非主流項目遭忽視與資源分配不均，以太坊創辦人 Vitalik Buterin、哈佛大學經濟學者 Zoë Hitzig 以及微軟首席經濟研究員 Glen Weyl 在 2018 年底共同提出「平方募資法」(Quadratic Funding)，平方募資基於平方投票計算與分配資金（如政府預算、慈善或企業來源、直接從參與者收集），目的在於讓資源分配變得更加平均。
-                  </Text>
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-
-            {/* <MagikButton /> */}
-          </VStack>
-          
-          {/* <VStack spacing={6} alignItems="flex-start" w={"full"}>
-            <Accordion allowToggle w={"full"} bg={backgroundColor}>
-              <AccordionItem border="none" w={"full"}>
-                <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
-                  <Heading textAlign={"left"} size="md">
-                   Eligibility Criteria
-                  </Heading>
-                  <AccordionIcon></AccordionIcon>
-                </HStack>
-
-                <AccordionPanel pb={4}>
-                  <Text  fontSize="sm"  py={2}>
-                    - Project needs to be based or working with local communities or the environment in Catalunya or elsewhere in Spain.
-                  </Text>
-                  <Text  fontSize="sm"  py={2}>
-                  - Public good focused Web3 / impact DAOs / decentralized projects can also apply, this is not exclusive to any project regardless of their use of blockchain technologies.
-                  </Text>
-                  <Text  fontSize="sm"  py={2}>
-                  - Projects are required to have a public good focus or impact, often defined as non-rivalrous (use by one person doesn’t prevent access by others) and non-excludable (anyone can access or use it).
-                  </Text>
-                  <Text  fontSize="sm"  py={2}>
-                  - Public good can be one of the many impacts of the project but it must be explicit what you will use the funds for if you are granted them. For example: funding a free permaculture education course for children in a village in Catalunya.
-                  </Text>
-                  <Text  fontSize="sm"  py={2}>
-                  - Projects are not required to be web3 or crypto-native, but they must submit a Gnosis Chain wallet which they control as part of the application process. We encourage the use of self-custody solutions.
-                  </Text>
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          </VStack> */}
-        </VStack>
-          {/* <VStack spacing={6} h="full" pb={8} alignItems={{ base: "flex-start", xl: "center" }} display="contents">
-            <MagikText
-              fontFamily="NeuePixelGrotesk"
-              fontWeight="400"
-              text="Featured Projects"
-              charPoses={animateText.bottomLeft(0)}
-              mt={10}
-              lineHeight={{ base: "100px", xl: "180px" }}
-              fontSize={{ base: "65px", xl: "100px" }}
-              textAlign={{ base: "left", xl: "center" }}
-            />
-            <Heading my={10} py={"40px"} fontFamily="NeuePixelGrotesk" fontWeight="400">
-              {" "}
-              Stay Tuned! Projects will be announced soon after applications close.
-            </Heading>
-          </VStack> */}
         </VStack>
       </Container>
     </Flex>

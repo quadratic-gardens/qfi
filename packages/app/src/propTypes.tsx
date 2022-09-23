@@ -1,11 +1,7 @@
 export type SideNavProps = {
   onGuideOpen: () => void;
-  onSettingsOpen: () => void;
 };
 export type LayoutProps = {
-  isSettingsOpen: boolean;
-  onSettingsOpen: () => void;
-  onSettingsClose: () => void;
   onGuideOpen : () => void;
   onGuideClose : () => void;
   isGuideOpen : boolean;
@@ -21,14 +17,14 @@ export type BallotOptionProps = {
 };
 
 export type Option = {
-  name: string;
+  projectName: string;
+  tagline: string;
+  description: string;
+  ethereumAddress: string;
+  website: string;
+  thumbnailImageLink: string;
+  logoCdnUrl:string;
+  bannerImageLink: string;
   id: string;
   recipientId: number;
-  address: string;
-  url: string;
-  description: string;
-  logo: string;
-  banner: string;
-  problemSpace: string;
-  tagline: string;
 };

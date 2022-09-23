@@ -1,10 +1,36 @@
-import React, { useCallback, useMemo } from "react";
-import { VStack, Stack, HStack, Tooltip, Icon, Text, Heading, Button, Center, IconButton } from "@chakra-ui/react";
-import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom";
+import React, { useCallback } from "react";
+import {
+  VStack,
+  Stack,
+  HStack,
+  Tooltip,
+  Text,
+  Heading,
+  IconButton,
+  Icon,
+  Center,
+  Button,
+} from "@chakra-ui/react";
+import {
+  createSearchParams,
+  Link,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { BallotOptionProps } from "../../propTypes";
 import { FaWindowClose } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+import { useMediaQuery } from "@chakra-ui/react";
 
-export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: BallotOptionProps) => {
+export const BallotOption = ({
+  ballotOption,
+  to,
+  votes,
+  lastOption,
+  onClick
+}: BallotOptionProps) => {
+  const { t } = useTranslation();
+  const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   let [searchParams] = useSearchParams();
   let navigate = useNavigate();
   const isInBallot = useCallback(
@@ -16,93 +42,108 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
   const handleRemoveFromBallot = useCallback(
     (projectId: string) => {
       return () => {
-       
-
         if (projectId && isInBallot(projectId)) {
-          let filtered = searchParams.getAll("option").filter((id) => id !== projectId);
+          let filtered = searchParams
+            .getAll("option")
+            .filter((id) => id !== projectId);
           let newSearchParams = createSearchParams({
-              option: filtered
-            });
-          
+            option: filtered,
+          });
+
           navigate("/ballot?" + newSearchParams.toString());
         }
-        
       };
     },
     [searchParams, isInBallot, navigate]
   );
   return (
     <Stack
-      boxSizing={"content-box"}
-      fontFamily={"arial"}
-      borderColor="black"
+      boxSizing="content-box"
+      fontFamily="arial"
+      borderColor="#FAF7F5"
       borderTopWidth={2}
       borderLeftWidth={2}
       borderRightWidth={2}
       borderBottomWidth={lastOption ? 2 : 0}
       spacing={0}
       alignItems="stretch"
-      justifyContent="center"
-      direction={{ base: "row", md: "row" }}
+      justifyContent={{ sm: "initial", md: "center" }}
+      direction="row"
       w="full"
-      h="100px">
+      h={{ sm: 150, md: 90 }}
+    >
       <VStack
-        py={1.5}
-        borderRightColor="black"
+
+        borderRightColor="#FAF7F5"
         borderRightWidth={2}
-        h="full"
         spacing={0}
-        justifyContent="flex-start"
+        justifyContent="center"
         alignItems="center"
         textAlign="center"
-        maxW={{ base: "fit-content", md: "40px" }}>
+        w={isViewportMd ? 140 : "35%"}
+      >
         <Text fontSize={20} fontWeight="bold" mx={2}>
           {votes ?? 0}
+        </Text>
+        <Text fontSize={20} fontFamily="Helvetica" mx={2}>
+          {t("CREDITS")}
         </Text>
       </VStack>
       <VStack
         spacing={0}
         position="relative"
-        borderRightColor="black"
-        borderRightWidth={2}
         justifyContent="flex-start"
         alignItems="stretch"
-        w={{ base: "full", md: "full" }}
+        w={{ base: "40%", md: "full" }}
         py={2.5}
-        px={2}>
-        <HStack alignItems={"flex-start"}>
-          <Heading fontSize={{ base: "md", md: "xl" }} fontWeight={"black"} letterSpacing={"-1px"}>
-            {ballotOption?.name}
+        px={2}
+      >
+        <HStack alignItems="flex-start">
+          <Heading fontSize={{ base: "md", md: "xl" }} fontWeight={"black"}>
+            {ballotOption?.projectName}
           </Heading>
 
           <Text
             as={Link}
             to={`${to}?${searchParams.toString()}` ?? "/projects"}
-            fontFamily={"arial"}
+            fontFamily="arial"
             fontSize={{ base: "sm", md: "sm" }}
-            fontWeight={"thin"}
+            fontWeight="thin"
             lineHeight="base"
-            display={{ base: "none", md: "flex" }}>
-            {ballotOption?.url}
+            display={{ base: "none", md: "flex" }}
+          >
+            {ballotOption?.website}
           </Text>
         </HStack>
-        <Text fontSize={"xs"} lineHeight={"short"} fontWeight={"normal"} overflow="hidden">
+        <Text
+          fontSize="xs"
+          lineHeight="short"
+          fontWeight="normal"
+          overflow="hidden"
+        >
           {ballotOption?.tagline}
         </Text>
         <Text
           as={Link}
           to={`${to}?${searchParams.toString()}` ?? "/projects"}
-          display={{ base: "flex", md: "none" }}
-          fontSize={"xs"}
-          fontWeight={"light"}>
-          {ballotOption?.url}
+          display={{ base: "block", md: "none" }}
+          fontSize="xs"
+          fontWeight="light"
+        >
+          {ballotOption?.website}
         </Text>
-
-        <Tooltip label={`remove ${ballotOption?.name} from ballot`} placement="left">
+      </VStack>
+      <VStack
+        position="relative"
+        justifyContent="flex-start"
+        alignItems="stretch"
+        spacing={0}
+        maxW={{ base: "fit-content", md: "70px" }}>
+        <Tooltip
+          label={`remove ${ballotOption?.projectName} from ballot`}
+          placement="left"
+        >
           <IconButton
-            position="absolute"
-            right={0}
-            top={0}
             rounded="0"
             size="sm"
             fontSize="lg"
@@ -111,17 +152,9 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
             marginLeft="2"
             onClick={handleRemoveFromBallot(ballotOption?.id ?? "")}
             icon={<FaWindowClose />}
-            aria-label={`remove ${ballotOption?.name} from ballot`}
+            aria-label={`remove ${ballotOption?.projectName} from ballot`}
           />
         </Tooltip>
-      </VStack>
-
-      <VStack
-        h="full"
-        spacing={0}
-        justifyContent="center"
-        alignItems="center"
-        maxW={{ base: "fit-content", md: "70px" }}>
         <Center boxSize={"60px"}>
           <Tooltip
             label={`Add one more vote for ${((votes ?? 0) + 1) ** 2 - (votes ?? 0) ** 2} more voice credits`}
@@ -135,7 +168,7 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
                   position: "absolute",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  background: `rgb(26, 31, 41) url('${ballotOption?.logo}') `,
+                  background: `rgb(26, 31, 41) url('${ballotOption?.logoCdnUrl}') `,
                   backgroundSize: "cover",
                   top: 0,
                   left: 0,
@@ -147,24 +180,28 @@ export const BallotOption = ({ ballotOption, to, onClick, votes, lastOption }: B
                   rounded: "full",
                 },
               }}
-              bg="transparent"
+              bg="gray.600"
               overflow="hidden"
               // bgImg={hero2}
               // backgroundPosition="center"
               rounded={"full"}
-              borderColor="white"
+              borderColor="#E573E5"
+              _hover={{
+                borderColor: "#80FF9F",
+                transform: "scale(1.1)",
+              }}
               borderWidth={1}
               boxSize="50px">
               <Center>
                 <Icon
-                  color="white"
+                  color="#E573E5"
                   position="relative"
                   zIndex={1}
                   boxSize={"8"}
                   letterSpacing="-0.5px"
-                  fontWeight={"black"}
+
                   _hover={{
-                    color: "black",
+                    color: "#80FF9F",
                     transform: "scale(1.1)",
                   }}>
                   <path

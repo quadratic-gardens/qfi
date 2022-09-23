@@ -15,7 +15,14 @@ import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factor
 import { GrantRound__factory } from "../../../contracts/typechain/factories/GrantRound__factory.js"
 
 import { cleanDir, directoryExists, makeDir, writeLocalJsonFile } from "../lib/files.js"
-import { deployedContracts, header, jsonRecipientsRecords, mnemonicBaseDirPath, mnemonicFilePath, outputDirPath } from "../lib/constants.js"
+import {
+  deployedContracts,
+  header,
+  jsonRecipientsRecords,
+  mnemonicBaseDirPath,
+  mnemonicFilePath,
+  outputDirPath
+} from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 
 interface SignUpAction {
@@ -44,8 +51,6 @@ interface GrantRoundAction {
   voiceCreditFactor: number
   coordinatorPubKey: string
 }
-
-
 
 /**
  * Initialize command.
@@ -79,7 +84,7 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
 
     const gasPrice = await provider.getGasPrice()
     const double = BigNumber.from("2")
-    const  doubleGasPrice = gasPrice.mul(double)
+    const doubleGasPrice = gasPrice.mul(double)
     const gasLimit = ethers.utils.hexlify(10000000)
 
     const deployer = wallet
@@ -93,12 +98,13 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     }
 
     // Get deployed contracts instances.
-    const qfi = new ethers.Contract(deployedContracts.Signups, QFI__factory.abi, deployer)
-    const grantRound = new ethers.Contract(deployedContracts.GrantRound, GrantRound__factory.abi, deployer)
-    const startBlock = 30496801
+    const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
+    const currentGrantRound = await qfi.currentGrantRound()
+    const grantRound = new ethers.Contract(currentGrantRound, GrantRound__factory.abi, deployer)
+    const startBlock = 31889151  
     const currentBlock = await provider.getBlockNumber()
 
-    const numBlocksPerRequest = 1000 // Around a day's worth of blocks
+    const numBlocksPerRequest = 100 // Around a day's worth of blocks
     /// //////////////////////////////////////////////////////////////////////////
     const spinner = customSpinner(`Read Smart Contracts`, "point")
     spinner.start()
@@ -111,8 +117,9 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     const dd = await grantRound.getDeployTimeAndDuration()
     const deployTime = Number(dd[0])
     const duration = Number(dd[1])
-    const lastBlockSignups = (2 / (60 * 60 * 24) + 1) * 43200 + startBlock
-    const lastBlockVotes = (duration / (60 * 60 * 24) + 1) * 43200 + startBlock
+    const lastBlockSignups = (8/24) * 43200 + startBlock
+    const lastBlockVotes = 32176267 - ((32176267 - 31889151 ) % numBlocksPerRequest)
+    // (2 / (60 * 60 * 24) + 1) * 43200 + startBlock
     const onChainMaxValues = await grantRound.maxValues()
     const onChainTreeDepths = await grantRound.treeDepths()
     const onChainBatchSizes = await grantRound.batchSizes()
@@ -345,10 +352,10 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
       (circuitInputs, batchNumber) => {
         // NOTE: these are required for the Verifier Contract onchain
         const maciNewSbCommitment = circuitInputs.newSbCommitment
-        const pollAddress = deployedContracts.GrantRound
+        const pollAddress = currentGrantRound
         return {
           pollAddress,
-          maciNewSbCommitment,
+          maciNewSbCommitment
         }
       }
     )
@@ -375,7 +382,7 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
       const { newResultsRootSalt } = circuitInputs
       const { newSpentVoiceCreditSubtotalSalt } = circuitInputs
       const { newPerVOSpentVoiceCreditsRootSalt } = circuitInputs
-      const pollAddress = deployedContracts.GrantRound
+      const pollAddress = currentGrantRound
 
       return {
         pollAddress,
@@ -429,9 +436,8 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     )
 
     // TODO: replace with subgraph
-    const projectNameByStateId = (index)=>  jsonRecipientsRecords[index].projectName
-    const projectAddressByStateId = (index)=>  jsonRecipientsRecords[index].ethereumAddress
-   
+    const projectNameByStateId = (index) => jsonRecipientsRecords[index].projectName
+    const projectAddressByStateId = (index) => jsonRecipientsRecords[index].ethereumAddress
 
     console.log(`\n Calculating QF subsidy results`)
     let subsidyTotal = 0
@@ -439,12 +445,12 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
       if (squareOfTally > 0) {
         const subsidyPercent = squareOfTally / sumOfSquareOfTally
         console.log(
-          `\n${projectNameByStateId(index - 1)}@${projectAddressByStateId(index -1 )}: ${
+          `\n${projectNameByStateId(index - 1)}@${projectAddressByStateId(index - 1)}: ${
             subsidyPercent * parseInt(matchingPoolAmount)
           } xDAI`
         )
         subsidyTotal += subsidyPercent * parseInt(matchingPoolAmount)
-        return { address: projectAddressByStateId(index-1), amount: subsidyPercent * parseInt(matchingPoolAmount) }
+        return { address: projectAddressByStateId(index - 1), amount: subsidyPercent * parseInt(matchingPoolAmount) }
       }
       return { address: "0x0000000000000000000000000000000000", amount: 0 }
     })

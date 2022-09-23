@@ -276,7 +276,7 @@ async function doTheThing(network: string) {
     console.log(`${logSymbols.success} Set Vks`)
     console.log(`\n${logSymbols.info} contracts connected, continuing to project sign up step!\n`)
 
-    console.log(`\n${logSymbols.info} ou are about to register [16] projects\n`)
+    console.log(`\n${logSymbols.info} You are about to register ${jsonRecipientsRecords.length} projects\n`)
 
     // Get CSV records.
     let i = 0
@@ -360,6 +360,7 @@ async function doTheThing(network: string) {
         stateIndex
       })
       hacks[maciPK] = stateIndex
+      // eslint-disable-next-line no-plusplus
       j++
     }
 
@@ -379,7 +380,7 @@ async function doTheThing(network: string) {
       .connect(deployer)
       .deployGrantRound(SEVENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
         gasPrice: doubleGasPrice,
-        gasLimit: ethers.utils.hexlify(30000000)
+        gasLimit: ethers.utils.hexlify(8000000)
       })
 
     await grantRoundTx.wait()
