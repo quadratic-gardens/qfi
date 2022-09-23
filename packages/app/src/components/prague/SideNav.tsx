@@ -110,8 +110,6 @@ export const Navbar = () => {
 
       <HStack px={2}>
         <Select
-       
-
           value={selectedLang}
           fontFamily="Helvetica"
           onChange={({ target: { value } }) => handleLangChange(value)}
@@ -158,6 +156,7 @@ export const Navbar = () => {
               isExternal>
               Tickets!
             </Button> */}
+
         <ColorModeSwitcher color="gray.500" aria-label="dark mode" />
       </HStack>
     </HStack>
