@@ -408,14 +408,14 @@ async function tally(
 
 
     const unencryptedCommands = maciPoll.commands.map((command) => {
-      console.log(`ID: ${command.voteOptionIndex}: ${command.newVoteWeight} by voter:${command.stateIndex} with nonce nonce:${command.nonce}`)
+      console.log(`ID: ${command.voteOptionIndex}: ${command.newVoteWeight} by voter:${command.stateIndex} with nonce:${command.nonce}`)
       return {
         voteOption: command.voteOptionIndex,
         nonce: Number(command.nonce),
         newVoteWeight: Number(command.newVoteWeight),
         voterID: command.stateIndex
       }
-    })
+    }).reverse()
 
     const memo = {}
     const easyTally = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -461,7 +461,7 @@ async function tally(
     const { newTallyCommitment } = finalTallyCircuitInputs
     const tallyResults: string[] = easyTally.map((x: any) => x.toString())
     const tallySalt = finalTallyCircuitInputs.newResultsRootSalt
-    const voiceCreditsSpent = maciPoll.totalSpentVoiceCredits.toString()
+    const voiceCreditsSpent = easyVOTally.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
     const voiceCreditsSalt = finalTallyCircuitInputs.newSpentVoiceCreditSubtotalSalt
     const perVOSpentTally = easyVOTally.map((x: any) => x.toString())
     const perVOSpentSalt = finalTallyCircuitInputs.newPerVOSpentVoiceCreditsRootSalt
@@ -491,7 +491,7 @@ async function tally(
     const sumOfSquareOfTally = squareOfTally.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
     console.log(sumOfSquareOfTally)
     const { confirmation: preFlightCheck2 } = await askForConfirmation(
-      `Expected Matching pool is ${matchingPoolAmount} xDAI, Are you ready to continue?`
+      `Expected Matching pool is ${matchingPoolAmount} USDC, Are you ready to continue?`
     )
 
     // TODO: replace with subgraph
@@ -506,7 +506,7 @@ async function tally(
         console.log(
           `\n${projectNameByStateId(index - 1)}@${projectAddressByStateId(index - 1)}: ${
             subsidyPercent * parseInt(matchingPoolAmount)
-          } xDAI`
+          } USDC`
         )
         subsidyTotal += subsidyPercent * parseInt(matchingPoolAmount)
         return { address: projectAddressByStateId(index - 1), amount: subsidyPercent * parseInt(matchingPoolAmount) }
