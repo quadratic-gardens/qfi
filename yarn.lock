@@ -3823,7 +3823,7 @@
 
 "@qfi/app@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/app":
   "resolved" "file:packages/app"
-  "version" "3.0.0"
+  "version" "3.4.2"
   dependencies:
     "@chakra-ui/react" "^1.8.6"
     "@coinbase/wallet-sdk" "^3.0.4"
@@ -3874,7 +3874,7 @@
 
 "@qfi/ethtaiwancli@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/cli":
   "resolved" "file:packages/cli"
-  "version" "3.4.1"
+  "version" "3.4.4"
   dependencies:
     "chalk" "^5.0.1"
     "clear" "^0.1.0"
@@ -3892,9 +3892,9 @@
     "qaci-domainobjs" "^1.1.0"
     "qrcode" "^1.5.0"
 
-"@qfi/hooks@^3.0.0", "@qfi/hooks@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/hooks":
+"@qfi/hooks@^3.4.2", "@qfi/hooks@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/hooks":
   "resolved" "file:packages/hooks"
-  "version" "3.0.0"
+  "version" "3.4.2"
   dependencies:
     "@chakra-ui/react" "^1.8.6"
     "@coinbase/wallet-sdk" "^3.0.4"
@@ -3925,14 +3925,14 @@
   dependencies:
     "@graphprotocol/graph-ts" "^0.27.0"
 
-"@qfi/ui@^3.0.0", "@qfi/ui@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/ui":
+"@qfi/ui@^3.4.2", "@qfi/ui@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/ui":
   "resolved" "file:packages/ui"
-  "version" "3.0.0"
+  "version" "3.4.2"
   dependencies:
     "@chakra-ui/react" "^1.7.2"
     "@emotion/react" "^11.0.0"
     "@emotion/styled" "^11.0.0"
-    "@qfi/hooks" "^3.0.0"
+    "@qfi/hooks" "^3.4.2"
     "@testing-library/jest-dom" "^5.9.0"
     "@testing-library/react" "^10.2.1"
     "@testing-library/user-event" "^12.0.2"
