@@ -62,6 +62,7 @@ async function tally(
   matchingPoolAmount: string,
   qfiContractAddress: string,
   startBlock: string,
+  firstVoteBlock: string,
   lastBlock: string
 ) {
   clear()
@@ -108,7 +109,7 @@ async function tally(
     const qfi = new ethers.Contract(qfiContractAddress, QFI__factory.abi, deployer)
     const currentGrantRound = await qfi.currentGrantRound()
     const grantRound = new ethers.Contract(currentGrantRound, GrantRound__factory.abi, deployer)
-    
+
     const currentBlock = await provider.getBlockNumber()
     const numBlocksPerRequest = 100
     /// //////////////////////////////////////////////////////////////////////////
@@ -125,6 +126,7 @@ async function tally(
     const duration = Number(dd[1])
     const BLOCKSPERDAY = 43200
     const firstBlock = parseInt(startBlock)
+    const firstVote = parseInt(firstVoteBlock)
     const lastBlockSignups = (4 / 24) * BLOCKSPERDAY + firstBlock
     const lastBlockVotes = lastBlock == "latest" ? currentBlock : parseInt(lastBlock)
     // (2 / (60 * 60 * 24) + 1) * 43200 + startBlock
@@ -254,7 +256,7 @@ async function tally(
       // NOTE: Get Vote Actions from GrantRound Smart Contracts
       let voteLogs = [] as any[]
 
-      for (let i = firstBlock; i < lastBlockVotes; i += numBlocksPerRequest + 1) {
+      for (let i = firstVote; i < lastBlockVotes; i += numBlocksPerRequest + 1) {
         const fromBlock = i >= currentBlock ? currentBlock : i
         const toBlock = i + numBlocksPerRequest >= currentBlock ? currentBlock : i + numBlocksPerRequest
         const logs = await provider.getLogs({
@@ -404,6 +406,52 @@ async function tally(
       }
     })
 
+
+    const unencryptedCommands = maciPoll.commands.map((command) => {
+      console.log(`ID: ${command.voteOptionIndex}: ${command.newVoteWeight} by voter:${command.stateIndex} with nonce nonce:${command.nonce}`)
+      return {
+        voteOption: command.voteOptionIndex,
+        nonce: Number(command.nonce),
+        newVoteWeight: Number(command.newVoteWeight),
+        voterID: command.stateIndex
+      }
+    })
+
+    const memo = {}
+    const easyTally = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    const easyVOTally = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    for (const { voteOption, nonce, newVoteWeight, voterID } of unencryptedCommands) {
+
+
+      //check if voter in memo
+      if (memo[voterID]){
+        // check if nonce is used
+        if (memo[voterID]?.includes(nonce)){
+          //if nonce exists do nothing
+          
+        }else{
+          //if nonce doesnt exist update tally
+          easyTally[voteOption] += newVoteWeight
+          easyVOTally[voteOption] += newVoteWeight * newVoteWeight
+          //and add to memo
+          memo[voterID].push(nonce)
+        }
+      // if the voter not in memo  and add to memo as you go
+      }else {
+        // add the voter to memo
+        memo[voterID]=[];
+        // update tally
+        easyTally[voteOption] += newVoteWeight
+        easyVOTally[voteOption] += newVoteWeight * newVoteWeight
+        //and add nonce to memo
+        memo[voterID].push(nonce)
+        
+      }
+    }
+
+    console.log(easyTally)
+    console.log(easyVOTally)
+
     const finalProcessMessagesCircuitInputs =
       processMessagesCircuitInputsByBatch[processMessagesCircuitInputsByBatch.length - 1]
     const finalTallyCircuitInputs = tallyVotesVerifierInputsByBatch[tallyVotesVerifierInputsByBatch.length - 1]
@@ -411,11 +459,11 @@ async function tally(
     const maciNewSbCommitment = finalProcessMessagesCircuitInputs.newSbCommitment
 
     const { newTallyCommitment } = finalTallyCircuitInputs
-    const tallyResults: string[] = maciPoll.results.map((x: any) => x.toString())
+    const tallyResults: string[] = easyTally.map((x: any) => x.toString())
     const tallySalt = finalTallyCircuitInputs.newResultsRootSalt
     const voiceCreditsSpent = maciPoll.totalSpentVoiceCredits.toString()
     const voiceCreditsSalt = finalTallyCircuitInputs.newSpentVoiceCreditSubtotalSalt
-    const perVOSpentTally = maciPoll.perVOSpentVoiceCredits.map((x: any) => x.toString())
+    const perVOSpentTally = easyVOTally.map((x: any) => x.toString())
     const perVOSpentSalt = finalTallyCircuitInputs.newPerVOSpentVoiceCreditsRootSalt
     const tallyFileData = {
       maci: qfi.address,
