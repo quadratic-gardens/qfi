@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.2](https://github.com/quadratic-funding/qfi/compare/v3.1.0...v3.4.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* fix projects mobile ([f6d00a6](https://github.com/quadratic-funding/qfi/commit/f6d00a61ae7adb8d9ee0b3851d44cc5581c0d655))
+
+
+
+
+
 # [2.1.0](https://github.com/quadratic-funding/qfi/compare/v2.0.1...v2.1.0) (2022-07-08)
 
 
