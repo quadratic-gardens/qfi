@@ -56,7 +56,14 @@ interface GrantRoundAction {
  * Initialize command.
  * @param network <string> - the network where the contracts are going to be deployed.
  */
-async function tally(network: string, coordinatorPrivKey: string, matchingPoolAmount: string) {
+async function tally(
+  network: string,
+  coordinatorPrivKey: string,
+  matchingPoolAmount: string,
+  qfiContractAddress: string,
+  startBlock: string,
+  lastBlock: string
+) {
   clear()
 
   console.log(header)
@@ -98,13 +105,12 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     }
 
     // Get deployed contracts instances.
-    const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
+    const qfi = new ethers.Contract(qfiContractAddress, QFI__factory.abi, deployer)
     const currentGrantRound = await qfi.currentGrantRound()
     const grantRound = new ethers.Contract(currentGrantRound, GrantRound__factory.abi, deployer)
-    const startBlock = 31889151  
+    
     const currentBlock = await provider.getBlockNumber()
-
-    const numBlocksPerRequest = 100 // Around a day's worth of blocks
+    const numBlocksPerRequest = 100
     /// //////////////////////////////////////////////////////////////////////////
     const spinner = customSpinner(`Read Smart Contracts`, "point")
     spinner.start()
@@ -117,8 +123,10 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     const dd = await grantRound.getDeployTimeAndDuration()
     const deployTime = Number(dd[0])
     const duration = Number(dd[1])
-    const lastBlockSignups = (8/24) * 43200 + startBlock
-    const lastBlockVotes = 32176267 - ((32176267 - 31889151 ) % numBlocksPerRequest)
+    const BLOCKSPERDAY = 43200
+    const firstBlock = parseInt(startBlock)
+    const lastBlockSignups = (4 / 24) * BLOCKSPERDAY + firstBlock
+    const lastBlockVotes = lastBlock == "latest" ? currentBlock : parseInt(lastBlock)
     // (2 / (60 * 60 * 24) + 1) * 43200 + startBlock
     const onChainMaxValues = await grantRound.maxValues()
     const onChainTreeDepths = await grantRound.treeDepths()
@@ -157,11 +165,12 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
       // NOTE: Get SignUp Actions from QFI Smart Contract
       let signUpLogs = [] as any[]
 
-      for (let i = startBlock; i < lastBlockSignups; i += numBlocksPerRequest + 1) {
+      for (let i = firstBlock; i < lastBlockSignups; i += numBlocksPerRequest + 1) {
+        const fromBlock = i >= currentBlock ? currentBlock : i
         const toBlock = i + numBlocksPerRequest >= currentBlock ? currentBlock : i + numBlocksPerRequest
         const logs = await provider.getLogs({
           ...qfi.filters.SignUp(),
-          fromBlock: i,
+          fromBlock: fromBlock,
           toBlock
         })
 
@@ -202,11 +211,12 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
     try {
       // NOTE: Get GrantRound Actions from GrantRound Smart Contracts
       let grantRoundLogs = [] as any[]
-      for (let i = startBlock; i < lastBlockSignups; i += numBlocksPerRequest + 1) {
+      for (let i = firstBlock; i < lastBlockSignups; i += numBlocksPerRequest + 1) {
+        const fromBlock = i >= currentBlock ? currentBlock : i
         const toBlock = i + numBlocksPerRequest >= currentBlock ? currentBlock : i + numBlocksPerRequest
         const logs = await provider.getLogs({
           ...qfi.filters.GrantRoundDeployed(),
-          fromBlock: i,
+          fromBlock: fromBlock,
           toBlock
         })
 
@@ -244,11 +254,12 @@ async function tally(network: string, coordinatorPrivKey: string, matchingPoolAm
       // NOTE: Get Vote Actions from GrantRound Smart Contracts
       let voteLogs = [] as any[]
 
-      for (let i = startBlock; i < lastBlockVotes; i += numBlocksPerRequest + 1) {
+      for (let i = firstBlock; i < lastBlockVotes; i += numBlocksPerRequest + 1) {
+        const fromBlock = i >= currentBlock ? currentBlock : i
         const toBlock = i + numBlocksPerRequest >= currentBlock ? currentBlock : i + numBlocksPerRequest
         const logs = await provider.getLogs({
           ...grantRound.filters.PublishMessage(),
-          fromBlock: i,
+          fromBlock: fromBlock,
           toBlock
         })
 
