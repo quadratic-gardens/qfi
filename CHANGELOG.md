@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/compare/v3.4.5...v3.5.1) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
 ## [3.4.5](https://github.com/compare/v3.4.2...v3.4.5) (2022-09-27)
 
 **Note:** Version bump only for package @qfi/qfi
