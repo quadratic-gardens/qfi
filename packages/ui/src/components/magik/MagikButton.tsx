@@ -47,7 +47,7 @@ export const MagikButton: React.FC<MagikButtonProps> = ({
       h={20}
       leftIcon={SwitchIcon}
       onClick={() => switchAction()}
-      variant="ethLatamPurple"
+      variant="primary"
       w="full"
       {...props}
     >

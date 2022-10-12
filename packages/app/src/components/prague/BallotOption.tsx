@@ -10,6 +10,7 @@ import {
   Icon,
   Center,
   Button,
+  useColorModeValue
 } from "@chakra-ui/react";
 import {
   createSearchParams,
@@ -29,6 +30,8 @@ export const BallotOption = ({
   lastOption,
   onClick
 }: BallotOptionProps) => {
+  const borderColor = useColorModeValue("border.1000", "border.0")
+  const textColor = useColorModeValue("text.1000", "text.0");
   const { t } = useTranslation();
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   let [searchParams] = useSearchParams();
@@ -60,7 +63,7 @@ export const BallotOption = ({
     <Stack
       boxSizing="content-box"
       fontFamily="arial"
-      borderColor="#FAF7F5"
+      borderColor= {{ borderColor}}
       borderTopWidth={2}
       borderLeftWidth={2}
       borderRightWidth={2}
@@ -74,7 +77,7 @@ export const BallotOption = ({
     >
       <VStack
 
-        borderRightColor="#FAF7F5"
+        borderRightColor={{ borderColor}}
         borderRightWidth={2}
         spacing={0}
         justifyContent="center"
@@ -148,7 +151,7 @@ export const BallotOption = ({
             size="sm"
             fontSize="lg"
             variant="ghost"
-            color="gray.600"
+            color="textColor"
             marginLeft="2"
             onClick={handleRemoveFromBallot(ballotOption?.id ?? "")}
             icon={<FaWindowClose />}
@@ -185,7 +188,7 @@ export const BallotOption = ({
               // bgImg={hero2}
               // backgroundPosition="center"
               rounded={"full"}
-              borderColor="#E573E5"
+              borderColor={{ borderColor}}
               _hover={{
                 borderColor: "#80FF9F",
                 transform: "scale(1.1)",
@@ -194,7 +197,7 @@ export const BallotOption = ({
               boxSize="50px">
               <Center>
                 <Icon
-                  color="#E573E5"
+                  color={textColor}
                   position="relative"
                   zIndex={1}
                   boxSize={"8"}

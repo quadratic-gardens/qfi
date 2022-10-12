@@ -42,13 +42,13 @@ export const Home = () => {
         top={0}
         left={0}
         sx={{
-          scrollbarColor: "green",
+          scrollbarColor: "transparent",
           "::-webkit-scrollbar": {
             width: "0px",
           },
 
           "::-webkit-scrollbar-track": {
-            boxShadow: "inset 0 0 0px grey",
+            boxShadow: "inset 0 0 0px transparent",
             borderRadius: "0px",
           },
 
@@ -75,18 +75,14 @@ export const Home = () => {
               <Button
                 as={RouterLink}
                 h={50}
-                variant={"solid"}
-                colorScheme="cyan"
-                fontSize={{ base: "md", xl: "xl" }}
+                variant={"primary"}
                 to={`/ballot?${searchParams.toString()}`}>
                 {t("GET STARTED")}
               </Button>
               <Button
                 as={RouterLink}
                 h={50}
-                variant={"outline"}
-                colorScheme={"cyan"}
-                fontSize={{ base: "md", xl: "xl" }}
+                variant={"secondary"}
                 to={`/projects?${searchParams.toString()}`}>
                 {t("CHECK OUT THE PROJECTS")}
               </Button>

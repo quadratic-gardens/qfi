@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
 export const SideNav = ({ onGuideOpen }: SideNavProps) => {
-  const backgroundColor = useColorModeValue("gray.100", "rgb(27, 34, 58)");
+  const backgroundColor = useColorModeValue("background.0", "background.1000");
   let [searchParams] = useSearchParams();
   const { t } = useTranslation();
 
@@ -71,7 +71,7 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
 export const Navbar = () => {
   const { i18n, t } = useTranslation();
   const [selectedLang, setSelectedLang] = useState<string>(i18n.language);
-  const backgroundColor = useColorModeValue("gray.100", "rgb(27, 34, 58)");
+  const backgroundColor = useColorModeValue("background.0", "background.1000");
 
   let [searchParams] = useSearchParams();
 
@@ -102,7 +102,7 @@ export const Navbar = () => {
           <img
             style={{ height: 40 }}
             src="logo.png"
-            alt="chain.tw"
+            alt="ZKPlayground"
           />
         }
         aria-label="Home"

@@ -11,11 +11,26 @@ const Button = {
   sizes: {},
   // 3. Add a new visual variant
   variants: {
-    primary: {
-      color: "white",
-      bg: "primary.400",
-      _hover: { bg: "primary.500" },
-    },
+    primary: (props: any) => ({
+      ...base.components.Button.variants.solid(props),
+      bg: mode(`primary.1000`, `primary.0`)(props),
+      color: mode(`text.0`, `text.1000`)(props),
+      borderColor: mode(`primary.1000`, `primary.0`)(props),
+      border: "1px solid",
+      fontWeight: 400,
+      fontFamily: "Helvetica",
+      fontSize:{ base: "md", xl: "xl" }
+    }),
+    secondary: (props: any) => ({
+      ...base.components.Button.variants.outline(props),
+      color: mode(`text.1000`, `text.0`)(props),
+      borderColor: mode(`secondary.1000`, `secondary.0`)(props),
+      border: "1px solid",
+      fontWeight: 400,
+      fontFamily: "Helvetica",
+      fontSize:{ base: "md", xl: "xl" },
+      boxSizing:"border-box"
+    }),
     barcelona: {
       height: "50px",
       color: "white",

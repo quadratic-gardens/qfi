@@ -82,7 +82,7 @@ const SubmitBallotButton = ({
         display="block"
         disabled={disableSubmitButton}
         onClick={onSubmit}
-        variant={!disableSubmitButton ? "ethLatamPurple" : "ethLatamDisabled"}
+        variant={!disableSubmitButton ? "primary" : "secondary"}
         fontSize={{ base: "md", xl: "lg" }}
       >
         <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
@@ -192,7 +192,7 @@ export const Ballot = () => {
   const displayOptions: boolean = useMemo(() => {
     return recipientRegistryIds.length > 0;
   }, [recipientRegistryIds]);
-  const color = useColorModeValue("gray.800", "gray.700");
+  const borderColor = useColorModeValue("border.0", "border.10000");
   const [ballotOptions, setBallotOptions] = useState<number[]>([]);
   const [ballotData, setBallotData] = useState<Option[]>([]);
   const [voiceCreditBalance, setVoiceCreditBBalance] = useState(0);
@@ -567,7 +567,7 @@ export const Ballot = () => {
     
       alignItems="center"
       flexDir="column"
-      borderRightColor={color}
+      borderRightColor={borderColor}
       borderRightWidth={1}
       overflowY="scroll"
       sx={{
@@ -640,7 +640,7 @@ export const Ballot = () => {
           <VStack style={{ marginTop: 48 }} alignItems="center" w="full">
             <Button
               as={Link}
-              variant="ethLatamWhite"
+              variant="secondary"
               fontSize={{ base: "lg", xl: "xl" }}
               maxW={{ base: 250, md: 400 }}
               to={`/projects?${searchParams.toString()}`}
@@ -700,7 +700,8 @@ export const Ballot = () => {
               <GridItem
                 colSpan={{ base: 1, md: 2 }}
                 w={{ base: "full", md: "90%" }}
-                m={{ base: "32px auto 0 auto", md: "auto" }}
+                mx={{ base: "auto", md: "auto" }}
+                alignContent ="baseline"
               >
                 <SubmitBallotButton
                   disableSubmitButton={disableSubmitButton}
@@ -728,7 +729,7 @@ export const Ballot = () => {
                 w={{ base: "full", md: "80%" }}
                 type="password"
                 placeholder={t("MACI Key")}
-                variant="ethLatamWhite"
+                variant="primary"
                 value={key}
                 onChange={handleInputChange}
               />
@@ -737,7 +738,7 @@ export const Ballot = () => {
                 {numChars ?? "-"} / 71
               </FormHelperText>
               <Button
-                variant="ethLatamGreen"
+                variant="primary"
                 fontSize={{ base: "lg", xl: "xl" }}
                 type="submit"
                 w={{ base: "full", md: "80%" }}

@@ -36,7 +36,7 @@ const shortenEthAddress = (address: string) => {
 export function Project() {
   const { t } = useTranslation();
 
-  const backgroundColor = useColorModeValue("gray.100", "rgb(27, 34, 58)");
+  const backgroundColor = useColorModeValue("background.0", "background.1000");
   const toast = useToast();
   let { projectId } = useParams();
   let navigate = useNavigate();
@@ -73,7 +73,8 @@ export function Project() {
 
   let project = getProject(projectId ?? "0");
 
-  const color = useColorModeValue("gray.100", "gray.700");
+  const borderColor = useColorModeValue("border.1000", "border.0");
+  const textColor = useColorModeValue("text.1000", "text.0");
   const handleAddToBallot = useCallback(() => {
     if (searchParams.getAll("option").length >= 8) {
       toast({
@@ -106,7 +107,7 @@ export function Project() {
       as="main"
       h="full"
       flex={1}
-      borderRightColor={color}
+      borderRightColor={borderColor}
       borderRightWidth={1}
       overflowY={"scroll"}
       sx={{
@@ -136,7 +137,7 @@ export function Project() {
         >
           <VStack
             pb={120}
-            borderColor={color}
+            borderColor={borderColor}
             borderLeftWidth={1}
             borderRightWidth={1}
             my={0}
@@ -150,7 +151,7 @@ export function Project() {
               mt={0.5}
               py={0.5}
               w="full"
-              borderBottomColor="gray.100"
+              borderBottomColor={borderColor}
               borderBottomWidth={1}
             >
               <VStack
@@ -181,7 +182,7 @@ export function Project() {
                 </Heading>
                 <Text
                   px={2}
-                  color="gray.600"
+                  color={textColor}
                   fontSize="xs"
                   lineHeight="16px"
                   fontWeight="400"
@@ -228,7 +229,7 @@ export function Project() {
               spacing={0}
             >
               <AspectRatio
-                borderColor="grey.300"
+                borderColor={borderColor}
                 borderWidth={3}
                 zIndex="1"
                 w={{ base: "25%", md: "25%" }}
@@ -249,7 +250,7 @@ export function Project() {
 
               <Button
                 fontSize="15px"
-                variant="ethLatamBlack"
+                variant="secondary"
                 onClick={
                   isInBallot
                     ? handleRemoveFromBallot(projectId?.toString() ?? "noop")
@@ -265,7 +266,7 @@ export function Project() {
               >
                 <HStack px={4}>
                   <Icon
-                    color="white"
+                    color={textColor}
                     position="relative"
                     z-index={20}
                     boxSize="15px"
@@ -307,7 +308,7 @@ export function Project() {
                   {project.projectName}
                 </Heading>
                 <Text
-                  color="gray.600"
+                  color={textColor}
                   fontSize="xs"
                   lineHeight="14px"
                   fontWeight="400"
