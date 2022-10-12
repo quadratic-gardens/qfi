@@ -1,33 +1,39 @@
 import { useCallback, useMemo } from "react";
 import {
   Text,
-  VStack, Button,
-  Show,
+  VStack,
+  Button,
   Image,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import BeatLoader from "react-spinners/BeatLoader";
 import CircleLoader from "react-spinners/CircleLoader";
 import { formatAddress, useWallet, useENS } from "@qfi/hooks";
+import { ButtonProps } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 
+type MagikButtonProps = ButtonProps & {};
 
-export function MagikButton() {
-  const { connectWallet, isConnecting, isConnected, disconnect, address } = useWallet();
+export const MagikButton: React.FC<MagikButtonProps> = ({
+  children,
+  ...props
+}) => {
+  const {
+    connectWallet,
+    isConnected,
+    disconnect,
+    address,
+  } = useWallet();
   const { avatar, loading } = useENS({ address: address ?? undefined });
-  // const { avatar, loading } = useENS({ ens: "alisha.eth" ?? "" });
-  
-  const logoutBg = useColorModeValue(`red.400`, `red.400`);
-  const loginBg = useColorModeValue(`#73FFBC`, `#37FFCF`);
-  const switchBgHoverColor = isConnected ? logoutBg : loginBg;
-  const logoutColor = useColorModeValue(`white`, `white`);
-  const loginColor = useColorModeValue(`white`, `white`);
-  const switchTextHoverColor = isConnected ? logoutColor : loginColor;
-  const switchHeight = isConnected ? [14, 14, 14, 16] : [12, 12, 12, 14];
 
   const switchIconColor = useColorModeValue("black", "white");
-  const BaseIcon = loading ? <CircleLoader size={25} color={switchIconColor} /> : <></>;
+  const BaseIcon = loading ? (
+    <CircleLoader size={25} color={switchIconColor} />
+  ) : (
+    undefined
+  );
   const SwitchAvatar = avatar ? (
-    <Image p={1} rounded={"full"} src={avatar} h={12} />
+    <Image p={1} rounded="full" src={avatar} h={12} />
   ) : (
     <Image src="/metamask.png" h={9} p={1.5} mx={0.5} />
   );
@@ -36,30 +42,25 @@ export function MagikButton() {
   const switchAction = isConnected ? disconnect : connectWallet;
 
   return (
-    <Show above="sm">
-      <Button
-        onClick={() => !isConnecting && switchAction()}
-        h={switchHeight}
-        pl={2}
-        pr={8}
-        borderRadius={"full"}
-        leftIcon={SwitchIcon}
-        variant="magik"
-        disabled={isConnecting}
-        _hover={{
-          bg: switchBgHoverColor,
-          color: switchTextHoverColor,
-        }}>
-        {isConnected ? <Web3State /> : <ConnectState />}
-      </Button>
-    </Show>
+    <Button
+      fontWeight="bold"
+      h={20}
+      leftIcon={SwitchIcon}
+      onClick={() => switchAction()}
+      variant="primary"
+      w="full"
+      {...props}
+    >
+      {isConnected ? <Web3State /> : <ConnectState />}
+    </Button>
   );
-}
+};
+
 function Web3State() {
   const switchColor = useColorModeValue("black", "white");
   const { address } = useWallet();
   const { ens, loading } = useENS({ address: address ?? undefined });
-  // const { ens, loading } = useENS({ ens: "alisha.eth" ?? "" });
+
   const randomPlaceHolder = useCallback(() => {
     const rand = Math.floor(Math.random() * 6) + 2;
     switch (rand) {
@@ -75,18 +76,20 @@ function Web3State() {
         return `(¬､¬)`;
     }
   }, []);
-  const BaseName = useMemo( ()=>{
-    return ens ? (
-      <Text fontSize="sm" fontWeight="bold">
-      {ens}
-    </Text>
-    
-  ) : (
-    <Text fontSize="sm" fontWeight="bold">
-      {randomPlaceHolder()}
-    </Text>
+
+  const BaseName = useMemo(
+    () =>
+      ens ? (
+        <Text fontSize="sm" fontWeight="bold">
+          {ens}
+        </Text>
+      ) : (
+        <Text fontSize="sm" fontWeight="bold">
+          {randomPlaceHolder()}
+        </Text>
+      ),
+    [ens, randomPlaceHolder]
   );
-  }, [ens, randomPlaceHolder]);
 
   const SwitchName = loading ? (
     <BeatLoader size={8} color={switchColor} />
@@ -95,23 +98,23 @@ function Web3State() {
   );
 
   return (
-    <VStack spacing={0.5} alignItems={"flex-start"}>
+    <VStack justifyContent="center" alignItems="flex-start">
       {SwitchName}
-       {ens}
+      {ens}
       <Text fontSize="xs">{formatAddress(address)}</Text>
     </VStack>
   );
 }
+
 function ConnectState() {
+  const { t } = useTranslation();
+
   return (
-    <VStack spacing={0.5} alignItems={"flex-start"} pl={3}>
-      <Text fontSize="lg" fontWeight={"extrabold"} fontFamily={"Helvetica"}>
-        CONNECT
-      </Text>
-    </VStack>
+    <Text whiteSpace="break-spaces" fontSize="lg" fontWeight="extrabold">
+      {t("CONNECT WALLET")}
+    </Text>
   );
 }
-
 
 // MIT License
 
