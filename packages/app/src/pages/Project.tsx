@@ -205,19 +205,20 @@ export function Project() {
                 sx={{
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  
-                  background: `linear-gradient(340deg, #FFB9E5 22.344970703125%, #ECF872 51.0040283203125%, #BEE0E6 76.86767578125%)  `,
+                  background: `rgb(26, 31, 41) url('${project?.logoCdnUrl}') `,
                   backgroundSize: "cover",
                 }}
               >
                 <AspectRatio position="relative" ratio={16 / 9}>
-                  <Box
-                    h="full"
-                    w="auto"
-                    position="relative"
-                    background= "linear-gradient(340deg, #FFB9E5 22.344970703125%, #ECF872 51.0040283203125%, #BEE0E6 76.86767578125%)"
-                    
-                  />
+                <Image
+                  h="full"
+                  w="auto"
+                  position="relative"
+                  src={project.logoCdnUrl}
+                  alt={project.projectName}
+            
+                />
+                 
                 </AspectRatio>
               </Box>
             </VStack>

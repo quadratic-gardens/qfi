@@ -23,28 +23,27 @@ export const defaultTheme: {
   branding: any;
 } = {
   primary: {
-    light: "#FAFAFA",
-    dark: "#222222",
+    light: "#69A197",
+    dark: "#69A197",
   },
   primaryAlpha: rgba("#10153d", 0.9),
   secondary: {
-    light: "#FAFAFA",
-    dark: "#222222",
+    light: "#F9DC5C",
+    dark: "#F9DC5C",
     
   },
   border: {
-    light: "#4A5568",
+    light: "#E3514F",
     dark: "#E2E8F0",
     
   },
  
   secondaryAlpha: rgba("#10153d", 0.75),
-
   background: {
-    light: "#EDF2F7",
+    light: "#F4FDD2",
     dark: "#2D3748",
   },
-  backgroundAlpha: "#03061B",
+  backgroundAlpha: "#F4FDD2",
   backgroundOverlayOpacity: 0.75,
   mode: "#FFFFFF",
   headingFont: "Helvetica",
@@ -52,7 +51,7 @@ export const defaultTheme: {
   monoFont: "Times",
   avatarImg: BrandImg,
   bgImg: BgImg,
-  text: { light: "#FFFFFF", dark: "#222222" },
+  text: { light: "#FFFFFF", dark: "#151616" },
   link: "#FFFFFF",
   branding: {
     projects: "Projects",
