@@ -106,7 +106,7 @@ export const Home = () => {
               </a>
               .
             </Text>
-            <Text pb={4} w={"full"} fontFamily="Helvetica" fontSize={22}>
+            <Text pb={4} w={"full"} fontFamily="Noto Sans TC" fontSize={22}>
               {t("The future is now.")}
             </Text> */}
           </VStack>

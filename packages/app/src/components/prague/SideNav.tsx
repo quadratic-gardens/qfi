@@ -113,7 +113,7 @@ export const Navbar = () => {
        
 
           value={selectedLang}
-          fontFamily="Helvetica"
+          fontFamily="Noto Sans TC"
           onChange={({ target: { value } }) => handleLangChange(value)}
           w={20}
           _focus={{ border: "none" }}
