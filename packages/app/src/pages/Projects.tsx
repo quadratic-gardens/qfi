@@ -104,7 +104,7 @@ export const Projects = ({ shuffledProjects }) => {
                         </VStack>
                         <AccordionPanel pb={4}>
                           <UnorderedList
-                            fontFamily="Helvetica"
+                            fontFamily="Noto Sans TC"
                             marginInlineStart="1rem !important"
                             w="full"
                           >
