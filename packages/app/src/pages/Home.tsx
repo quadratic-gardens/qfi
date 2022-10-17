@@ -61,12 +61,9 @@ export const Home = () => {
         py={8}>
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
-            <Heading fontSize={{ base: "76px", xl: "120px" }}>平方募資法</Heading>
+            <Heading fontSize={{ base: "38px", xl: "60px" }}>ZKPLAYGROUND x 平方投票募資法</Heading>
           </VStack>
           <VStack width="100%" alignItems="flex-start">
-            <Text fontSize={"lg"} pb={2}>
-              Quadratic Funding
-            </Text>
             <Text fontSize={"md"} pb={4}>
               在 Web3 的世界中，我們透過社群自治來解決各式問題。 而平方投票法，則是一套消弭分配不均的實驗性工具。
             </Text>
@@ -76,16 +73,17 @@ export const Home = () => {
                 as={RouterLink}
                 h={50}
                 variant={"primary"}
-                to={`/ballot?${searchParams.toString()}`}>
-                {t("GET STARTED")}
+                to={`/projects?${searchParams.toString()}`}>
+                {t("CHECK OUT THE PROJECTS")}
               </Button>
               <Button
                 as={RouterLink}
                 h={50}
                 variant={"secondary"}
-                to={`/projects?${searchParams.toString()}`}>
-                {t("CHECK OUT THE PROJECTS")}
+                to={`/ballot?${searchParams.toString()}`}>
+                {t("GET STARTED")}
               </Button>
+              
             </Stack>
 
             {/* 
@@ -106,7 +104,7 @@ export const Home = () => {
               </a>
               .
             </Text>
-            <Text pb={4} w={"full"} fontFamily="Noto Sans TC" fontSize={22}>
+            <Text pb={4} w={"full"} fontFamily="Helvetica" fontSize={22}>
               {t("The future is now.")}
             </Text> */}
           </VStack>
@@ -116,22 +114,30 @@ export const Home = () => {
                 <AccordionItem border="none" w={"full"}>
                   <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                     <Heading textAlign={"left"} size="md">
-                      跨界合作：總統盃黑客松
+                      跨界合作：ZKPLAYGROUND
                     </Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm" py={2}>
-                      平方投票法是套集體決策程序。參與決策的投票者透過分配投票來表達偏好及偏好的程度。藉此，平方投票試圖解決多數決的常見難題，如投票悖論、棄保效應及配票。為推廣平方投票法的優點，本協會響應總統盃黑客松解決台灣永續相關議題之目標，並支持優良新創項目得以永續發展，將於
-                      N24 台北方舟區塊鏈創新育成基地舉辦平方募資活動。
+                    區塊鏈公開透明的特性已經為人所知，哪個地址給了多少錢給哪個地址的紀錄都能在這份公開帳本上找到。
                     </Text>
 
                     <Text fontSize="sm" py={2}>
-                      「2022 總統盃黑客松」以國家發展藍圖為本，超越 GDP (Beyond GDP)
-                      的發展理念，融入國、內外發展情勢，以『安居永續‧均衡臺灣』為競賽主題，從「安居樂業」(SDGs
-                      社會面)、「永續發展」(SDGs 經濟面) 及「均衡臺灣」(SDGs 環境面)
-                      三大面向，號召全民許願、黑客解題，希冀透過公私協力，共創經濟、社會及環境都具幸福感的安居臺灣。
+                    但是這件事是相當沒有隱私的。
+                    </Text>
+
+                    <Text fontSize="sm" py={2}>
+                    隱私是什麼？『個人有權利去保護自己不想讓眾人知道的部分』。
+                    </Text>  
+
+                    <Text fontSize="sm" py={2}>
+                    那麼在區塊鏈上要如何保障使用者的隱私，又要能被礦工驗證正確性呢？ 目前最被廣為使用的方法是使用：零知識證明(Zero Knowledge Proof)，最知名的例子是：tornado cash 和 dark forest。
+                    </Text>
+
+                    <Text fontSize="sm" py={2}>
+                    這些聽起來神秘又未知的專案，將透過 ZK Playground 一系列講座與實作，用技術的觀點帶領大家一步一步揭露他們的面紗。
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
@@ -223,3 +229,4 @@ export const Home = () => {
     </Flex>
   );
 };
+
