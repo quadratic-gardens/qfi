@@ -154,8 +154,8 @@ export const theme = extendTheme({
     bgImg: brand.bgImg,
   },
   fonts: {
-    heading: `'Helvetica', serif`,
-    body: `'Helvetica', sans-serif`,
+    heading: `'Noto Sans TC', 'Helvetica', serif`,
+    body: `'Noto Sans TC', 'Helvetica', sans-serif`,
     mono: brand.monoFont,
     accessory: "Roboto Mono",
     space: "Space Mono",
