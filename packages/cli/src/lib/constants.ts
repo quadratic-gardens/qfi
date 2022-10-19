@@ -126,6 +126,12 @@ export const networks = {
     rpcUrl: "https://polygon-mainnet.g.alchemy.com/v2/7afvptVsZxjFBz8Mcdm4dpu84IekOGds",
     chainId: 137,
     explorer: "https://polygonscan.com/"
+  },
+  goerli: {
+    name: "goerli",
+    rpcUrl: "https://eth-goerli.g.alchemy.com/v2/Yj6TVGlMl_otB1yDvpMTsb8vLFm1oGqg",
+    chainId: 5,
+    explorer: "https://goerli.etherscan.io/"
   }
 }
 
