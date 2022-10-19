@@ -186,21 +186,6 @@ const Guide = () => {
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs">
                           {t(
-                            "Web3 and social impact initiatives that contribute to the Argentine ecosystem can register to receive funding. Within the 'Project List' page of the website you can learn about them and visit their websites and social networks to learn more."
-                          )}
-                        </Text>
-                        <Text fontSize="xs">
-                          {t(
-                            "If you want to vote for a project, press the purple button with the vote icon on the ballot process, once the vote is confirmed a pop-up will appear notifying the successful registration of the vote. Look at all the projects and choose the ones you want to support (up to 8 in total)."
-                          )}
-                        </Text>
-                        <Text fontSize="xs">
-                          {t(
-                            "Disclaimer: These projects will not be presented during the event, it will be up to you to read and choose which projects you want to vote for to receive the funds made available by the generous donors."
-                          )}
-                        </Text>
-                        <Text fontSize="xs">
-                          {t(
                             "You can choose up to 8 projects to vote for, or fewer, as you prefer. With your MACI password you can change your vote before voting closes."
                           )}
                         </Text>
@@ -326,3 +311,4 @@ export const GuideDrawer = ({ isOpen, onClose }: GuideDrawerProps) => {
     </Drawer>
   );
 };
+
