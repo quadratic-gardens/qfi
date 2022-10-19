@@ -214,7 +214,7 @@ export function Project() {
                   h="full"
                   w="auto"
                   position="relative"
-                  src={project.logoCdnUrl}
+                  src={project.bannerImageLink}
                   alt={project.projectName}
             
                 />
