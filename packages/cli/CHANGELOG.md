@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.5](https://github.com/quadratic-funding/qfi/compare/v3.5.4...v3.5.5) (2022-10-26)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
+## [3.5.4](https://github.com/quadratic-funding/qfi/compare/v3.5.3...v3.5.4) (2022-10-19)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
 ## [3.5.3](https://github.com/quadratic-funding/qfi/compare/v3.5.1...v3.5.3) (2022-09-27)
 
 **Note:** Version bump only for package @qfi/ethtaiwancli
