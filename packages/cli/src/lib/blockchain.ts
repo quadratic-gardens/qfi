@@ -27,7 +27,6 @@ export const getNetworkExplorerUrl = (networkName: string): string => {
  */
 export const getProvider = (network: string): JsonRpcProvider => {
   let selectedNetwork: Network
-  
 
   // Connect to selected network.
   if (network === networks.xdai.name) selectedNetwork = networks.xdai
