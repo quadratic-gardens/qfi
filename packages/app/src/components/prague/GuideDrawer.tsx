@@ -2,6 +2,8 @@ import {
   VStack,
   Container,
   Text,
+  Link,
+  Icon,
   Heading,
   Drawer,
   DrawerOverlay,
@@ -17,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useTranslation, Trans } from "react-i18next";
+import { HiQrcode, HiCollection, HiExternalLink } from "react-icons/hi";
 
 const Guide = () => {
   const { t } = useTranslation();
@@ -66,6 +69,14 @@ const Guide = () => {
             {t(
               "The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page)."
             )}
+          </Text>
+          <Text>
+            {t("點擊右方圖示閱讀有關 MACI 的更多信息"
+             )}
+             {" "}
+            <Link href="https://github.com/privacy-scaling-explorations/maci/blob/master/specs/01_introduction.md" isExternal>
+              <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
+            </Link>
           </Text>
           <Text>
             {t(
