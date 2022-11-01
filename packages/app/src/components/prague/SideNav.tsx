@@ -107,8 +107,9 @@ export const Navbar = () => {
         }
         aria-label="Home"
       />
-
+      
       <HStack px={2}>
+
         <Select
        
 
@@ -127,26 +128,6 @@ export const Navbar = () => {
             }}
           >
             TW
-          </option>
-          <option
-            value="en"
-            style={{
-              background: backgroundColor,
-              fontFamily: "Helvetica",
-              fontWeight: "bold",
-            }}
-          >
-            EN
-          </option>
-          <option
-            value="es"
-            style={{
-              background: backgroundColor,
-              fontFamily: "Helvetica",
-              fontWeight: "bold",
-            }}
-          >
-            ES
           </option>
         </Select>
 

@@ -176,6 +176,16 @@ const Button = {
       bg: mode(`gray.100`, `whiteAlpha.200`)(props),
       color: mode(`gray.800`, `whiteAlpha.900`)(props),
     }),
+    zkstart: (props: any) => ({
+      ...base.components.Button.variants.solid(props),
+      bg: mode(`red.100`, `red.200`)(props),
+      color: mode(`red.800`, `red.900`)(props),
+      border: "1px solid",
+      fontWeight: 400,
+      fontFamily: "Helvetica",
+      fontSize:{ base: "md", xl: "xl" },
+      boxSizing:"border-box"
+    }),
     // 4. Override existing variants
     outline: (props: any) => ({
       ...base.components.Button.variants.outline(props),

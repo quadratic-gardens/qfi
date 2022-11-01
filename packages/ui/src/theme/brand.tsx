@@ -28,7 +28,7 @@ export const defaultTheme: {
   },
   primaryAlpha: rgba("#10153d", 0.9),
   secondary: {
-    light: "#F9DC5C",
+    light: "#F9DC5C", 
     dark: "#F9DC5C",
     
   },

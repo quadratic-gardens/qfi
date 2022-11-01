@@ -4,6 +4,8 @@ import {
   Container,
   Flex,
   Text,
+  Link,
+  Icon,
   Heading,
   Button,
   useColorModeValue,
@@ -17,11 +19,12 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams, Link as RouterLink } from "react-router-dom";
+import { HiQrcode, HiCollection, HiExternalLink } from "react-icons/hi";
 
 export const Home = () => {
   const { t } = useTranslation();
   const color = useColorModeValue("gray.800", "gray.700");
-  const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
+  const backgroundColor = useColorModeValue("#F9DC5C", "#222222");
   let [searchParams] = useSearchParams();
 
   return (
@@ -61,11 +64,11 @@ export const Home = () => {
         py={8}>
         <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
           <VStack spacing={6} alignItems="flex-start">
-            <Heading fontSize={{ base: "38px", xl: "60px" }}>ZKPLAYGROUND x 平方投票募資法</Heading>
+            <Heading fontSize={{ base: "38px", xl: "60px" }}>QF @ZKPLAYGROUND</Heading>
           </VStack>
           <VStack width="100%" alignItems="flex-start">
             <Text fontSize={"md"} pb={4}>
-              在 Web3 的世界中，我們透過社群自治來解決各式問題。 而平方投票法，則是一套消弭分配不均的實驗性工具。
+              在 Web3 的世界中，我們透過社群自治來解決各式問題。 而平方募資法 (QF) ，則是一套消弭分配不均的實驗性工具。
             </Text>
 
             <Stack spacing={10} direction={["column", "row"]} pb={4}>
@@ -79,7 +82,7 @@ export const Home = () => {
               <Button
                 as={RouterLink}
                 h={50}
-                variant={"secondary"}
+                variant={"zkstart"} //magik //secondary
                 to={`/ballot?${searchParams.toString()}`}>
                 {t("GET STARTED")}
               </Button>
@@ -114,30 +117,18 @@ export const Home = () => {
                 <AccordionItem border="none" w={"full"}>
                   <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                     <Heading textAlign={"left"} size="md">
-                      跨界合作：ZKPLAYGROUND
+                      為 ZKPlayground 提案項目投票的意義是什麼？
                     </Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm" py={2}>
-                    區塊鏈公開透明的特性已經為人所知，哪個地址給了多少錢給哪個地址的紀錄都能在這份公開帳本上找到。
+                    為您喜歡的 ZKPlayground 提案投票，使他們有資格從贊助者的集合資金池中取得資金並繼續發展，另外一方面提案方也可以由社群票數了解到提案的市場性。每個專案獲得多少資金將由 ZKPlayground Stage1 的參與者在活動期間投票決定。
                     </Text>
 
                     <Text fontSize="sm" py={2}>
-                    但是這件事是相當沒有隱私的。
-                    </Text>
-
-                    <Text fontSize="sm" py={2}>
-                    隱私是什麼？『個人有權利去保護自己不想讓眾人知道的部分』。
-                    </Text>  
-
-                    <Text fontSize="sm" py={2}>
-                    那麼在區塊鏈上要如何保障使用者的隱私，又要能被礦工驗證正確性呢？ 目前最被廣為使用的方法是使用：零知識證明(Zero Knowledge Proof)，最知名的例子是：tornado cash 和 dark forest。
-                    </Text>
-
-                    <Text fontSize="sm" py={2}>
-                    這些聽起來神秘又未知的專案，將透過 ZK Playground 一系列講座與實作，用技術的觀點帶領大家一步一步揭露他們的面紗。
+                    請注意，投票主辦團隊永遠不會要求你分享這個錢包的種子短語或私鑰，也永遠不會通過社交媒體或其他渠道與你聯繫，也不會給你發送種子短語或私鑰來使用。這些都是常見的詐騙手段，我們希望避免這些不良分子竊取你的資金。
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
@@ -153,10 +144,13 @@ export const Home = () => {
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm">
-                      為避免因棄保效應、配票、80/20 法則等，導致非主流項目遭忽視與資源分配不均，以太坊創辦人 Vitalik
-                      Buterin、哈佛大學經濟學者 Zoë Hitzig 以及微軟首席經濟研究員 Glen Weyl 在 2018
-                      年底共同提出「平方募資法」(Quadratic
-                      Funding)，平方募資基於平方投票計算與分配資金（如政府預算、慈善或企業來源、直接從參與者收集），目的在於讓資源分配變得更加平均。
+                    平方募資 (QF) 是社區決定如何將資金分配給公共產品的一種更民主的方式。一個匹配的資金池根據一個公式分配給受助項目，該公式考慮了有多少人重視某件事，以及人們個人偏好的強度。
+                    </Text>
+                    <Text>
+                        （點擊右方圖示閱讀有關平方募資的更多信息) {" "}
+                          <Link href="https://docs.google.com/presentation/d/1xmYeiLxalpINxE6f4VU8oQx0Qb_2eDJnwGCHwd1fAEo/edit?usp=sharing" isExternal>
+                          <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
+                          </Link>
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
