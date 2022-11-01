@@ -9,6 +9,7 @@ import { PubKey } from "qaci-domainobjs"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
 // import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
+import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
 
 import { directoryExists, jsonToCsv, makeDir, writeLocalJsonFile } from "../lib/files.js"
 import {
@@ -23,7 +24,8 @@ import {
   usersStateIndexesFilePath,
   userSignUps,
   maxValues,
-  usersStateIndexesBaseDirPath
+  usersStateIndexesBaseDirPath,
+  jsonRecipientsRecords
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 
@@ -110,11 +112,46 @@ async function recover(network: string) {
     await delay(3)
 
     spinner.stop()
-  
 
-    console.log(`\n${logSymbols.info} SKIP: you are about to register projects\n`)
+    // Get deployed simpleHackathon instance.
+    const simpleHackathon = new ethers.Contract(
+      deployedContracts.SimpleHackathon,
+      SimpleHackathon__factory.abi,
+      deployer
+    )
+
+    console.log(`\n${logSymbols.info} RECOVER: register projects\n`)
+
+    const recipientStateIndex = Number(await simpleHackathon.getRecipientCount())
 
     // Get CSV records.
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = recipientStateIndex; i < jsonRecipientsRecords.length; i++) {
+      const recipientRecord = jsonRecipientsRecords[i]
+      const spinner = customSpinner(`Adding recipient in position ${chalk.bold(i)}`, "point")
+      spinner.start()
+
+      // Check input data.
+
+      // Create metadata.
+      const { ethereumAddress, ...metadataJSON } = recipientRecord
+      const metadata = JSON.stringify(metadataJSON)
+
+      // Create tx.
+      const tx = await simpleHackathon.connect(deployer).addRecipient(recipientRecord.ethereumAddress, metadata, {
+        gasPrice: doubleGasPrice,
+        gasLimit: ethers.utils.hexlify(10000000)
+      })
+      await tx.wait()
+
+      spinner.stop()
+      console.log(
+        `${logSymbols.success} Recipient #${chalk.bold(i)} (${chalk.bold(
+          recipientRecord.projectName
+        )}) has been successfully registered on-chain`
+      )
+    }
 
     console.log(`\n${logSymbols.success} You have successfully registered the recipients on-chain 🎊\n`)
 
@@ -127,8 +164,6 @@ async function recover(network: string) {
     await delay(30)
 
     spinner.stop()
-
-    
 
     const stateIndexes = []
 
