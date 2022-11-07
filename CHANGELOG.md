@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.7.0](https://github.com/compare/v3.5.5...v3.7.0) (2022-11-07)
+
+
+### Features
+
+* delete the keys of stateIndexByPubKey and userSignUps which are over 258 ([809a565](https://github.com/commit/809a5651764e322318922596f8102ec7353680f2))
+* modify the projects data and the provider network setting ([e5dc704](https://github.com/commit/e5dc704ce3c4d2eb7b1d661935f5729c6a3b3988))
+
+
+
+
+
 ## [3.5.5](https://github.com/compare/v3.5.4...v3.5.5) (2022-10-26)
 
 **Note:** Version bump only for package @qfi/qfi
