@@ -11,10 +11,9 @@ import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factor
 // import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
 import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
 
-import { directoryExists, jsonToCsv, makeDir, writeLocalJsonFile } from "../lib/files.js"
+import { directoryExists, jsonToCsv, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
 import {
   coordinatorPubkey,
-  deployedContracts,
   hacksFilePath,
   header,
   mnemonicBaseDirPath,
@@ -25,7 +24,9 @@ import {
   userSignUps,
   maxValues,
   usersStateIndexesBaseDirPath,
-  jsonRecipientsRecords
+  jsonRecipientsRecords,
+  deployedContractsBaseDirPath,
+  deployedContractsFilePath
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 
@@ -54,7 +55,24 @@ async function recover(network: string) {
     // Check if users has been already signed up.
     if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
     if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
-    // NOTE: contracts allready deployed.
+
+    // Check if contracts allready deployed.
+
+    // Check for output directory.
+    if (!directoryExists(outputDirPath)) makeDir(outputDirPath)
+
+    // Check if mnemonic already present.
+    if (!directoryExists(mnemonicBaseDirPath) && !directoryExists(mnemonicFilePath))
+      throw new Error(`You must first authenticate by running \`auth \"<your-mnemonic>\"\` command!`)
+
+    // Check if contracts has been already deployed.
+    if (!directoryExists(deployedContractsBaseDirPath) && !directoryExists(deployedContractsFilePath))
+      throw new Error(`You must first deploy QFI/MACI smart contracts by running \`deploy \"<network>\"\` command!`)
+
+    process.stdout.write(`\n`)
+
+    // Retrieve deployed smart contracts addresses.
+    const deployedContracts = readJSONFile(deployedContractsFilePath)
     process.stdout.write(`\n`)
 
     const { provider, wallet } = await connectToBlockchain(network)
