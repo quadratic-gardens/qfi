@@ -12,10 +12,9 @@ import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factor
 import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
 // import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
 
-import { directoryExists, jsonToCsv, makeDir, writeLocalJsonFile } from "../lib/files.js"
+import { directoryExists, jsonToCsv, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
 import {
   coordinatorPubkey,
-  deployedContracts,
   hacksFilePath,
   header,
   jsonRecipientsRecords,
@@ -30,7 +29,9 @@ import {
   usersStateIndexesFilePath,
   userSignUps,
   maxValues,
-  usersStateIndexesBaseDirPath
+  usersStateIndexesBaseDirPath,
+  deployedContractsBaseDirPath,
+  deployedContractsFilePath
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 import { VerifyingKeyStruct } from "../../../contracts/typechain/VkRegistry.js"
@@ -93,8 +94,23 @@ async function doTheThing(network: string) {
       throw new Error(`You must first authenticate by running \`auth \"<your-mnemonic>\"\` command!`)
     // Check if users has been already signed up.
     if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
-    if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
-    // NOTE: contracts allready deployed.
+    // Check if contracts allready deployed.
+
+    // Check for output directory.
+    if (!directoryExists(outputDirPath)) makeDir(outputDirPath)
+
+    // Check if mnemonic already present.
+    if (!directoryExists(mnemonicBaseDirPath) && !directoryExists(mnemonicFilePath))
+      throw new Error(`You must first authenticate by running \`auth \"<your-mnemonic>\"\` command!`)
+
+    // Check if contracts has been already deployed.
+    if (!directoryExists(deployedContractsBaseDirPath) && !directoryExists(deployedContractsFilePath))
+      throw new Error(`You must first deploy QFI/MACI smart contracts by running \`deploy \"<network>\"\` command!`)
+
+    process.stdout.write(`\n`)
+
+    // Retrieve deployed smart contracts addresses.
+    const deployedContracts = readJSONFile(deployedContractsFilePath)
     process.stdout.write(`\n`)
 
     const { provider, wallet } = await connectToBlockchain(network)
@@ -373,12 +389,12 @@ async function doTheThing(network: string) {
 
     console.log(`\n${logSymbols.success} We will now start the grant round. It will be active for [7] days. 🎊\n`)
 
-    const SEVENDAYS = 60 * 60 * 24 * 7
+    const THIRTYDAYS = 60 * 60 * 24 * 30
 
     const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam()
     const grantRoundTx = await qfi
       .connect(deployer)
-      .deployGrantRound(SEVENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
+      .deployGrantRound(THIRTYDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
         gasPrice: doubleGasPrice,
         gasLimit: ethers.utils.hexlify(8000000)
       })
