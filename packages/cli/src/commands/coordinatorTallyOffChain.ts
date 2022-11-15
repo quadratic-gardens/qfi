@@ -225,16 +225,12 @@ async function tally(
     try {
       // NOTE: Get GrantRound Actions from GrantRound Smart Contracts
       let grantRoundLogs = [] as any[]
-      for (
-        let i = firstGrantRoundBlock;
-        i < firstGrantRoundBlock + numBlocksPerRequest + 1;
-        i += numBlocksPerRequest + 1
-      ) {
+      for (let i = firstGrantRoundBlock; i < lastBlockSignups; i += numBlocksPerRequest + 1) {
         const fromBlock = i >= currentBlock ? currentBlock : i
         const toBlock = i + numBlocksPerRequest >= currentBlock ? currentBlock : i + numBlocksPerRequest
         const logs = await provider.getLogs({
           ...qfi.filters.GrantRoundDeployed(),
-          fromBlock: fromBlock,
+          fromBlock,
           toBlock
         })
 
@@ -406,7 +402,7 @@ async function tally(
     // NOTE: Proof Generation offchain
     const tallyVotesVerifierInputsByBatch = tallyVotesCircuitInputsByBatch.map((circuitInputs, batchNumber) => {
       // NOTE: these are required for the Verifier Contract onchain
-
+    
       const { newTallyCommitment } = circuitInputs
       const { newResultsRootSalt } = circuitInputs
       const { newSpentVoiceCreditSubtotalSalt } = circuitInputs
