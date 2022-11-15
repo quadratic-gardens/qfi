@@ -69,9 +69,9 @@ async function deploy(network: string) {
     process.stdout.write(`\n`)
 
     const { wallet, provider } = await connectToBlockchain(network)
-    const gasPrice = await provider.getGasPrice()
-    const doubleGasPrice = gasPrice.mul(BigNumber.from(2))
-    const gasLimit = ethers.utils.hexlify(20000000)
+    let gasPrice = await provider.getGasPrice()
+    let doubleGasPrice = gasPrice.mul(BigNumber.from(2))
+    let gasLimit = ethers.utils.hexlify(4000000)
     /** DEPLOY MACI/QFI SMART CONTRACTS */
     const deployer = wallet
     const deployerAddress = wallet.address
@@ -250,6 +250,10 @@ async function deploy(network: string) {
 
     spinner = customSpinner(`Deploying QFI smart contract...`, "point")
     spinner.start()
+
+    gasPrice = await provider.getGasPrice()
+    doubleGasPrice = gasPrice.mul(BigNumber.from(2))
+    gasLimit = ethers.utils.hexlify(8000000)
 
     const qfi = await QFIFactory.deploy(
       baseERC20Token.address,
