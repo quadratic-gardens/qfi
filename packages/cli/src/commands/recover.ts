@@ -155,7 +155,7 @@ async function recover(network: string) {
       // Create metadata.
       const { ethereumAddress, ...metadataJSON } = recipientRecord
       const metadata = JSON.stringify(metadataJSON)
-
+      console.log(recipientRecord.ethereumAddress)
       // Create tx.
       const tx = await simpleHackathon.connect(deployer).addRecipient(recipientRecord.ethereumAddress, metadata, {
         gasPrice: doubleGasPrice,

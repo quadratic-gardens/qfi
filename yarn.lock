@@ -3823,7 +3823,7 @@
 
 "@qfi/app@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/app":
   "resolved" "file:packages/app"
-  "version" "3.5.1"
+  "version" "3.7.1"
   dependencies:
     "@chakra-ui/react" "^1.8.6"
     "@coinbase/wallet-sdk" "^3.0.4"
@@ -3872,10 +3872,11 @@
     "mustache" "^4.2.0"
     "qaci-contracts" "^1.1.9"
 
-"@qfi/ethtaiwancli@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/cli":
+"@qfi/ethtaiwancli@^3.7.1", "@qfi/ethtaiwancli@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/cli":
   "resolved" "file:packages/cli"
-  "version" "3.7.0"
+  "version" "3.8.0"
   dependencies:
+    "@qfi/ethtaiwancli" "^3.7.1"
     "chalk" "^5.0.1"
     "clear" "^0.1.0"
     "commander" "^9.3.0"
