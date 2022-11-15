@@ -299,7 +299,7 @@ export const jsonRecipientsRecords: Recipient[] = [
       "Founded in 2019, Rooit has 1.2M users around the world, creates 300K+ matches every month. Rooit is backed by Rakuten, Techstars Accelerator, Expara Venture and more...",
     description:
       "Founded in 2019, Rooit has 1.2M users around the world, creates 300K+ matches every month. Rooit is backed by Rakuten, Techstars Accelerator, Expara Venture and more. Rooit’s mission is to make everyone find a confidant, end loneliness. Rooit is moving forward to become the No.1 Web3 Friend-making app based on Ethereum. Users can create their own identity, stories and earn $STAR tokens by raising their alien pet: 'ROO'.",
-    ethereumAddress: "0xbcd496ead2415bD438269aE0c4f50cE20242a29A  ",
+    ethereumAddress: "0xbcd496ead2415bD438269aE0c4f50cE20242a29A",
     website: "-",
     thumbnailImageLink: "https://source.unsplash.com/random",
     logoCdnUrl: "https://source.unsplash.com/random",

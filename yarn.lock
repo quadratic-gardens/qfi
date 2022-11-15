@@ -3874,7 +3874,7 @@
 
 "@qfi/ethtaiwancli@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/cli":
   "resolved" "file:packages/cli"
-  "version" "3.8.2"
+  "version" "3.8.3"
   dependencies:
     "chalk" "^5.0.1"
     "clear" "^0.1.0"
