@@ -1,6 +1,6 @@
 {
-  "name": "@qfi/ethlatamcli",
-  "version": "3.1.0",
+  "name": "@qfi/ethtaiwancli",
+  "version": "3.6.0",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
   "main": "dist/cli/src/index.js",
   "repository": "https://github.com/quadratic-funding/qfi",
@@ -17,7 +17,7 @@
     "README.md"
   ],
   "bin": {
-    "ethlatamcli": "dist/cli/src/index.js"
+    "ethtaiwancli": "dist/cli/src/index.js"
   },
   "scripts": {
     "build": "tsc",

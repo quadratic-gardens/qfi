@@ -1,133 +1,210 @@
 let projects = [
   {
-    projectName: "守護者聯盟2.0",
-    tagline: "我們是「守護者聯盟2.0」，分別是由公、私部門及NGO共同組成的團隊， 我們的理念是運用科技，結合民間彼此的力量來配合政府，一同守護社會安...",
+    projectName: "Hedgespa Digital Assets for both Private and Public Market Investments",
+    tagline:
+      "HedgeSPA is an investment analytics boutique with serial-award-winning expertise in public market and private market investments.",
     description:
-      "我們是「守護者聯盟2.0」，分別是由公、私部門及NGO共同組成的團隊， 我們的理念是運用科技，結合民間彼此的力量來配合政府，一同守護社會安全，用實際的行動用心守護我們珍視的每一個人，所以我們提出了「安居永續平安福」計畫，希望能達成全民安居、服務永續、平安是福的目標",
+      "Copy of WAGMI Pitch Battle- Projects Information for Q Copy of WAGMI Pitch Battle- Projects Information for Q 100% 10 D4 HedgeSPA is an investment analytics boutique with serial-award-winning expertise in public market and private market investments. Our founder was a Managing Director at BlackRock’s Portfolio Management Group in New York, where he built the multi-asset functionality on BlackRock’s Aladdin platform, based on his own background IP.  That’s how we got funded by the Singapore Government to rebuild from scratch. We offer our expertise in both technology and investment formats.  We also offer a Digital Asset/Web3 solution that combines both, with a sophisticated settlement choice settlement mechanism on which we are working with a bank consortium to seek regulatory approvals.  https://youtu.be/Mh-eNY5ip7M To enable screen reader support, press ⌘+Option+Z To learn about keyboard shortcuts, press ⌘slash HedgeSPA is an investment analytics boutique with serial-award-winning expertise in public market and private market investments. Our founder was a Managing Director at BlackRock’s Portfolio Management Group in New York, where he built the multi-asset functionality on BlackRock’s Aladdin platform, based on his own background IP.  That’s how we got funded by the Singapore Government to rebuild from scratch. We offer our expertise in both technology and investment formats.  We also offer a Digital Asset/Web3 solution that combines both, with a sophisticated settlement choice settlement mechanism on which we are working with a bank consortium to seek regulatory approvals.  https://youtu.be/Mh-eNY5ip7M Turn on screen reader support.",
     ethereumAddress: "-",
-    website: "https://www.facebook.com/SFGuardians",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/d21407_6655af4ef85d490bac38703af0170e5a~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E5%AE%88%E8%AD%B7%E8%80%85.png",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/d21407_6655af4ef85d490bac38703af0170e5a~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E5%AE%88%E8%AD%B7%E8%80%85.png",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/d21407_6655af4ef85d490bac38703af0170e5a~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E5%AE%88%E8%AD%B7%E8%80%85.png",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 1,
     id: "1",
   },
   {
-    projectName: "文譯之間",
-    tagline: "文譯之間團隊，有不同領域的工程師：醫院、半導體業、資訊安全、系統整合等，協力合作夥伴有公部門與NGO。這兩年疫情影響，醫院配合政策常需要快速更新當下的公告...",
+    projectName: "Decentralized Fact Auditor (DFA)",
+    tagline: "DFA's goal is to decrease fake news on the internet which allows users to stake their tokens to prove...",
     description:
-      "文譯之間團隊，有不同領域的工程師：醫院、半導體業、資訊安全、系統整合等，協力合作夥伴有公部門與NGO。這兩年疫情影響，醫院配合政策常需要快速更新當下的公告，通常會透過圖卡的形式發佈，以利民眾轉貼分享，這也是目前公部門政策宣導最常用的一種形式，然而，圖卡不利於翻譯、被搜尋等，而我們提供一種更友善的服務。",
-    ethereumAddress: "-",
-    website: "https://inkrosetta.tw/",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/d21407_0da45008ef03415daaa6f6411490e8fa~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/inkrosetta_logo.png",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/d21407_0da45008ef03415daaa6f6411490e8fa~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/inkrosetta_logo.png",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/d21407_0da45008ef03415daaa6f6411490e8fa~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/inkrosetta_logo.png",
+      "DFA's goal is to decrease fake news on the internet which allows users to stake their tokens to prove the fact of the news they publish. Users can also stake tokens to prove that news are fake. Also, unlike Web2 media which is centralized, the DFA DAO will verify whether the news is fact or fake.",
+    ethereumAddress: "0xa58Dfc01606D39Cf14aa2f7394318C9B06E0Bb0E",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 2,
     id: "2",
   },
   {
-    projectName: "CEASEFIRE",
-    tagline: "解方主要效益：使林火發生後在最短時間偵測到，火勢初生即有效抑制和撲滅，使森林不受破壞繼續發揮其生態及固碳功能。建議林務局成立林火消防救護基金會...",
+    projectName: "gotEM",
+    tagline:
+      "TA-WEI CHANG - Founder. Internet Serial Entrepreneur with experience in Internet Marketplaces, Internet Marketing, and Blockchain Technology. Founded gotEM, MeetMySpy and ... ",
     description:
-      "解方主要效益：使林火發生後在最短時間偵測到，火勢初生即有效抑制和撲滅，使森林不受破壞繼續發揮其生態及固碳功能。建議林務局成立林火消防救護基金會，作為土地活化平台，釋出國家未充分使用林地，供企業認養。基金會成員，由產官學民共同參與，Ceasefire團隊自願為創始成員，為竹林地活化展開新的合作模式。",
-    ethereumAddress: "-",
-    website: "https://www.linkedin.com/in/lin-harrison-378550b1/",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/d21407_9033d1cd3ca0438aaf7f389c44c4d989~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ceasefire%20logo.png",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/d21407_9033d1cd3ca0438aaf7f389c44c4d989~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ceasefire%20logo.png",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/d21407_9033d1cd3ca0438aaf7f389c44c4d989~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/ceasefire%20logo.png",
+      "TA-WEI CHANG - Founder Internet Serial Entrepreneur with experience in Internet Marketplaces, Internet Marketing, and Blockchain Technology. Founded gotEM, MeetMySpy and Co-Founded Digix, one of the first dApps on Ethereum BC. Studied Economics at San Francisco State University. https://www.linkedin.com/in/tawei-c-6a2640126/ Thomas Chang - Lead Blockchain Developer Over 15 years as a system admin and senior engineer. Has experience with C / C++, Python, AWS server, and Solidity and hardhat. Has worked previously at Foxconn, Cyberlink, InQuartik. He is currently lead blockchain developer at gotEM. RAFIQ AL SHAHBAZ - Attorney and Advisory Senior Legal Advisor and Attorney at Empower Energy Solutions, MBA London Business School AHMED SHAHZAIB - Lead Product Developer Full-stack Developer with a focus in Bootstrap, SQL, PHP, LARAVEL, HTML and JavaScript. Engineering background and studied Computer. Studied Science from GC University, Faisalabad. Dr. League Imparable - Marketing / Strategy Imparable has been working in the digital marketing space for over four years and has extensive experience with marketing within the crypto space. He specializes in blockchain technology, community outreach, and building alliances with relevant teams and organizations. His experience spans from working with Medicalveda, Tycoon.io, Mahadao, Freela, and Porkswap. He is currently VP and Director of marketing with gotEM. Perryn Kitiwanprasarn - Administrative Assistant A junior year student, from Ming Chuan University, currently work as Administrative Assistant at gotEM.",
+    ethereumAddress: "0x8c1a7845956b73e5da7747ffb62891cc5a24faa4",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 3,
     id: "3",
   },
   {
-    projectName: "透明足跡",
-    tagline: "綠色公民行動聯盟透明足跡計畫致力於通過資訊公開與應用，推動企業永續轉型。目前推出的工具有:監督企業環境裁罰紀錄的透明足跡網站...",
+    projectName: "MotionsCloud",
+    tagline:
+      "MotionsCloud automates damage detection & assessment processes via 4 modules: M1: IoT sensor device to automate damage notification & get 1st insight of the accident (In partnership with BOSCH)...",
     description:
-      "綠色公民行動聯盟透明足跡計畫致力於通過資訊公開與應用，推動企業永續轉型。目前推出的工具有:監督企業環境裁罰紀錄的透明足跡網站、消費者環境運動APP掃了再買、整合企業永續資料的ESG 檢測儀、以及檢視企業減碳承諾與成效的淨零路徑模擬器。",
-    ethereumAddress: "-",
-    website: "https://thaubing.gcaa.org.tw/",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/d21407_d5ece5e722d34464b8389bdbf1675b47~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E9%80%8F%E6%98%8E%E8%B6%B3%E8%B7%A1-LOGO.png",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/d21407_d5ece5e722d34464b8389bdbf1675b47~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E9%80%8F%E6%98%8E%E8%B6%B3%E8%B7%A1-LOGO.png",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/d21407_d5ece5e722d34464b8389bdbf1675b47~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E9%80%8F%E6%98%8E%E8%B6%B3%E8%B7%A1-LOGO.png",
+      "MotionsCloud automates damage detection & assessment processes via 4 modules: M1: IoT sensor device to automate damage notification & get 1st insight of the accident (In partnership with BOSCH). M2: An augmented reality guidance mobile web-based app for users to perform a simple self-inspection. M3: An AI computer vision technology to evaluate & analyze photos/videos taken from M2, which generates a damage assessment report in minutes. M4: An optional remote live video inspection for more complicated cases in which an expert can perform remote inspections & check via mobile web app. MotionsCloud collaborates with Ensuro, the first decentralized, licensed (re)insurer on a public blockchain for smartphone screen guarantee with smart contract and insurance on blockchain.",
+    ethereumAddress: "0xcCA126D69c386811F9C260c48Bf2F940A8dFABBB",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 4,
     id: "4",
   },
   {
-    projectName: "Turing Certs",
-    tagline: "圖靈證書（Turing Certs）正在世界解決造假問題，透過區塊鏈為所有人建立一個數位身分與歷程檔案。目前已經有 9 個國家與地區的 120 間的政府、學校...",
+    projectName: "zero-knowledge orderbook system ZK(OBS)",
+    tagline:
+      "The team members are from TKSpring, including front-end and back-end and smart contract engineers. We are building a new generation of DeFi products, the fixed-income and structured products, which will become the most stable cornerstone of DeFi. We will use the ZKP technology to solve the scalability problem on Ethereum, and establish an order book trading system based on ZKP...",
     description:
-      "圖靈證書（Turing Certs）正在世界解決造假問題，透過區塊鏈為所有人建立一個數位身分與歷程檔案。目前已經有 9 個國家與地區的 120 間的政府、學校、機構開始使用我們的數位憑證工具，發行上萬張的數位證書，解決畢業證書、專業能力證明、不動產合約書、農產品歷程、綠電憑證、碳權憑證。讓我們一起建立一個無紙化、安全隱私、100% 零碳數位化的未來。",
-    ethereumAddress: "-",
-    website: "https://certs.turingchain.tech/",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/d21407_13ec422f15f74074b12b360e99abb052~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo-2.png",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/d21407_13ec422f15f74074b12b360e99abb052~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo-2.png",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/d21407_13ec422f15f74074b12b360e99abb052~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo-2.png",
+      "The team members are from TKSpring, including front-end and back-end and smart contract engineers. We are building a new generation of DeFi products, the fixed-income and structured products, which will become the most stable cornerstone of DeFi. We will use the ZKP technology to solve the scalability problem on Ethereum, and establish an order book trading system based on ZKP, so that users can enjoy the most efficient transactions without gas fees in DeFi.",
+    ethereumAddress: "0x4B933cD816C86783B116D070818C6FCDf5bfF17a",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 5,
     id: "5",
   },
   {
-    projectName: "FinTech大聯盟",
-    tagline: "FinTech大聯盟旨在是透過履行社會責任，了解人民真實需求，作為銜接人民與政府之監理協作及監理溝通之橋樑，並透過政府授權或合作來提前反映爭點...",
+    projectName: "1TM",
+    tagline: "We are a group of strategists, designers, and engineers teamed up to enable creators...",
     description:
-      "FinTech大聯盟旨在是透過履行社會責任，了解人民真實需求，作為銜接人民與政府之監理協作及監理溝通之橋樑，並透過政府授權或合作來提前反映爭點，降低未來新創與沙盒試驗之難度，同時因為教育之落實，理論與實作之經驗取得，金融科技教育得以向下普遍扎根。",
-    ethereumAddress: "-",
-    website: "https://presidential-hackathon.mic.org.tw/2020/ProposedContent.aspx",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/nsplsh_3049566f703576344d4d55~mv2_d_4139_2759_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/Image%20by%20Jonas%20Leupe.jpg",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/nsplsh_3049566f703576344d4d55~mv2_d_4139_2759_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/Image%20by%20Jonas%20Leupe.jpg",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/nsplsh_3049566f703576344d4d55~mv2_d_4139_2759_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/Image%20by%20Jonas%20Leupe.jpg",
+      "We are a group of strategists, designers, and engineers teamed up to enable creators around the globe and create a culture of collaboration. We are doing this by building 1TM, a decentralized collaboration platform where everyone gets rewarded for their work and participation.",
+    ethereumAddress: "0x54e21D5E824Af796ED6201295ca0e7173cb20F32",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 6,
     id: "6",
   },
   {
-    projectName: "海闊天空隊",
-    tagline: "我們是一群熱愛海洋的人們，來自於學校、企業、NGOs、相關政府單位，我們共同看見台灣的海洋面臨著危險，平常一起參與淨灘的活動中...",
+    projectName: "G-Click",
+    tagline:
+      "G-Click is a concept of decentralize-ESG project... We aim to provide a service for corporations and customers to realize SDGs with just a click, earn the honorable NFT as a receipt, and record their sustainable actions in a trustworthy and easy way.",
     description:
-      "我們是一群熱愛海洋的人們，來自於學校、企業、NGOs、相關政府單位，我們共同看見台灣的海洋面臨著危險，平常一起參與淨灘的活動中，發現海洋廢棄物可以重複再利用，經過企業夥伴們的嘗試，提出藍色經濟循環，希望將更多海廢清出大海，減少對海洋持續的破壞，並將每個環節都上鏈紀錄，為我們的海洋環境作出一些努力及貢獻。",
-    ethereumAddress: "-",
+      "G-Click is a concept of decentralize-ESG project.  Due to the global trend of ESG and SDGs, we believed the feature of blockchain 3T (Trust, Transparency & Traceability) can be fully applied for the MRV (Measure, Reporting & Verification) when cooperates work on ESG. We aim to provide a service for corporations and customers to realize SDGs with just a click, earn the honorable NFT as a receipt, and record their sustainable actions in a trustworthy and easy way.",
+    ethereumAddress: "0x6609CeCa0b73C16931b182c2A58Db297D69A1284",
     website: "-",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/d21407_1e84e5929bdf4500ac5d96905d3e44f8~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E6%B5%B7%E9%97%8A%E5%A4%A9%E7%A9%BA-Logo.png",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/d21407_1e84e5929bdf4500ac5d96905d3e44f8~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E6%B5%B7%E9%97%8A%E5%A4%A9%E7%A9%BA-Logo.png",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/d21407_1e84e5929bdf4500ac5d96905d3e44f8~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E6%B5%B7%E9%97%8A%E5%A4%A9%E7%A9%BA-Logo.png",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 7,
     id: "7",
   },
-
   {
-    projectName: "街道醫生",
-    tagline: "街道醫生團隊透過「全民參與街道改善決策方案平台」建置與民眾溝通的管道，藉由人行道現況、社經環境資料的大數據疊加分析以及民眾參與...",
+    projectName: "Hepta Protocol",
+    tagline:
+      "Hepta Protocol is a blockchain-based platform where corporates can subscribe to well-curated ESG initiatives...",
     description:
-      "街道醫生團隊透過「全民參與街道改善決策方案平台」建置與民眾溝通的管道，藉由人行道現況、社經環境資料的大數據疊加分析以及民眾參與，找出最迫切需要改善之路段。我們結合社福團體-身心障礙者聯盟、中華視障聯盟的鞭策，政府單位-內政部營建署的資源及補助機制、新北市政府的案件配合執行，產業界-鼎漢工程顧問公司、台科大資工系的技術指導，更結合民眾倡議並通過中央政府經費協助，形成街道永續安全的共識，逐一排除街道步行阻礙，打通街道經脈，讓民眾都能夠通行無礙。",
-    ethereumAddress: "-",
+      "Hepta Protocol is a blockchain-based platform where corporates can subscribe to well-curated ESG initiatives. We believe the transparency embedded in blockchain technology will  boost the efficiency and save extra costs for enterprises.",
+    ethereumAddress: "0x3134Fbaa0e37e7EE5FcbDC8eAb78EE206EFE8fcF",
     website: "-",
-    thumbnailImageLink:
-      "https://static.wixstatic.com/media/d21407_2d4a781193a248ba9f49fa0cdef3b66f~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E8%A1%97%E9%81%93%E9%86%AB%E7%94%9Flogo.png",
-    logoCdnUrl:
-      "https://static.wixstatic.com/media/d21407_2d4a781193a248ba9f49fa0cdef3b66f~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E8%A1%97%E9%81%93%E9%86%AB%E7%94%9Flogo.png",
-    bannerImageLink:
-      "https://static.wixstatic.com/media/d21407_2d4a781193a248ba9f49fa0cdef3b66f~mv2.png/v1/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/%E8%A1%97%E9%81%93%E9%86%AB%E7%94%9Flogo.png",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
     recipientId: 8,
     id: "8",
   },
+  {
+    projectName: "Edu-Fi",
+    tagline:
+      "Edu-Fi is a learn-to-earn platform aiming to motivate children in remote countrysides to learn. Cooperating with enterprises to reward the children to learn and get skills certificates.",
+    description:
+      "Edu-Fi is a learn-to-earn platform aiming to motivate children in remote countrysides to learn. Cooperating with enterprises to reward the children to learn and get skills certificates.",
+    ethereumAddress: "0x3A91b9B2Ce2c3326cf9e49aBDc9BDd8bbEABce58",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
+    recipientId: 9,
+    id: "9",
+  },
+  {
+    projectName: "Mr3",
+    tagline: "MR3 provides services to build medical records on the blockchain...",
+    description:
+      "MR3 provides services to build medical records on the blockchain. Give people more flexibility in choosing where to seek medical care and help. At the same time, people can get better business applications and privacy.",
+    ethereumAddress: "0x17569A4163F1B1DC10096FfCE96E3921B61526b6",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
+    recipientId: 10,
+    id: "10",
+  },
+  {
+    projectName: "Zomma Protocol",
+    tagline: "ZOMMA aims to be the underlying fuel for all on-chain financial products...",
+    description:
+      "ZOMMA aims to be the underlying fuel for all on-chain financial products, focusing to contribute to the DeFi world by building an array of innovative and diversified products, that include staking, yield mining, buy & sell European style options, settlements and with the highest capital efficiency to achieve a win-win for all our ecosystem participants.",
+    ethereumAddress: "0xccd7Dabc3E6B15FD62137c1e01971004e8F889c6",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
+    recipientId: 11,
+    id: "11",
+  },
+  {
+    projectName: "X-CITY",
+    tagline:
+      "We are team X-city. We are dedicated to creating a fair, just, and transparent online social environment. Our team members come from computer science and legal areas...",
+    description:
+      "We are team X-city. We are dedicated to creating a fair, just, and transparent online social environment. Our team members come from computer science and legal areas; we believe the combination is promising for implementing such radical online social and organizational reform. All members have dived into the crypto area for years; some are experienced smart contract developers and researchers, and some are experienced software engineers in the internet industry. We are trying to develop some exciting applications which can realize the ideal. We hope we can present some attractive and practical in making the world better.",
+    ethereumAddress: "0xDdC9b9e424E630994386a55Eddc9281A693330D1",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
+    recipientId: 12,
+    id: "12",
+  },
+  {
+    projectName: "Rooit",
+    tagline:
+      "Founded in 2019, Rooit has 1.2M users around the world, creates 300K+ matches every month. Rooit is backed by Rakuten, Techstars Accelerator, Expara Venture and more...",
+    description:
+      "Founded in 2019, Rooit has 1.2M users around the world, creates 300K+ matches every month. Rooit is backed by Rakuten, Techstars Accelerator, Expara Venture and more. Rooit’s mission is to make everyone find a confidant, end loneliness. Rooit is moving forward to become the No.1 Web3 Friend-making app based on Ethereum. Users can create their own identity, stories and earn $STAR tokens by raising their alien pet: 'ROO'.",
+    ethereumAddress: "0xb6f59f79F0526d326BB25B57fcCd45Fd8d960AA5",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
+    recipientId: 13,
+    id: "13",
+  },
+  {
+    projectName: "pRoots",
+    tagline:
+      "Founded in 2019, Rooit has 1.2M users around the world, creates 300K+ matches every month. Rooit is backed by Rakuten, Techstars Accelerator, Expara Venture and more...",
+    description:
+      "Founded in 2019, Rooit has 1.2M users around the world, creates 300K+ matches every month. Rooit is backed by Rakuten, Techstars Accelerator, Expara Venture and more. Rooit’s mission is to make everyone find a confidant, end loneliness. Rooit is moving forward to become the No.1 Web3 Friend-making app based on Ethereum. Users can create their own identity, stories and earn $STAR tokens by raising their alien pet: 'ROO'.",
+    ethereumAddress: "0xbcd496ead2415bD438269aE0c4f50cE20242a29A  ",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
+    recipientId: 14,
+    id: "14",
+  },
+  {
+    projectName: "From Learners to Learners",
+    tagline:
+      "Junyiacademy is an education NGO, providing digital learning platform for students from elementary school to high school...",
+    description:
+      "Junyiacademy is an education NGO, providing digital learning platform for students from elementary school to high school. We believe that “every child, from all backgrounds, can be a lifelong learner.” In the past 10 years, we have more than 4,200k registration and 83k active users in Taiwan. With this energy and power, we would like to keep helping students by moving from web2 to web3. Therefore, there will be more interaction among our donators, users and us, and it’s an important step to complete the vision.",
+    ethereumAddress: "0x7623b7a9B74D8D2b4005cEfc87C3a5C592d0f1CB",
+    website: "-",
+    thumbnailImageLink: "https://source.unsplash.com/random",
+    logoCdnUrl: "https://source.unsplash.com/random",
+    bannerImageLink: "https://source.unsplash.com/random",
+    recipientId: 15,
+    id: "15",
+  }
 ];
 
 export function getProjects() {

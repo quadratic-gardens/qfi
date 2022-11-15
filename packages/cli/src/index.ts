@@ -104,14 +104,40 @@ program
   .action((network: string) => {
     recover(network)
   })
-  program
+program
   .command("tally")
   .description("calculates the tally of the current vote offchain")
   .argument("<network>", "the network where the contracts has been deployed")
   .argument("<coordinatorPrivkey>", "MACI privatekey used by coodinator in Diffie Hellman Secret")
   .argument("<matchingPoolAmount>", "Amount of xDAI to use for matching pool (dollar amount)")
-  .action((network: string, coordinatorPrivkey:string, matchingPoolAmount: string) => {
-    tally(network, coordinatorPrivkey, matchingPoolAmount)
-  })
+  .argument("<qfiContractAddress>", "Block QFI contracts were deployed on")
+  .argument("<startBlock>", "Block QFI contracts were deployed on")
+  .argument("<grantRoundStartBlock>", "Block Grant Round Started on")
+  .argument("<firstVoteBlock>", "First block a vote was cast")
+  .argument("<lastblock>", "Last block to check for vote messages on, 'latest' for current block number")
+  .action(
+    (
+      network: string,
+      coordinatorPrivkey: string,
+      matchingPoolAmount: string,
+      qfiContractAddress: string,
+      startBlock: string,
+      grantRoundStartBlock: string,
+      firstVoteBlock: string,
+      lastBlock: string
+    ) => {
+      const optionalLastBlock = lastBlock === "latest" ? "latest" : lastBlock
+      tally(
+        network,
+        coordinatorPrivkey,
+        matchingPoolAmount,
+        qfiContractAddress,
+        startBlock,
+        grantRoundStartBlock,
+        firstVoteBlock,
+        optionalLastBlock
+      )
+    }
+  )
 
 program.parseAsync()
