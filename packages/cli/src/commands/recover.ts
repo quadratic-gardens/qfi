@@ -9,11 +9,11 @@ import { PubKey } from "qaci-domainobjs"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
 // import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
+import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
 
-import { directoryExists, jsonToCsv, makeDir, writeLocalJsonFile } from "../lib/files.js"
+import { directoryExists, jsonToCsv, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
 import {
   coordinatorPubkey,
-  deployedContracts,
   hacksFilePath,
   header,
   mnemonicBaseDirPath,
@@ -23,7 +23,10 @@ import {
   usersStateIndexesFilePath,
   userSignUps,
   maxValues,
-  usersStateIndexesBaseDirPath
+  usersStateIndexesBaseDirPath,
+  jsonRecipientsRecords,
+  deployedContractsBaseDirPath,
+  deployedContractsFilePath
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 
@@ -52,7 +55,24 @@ async function recover(network: string) {
     // Check if users has been already signed up.
     if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
     if (!directoryExists(usersStateIndexesBaseDirPath)) makeDir(usersStateIndexesBaseDirPath)
-    // NOTE: contracts allready deployed.
+
+    // Check if contracts allready deployed.
+
+    // Check for output directory.
+    if (!directoryExists(outputDirPath)) makeDir(outputDirPath)
+
+    // Check if mnemonic already present.
+    if (!directoryExists(mnemonicBaseDirPath) && !directoryExists(mnemonicFilePath))
+      throw new Error(`You must first authenticate by running \`auth \"<your-mnemonic>\"\` command!`)
+
+    // Check if contracts has been already deployed.
+    if (!directoryExists(deployedContractsBaseDirPath) && !directoryExists(deployedContractsFilePath))
+      throw new Error(`You must first deploy QFI/MACI smart contracts by running \`deploy \"<network>\"\` command!`)
+
+    process.stdout.write(`\n`)
+
+    // Retrieve deployed smart contracts addresses.
+    const deployedContracts = readJSONFile(deployedContractsFilePath)
     process.stdout.write(`\n`)
 
     const { provider, wallet } = await connectToBlockchain(network)
@@ -110,11 +130,46 @@ async function recover(network: string) {
     await delay(3)
 
     spinner.stop()
-  
 
-    console.log(`\n${logSymbols.info} SKIP: you are about to register projects\n`)
+    // Get deployed simpleHackathon instance.
+    const simpleHackathon = new ethers.Contract(
+      deployedContracts.SimpleHackathon,
+      SimpleHackathon__factory.abi,
+      deployer
+    )
+
+    console.log(`\n${logSymbols.info} RECOVER: register projects\n`)
+
+    const recipientStateIndex = Number(await simpleHackathon.getRecipientCount())
 
     // Get CSV records.
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = recipientStateIndex; i < jsonRecipientsRecords.length; i++) {
+      const recipientRecord = jsonRecipientsRecords[i]
+      const spinner = customSpinner(`Adding recipient in position ${chalk.bold(i)}`, "point")
+      spinner.start()
+
+      // Check input data.
+
+      // Create metadata.
+      const { ethereumAddress, ...metadataJSON } = recipientRecord
+      const metadata = JSON.stringify(metadataJSON)
+
+      // Create tx.
+      const tx = await simpleHackathon.connect(deployer).addRecipient(recipientRecord.ethereumAddress, metadata, {
+        gasPrice: doubleGasPrice,
+        gasLimit: ethers.utils.hexlify(10000000)
+      })
+      await tx.wait()
+
+      spinner.stop()
+      console.log(
+        `${logSymbols.success} Recipient #${chalk.bold(i)} (${chalk.bold(
+          recipientRecord.projectName
+        )}) has been successfully registered on-chain`
+      )
+    }
 
     console.log(`\n${logSymbols.success} You have successfully registered the recipients on-chain 🎊\n`)
 
@@ -127,8 +182,6 @@ async function recover(network: string) {
     await delay(30)
 
     spinner.stop()
-
-    
 
     const stateIndexes = []
 

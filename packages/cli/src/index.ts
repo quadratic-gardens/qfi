@@ -112,6 +112,7 @@ program
   .argument("<matchingPoolAmount>", "Amount of xDAI to use for matching pool (dollar amount)")
   .argument("<qfiContractAddress>", "Block QFI contracts were deployed on")
   .argument("<startBlock>", "Block QFI contracts were deployed on")
+  .argument("<grantRoundStartBlock>", "Block Grant Round Started on")
   .argument("<firstVoteBlock>", "First block a vote was cast")
   .argument("<lastblock>", "Last block to check for vote messages on, 'latest' for current block number")
   .action(
@@ -121,11 +122,21 @@ program
       matchingPoolAmount: string,
       qfiContractAddress: string,
       startBlock: string,
-      firstVoteBlock:string,
+      grantRoundStartBlock: string,
+      firstVoteBlock: string,
       lastBlock: string
     ) => {
-      var optionalLastBlock = lastBlock == "latest" ? "latest" : lastBlock
-      tally(network, coordinatorPrivkey, matchingPoolAmount, qfiContractAddress, startBlock, firstVoteBlock,  optionalLastBlock)
+      const optionalLastBlock = lastBlock === "latest" ? "latest" : lastBlock
+      tally(
+        network,
+        coordinatorPrivkey,
+        matchingPoolAmount,
+        qfiContractAddress,
+        startBlock,
+        grantRoundStartBlock,
+        firstVoteBlock,
+        optionalLastBlock
+      )
     }
   )
 

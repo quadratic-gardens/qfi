@@ -6,7 +6,7 @@
 import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
-import { BigNumber, BigNumberish, ethers } from "ethers"
+import { ethers } from "ethers"
 import { Message, PubKey, PrivKey, Keypair } from "qaci-domainobjs"
 import { MaciState } from "qaci-core"
 
@@ -14,9 +14,10 @@ import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js
 import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
 import { GrantRound__factory } from "../../../contracts/typechain/factories/GrantRound__factory.js"
 
-import { cleanDir, directoryExists, makeDir, writeLocalJsonFile } from "../lib/files.js"
+import { directoryExists, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
 import {
-  deployedContracts,
+  deployedContractsBaseDirPath,
+  deployedContractsFilePath,
   header,
   jsonRecipientsRecords,
   mnemonicBaseDirPath,
@@ -62,14 +63,13 @@ async function tally(
   matchingPoolAmount: string,
   qfiContractAddress: string,
   startBlock: string,
+  grantRoundStartBlock: string,
   firstVoteBlock: string,
   lastBlock: string
 ) {
   clear()
 
   console.log(header)
-  //  TODO: save to local file
-  // Save to local file.
   const maciBasePath = `${outputDirPath}/maci`
   const signUpsFilePath = `${outputDirPath}/maci/Signups.json`
   const grantRoundsFilePath = `${outputDirPath}/maci/GrantRounds.json`
@@ -86,14 +86,24 @@ async function tally(
       throw new Error(`You must first authenticate by running \`auth \\"<your-mnemonic>\\"\` command!`)
     process.stdout.write(`\n`)
 
+    // Check for output directory.
+    if (!directoryExists(outputDirPath)) makeDir(outputDirPath)
+
+    // Check if mnemonic already present.
+    if (!directoryExists(mnemonicBaseDirPath) && !directoryExists(mnemonicFilePath))
+      throw new Error(`You must first authenticate by running \`auth \"<your-mnemonic>\"\` command!`)
+
+    // Check if contracts has been already deployed.
+    if (!directoryExists(deployedContractsBaseDirPath) && !directoryExists(deployedContractsFilePath))
+      throw new Error(`You must first deploy QFI/MACI smart contracts by running \`deploy \"<network>\"\` command!`)
+
+    process.stdout.write(`\n`)
+
+    // Retrieve deployed smart contracts addresses.
+    const deployedContracts = readJSONFile(deployedContractsFilePath)
+
     /** NOTE: Set up Web3 Provider */
     const { provider, wallet } = await connectToBlockchain(network)
-    const balanceInEthers = ethers.utils.formatEther((await wallet.getBalance()).toString())
-
-    const gasPrice = await provider.getGasPrice()
-    const double = BigNumber.from("2")
-    const doubleGasPrice = gasPrice.mul(double)
-    const gasLimit = ethers.utils.hexlify(10000000)
 
     const deployer = wallet
     const { confirmation: preFlightCheck } = await askForConfirmation(
@@ -125,7 +135,9 @@ async function tally(
     const deployTime = Number(dd[0])
     const duration = Number(dd[1])
     const BLOCKSPERDAY = 43200
+
     const firstBlock = parseInt(startBlock)
+    const firstGrantRoundBlock = parseInt(grantRoundStartBlock)
     const firstVote = parseInt(firstVoteBlock)
     const lastBlockSignups = (4 / 24) * BLOCKSPERDAY + firstBlock
     const lastBlockVotes = lastBlock == "latest" ? currentBlock : parseInt(lastBlock)
@@ -213,12 +225,12 @@ async function tally(
     try {
       // NOTE: Get GrantRound Actions from GrantRound Smart Contracts
       let grantRoundLogs = [] as any[]
-      for (let i = firstBlock; i < lastBlockSignups; i += numBlocksPerRequest + 1) {
+      for (let i = firstGrantRoundBlock; i < lastBlockSignups; i += numBlocksPerRequest + 1) {
         const fromBlock = i >= currentBlock ? currentBlock : i
         const toBlock = i + numBlocksPerRequest >= currentBlock ? currentBlock : i + numBlocksPerRequest
         const logs = await provider.getLogs({
           ...qfi.filters.GrantRoundDeployed(),
-          fromBlock: fromBlock,
+          fromBlock,
           toBlock
         })
 
@@ -390,7 +402,7 @@ async function tally(
     // NOTE: Proof Generation offchain
     const tallyVotesVerifierInputsByBatch = tallyVotesCircuitInputsByBatch.map((circuitInputs, batchNumber) => {
       // NOTE: these are required for the Verifier Contract onchain
-
+    
       const { newTallyCommitment } = circuitInputs
       const { newResultsRootSalt } = circuitInputs
       const { newSpentVoiceCreditSubtotalSalt } = circuitInputs
@@ -406,46 +418,55 @@ async function tally(
       }
     })
 
-
-    const unencryptedCommands = maciPoll.commands.map((command) => {
-      console.log(`ID: ${command.voteOptionIndex}: ${command.newVoteWeight} by voter:${command.stateIndex} with nonce:${command.nonce}`)
-      return {
-        voteOption: command.voteOptionIndex,
-        nonce: Number(command.nonce),
-        newVoteWeight: Number(command.newVoteWeight),
-        voterID: command.stateIndex
-      }
-    }).reverse()
+    const unencryptedCommands = maciPoll.commands
+      .map((command) => {
+        console.log(
+          `ID: ${command.voteOptionIndex}: ${command.newVoteWeight} by voter:${command.stateIndex} with nonce:${command.nonce}`
+        )
+        return {
+          voteOption: command.voteOptionIndex,
+          nonce: Number(command.nonce),
+          newVoteWeight: Number(command.newVoteWeight),
+          voterID: command.stateIndex
+        }
+      })
+      .reverse()
 
     const memo = {}
-    const easyTally = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    const easyVOTally = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    const easyTally = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ]
+    const easyVOTally = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ]
     for (const { voteOption, nonce, newVoteWeight, voterID } of unencryptedCommands) {
-
-
       //check if voter in memo
-      if (memo[voterID]){
+      if (memo[voterID]) {
         // check if nonce is used
-        if (memo[voterID]?.includes(nonce)){
+        if (memo[voterID]?.includes(nonce)) {
           //if nonce exists do nothing
-          
-        }else{
+        } else {
           //if nonce doesnt exist update tally
           easyTally[voteOption] += newVoteWeight
           easyVOTally[voteOption] += newVoteWeight * newVoteWeight
           //and add to memo
           memo[voterID].push(nonce)
         }
-      // if the voter not in memo  and add to memo as you go
-      }else {
+        // if the voter not in memo  and add to memo as you go
+      } else {
         // add the voter to memo
-        memo[voterID]=[];
+        memo[voterID] = []
         // update tally
         easyTally[voteOption] += newVoteWeight
         easyVOTally[voteOption] += newVoteWeight * newVoteWeight
         //and add nonce to memo
         memo[voterID].push(nonce)
-        
       }
     }
 

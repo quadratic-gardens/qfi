@@ -16,6 +16,7 @@ export const getNetworkExplorerUrl = (networkName: string): string => {
   if (networkName === networks.arbitrumRinkeby.name) return networks.arbitrumRinkeby.explorer
   if (networkName === networks.kovan.name) return networks.kovan.explorer
   if (networkName === networks.matic.name) return networks.matic.explorer
+  if (networkName === networks.goerli.name) return networks.goerli.explorer
   return networks.localhost.explorer
 }
 
@@ -33,6 +34,7 @@ export const getProvider = (network: string): JsonRpcProvider => {
   else if (network === networks.arbitrumRinkeby.name) selectedNetwork = networks.arbitrumRinkeby
   else if (network === networks.kovan.name) selectedNetwork = networks.kovan
   else if (network === networks.matic.name) selectedNetwork = networks.matic
+  else if (network === networks.goerli.name) selectedNetwork = networks.goerli
   else selectedNetwork = networks.localhost
   const provider = new JsonRpcProvider(selectedNetwork.rpcUrl, selectedNetwork.name)
 
