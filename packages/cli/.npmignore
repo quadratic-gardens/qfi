@@ -1,0 +1,9 @@
+# dependencies
+node_modules/
+yarn-error.log
+
+# environment
+.env
+
+# output
+output/**/*

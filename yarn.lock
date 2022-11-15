@@ -3872,9 +3872,9 @@
     "mustache" "^4.2.0"
     "qaci-contracts" "^1.1.9"
 
-"@qfi/ethtaiwancli@^3.8.0", "@qfi/ethtaiwancli@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/cli":
+"@qfi/ethtaiwancli@file:/Users/Q/Desktop/git/quadratic-funding/qfi/packages/cli":
   "resolved" "file:packages/cli"
-  "version" "3.8.0"
+  "version" "3.8.1"
   dependencies:
     "chalk" "^5.0.1"
     "clear" "^0.1.0"

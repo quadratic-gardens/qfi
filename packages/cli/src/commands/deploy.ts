@@ -71,7 +71,7 @@ async function deploy(network: string) {
     const { wallet, provider } = await connectToBlockchain(network)
     let gasPrice = await provider.getGasPrice()
     let doubleGasPrice = gasPrice.mul(BigNumber.from(2))
-    let gasLimit = ethers.utils.hexlify(4000000)
+    let gasLimit = ethers.utils.hexlify(10000000)
     /** DEPLOY MACI/QFI SMART CONTRACTS */
     const deployer = wallet
     const deployerAddress = wallet.address
