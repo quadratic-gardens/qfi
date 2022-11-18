@@ -120,22 +120,14 @@ export const Home = () => {
                 <AccordionItem border="none" w={"full"}>
                   <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                     <Heading textAlign={"left"} size="md">
-                      跨界合作：總統盃黑客松
+                      跨界合作：1st WAGMI Pitch Battle
                     </Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm" py={2}>
-                      平方投票法是套集體決策程序。參與決策的投票者透過分配投票來表達偏好及偏好的程度。藉此，平方投票試圖解決多數決的常見難題，如投票悖論、棄保效應及配票。為推廣平方投票法的優點，本協會響應總統盃黑客松解決台灣永續相關議題之目標，並支持優良新創項目得以永續發展，將於
-                      N24 台北方舟區塊鏈創新育成基地舉辦平方募資活動。
-                    </Text>
-
-                    <Text fontSize="sm" py={2}>
-                      「2022 總統盃黑客松」以國家發展藍圖為本，超越 GDP (Beyond GDP)
-                      的發展理念，融入國、內外發展情勢，以『安居永續‧均衡臺灣』為競賽主題，從「安居樂業」(SDGs
-                      社會面)、「永續發展」(SDGs 經濟面) 及「均衡臺灣」(SDGs 環境面)
-                      三大面向，號召全民許願、黑客解題，希冀透過公私協力，共創經濟、社會及環境都具幸福感的安居臺灣。
+                      第一屆全英文 WAGMI Pitch Battle，擴散公共財理念，廣邀國內外新創團隊參賽，及邀請國內業界知名專家擔任評審，並且採用平方投票法，使用去中心錢包投票，透過智能合約分配獎勵。其中團隊題目包含 DeFi、GameFi、Infra&Tools、DAO、NFT＆Metaverse 等領域。讓國際視界走入台北，提高臺灣區塊鏈生態在世界的能見度。
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
