@@ -13,7 +13,7 @@ enum KeyType {
 
 export const Admin = () => {
   const color = useColorModeValue("gray.800", "gray.700");
-
+  
   const [key, setKey] = useState<string>();
   const [keyType, setKeyType] = useState<string>();
   const [openQRCodeReader, setOpenQRCodeReader] = useState(false);

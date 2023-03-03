@@ -188,13 +188,13 @@ export const Apply = () => {
                                 </Heading>
                             )}
                             <Text textAlign="justify" mb={4}>
-                                <Trans i18nKey="Submitting your project makes you eligible to receive funds provided for the QF initiative at ETHCommunity, <strong>but does not guarantee funding</strong>. There will be a filter to the initiatives presented carried out by a group of volunteers from QF ETHCommunity to determine that the initiatives are in accordance with the requirements and that they’re initiatives that do not go against the law." />
+                                <Trans i18nKey="Submitting your project makes you eligible to receive funds provided for the QF initiative at ETHLatam, <strong>but does not guarantee funding</strong>. There will be a filter to the initiatives presented carried out by a group of volunteers from QF ETH Latam to determine that the initiatives are in accordance with the requirements and that they’re initiatives that do not go against the law." />
                             </Text>
                             <Text textAlign="justify" mb={4}>
-                                {t("This financing is a donation and has no associated reports, returns, or obligations on the part of the project. How much each project receives will be decided by ETHCommunity attendees who vote during the event. If you are unsure about this, feel free to contact the team at sponsors@ETHCommunity.org.")}
+                                {t("This financing is a donation and has no associated reports, returns, or obligations on the part of the project. How much each project receives will be decided by ETHLatam attendees who vote during the event. If you are unsure about this, feel free to contact the team at sponsors@ethlatam.org.")}
                             </Text>
                             <Text textAlign="justify" mb={4}>
-                                {t("This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@ETHCommunity.org.")}
+                                {t("This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@ethlatam.org.")}
                             </Text>
                             <Alert status='warning' mb={4}>
                                 <AlertIcon />
@@ -204,12 +204,12 @@ export const Apply = () => {
                             </Alert>
 
                             <Text textAlign="justify" mb={4}>
-                                <Trans i18nKey="Unfortunately, the projects or teams will not be able to appear on stage during ETHCommunity, but we do empower them to use the hashtag #ETHCommunityQF in your social media posts so that you show and tell attendees about your impact on public goods." />
+                                <Trans i18nKey="Unfortunately, the projects or teams will not be able to appear on stage during ETHLatam, but we do empower them to use the hashtag #ETHLatamQF in your social media posts so that you show and tell attendees about your impact on public goods." />
                             </Text>
                             <Text textAlign="justify" mb={4}>
-                                {t("If you post on Twitter, tag @ETHCommunity and use the corresponding hashtags to achieve greater reach. You can also post within the")}{" "}
-                                <a href={"https://t.me/ETHCommunity"} rel="noreferrer" target="_blank">
-                                    {t("ETHCommunity Telegram group")}
+                                {t("If you post on Twitter, tag @ETHLatam and use the corresponding hashtags to achieve greater reach. You can also post within the")}{" "}
+                                <a href={"https://t.me/ethlatam"} rel="noreferrer" target="_blank">
+                                    {t("ETHLatam Telegram group")}
                                 </a>{" "}
                                 {t("using the hashtag #QF in your post.")}
                             </Text>
@@ -249,12 +249,12 @@ export const Apply = () => {
                                                 </ListItem>
                                                 <ListItem mb={4}>
                                                     {t(
-                                                        "The ETHCommunity team will contact you if they need to clarify something or if they need more details."
+                                                        "The ETHLatam team will contact you if they need to clarify something or if they need more details."
                                                     )}
                                                 </ListItem>
                                                 <ListItem mb={4}>
                                                     {t(
-                                                        "If you have any questions during the application process, send an email to sponsors@ETHCommunity.org before the submission deadline."
+                                                        "If you have any questions during the application process, send an email to sponsors@ethlatam.org before the submission deadline."
                                                     )}
                                                 </ListItem>
                                             </UnorderedList>

@@ -39,7 +39,7 @@ export const BallotExplainer = () => {
             </VStack>
             <AccordionPanel pb={4}>
               <UnorderedList
-                fontFamily="Noto Sans TC"
+                fontFamily="Space Grotesk"
                 marginInlineStart="1rem !important"
                 w="full"
               >

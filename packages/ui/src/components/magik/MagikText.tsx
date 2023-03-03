@@ -67,7 +67,7 @@ export type MagikTextProps = Omit<TextProps, "fontFamily"> &
   PropsWithChildren<{
     text: string;
     charPoses: CharPoses;
-    fontFamily: "Futura" | "Helvetica" | "Arial" | "Dahlia" |"DahliaCondensed"| "sans-serif";
+    fontFamily: "Futura" | "Helvetica" | "Arial" | "Dahlia" |"DahliaCondensed"| "Space Grotesk" | "sans-serif";
   }>;
 
 export const MagikText: React.FC<MagikTextProps> = ({ children, charPoses, text, ...props }) => (

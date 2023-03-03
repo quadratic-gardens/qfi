@@ -23,57 +23,64 @@ type WalletContextType = {
 };
 
 export const SUPPORTED_NETWORKS: NetworkConfig = {
-  "0x5": {
-    chainId: "0x5",
-    name: "Goerli",
-    symbol: "Goerli ETH",
-    explorer: "https://goerli.etherscan.io",
-    rpc: "https://rpc.ankr.com/eth_goerli",
+  "0x1": {
+    chainId: "0x1",
+    name: "Mainnet",
+    symbol: "ETH",
+    explorer: "https://etherscan.io",
+    rpc: "https://mainnet.infura.io/v3/<your infura project id>",
   },
-  // "0x1": {
-  //   chainId: "0x1",
-  //   name: "Mainnet",
-  //   symbol: "ETH",
-  //   explorer: "https://etherscan.io",
-  //   rpc: "https://rpc.ankr.com/eth",
-  // },
-  // "0x64": {
-  //   chainId: "0x64",
-  //   name: "Gnosis Chain",
-  //   symbol: "Gnosis Chain",
-  //   explorer: "https://blockscout.com/Gnosis Chain/mainnet/",
-  //   rpc: "https://rpc.gnosischain.com/",
-  // },
-  // "0x89": {
-  //   chainId: "0x89",
-  //   name: "Polygon Mainnet",
-  //   symbol: "MATIC",
-  //   explorer: "https://polygonscan.com/",
-  //   rpc: "https://polygon-mainnet.g.alchemy.com/v2/7afvptVsZxjFBz8Mcdm4dpu84IekOGds",
-  // },
-  // "0x539": {
-  //   chainId: "0x539",
-  //   name: "Hardhat",
-  //   symbol: "ETH",
-  //   explorer: "http://localhost:1234",
-  //   rpc: "http://localhost:8545",
-  // },
-  // "0x13881": {
-  //   chainId: "0x13881",
-  //   name: "Mumbai Testnet",
-  //   symbol: "MATIC",
-  //   explorer: "https://mumbai.polygonscan.com",
-  //   rpc: "https://matic-mumbai.chainstacklabs.com",
-  // },
+  "0x64": {
+    chainId: "0x64",
+    name: "Gnosis Chain",
+    symbol: "xDai",
+    explorer: "https://blockscout.com/xdai/mainnet/",
+    rpc: "https://rpc.gnosischain.com/",
+  },
+  "0x89": {
+    chainId: "0x89",
+    name: "Polygon Mainnet",
+    symbol: "MATIC",
+    explorer: "https://polygonscan.com/",
+    rpc: "https://polygon-mainnet.g.alchemy.com/v2/7afvptVsZxjFBz8Mcdm4dpu84IekOGds",
+  },
+  "0x539": {
+    chainId: "0x539",
+    name: "Hardhat",
+    symbol: "ETH",
+    explorer: "http://localhost:1234",
+    rpc: "http://localhost:8545",
+  },
+  "0x13881": {
+    chainId: "0x13881",
+    name: "Mumbai Testnet",
+    symbol: "MATIC",
+    explorer: "https://mumbai.polygonscan.com",
+    rpc: "https://matic-mumbai.chainstacklabs.com",
+  },
 };
 
 export const providerOptions: IProviderOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      infuraId: "9be520000cc54a60983cf49a7b75b59e", // relace with your infura API KEY
+      infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
       rpc: {
-        5: SUPPORTED_NETWORKS["0x5"].rpc,
+        1: SUPPORTED_NETWORKS["0x1"].rpc,
+        100: SUPPORTED_NETWORKS["0x64"].rpc,
+        1337: SUPPORTED_NETWORKS["0x539"].rpc,
+      },
+    },
+  },
+  walletlink: {
+    package: CoinbaseWalletSDK,
+    options: {
+      appName: "QFI",
+      infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
+      rpc: {
+        1: SUPPORTED_NETWORKS["0x1"].rpc,
+        100: SUPPORTED_NETWORKS["0x64"].rpc,
+        1337: SUPPORTED_NETWORKS["0x539"].rpc,
       },
     },
   },
@@ -379,14 +386,12 @@ export const useWallet = (): WalletContextType => useContext(WalletContext);
 
 export const nameToChainId = (name: string): string | undefined => {
   switch (name) {
-    case "Gnosis Chain":
+    case "xdai":
       return "0x64";
     case "polygon":
       return "0x89";
     case "Mainnet":
       return "0x1";
-    case "Goerli":
-      return "0x5";
     case "Hardhat":
       return "0x539";
     case "Polygon":

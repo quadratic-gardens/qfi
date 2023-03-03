@@ -2,8 +2,6 @@ import {
   VStack,
   Container,
   Text,
-  Link,
-  Icon,
   Heading,
   Drawer,
   DrawerOverlay,
@@ -19,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 
 import { useTranslation, Trans } from "react-i18next";
-import { HiQrcode, HiCollection, HiExternalLink } from "react-icons/hi";
 
 const Guide = () => {
   const { t } = useTranslation();
@@ -71,14 +68,6 @@ const Guide = () => {
             )}
           </Text>
           <Text>
-            {t("點擊右方圖示閱讀有關 MACI 的更多信息"
-             )}
-             {" "}
-            <Link href="https://github.com/privacy-scaling-explorations/maci/blob/master/specs/01_introduction.md" isExternal>
-              <Icon as={HiExternalLink} boxSize={4} color="gray.500" />
-            </Link>
-          </Text>
-          <Text>
             {t(
               "Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it."
             )}
@@ -95,9 +84,9 @@ const Guide = () => {
             {t("We know this might be confusing, need help?")}
           </Heading>
           <Text>
-            {t("Drop us a line at sponsors@ETHCommunity.org or join the")}{" "}
-            <a href={"https://t.me/ETHCommunity"} rel="noreferrer" target="_blank">
-              {t("ETHCommunity Telegram group")}
+            {t("Drop us a line at sponsors@ethlatam.org or join the")}{" "}
+            <a href={"https://t.me/ethlatam"} rel="noreferrer" target="_blank">
+              {t("ETHLatam Telegram group")}
             </a>{" "}
             {t("using the hashtag #QF in your post.")}
           </Text>
@@ -124,7 +113,7 @@ const Guide = () => {
                     <VStack spacing={6} alignItems="flex-start">
                       <Text fontSize="xs">
                         {t(
-                          "ETHCommunity team will send your MACI key the email address you used to register for the event."
+                          "ETHLatam team will send your MACI key the email address you used to register for the event."
                         )}
                       </Text>
                     </VStack>
@@ -195,6 +184,21 @@ const Guide = () => {
                     </VStack>
                     <AccordionPanel pb={4}>
                       <VStack spacing={6} alignItems="flex-start">
+                        <Text fontSize="xs">
+                          {t(
+                            "Web3 and social impact initiatives that contribute to the Argentine ecosystem can register to receive funding. Within the 'Project List' page of the website you can learn about them and visit their websites and social networks to learn more."
+                          )}
+                        </Text>
+                        <Text fontSize="xs">
+                          {t(
+                            "If you want to vote for a project, press the purple button with the vote icon on the ballot process, once the vote is confirmed a pop-up will appear notifying the successful registration of the vote. Look at all the projects and choose the ones you want to support (up to 8 in total)."
+                          )}
+                        </Text>
+                        <Text fontSize="xs">
+                          {t(
+                            "Disclaimer: These projects will not be presented during the event, it will be up to you to read and choose which projects you want to vote for to receive the funds made available by the generous donors."
+                          )}
+                        </Text>
                         <Text fontSize="xs">
                           {t(
                             "You can choose up to 8 projects to vote for, or fewer, as you prefer. With your MACI password you can change your vote before voting closes."
@@ -322,4 +326,3 @@ export const GuideDrawer = ({ isOpen, onClose }: GuideDrawerProps) => {
     </Drawer>
   );
 };
-

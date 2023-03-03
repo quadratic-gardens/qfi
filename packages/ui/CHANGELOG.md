@@ -3,36 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [3.7.0](https://github.com/quadratic-funding/qfi/compare/v3.5.5...v3.7.0) (2022-11-07)
-
-
-### Features
-
-* modify the projects data and the provider network setting ([e5dc704](https://github.com/quadratic-funding/qfi/commit/e5dc704ce3c4d2eb7b1d661935f5729c6a3b3988))
-
-
-
-
-
-## [3.5.4](https://github.com/quadratic-funding/qfi/compare/v3.5.3...v3.5.4) (2022-10-19)
-
-**Note:** Version bump only for package @qfi/ui
-
-
-
-
-
-## [3.4.2](https://github.com/quadratic-funding/qfi/compare/v3.1.0...v3.4.2) (2022-09-27)
-
-
-### Bug Fixes
-
-* fix projects mobile ([f6d00a6](https://github.com/quadratic-funding/qfi/commit/f6d00a61ae7adb8d9ee0b3851d44cc5581c0d655))
-
-
-
-
-
 # [2.1.0](https://github.com/quadratic-funding/qfi/compare/v2.0.1...v2.1.0) (2022-07-08)
 
 

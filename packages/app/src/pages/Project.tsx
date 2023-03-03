@@ -35,8 +35,9 @@ const shortenEthAddress = (address: string) => {
 
 export function Project() {
   const { t } = useTranslation();
-
-  const backgroundColor = useColorModeValue("background.0", "background.1000");
+  const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+  const color = useColorModeValue("gray.900", "#FDFDFD"); 
+ 
   const toast = useToast();
   let { projectId } = useParams();
   let navigate = useNavigate();
@@ -73,8 +74,6 @@ export function Project() {
 
   let project = getProject(projectId ?? "0");
 
-  const borderColor = useColorModeValue("border.1000", "border.0");
-  const textColor = useColorModeValue("text.1000", "text.0");
   const handleAddToBallot = useCallback(() => {
     if (searchParams.getAll("option").length >= 8) {
       toast({
@@ -107,7 +106,7 @@ export function Project() {
       as="main"
       h="full"
       flex={1}
-      borderRightColor={borderColor}
+      borderRightColor={color}
       borderRightWidth={1}
       overflowY={"scroll"}
       sx={{
@@ -137,7 +136,7 @@ export function Project() {
         >
           <VStack
             pb={120}
-            borderColor={borderColor}
+            borderColor={color}
             borderLeftWidth={1}
             borderRightWidth={1}
             my={0}
@@ -151,7 +150,7 @@ export function Project() {
               mt={0.5}
               py={0.5}
               w="full"
-              borderBottomColor={borderColor}
+              borderBottomColor="gray.100"
               borderBottomWidth={1}
             >
               <VStack
@@ -182,7 +181,7 @@ export function Project() {
                 </Heading>
                 <Text
                   px={2}
-                  color={textColor}
+                  color="gray.600"
                   fontSize="xs"
                   lineHeight="16px"
                   fontWeight="400"
@@ -205,20 +204,18 @@ export function Project() {
                 sx={{
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  background: `rgb(26, 31, 41) url('${project?.logoCdnUrl}') `,
+                  background: `rgb(26, 31, 41) url('${project?.bannerImageLink}') `,
                   backgroundSize: "cover",
                 }}
               >
                 <AspectRatio position="relative" ratio={16 / 9}>
-                <Image
-                  h="full"
-                  w="auto"
-                  position="relative"
-                  src={project.bannerImageLink}
-                  alt={project.projectName}
-            
-                />
-                 
+                  <Image
+                    h="full"
+                    w="auto"
+                    position="relative"
+                    src={project.bannerImageLink}
+                    alt={project.projectName}
+                  />
                 </AspectRatio>
               </Box>
             </VStack>
@@ -230,7 +227,7 @@ export function Project() {
               spacing={0}
             >
               <AspectRatio
-                borderColor={borderColor}
+                borderColor="grey.300"
                 borderWidth={3}
                 zIndex="1"
                 w={{ base: "25%", md: "25%" }}
@@ -251,13 +248,13 @@ export function Project() {
 
               <Button
                 fontSize="15px"
-                variant="secondary"
+                variant="porto"
                 onClick={
                   isInBallot
                     ? handleRemoveFromBallot(projectId?.toString() ?? "noop")
                     : handleAddToBallot
                 }
-                height={{ base: "30px", md: "40px" }}
+               
                 marginTop={{
                   base: "-12% !important",
                   sm: "-5% !important",
@@ -267,13 +264,15 @@ export function Project() {
               >
                 <HStack px={4}>
                   <Icon
-                    color={textColor}
+                    color={color}
+                   alignContent="center"
+                   alignItems={"center"}
+                   justifyContent="center"
                     position="relative"
                     z-index={20}
                     boxSize="15px"
                     fontWeight="black"
                     _hover={{
-                      color: "black",
                       transform: "scale(1.1)",
                     }}
                   >
@@ -283,6 +282,7 @@ export function Project() {
                     ></path>
                   </Icon>
                   <Text
+                    color={color}
                     display={{ base: "none", md: "block" }}
                     fontSize={["xs", "sm", "sm", "sm"]}
                     fontWeight="800"
@@ -309,7 +309,7 @@ export function Project() {
                   {project.projectName}
                 </Heading>
                 <Text
-                  color={textColor}
+                  color="gray.600"
                   fontSize="xs"
                   lineHeight="14px"
                   fontWeight="400"

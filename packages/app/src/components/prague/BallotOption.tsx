@@ -10,7 +10,6 @@ import {
   Icon,
   Center,
   Button,
-  useColorModeValue
 } from "@chakra-ui/react";
 import {
   createSearchParams,
@@ -30,8 +29,6 @@ export const BallotOption = ({
   lastOption,
   onClick
 }: BallotOptionProps) => {
-  const borderColor = useColorModeValue("border.1000", "border.0")
-  const textColor = useColorModeValue("text.1000", "text.0");
   const { t } = useTranslation();
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   let [searchParams] = useSearchParams();
@@ -62,8 +59,8 @@ export const BallotOption = ({
   return (
     <Stack
       boxSizing="content-box"
-      fontFamily="arial"
-      borderColor= {{ borderColor}}
+      fontFamily="Space Grotesk"
+      borderColor="#FAF7F5"
       borderTopWidth={2}
       borderLeftWidth={2}
       borderRightWidth={2}
@@ -77,7 +74,7 @@ export const BallotOption = ({
     >
       <VStack
 
-        borderRightColor={{ borderColor}}
+        borderRightColor="#FAF7F5"
         borderRightWidth={2}
         spacing={0}
         justifyContent="center"
@@ -88,7 +85,7 @@ export const BallotOption = ({
         <Text fontSize={20} fontWeight="bold" mx={2}>
           {votes ?? 0}
         </Text>
-        <Text fontSize={20} fontFamily="Noto Sans TC" mx={2}>
+        <Text fontSize={20} fontFamily="Space Grotesk" mx={2}>
           {t("CREDITS")}
         </Text>
       </VStack>
@@ -109,7 +106,7 @@ export const BallotOption = ({
           <Text
             as={Link}
             to={`${to}?${searchParams.toString()}` ?? "/projects"}
-            fontFamily="arial"
+            fontFamily="Space Grotesk"
             fontSize={{ base: "sm", md: "sm" }}
             fontWeight="thin"
             lineHeight="base"
@@ -151,7 +148,7 @@ export const BallotOption = ({
             size="sm"
             fontSize="lg"
             variant="ghost"
-            color="textColor"
+            color="gray.600"
             marginLeft="2"
             onClick={handleRemoveFromBallot(ballotOption?.id ?? "")}
             icon={<FaWindowClose />}
@@ -188,7 +185,7 @@ export const BallotOption = ({
               // bgImg={hero2}
               // backgroundPosition="center"
               rounded={"full"}
-              borderColor={{ borderColor}}
+              borderColor="#E573E5"
               _hover={{
                 borderColor: "#80FF9F",
                 transform: "scale(1.1)",
@@ -197,7 +194,7 @@ export const BallotOption = ({
               boxSize="50px">
               <Center>
                 <Icon
-                  color={textColor}
+                  color="#E573E5"
                   position="relative"
                   zIndex={1}
                   boxSize={"8"}

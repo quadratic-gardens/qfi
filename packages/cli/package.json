@@ -1,5 +1,5 @@
 {
-  "name": "@qfi/zkplaygroundcli",
+  "name": "@qfi/ethPortocli",
   "version": "3.7.2",
   "description": "An easy-to-use CLI for supporting admin/operator activities for QFI",
   "main": "dist/cli/src/index.js",
@@ -17,7 +17,7 @@
     "README.md"
   ],
   "bin": {
-    "zkplaygroundcli": "dist/cli/src/index.js"
+    "ethPortocli": "dist/cli/src/index.js"
   },
   "scripts": {
     "build": "tsc",

@@ -15,12 +15,14 @@ import {
   Input,
   Tooltip,
   useMediaQuery,
+  AspectRatio,
 } from "@chakra-ui/react";
 
 import { MagikButton } from "@qfi/ui";
 import { getProject, getRecipientIdbyId } from "../data";
 import { Option } from "../propTypes";
 import { BallotOption } from "../components/prague/BallotOption";
+import { Hero } from "../components/Hero";
 import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDappState } from "../context/DappContext";
@@ -82,7 +84,7 @@ const SubmitBallotButton = ({
         display="block"
         disabled={disableSubmitButton}
         onClick={onSubmit}
-        variant={!disableSubmitButton ? "primary" : "secondary"}
+        variant={"porto"}
         fontSize={{ base: "md", xl: "lg" }}
       >
         <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
@@ -106,6 +108,8 @@ const headerYourBallotLogo = {
 };
 
 export const Ballot = () => {
+  const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+ 
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
@@ -192,7 +196,7 @@ export const Ballot = () => {
   const displayOptions: boolean = useMemo(() => {
     return recipientRegistryIds.length > 0;
   }, [recipientRegistryIds]);
-  const borderColor = useColorModeValue("border.0", "border.10000");
+  const color = useColorModeValue("gray.800", "gray.700");
   const [ballotOptions, setBallotOptions] = useState<number[]>([]);
   const [ballotData, setBallotData] = useState<Option[]>([]);
   const [voiceCreditBalance, setVoiceCreditBBalance] = useState(0);
@@ -460,7 +464,7 @@ export const Ballot = () => {
   const handleSubmit = async () => {
     console.log(isMaciPrivKey(maciKey));
     const signer = provider.getSigner(address);
-    const grantRoundAddress = "0x7b715BdCB5b6D7438FE84f36Eb589A1aE8307a70";
+    const grantRoundAddress = "0xF1D72F065fcBF6e1Ad623456fBb05A8777E27052";
 
     const grantRound = new ethers.Contract(
       grantRoundAddress,
@@ -564,10 +568,10 @@ export const Ballot = () => {
       as="main"
       h="full"
       w="full"
-    
+      bg={backgroundColor}
       alignItems="center"
       flexDir="column"
-      borderRightColor={borderColor}
+      borderRightColor={color}
       borderRightWidth={1}
       overflowY="scroll"
       sx={{
@@ -589,22 +593,27 @@ export const Ballot = () => {
     >
       <Container style={{ marginTop: 64, maxWidth: 1042 }}>
         {isViewportMd ? (
-          <Heading maxW={{ md: 595, base: 250 }}>
-            <img src={headerYourBallotLogo[currLang]} alt={t("YOUR BALLOT")} />
+          <Heading w="full">
+            <AspectRatio ratio={24 / 4} w='full'overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
+              <Hero/>
+            </AspectRatio>
           </Heading>
         ) : (
           <Flex w="full" alignItems="center" flexDirection="column">
-            <Heading maxW={{ md: 595, base: 250 }}>
-              <img
-                src={headerYourBallotLogo[currLang]}
-                alt={t("YOUR BALLOT")}
-              />
+            <Heading w="full">
+              <AspectRatio ratio={24 / 4} w='full'overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
+                <Hero/>
+              </AspectRatio>
             </Heading>
-            <MagikButton mt={6} maxWidth={{ md: 175 }} />
+            <MagikButton 
+        borderRadius={"8px"} mt={6} maxWidth={{ md: 175 }} />
           </Flex>
         )}
 
         <VStack spacing={2} alignItems="flex-start" w="full">
+        <Heading style={{ marginTop: 56 }} textAlign={{ base: "center" }}>
+            Voting Ballot
+          </Heading>
           <BallotExplainer />
           <Heading style={{ marginTop: 56 }} textAlign={{ base: "center" }}>
             {t("VOICE CREDIT BALANCE")}: {voiceCreditBalance}
@@ -640,7 +649,7 @@ export const Ballot = () => {
           <VStack style={{ marginTop: 48 }} alignItems="center" w="full">
             <Button
               as={Link}
-              variant="secondary"
+              variant="porto"
               fontSize={{ base: "lg", xl: "xl" }}
               maxW={{ base: 250, md: 400 }}
               to={`/projects?${searchParams.toString()}`}
@@ -700,8 +709,7 @@ export const Ballot = () => {
               <GridItem
                 colSpan={{ base: 1, md: 2 }}
                 w={{ base: "full", md: "90%" }}
-                mx={{ base: "auto", md: "auto" }}
-                alignContent ="baseline"
+                m={{ base: "32px auto 0 auto", md: "auto" }}
               >
                 <SubmitBallotButton
                   disableSubmitButton={disableSubmitButton}
@@ -729,16 +737,16 @@ export const Ballot = () => {
                 w={{ base: "full", md: "80%" }}
                 type="password"
                 placeholder={t("MACI Key")}
-                variant="primary"
+                variant="porto"
                 value={key}
                 onChange={handleInputChange}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormHelperText fontFamily="Noto Sans TC">
+              <FormHelperText fontFamily="Space Grotesk">
                 {numChars ?? "-"} / 71
               </FormHelperText>
               <Button
-                variant="primary"
+                variant="porto"
                 fontSize={{ base: "lg", xl: "xl" }}
                 type="submit"
                 w={{ base: "full", md: "80%" }}

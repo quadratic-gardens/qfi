@@ -10,12 +10,12 @@ export const Layout = ({
   onGuideClose,
   isGuideOpen,
 }: LayoutProps) => {
-  const backgroundColor = useColorModeValue("gray.100", "gray.700");
+  const backgroundColor = useColorModeValue("gray.100", "0D1429");
   return (
     <HStack h="100vh" w="full" spacing={0}>
       <Navbar />
       <Flex as="nav" h="full" maxW={16} w="full" bg={backgroundColor}>
-        <SideNav onGuideOpen={onGuideOpen} />
+        <SideNav />
       </Flex>
       <Flex
         as="aside"

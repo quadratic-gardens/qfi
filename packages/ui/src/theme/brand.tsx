@@ -2,13 +2,12 @@ import { rgba } from "polished";
 import BrandImg from "../assets/logo.png";
 import BgImg from "../assets/logo.png";
 
-
 export const defaultTheme: {
-  primary: { light: string; dark: string; };
+  primary: string;
   primaryAlpha: string;
-  secondary: { light: string; dark: string; };
+  secondary: string;
   secondaryAlpha: string;
-  background: { light: string; dark: string; };
+  background: string;
   backgroundAlpha: string;
   backgroundOverlayOpacity: number;
   mode: string;
@@ -17,41 +16,24 @@ export const defaultTheme: {
   monoFont: string;
   avatarImg: string;
   bgImg: string;
-  text: { light: string; dark: string; };
-  border: { light: string; dark: string; };
+  text: string;
   link: string;
   branding: any;
 } = {
-  primary: {
-    light: "#69A197",
-    dark: "#69A197",
-  },
+  primary: "#9c1783",
   primaryAlpha: rgba("#10153d", 0.9),
-  secondary: {
-    light: "#F9DC5C", 
-    dark: "#F9DC5C",
-    
-  },
-  border: {
-    light: "#E3514F",
-    dark: "#E2E8F0",
-    
-  },
- 
+  secondary: rgba("#10153d", 0.5),
   secondaryAlpha: rgba("#10153d", 0.75),
-  background: {
-    light: "#F4FDD2",
-    dark: "#2D3748",
-  },
-  backgroundAlpha: "#F4FDD2",
+  background: "#0D1429",
+  backgroundAlpha: "#0D1429",
   backgroundOverlayOpacity: 0.75,
   mode: "#FFFFFF",
-  headingFont: "Noto Sans TC",
-  bodyFont: "Noto Sans TC",
+  headingFont: "Space Grotesk",
+  bodyFont: "Space Grotesk",
   monoFont: "Times",
   avatarImg: BrandImg,
   bgImg: BgImg,
-  text: { light: "#FFFFFF", dark: "#151616" },
+  text: "#FFFFFF",
   link: "#FFFFFF",
   branding: {
     projects: "Projects",
