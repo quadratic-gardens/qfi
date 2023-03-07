@@ -1,16 +1,10 @@
 #!/usr/bin/env node
-
 import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
 import { BigNumber, ethers } from "ethers"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
-import { GrantRoundFactory__factory } from "../../../contracts/typechain/factories/GrantRoundFactory__factory.js"
-import { PollFactory__factory } from "../../../contracts/typechain/factories/PollFactory__factory.js"
-import { MessageAqFactory__factory } from "../../../contracts/typechain/factories/MessageAqFactory__factory.js"
-import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
 import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
-// import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
 
 import { directoryExists, jsonToCsv, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
 import {
@@ -159,140 +153,140 @@ async function doTheThing(network: string) {
       deployer
     )
 
-    const pollFactory = new ethers.Contract(deployedContracts.PollFactory, PollFactory__factory.abi, deployer)
+    // const pollFactory = new ethers.Contract(deployedContracts.PollFactory, PollFactory__factory.abi, deployer)
 
-    const grantRoundFactory = new ethers.Contract(
-      deployedContracts.GrantRoundFactory,
-      GrantRoundFactory__factory.abi,
-      deployer
-    )
+    // const grantRoundFactory = new ethers.Contract(
+    //   deployedContracts.GrantRoundFactory,
+    //   GrantRoundFactory__factory.abi,
+    //   deployer
+    // )
 
-    const messageAqFactory = new ethers.Contract(
-      deployedContracts.MessageAqFactory,
-      MessageAqFactory__factory.abi,
-      deployer
-    )
+    // const messageAqFactory = new ethers.Contract(
+    //   deployedContracts.MessageAqFactory,
+    //   MessageAqFactory__factory.abi,
+    //   deployer
+    // )
 
-    const messageAqFactoryGrants = new ethers.Contract(
-      deployedContracts.MessageAqFactoryGrants,
-      MessageAqFactory__factory.abi,
-      deployer
-    )
+    // const messageAqFactoryGrants = new ethers.Contract(
+    //   deployedContracts.MessageAqFactoryGrants,
+    //   MessageAqFactory__factory.abi,
+    //   deployer
+    // )
 
     const vkRegistry = new ethers.Contract(deployedContracts.VKRegistry, VkRegistry__factory.abi, deployer)
 
-    const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
+    // const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
 
     // Send txs.
     let spinner = customSpinner(`Set MACI instance for SimpleHackathon contract`, "point")
     spinner.start()
 
-    let tx = await simpleHackathon
-      .connect(deployer)
-      .setMaciInstance(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
-    await tx.wait()
-    spinner.stop()
-    console.log(`${logSymbols.success} Set MACI instance for SimpleHackathon contract`)
+    // let tx = await simpleHackathon
+    //   .connect(deployer)
+    //   .setMaciInstance(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
+    // await tx.wait()
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Set MACI instance for SimpleHackathon contract`)
 
     spinner = customSpinner(`Max number of recipients for the SimpleHackathon base registry`, "point")
     spinner.start()
 
-    tx = await simpleHackathon
-      .connect(deployer)
-      .setMaxRecipients(numberOfMaxRecipients, { gasPrice: doubleGasPrice, gasLimit })
-    await tx.wait()
-    spinner.stop()
-    console.log(`${logSymbols.success} Max number of recipients for the SimpleHackathon base registry`)
+    // let tx = await simpleHackathon
+    //   .connect(deployer)
+    //   .setMaxRecipients(numberOfMaxRecipients, { gasPrice: doubleGasPrice, gasLimit })
+    // await tx.wait()
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Max number of recipients for the SimpleHackathon base registry`)
 
-    spinner = customSpinner(`Transfer PollFactory ownership to QFI contract`, "point")
-    spinner.start()
+    // spinner = customSpinner(`Transfer PollFactory ownership to QFI contract`, "point")
+    // spinner.start()
 
-    tx = await pollFactory.connect(deployer).transferOwnership(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
-    await tx.wait()
-    spinner.stop()
-    console.log(`${logSymbols.success} Transfer PollFactory ownership to QFI contract`)
+    // tx = await pollFactory.connect(deployer).transferOwnership(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
+    // await tx.wait()
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Transfer PollFactory ownership to QFI contract`)
 
-    spinner = customSpinner(`Transfer GrantRoundFactory ownership to QFI contract`, "point")
-    spinner.start()
+    // spinner = customSpinner(`Transfer GrantRoundFactory ownership to QFI contract`, "point")
+    // spinner.start()
 
-    tx = await grantRoundFactory
-      .connect(deployer)
-      .transferOwnership(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
-    await tx.wait()
-    spinner.stop()
-    console.log(`${logSymbols.success} Transfer GrantRoundFactory ownership to QFI contract`)
+    // tx = await grantRoundFactory
+    //   .connect(deployer)
+    //   .transferOwnership(qfi.address, { gasPrice: doubleGasPrice, gasLimit })
+    // await tx.wait()
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Transfer GrantRoundFactory ownership to QFI contract`)
 
-    spinner = customSpinner(`Transfer MessageAq ownership to PollFactory contract`, "point")
-    spinner.start()
+    // spinner = customSpinner(`Transfer MessageAq ownership to PollFactory contract`, "point")
+    // spinner.start()
 
-    tx = await messageAqFactory
-      .connect(deployer)
-      .transferOwnership(pollFactory.address, { gasPrice: doubleGasPrice, gasLimit })
-    await tx.wait()
-    spinner.stop()
-    console.log(`${logSymbols.success} Transfer MessageAq ownership to PollFactory contract`)
+    // tx = await messageAqFactory
+    //   .connect(deployer)
+    //   .transferOwnership(pollFactory.address, { gasPrice: doubleGasPrice, gasLimit })
+    // await tx.wait()
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Transfer MessageAq ownership to PollFactory contract`)
 
-    spinner = customSpinner(`Transfer MessageAqFactoryGrants ownership to GrantRoundFactory contract`, "point")
-    spinner.start()
+    // spinner = customSpinner(`Transfer MessageAqFactoryGrants ownership to GrantRoundFactory contract`, "point")
+    // spinner.start()
 
-    tx = await messageAqFactoryGrants
-      .connect(deployer)
-      .transferOwnership(grantRoundFactory.address, { gasPrice: doubleGasPrice, gasLimit })
-    await tx.wait()
-    spinner.stop()
-    console.log(`${logSymbols.success} Transfer MessageAqFactoryGrants ownership to GrantRoundFactory contract`)
+    // tx = await messageAqFactoryGrants
+    //   .connect(deployer)
+    //   .transferOwnership(grantRoundFactory.address, { gasPrice: doubleGasPrice, gasLimit })
+    // await tx.wait()
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Transfer MessageAqFactoryGrants ownership to GrantRoundFactory contract`)
 
-    spinner = customSpinner(`Initialize QFI contract`, "point")
-    spinner.start()
+    // spinner = customSpinner(`Initialize QFI contract`, "point")
+    // spinner.start()
 
-    tx = await qfi
-      .connect(deployer)
-      .initialize(deployedContracts.VKRegistry, messageAqFactory.address, messageAqFactoryGrants.address, {
-        gasPrice: doubleGasPrice,
-        gasLimit
-      })
-    await tx.wait()
-    spinner.stop()
-    console.log(`${logSymbols.success} Initialize QFI contract`)
+    // tx = await qfi
+    //   .connect(deployer)
+    //   .initialize(deployedContracts.VKRegistry, messageAqFactory.address, messageAqFactoryGrants.address, {
+    //     gasPrice: doubleGasPrice,
+    //     gasLimit
+    //   })
+    // await tx.wait()
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Initialize QFI contract`)
 
-    // NOTE: Set up vk registry
-    const stateTreeDepth = await qfi.stateTreeDepth()
-    const _stateTreeDepth = stateTreeDepth.toString()
-    const _intStateTreeDepth = treeDepths.intStateTreeDepth
-    const _messageTreeDepth = treeDepths.messageTreeDepth
-    const _voteOptionTreeDepth = treeDepths.voteOptionTreeDepth
-    const _messageBatchSize = messageBatchSize.toString()
-    const _processVk = <VerifyingKeyStruct>ProcessVk.asContractParam()
-    const _tallyVk = <VerifyingKeyStruct>TallyVk.asContractParam()
+    // // NOTE: Set up vk registry
+    // const stateTreeDepth = await qfi.stateTreeDepth()
+    // const _stateTreeDepth = stateTreeDepth.toString()
+    // const _intStateTreeDepth = treeDepths.intStateTreeDepth
+    // const _messageTreeDepth = treeDepths.messageTreeDepth
+    // const _voteOptionTreeDepth = treeDepths.voteOptionTreeDepth
+    // const _messageBatchSize = messageBatchSize.toString()
+    // const _processVk = <VerifyingKeyStruct>ProcessVk.asContractParam()
+    // const _tallyVk = <VerifyingKeyStruct>TallyVk.asContractParam()
 
-    spinner = customSpinner(`Set VKs`, "point")
-    spinner.start()
+    // spinner = customSpinner(`Set VKs`, "point")
+    // spinner.start()
 
-    const vkTx = await vkRegistry
-      .connect(deployer)
-      .setVerifyingKeys(
-        stateTreeDepth,
-        _intStateTreeDepth,
-        _messageTreeDepth,
-        _voteOptionTreeDepth,
-        _messageBatchSize,
-        _processVk,
-        _tallyVk,
-        { gasPrice: doubleGasPrice, gasLimit }
-      )
-    await vkTx.wait()
+    // const vkTx = await vkRegistry
+    //   .connect(deployer)
+    //   .setVerifyingKeys(
+    //     stateTreeDepth,
+    //     _intStateTreeDepth,
+    //     _messageTreeDepth,
+    //     _voteOptionTreeDepth,
+    //     _messageBatchSize,
+    //     _processVk,
+    //     _tallyVk,
+    //     { gasPrice: doubleGasPrice, gasLimit }
+    //   )
+    // await vkTx.wait()
 
-    await vkRegistry
-      .connect(deployer)
-      .genProcessVkSig(_stateTreeDepth, _messageTreeDepth, _voteOptionTreeDepth, _messageBatchSize)
+    // await vkRegistry
+    //   .connect(deployer)
+    //   .genProcessVkSig(_stateTreeDepth, _messageTreeDepth, _voteOptionTreeDepth, _messageBatchSize)
 
-    await vkRegistry.connect(deployer).genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth)
+    // await vkRegistry.connect(deployer).genTallyVkSig(_stateTreeDepth, _intStateTreeDepth, _voteOptionTreeDepth)
 
-    spinner.stop()
-    console.log(`${logSymbols.success} Set Vks`)
-    console.log(`\n${logSymbols.info} contracts connected, continuing to project sign up step!\n`)
+    // spinner.stop()
+    // console.log(`${logSymbols.success} Set Vks`)
+    // console.log(`\n${logSymbols.info} contracts connected, continuing to project sign up step!\n`)
 
-    console.log(`\n${logSymbols.info} You are about to register ${jsonRecipientsRecords.length} projects\n`)
+    // console.log(`\n${logSymbols.info} You are about to register ${jsonRecipientsRecords.length} projects\n`)
 
     // Get CSV records.
     let i = 0
@@ -341,44 +335,44 @@ async function doTheThing(network: string) {
 
     const hacks: { [k: string]: string } = {}
     let j = 1
-    for await (const maciPK of userSignUps) {
-      const spinner = customSpinner(`Sign up for user in position ${chalk.bold(j)}`, "point")
-      spinner.start()
+    // for await (const maciPK of userSignUps) {
+    //   const spinner = customSpinner(`Sign up for user in position ${chalk.bold(j)}`, "point")
+    //   spinner.start()
 
-      // Prepare data for tx.
-      const _maciPK = PubKey.unserialize(maciPK).asContractParam()
-      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
-      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
+    //   // Prepare data for tx.
+    //   const _maciPK = PubKey.unserialize(maciPK).asContractParam()
+    //   const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
+    //   const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
 
-      const tx = await qfi.connect(deployer).signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData, {
-        gasPrice: doubleGasPrice,
-        gasLimit: ethers.utils.hexlify(10000000)
-      })
-      await tx.wait()
+    //   const tx = await qfi.connect(deployer).signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData, {
+    //     gasPrice: doubleGasPrice,
+    //     gasLimit: ethers.utils.hexlify(10000000)
+    //   })
+    //   await tx.wait()
 
-      // Read the event from logs.
-      // const iface = qfi.interface
-      // const signUpEvent = iface.parseLog(logs[logs.length - 1])
-      const stateIndex: string = j.toString()
+    //   // Read the event from logs.
+    //   // const iface = qfi.interface
+    //   // const signUpEvent = iface.parseLog(logs[logs.length - 1])
+    //   const stateIndex: string = j.toString()
 
-      stateIndexes.push(stateIndex)
+    //   stateIndexes.push(stateIndex)
 
-      spinner.stop()
-      console.log(
-        `${logSymbols.success} User #${chalk.bold(j)} (${chalk.bold(
-          maciPK
-        )}) has been successfully registered on-chain with a state index of ${stateIndex}`
-      )
+    //   spinner.stop()
+    //   console.log(
+    //     `${logSymbols.success} User #${chalk.bold(j)} (${chalk.bold(
+    //       maciPK
+    //     )}) has been successfully registered on-chain with a state index of ${stateIndex}`
+    //   )
 
-      // Store rows for CSV files.
-      stateIndexes.push({
-        maciPK,
-        stateIndex
-      })
-      hacks[maciPK] = stateIndex
-      // eslint-disable-next-line no-plusplus
-      j++
-    }
+    //   // Store rows for CSV files.
+    //   stateIndexes.push({
+    //     maciPK,
+    //     stateIndex
+    //   })
+    //   hacks[maciPK] = stateIndex
+    //   // eslint-disable-next-line no-plusplus
+    //   j++
+    // }
 
     // Create CSV file.
     jsonToCsv(usersStateIndexesFilePath, [`maciPK`, `stateIndex`], stateIndexes)
@@ -391,20 +385,20 @@ async function doTheThing(network: string) {
 
     const FOURTEENDAYS = 60 * 60 * 24 * 14
 
-    const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam()
-    const grantRoundTx = await qfi
-      .connect(deployer)
-      .deployGrantRound(FOURTEENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
-        gasPrice: doubleGasPrice,
-        gasLimit: ethers.utils.hexlify(8000000)
-      })
+    // const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam()
+    // const grantRoundTx = await qfi
+    //   .connect(deployer)
+    //   .deployGrantRound(FOURTEENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
+    //     gasPrice: doubleGasPrice,
+    //     gasLimit: ethers.utils.hexlify(8000000)
+    //   })
 
-    await grantRoundTx.wait()
+    // await grantRoundTx.wait()
 
     console.log(`\n${logSymbols.success} You have successfully initialized the deployed MACI/QFI smart contracts 🎊\n`)
-    console.log(
-      `\n${logSymbols.success} you grant round will be active once this transaction is confirmed ${grantRoundTx} n`
-    )
+    // console.log(
+    //   `\n${logSymbols.success} you grant round will be active once this transaction is confirmed ${grantRoundTx} n`
+    // )
   } catch (err: any) {
     console.log(err)
     if (!err.transactionHash) console.log(`\n${logSymbols.error} Something went wrong: ${err}`)

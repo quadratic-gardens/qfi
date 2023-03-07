@@ -4,11 +4,9 @@ import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
 import { BigNumber, ethers } from "ethers"
-import { PubKey } from "qaci-domainobjs"
+import { PubKey } from "maci-domainobjs"
 
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
-import { QFI__factory } from "../../../contracts/typechain/factories/QFI__factory.js"
-// import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
 import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
 
 import { directoryExists, jsonToCsv, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
@@ -114,7 +112,7 @@ async function recover(network: string) {
     }
     // Get deployed contracts instances.
 
-    const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
+    // const qfi = new ethers.Contract(deployedContracts.QFI, QFI__factory.abi, deployer)
 
     // Send txs.
     let spinner = customSpinner(`SKIP: Set MACI instance for SimpleHackathon contract`, "point")
@@ -186,67 +184,67 @@ async function recover(network: string) {
     const stateIndexes = []
 
     const hacks: { [k: string]: string } = {}
-    const maciStateIndex = Number(await qfi.numSignUps())
+    // const maciStateIndex = Number(await qfi.numSignUps())
 
     // eslint-disable-next-line no-plusplus
-    for (let i = maciStateIndex; i < userSignUps.length; i++) {
-      const maciPK = userSignUps[i]
-      const spinner = customSpinner(`Sign up for user in position ${chalk.bold(i)}`, "point")
-      spinner.start()
+    // for (let i = maciStateIndex; i < userSignUps.length; i++) {
+    //   const maciPK = userSignUps[i]
+    //   const spinner = customSpinner(`Sign up for user in position ${chalk.bold(i)}`, "point")
+    //   spinner.start()
 
-      // Prepare data for tx.
-      const _maciPK = PubKey.unserialize(maciPK).asContractParam()
-      const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
-      const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
+    //   // Prepare data for tx.
+    //   const _maciPK = PubKey.unserialize(maciPK).asContractParam()
+    //   const _signUpGatekeeperData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
+    //   const _initialVoiceCreditProxyData = ethers.utils.defaultAbiCoder.encode(["uint256"], [0])
 
-      const tx = await qfi.connect(deployer).signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData, {
-        gasPrice: doubleGasPrice,
-        gasLimit: ethers.utils.hexlify(10000000)
-      })
-      await tx.wait()
+    //   const tx = await qfi.connect(deployer).signUp(_maciPK, _signUpGatekeeperData, _initialVoiceCreditProxyData, {
+    //     gasPrice: doubleGasPrice,
+    //     gasLimit: ethers.utils.hexlify(10000000)
+    //   })
+    //   await tx.wait()
 
-      const stateIndex: string = i.toString()
+    //   const stateIndex: string = i.toString()
 
-      spinner.stop()
-      console.log(
-        `${logSymbols.success} User #${chalk.bold(i)} (${chalk.bold(
-          maciPK
-        )}) has been successfully registered on-chain with a state index of ${stateIndex}`
-      )
+    //   spinner.stop()
+    //   console.log(
+    //     `${logSymbols.success} User #${chalk.bold(i)} (${chalk.bold(
+    //       maciPK
+    //     )}) has been successfully registered on-chain with a state index of ${stateIndex}`
+    //   )
 
-      // Store rows for CSV files.
-      stateIndexes.push({
-        maciPK,
-        stateIndex
-      })
-      hacks[maciPK] = stateIndex
-    }
+    //   // Store rows for CSV files.
+    //   stateIndexes.push({
+    //     maciPK,
+    //     stateIndex
+    //   })
+    //   hacks[maciPK] = stateIndex
+    // }
 
-    // Create CSV file.
-    jsonToCsv(usersStateIndexesFilePath, [`maciPK`, `stateIndex`], stateIndexes)
+    // // Create CSV file.
+    // jsonToCsv(usersStateIndexesFilePath, [`maciPK`, `stateIndex`], stateIndexes)
 
-    writeLocalJsonFile(hacksFilePath, JSON.parse(JSON.stringify(hacks)))
+    // writeLocalJsonFile(hacksFilePath, JSON.parse(JSON.stringify(hacks)))
 
-    console.log(`\n${logSymbols.success} You have successfully registered users on-chain 🎊\n`)
+    // console.log(`\n${logSymbols.success} You have successfully registered users on-chain 🎊\n`)
 
-    console.log(`\n${logSymbols.success} We will now start the grant round. It will be active for [7] days. 🎊\n`)
+    // console.log(`\n${logSymbols.success} We will now start the grant round. It will be active for [7] days. 🎊\n`)
 
-    const SEVENDAYS = 60 * 60 * 24 * 7
+    // const SEVENDAYS = 60 * 60 * 24 * 7
 
-    const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam()
-    const grantRoundTx = await qfi
-      .connect(deployer)
-      .deployGrantRound(SEVENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
-        gasPrice: doubleGasPrice,
-        gasLimit: ethers.utils.hexlify(8000000)
-      })
+    // const _coordinatorPubkey = PubKey.unserialize(coordinatorPubkey).asContractParam()
+    // const grantRoundTx = await qfi
+    //   .connect(deployer)
+    //   .deployGrantRound(SEVENDAYS, maxValues, treeDepths, _coordinatorPubkey, deployer.address, {
+    //     gasPrice: doubleGasPrice,
+    //     gasLimit: ethers.utils.hexlify(8000000)
+    //   })
 
-    await grantRoundTx.wait()
+    // await grantRoundTx.wait()
 
-    console.log(`\n${logSymbols.success} You have successfully initialized the deployed MACI/QFI smart contracts 🎊\n`)
-    console.log(
-      `\n${logSymbols.success} you grant round will be active once this transaction is confirmed ${grantRoundTx} n`
-    )
+    // console.log(`\n${logSymbols.success} You have successfully initialized the deployed MACI/QFI smart contracts 🎊\n`)
+    // console.log(
+    //   `\n${logSymbols.success} you grant round will be active once this transaction is confirmed ${grantRoundTx} n`
+    // )
   } catch (err: any) {
     console.log(err)
     if (!err.transactionHash) console.log(`\n${logSymbols.error} Something went wrong: ${err}`)

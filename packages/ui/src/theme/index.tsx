@@ -1,8 +1,8 @@
-import { ColorMode, extendTheme,  } from "@chakra-ui/react";
+import { ColorMode, extendTheme } from "@chakra-ui/react";
 import { theme as defaultTheme } from "@chakra-ui/theme";
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { lighten, darken } from "polished";
-import { mode } from '@chakra-ui/theme-tools';
+import { mode } from "@chakra-ui/theme-tools";
 import { theme as base } from "@chakra-ui/react";
 
 import Badge from "./core/badge";
@@ -124,38 +124,37 @@ export const theme = extendTheme({
   },
   components: {
     // core components
-    Accordion:{
+    Accordion: {
       variants: {
         porto: (props: any) => ({
           container: {
             padding: "3rem 3rem",
-            borderRadius: "16px",
+            borderRadius: mode("3px", "16px")(props),
             position: "relative",
             display: "flex",
             flexDirection: "column",
-  
+
             justifyContent: "flex-start",
             _before: {
               content: '""',
               zIndex: "-3",
-              boxShadow: "0 0 10px #9eeafd, inset 0 0 10px #9eeafd !important",
-              border: "#9eeafd 2px solid",
-              borderRadius: "16px",
-              width:"98% !important",
-        
+              boxShadow: `0 0 10px ${mode(`gray.100`, `#9eeafd`)(props)}, inset 0 0 10px ${mode(`gray.100`, `#9eeafd`)(props)} !important`,
+              border: `${mode(`#6953A2`, `#9eeafd`)(props)} 2px solid`,
+              borderRadius: mode("3px", "16px")(props),
+              width: "98% !important",
+
               height: "100%",
               position: "absolute",
               left: "0",
               top: "0",
               right: "0",
-              
             },
             _after: {
               content: '""',
               width: "200px",
               height: "30px",
               position: "absolute",
-              backgroundColor: mode(`gray.100`, `#020e38`)(props),
+              backgroundColor: mode(`transparent`, `#0D1429`)(props),
               right: "-20px",
               top: "-15px",
               zIndex: "-2",
@@ -163,11 +162,17 @@ export const theme = extendTheme({
           },
           button: {
             _focus: {
-              boxShadow: "none"
+              boxShadow: "none",
+            },
+            _hover: { 
+              bg: mode(`transparent`, `transparent`)(props), 
+              boxShadow: mode(`0`, `1px 1px 0px 1px`)(props),
+              color: mode(`#6953A2`, `#E9D100` )(props),
+              textShadow: `0 0 2px ${mode(`grey.100`, `#f6ec10`)(props)}`,
             },
           },
-        })
-      }
+        }),
+      },
     },
     Button,
     Badge,
@@ -222,7 +227,7 @@ export const theme = extendTheme({
         color: "mode.900",
         lineHeight: "tall",
       },
-      body:{
+      body: {
         bg: mode(`gray.100`, `#0D1429`)(props),
         color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },

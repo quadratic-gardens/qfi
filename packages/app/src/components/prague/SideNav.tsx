@@ -144,6 +144,7 @@ export const Navbar = () => {
           bg={backgroundColor}
           color={color}
           borderColor={color}
+          borderRadius={useColorModeValue("3px", "8px")}
           value={selectedLang}
           onChange={({ target: { value } }) => handleLangChange(value)}
           w={20}
@@ -169,7 +170,7 @@ export const Navbar = () => {
             ES
           </option>
         </Select>
-        <ColorModeSwitcher color="gray.500" aria-label="dark mode"   h="50px" />
+        <ColorModeSwitcher color="gray.500" aria-label="dark mode"   h="50px"  borderRadius={useColorModeValue("3px", "8px")}/>
       </HStack>
     </HStack>
   );
