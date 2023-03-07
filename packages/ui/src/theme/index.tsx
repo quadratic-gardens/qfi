@@ -1,9 +1,9 @@
-import { ColorMode, extendTheme,  } from "@chakra-ui/react";
+import { ColorMode, extendTheme } from "@chakra-ui/react";
 import { theme as defaultTheme } from "@chakra-ui/theme";
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 import { lighten, darken } from "polished";
-import { mode } from '@chakra-ui/theme-tools';
-
+import { mode } from "@chakra-ui/theme-tools";
+import { theme as base } from "@chakra-ui/react";
 
 import Badge from "./core/badge";
 import Button from "./core/button";
@@ -34,7 +34,7 @@ const brand = {
   }, {}),
 };
 // Add color mode config
-const colormode: ColorMode | undefined = "dark";
+const colormode: ColorMode | undefined = "light";
 const config = {
   initialColorMode: colormode,
   useSystemColorMode: false,
@@ -83,7 +83,6 @@ export const theme = extendTheme({
       900: darken(0.2, brand.primary),
     },
     background: {
-      0: '#FAF7F5',
       50: lighten(0.4, brand.background),
       100: lighten(0.3, brand.background),
       200: lighten(0.2, brand.background),
@@ -94,7 +93,6 @@ export const theme = extendTheme({
       700: darken(0.1, brand.background),
       800: darken(0.15, brand.background),
       900: darken(0.2, brand.background),
-      1000: '#000000'
     },
     secondary: {
       50: lighten(0.4, brand.secondary),
@@ -114,11 +112,11 @@ export const theme = extendTheme({
     bgImg: brand.bgImg,
   },
   fonts: {
-    heading: `'NeuePixelGrotesk', serif`,
-    body: `'Montserrat', sans-serif`,
+    heading: `'Space Grotesk', serif`,
+    body: `'Space Grotesk', sans-serif`,
     mono: brand.monoFont,
-    accessory: "Roboto Mono",
-    space: "Space Mono",
+    accessory: "Space Grotesk",
+    space: "Space Grotesk",
   },
   meta: {
     projects: brand.branding.projects,
@@ -126,6 +124,56 @@ export const theme = extendTheme({
   },
   components: {
     // core components
+    Accordion: {
+      variants: {
+        porto: (props: any) => ({
+          container: {
+            padding: "3rem 3rem",
+            borderRadius: mode("3px", "16px")(props),
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+
+            justifyContent: "flex-start",
+            _before: {
+              content: '""',
+              zIndex: "-3",
+              boxShadow: `0 0 10px ${mode(`gray.100`, `#9eeafd`)(props)}, inset 0 0 10px ${mode(`gray.100`, `#9eeafd`)(props)} !important`,
+              border: `${mode(`#6953A2`, `#9eeafd`)(props)} 2px solid`,
+              borderRadius: mode("3px", "16px")(props),
+              width: "98% !important",
+
+              height: "100%",
+              position: "absolute",
+              left: "0",
+              top: "0",
+              right: "0",
+            },
+            _after: {
+              content: '""',
+              width: "200px",
+              height: "30px",
+              position: "absolute",
+              backgroundColor: mode(`transparent`, `#0D1429`)(props),
+              right: "-20px",
+              top: "-15px",
+              zIndex: "-2",
+            },
+          },
+          button: {
+            _focus: {
+              boxShadow: "none",
+            },
+            _hover: { 
+              bg: mode(`transparent`, `transparent`)(props), 
+              boxShadow: mode(`0`, `1px 1px 0px 1px`)(props),
+              color: mode(`#6953A2`, `#E9D100` )(props),
+              textShadow: `0 0 2px ${mode(`grey.100`, `#f6ec10`)(props)}`,
+            },
+          },
+        }),
+      },
+    },
     Button,
     Badge,
     FormLabel,
@@ -157,7 +205,7 @@ export const theme = extendTheme({
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: mode(`gray.100`, `background.1000`)(props),
+              backgroundColor: mode(`gray.100`, `#020e38`)(props),
               pointerEvents: "none",
               mx: 3,
               px: 1,
@@ -179,14 +227,14 @@ export const theme = extendTheme({
         color: "mode.900",
         lineHeight: "tall",
       },
-      body:{
-        bg: mode(`gray.100`, `background.1000`)(props),
+      body: {
+        bg: mode(`gray.100`, `#0D1429`)(props),
         color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },
       a: {
         transition: "all 0.15s linear",
         color: "secondary.400",
-        _hover: { textDecoration: "none", color: "gray.500" },
+        _hover: { textDecoration: "none", color: "secondary.500" },
       },
     }),
   },

@@ -1,39 +1,29 @@
 import { useCallback, useMemo } from "react";
-import {
-  Text,
-  VStack,
-  Button,
-  Image,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Text, VStack, Button, Show, Image, useColorModeValue } from "@chakra-ui/react";
 import BeatLoader from "react-spinners/BeatLoader";
 import CircleLoader from "react-spinners/CircleLoader";
 import { formatAddress, useWallet, useENS } from "@qfi/hooks";
 import { ButtonProps } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 
 type MagikButtonProps = ButtonProps & {};
 
-export const MagikButton: React.FC<MagikButtonProps> = ({
-  children,
-  ...props
-}) => {
-  const {
-    connectWallet,
-    isConnected,
-    disconnect,
-    address,
-  } = useWallet();
+export const MagikButton: React.FC<MagikButtonProps> = ({ children, ...props }) => {
+  const { connectWallet, isConnecting, isConnected, disconnect, address } = useWallet();
   const { avatar, loading } = useENS({ address: address ?? undefined });
+  // const { avatar, loading } = useENS({ ens: "alisha.eth" ?? "" });
+
+  const logoutBg = useColorModeValue(`red.400`, `red.400`);
+  const loginBg = useColorModeValue(`#73FFBC`, `#37FFCF`);
+  const switchBgHoverColor = isConnected ? logoutBg : loginBg;
+  const logoutColor = useColorModeValue(`white`, `white`);
+  const loginColor = useColorModeValue(`white`, `white`);
+  const switchTextHoverColor = isConnected ? logoutColor : loginColor;
+  const switchHeight = isConnected ? [14, 14, 14, 16] : [12, 12, 12, 14];
 
   const switchIconColor = useColorModeValue("black", "white");
-  const BaseIcon = loading ? (
-    <CircleLoader size={25} color={switchIconColor} />
-  ) : (
-    undefined
-  );
+  const BaseIcon = loading ? <CircleLoader size={25} color={switchIconColor} /> : <></>;
   const SwitchAvatar = avatar ? (
-    <Image p={1} rounded="full" src={avatar} h={12} />
+    <Image p={1} rounded={"full"} src={avatar} h={12} />
   ) : (
     <Image src="/metamask.png" h={9} p={1.5} mx={0.5} />
   );
@@ -42,25 +32,30 @@ export const MagikButton: React.FC<MagikButtonProps> = ({
   const switchAction = isConnected ? disconnect : connectWallet;
 
   return (
-    <Button
-      fontWeight="bold"
-      h={20}
-      leftIcon={SwitchIcon}
-      onClick={() => switchAction()}
-      variant="ethLatamPurple"
-      w="full"
-      {...props}
-    >
-      {isConnected ? <Web3State /> : <ConnectState />}
-    </Button>
+      <Button
+        fontWeight="bold"
+        {...props}
+        w="full"
+        onClick={() => !isConnecting && switchAction()}
+        h={switchHeight}
+        pl={2}
+        pr={8}
+        leftIcon={SwitchIcon}
+        variant="magik"
+        disabled={isConnecting}
+        _hover={{
+          bg: switchBgHoverColor,
+          color: switchTextHoverColor,
+        }}>
+        {isConnected ? <Web3State /> : <ConnectState />}
+      </Button>
   );
 };
-
 function Web3State() {
   const switchColor = useColorModeValue("black", "white");
   const { address } = useWallet();
   const { ens, loading } = useENS({ address: address ?? undefined });
-
+  // const { ens, loading } = useENS({ ens: "alisha.eth" ?? "" });
   const randomPlaceHolder = useCallback(() => {
     const rand = Math.floor(Math.random() * 6) + 2;
     switch (rand) {
@@ -76,43 +71,35 @@ function Web3State() {
         return `(¬､¬)`;
     }
   }, []);
+  const BaseName = useMemo(() => {
+    return ens ? (
+      <Text fontSize="sm" fontWeight="bold">
+        {ens}
+      </Text>
+    ) : (
+      <Text fontSize="sm" fontWeight="bold">
+        {randomPlaceHolder()}
+      </Text>
+    );
+  }, [ens, randomPlaceHolder]);
 
-  const BaseName = useMemo(
-    () =>
-      ens ? (
-        <Text fontSize="sm" fontWeight="bold">
-          {ens}
-        </Text>
-      ) : (
-        <Text fontSize="sm" fontWeight="bold">
-          {randomPlaceHolder()}
-        </Text>
-      ),
-    [ens, randomPlaceHolder]
-  );
-
-  const SwitchName = loading ? (
-    <BeatLoader size={8} color={switchColor} />
-  ) : (
-    BaseName
-  );
+  const SwitchName = loading ? <BeatLoader size={8} color={switchColor} /> : BaseName;
 
   return (
-    <VStack justifyContent="center" alignItems="flex-start">
+    <VStack spacing={0.5} alignItems={"flex-start"}>
       {SwitchName}
       {ens}
       <Text fontSize="xs">{formatAddress(address)}</Text>
     </VStack>
   );
 }
-
 function ConnectState() {
-  const { t } = useTranslation();
-
   return (
-    <Text whiteSpace="break-spaces" fontSize="lg" fontWeight="extrabold">
-      {t("CONNECT WALLET")}
-    </Text>
+    <VStack spacing={0.5} alignItems={"flex-start"} pl={3}>
+      <Text fontSize="lg" fontWeight={"extrabold"} >
+        CONNECT
+      </Text>
+    </VStack>
   );
 }
 

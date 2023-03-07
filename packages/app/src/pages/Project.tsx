@@ -35,8 +35,9 @@ const shortenEthAddress = (address: string) => {
 
 export function Project() {
   const { t } = useTranslation();
-
-  const backgroundColor = useColorModeValue("gray.100", "#000000");
+  const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+  const color = useColorModeValue("gray.900", "#FDFDFD"); 
+ 
   const toast = useToast();
   let { projectId } = useParams();
   let navigate = useNavigate();
@@ -73,7 +74,6 @@ export function Project() {
 
   let project = getProject(projectId ?? "0");
 
-  const color = useColorModeValue("gray.100", "gray.700");
   const handleAddToBallot = useCallback(() => {
     if (searchParams.getAll("option").length >= 8) {
       toast({
@@ -248,13 +248,13 @@ export function Project() {
 
               <Button
                 fontSize="15px"
-                variant="ethLatamBlack"
+                variant="porto"
                 onClick={
                   isInBallot
                     ? handleRemoveFromBallot(projectId?.toString() ?? "noop")
                     : handleAddToBallot
                 }
-                height={{ base: "30px", md: "40px" }}
+               
                 marginTop={{
                   base: "-12% !important",
                   sm: "-5% !important",
@@ -264,13 +264,15 @@ export function Project() {
               >
                 <HStack px={4}>
                   <Icon
-                    color="white"
+                    color={color}
+                   alignContent="center"
+                   alignItems={"center"}
+                   justifyContent="center"
                     position="relative"
                     z-index={20}
                     boxSize="15px"
                     fontWeight="black"
                     _hover={{
-                      color: "black",
                       transform: "scale(1.1)",
                     }}
                   >
@@ -280,6 +282,7 @@ export function Project() {
                     ></path>
                   </Icon>
                   <Text
+                    color={color}
                     display={{ base: "none", md: "block" }}
                     fontSize={["xs", "sm", "sm", "sm"]}
                     fontWeight="800"

@@ -59,7 +59,7 @@ export const BallotOption = ({
   return (
     <Stack
       boxSizing="content-box"
-      fontFamily="arial"
+      fontFamily="Space Grotesk"
       borderColor="#FAF7F5"
       borderTopWidth={2}
       borderLeftWidth={2}
@@ -85,7 +85,7 @@ export const BallotOption = ({
         <Text fontSize={20} fontWeight="bold" mx={2}>
           {votes ?? 0}
         </Text>
-        <Text fontSize={20} fontFamily="NeuePixelGrotesk" mx={2}>
+        <Text fontSize={20} fontFamily="Space Grotesk" mx={2}>
           {t("CREDITS")}
         </Text>
       </VStack>
@@ -106,7 +106,7 @@ export const BallotOption = ({
           <Text
             as={Link}
             to={`${to}?${searchParams.toString()}` ?? "/projects"}
-            fontFamily="arial"
+            fontFamily="Space Grotesk"
             fontSize={{ base: "sm", md: "sm" }}
             fontWeight="thin"
             lineHeight="base"

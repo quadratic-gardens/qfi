@@ -85,7 +85,7 @@ const Guide = () => {
           </Heading>
           <Text>
             {t("Drop us a line at sponsors@ethlatam.org or join the")}{" "}
-            <a href={"https://t.me/ethlatam"} rel="noreferrer" target="_blank">
+            <a href={"https://t.me/ethporto"} rel="noreferrer" target="_blank">
               {t("ETHLatam Telegram group")}
             </a>{" "}
             {t("using the hashtag #QF in your post.")}

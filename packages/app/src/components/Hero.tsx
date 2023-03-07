@@ -5,11 +5,12 @@ import {
   forwardRef,
   usePrefersReducedMotion,
   useColorModeValue,
+  AspectRatio,
 } from "@chakra-ui/react";
 
 import logo from "./assets/logo.png";
-import hero from "./assets/hero.png";
-import hero4 from "./assets/hero4.png";
+import hero from "./assets/Hero.png";
+import hero4 from "./assets/hero4.gif";
 
 const spin = keyframes`
   from { transform: rotate(360deg); }
@@ -47,21 +48,23 @@ export const Hero = forwardRef<ImageProps, "img">((props, ref) => {
     const rand = Math.floor(Math.random() * 6) + 2;
     switch (rand) {
       case 2:
-        return hero4;
+        return hero;
       case 3:
-        return hero4;
+        return hero;
       case 6:
-        return hero4;
+        return hero;
       case 7:
-        return hero4;
+        return hero;
       default:
-        return hero4;
+        return hero;
     }
   };
   const SwitchIcon = useColorModeValue(RandomHeroLight(), RandomHeroDark());
 
   // const animation = prefersReducedMotion ? undefined : `${spin} infinite 200000000s linear`;
 
-  const light = <chakra.img  src={SwitchIcon} ref={ref} {...props} />;
-  return light;
+
+  return (
+      <chakra.img  src={SwitchIcon} ref={ref} {...props} />
+  );
 });

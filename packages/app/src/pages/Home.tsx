@@ -1,28 +1,55 @@
 import React from "react";
 import {
-  VStack,
-  Container,
-  Flex,
-  Text,
-  Heading,
-  Button,
-  useColorModeValue,
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  HStack,
-  Stack,
+   VStack,
+   Container,
+   Flex,
+   Text,
+   Heading,
+   Button,
+   useColorModeValue,
+   Accordion,
+   AccordionButton,
+   AccordionIcon,
+   AccordionItem,
+   AccordionPanel,
+   HStack,
+   Stack,
+   AspectRatio,
 } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
-import { useSearchParams, Link as RouterLink } from "react-router-dom";
+import {  useTranslation } from "react-i18next";
+import {  useSearchParams,  Link as RouterLink } from "react-router-dom";
+import {  Hero } from "../components/Hero";
 
 export const Home = () => {
   const { t } = useTranslation();
   const color = useColorModeValue("gray.800", "gray.700");
   const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
   let [searchParams] = useSearchParams();
+  const heroLightmode = (
+    <AspectRatio
+      ratio={1}
+      w="50%"
+      h={"auto"}
+      overflow="hidden"
+      alignItems={"flex-start"}
+      justifyContent={"flex-start"}
+      flexDir={"row"}>
+      <Hero></Hero>
+    </AspectRatio>
+  );
+  const heroDarkmode = (
+    <AspectRatio
+      ratio={16 / 9}
+      w="full"
+      h={"auto"}
+      overflow="hidden"
+      alignItems={"flex-start"}
+      justifyContent={"flex-start"}
+      flexDir={"row"}>
+      <Hero h={"auto !important"}></Hero>
+    </AspectRatio>
+  );
+
 
   return (
     <Flex
@@ -33,8 +60,7 @@ export const Home = () => {
       borderRightColor={color}
       borderRightWidth={1}
       position={"relative"}
-      overflow="hidden"
-    >
+      overflow="hidden">
       <Container
         h="full"
         w="full"
@@ -59,29 +85,27 @@ export const Home = () => {
           },
         }}
         maxWidth={{ lg: "container.lg", md: "container.md" }}
-        py={8}
-      >
-        <VStack mt={20} spacing={10} h="full" alignItems="flex-start">
-          <VStack spacing={6} alignItems="flex-start">
-            <div style={{ height: "auto", maxWidth: "100%" }}>
-              <img src="title.svg" alt="QF @ ETH LATAM" />
-            </div>
-            <Stack spacing={10} direction={["column", "row"]}>
+        py={8}>
+        <VStack mt={20} spacing={10} h="full" w="full" alignItems="flex-start">
+          <VStack spacing={6} w="full" alignItems="flex-start">
+            {  useColorModeValue(heroLightmode, heroDarkmode)}
+            <Heading fontWeight={"black"} fontSize={"4xl"}>
+              {t("ORGANIZER")}
+            </Heading>
+            <Stack spacing={10} direction={["column", "row"]} w="full">
               <Button
                 as={RouterLink}
                 h={50}
-                variant={"ethLatamPurple"}
+                variant={"porto"}
                 fontSize={{ base: "md", xl: "xl" }}
-                to={`/ballot?${searchParams.toString()}`}
-              >
+                to={`/ballot?${searchParams.toString()}`}>
                 {t("GET STARTED")}
               </Button>
               <Button
                 as={RouterLink}
-                variant={"ethLatamWhite"}
+                variant={"porto"}
                 fontSize={{ base: "md", xl: "xl" }}
-                to={`/projects?${searchParams.toString()}`}
-              >
+                to={`/projects?${searchParams.toString()}`}>
                 {t("CHECK OUT THE PROJECTS")}
               </Button>
             </Stack>
@@ -98,39 +122,21 @@ export const Home = () => {
               )}
             </Text>
             <Text pb={4} w={"full"}>
-              {t(
-                "Below you will find instructions to help support local projects. Learn more about Quadratic Funding"
-              )}{" "}
-              <a
-                href={
-                  "https://wtfisqf.com/?grant=&grant=&grant=&grant=&match=1000"
-                }
-                rel="noreferrer"
-                target="_blank"
-              >
+              {t("Below you will find instructions to help support local projects. Learn more about Quadratic Funding")}{" "}
+              <a href={"https://wtfisqf.com/?grant=&grant=&grant=&grant=&match=1000"} rel="noreferrer" target="_blank">
                 {t("here")}
               </a>
               .
             </Text>
-            <Text pb={4} w={"full"} fontFamily="NeuePixelGrotesk" fontSize={22}>
+            <Text pb={4} w={"full"} fontSize={22}>
               {t("The future is now.")}
             </Text>
           </VStack>
           <VStack w="full" spacing={6}>
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
-              <Accordion
-                allowToggle
-                w={"full"}
-                bg={backgroundColor}
-                defaultIndex={0}
-              >
+              <Accordion variant={"porto"} allowToggle w={"full"} defaultIndex={0}>
                 <AccordionItem border="none" w={"full"}>
-                  <HStack
-                    as={AccordionButton}
-                    w={"full"}
-                    justifyContent={"space-between"}
-                    py={4}
-                  >
+                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                     <Heading textAlign={"left"} size="md">
                       {t("Timeline")}
                     </Heading>
@@ -142,9 +148,7 @@ export const Home = () => {
                       <ul>
                         <li>{t("Project submission deadline: August 11th")}</li>
                         <li>{t("ETHLatam: August 11th - 13th")}</li>
-                        <li>
-                          {t("Voting opens: August 13th @ 2:00 pm GTM-3")}
-                        </li>
+                        <li>{t("Voting opens: August 13th @ 2:00 pm GTM-3")}</li>
                         <li>{t("Voting closes: August 19th")}</li>
                         <li>{t("Count of votes: August 22nd")}</li>
                         <li>{t("Distribution of funds: September 2nd")}</li>
@@ -155,23 +159,16 @@ export const Home = () => {
               </Accordion>
             </VStack>
             <VStack spacing={6} alignItems="flex-start" w={"full"}>
-              <Accordion mb={20} allowToggle w={"full"} bg={backgroundColor}>
+              <Accordion variant={"porto"} mb={20} allowToggle w={"full"}>
                 <AccordionItem border="none" w={"full"}>
-                  <HStack
-                    as={AccordionButton}
-                    w={"full"}
-                    justifyContent={"space-between"}
-                    py={4}
-                  >
+                  <HStack as={AccordionButton} w={"full"} justifyContent={"space-between"} py={4}>
                     <Heading size="md">{t("How does it work?")}</Heading>
                     <AccordionIcon></AccordionIcon>
                   </HStack>
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm" pb={8}>
-                      {t(
-                        "All ETH Latam attendees will receive an email with a MACI key."
-                      )}
+                      {t("All ETH Latam attendees will receive an email with a MACI key.")}
                     </Text>
                     <Text fontSize="sm" pb={8}>
                       {t(
@@ -189,9 +186,7 @@ export const Home = () => {
                       )}
                     </Text>
                     <Text fontSize="sm" pb={8}>
-                      {t(
-                        "If you have any questions, please, feel free to ask any of the ETHLatam volunteers."
-                      )}
+                      {t("If you have any questions, please, feel free to ask any of the ETHLatam volunteers.")}
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>
