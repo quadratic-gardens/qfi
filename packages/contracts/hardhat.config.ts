@@ -6,10 +6,10 @@ import dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/types";
 import { NetworkUserConfig } from "hardhat/types";
 
-import "@typechain/hardhat";
-import "@nomiclabs/hardhat-ethers";
-// import "@nomiclabs/hardhat-waffle";
-// import "@nomiclabs/hardhat-ganache";
+
+import '@typechain/hardhat'
+import '@nomiclabs/hardhat-ethers'
+import '@nomiclabs/hardhat-waffle'
 
 import "solidity-coverage";
 import "hardhat-gas-reporter";
@@ -107,7 +107,7 @@ const config: HardhatUserConfig = {
     coinmarketcap: "603bd12e-d2f3-4a9f-8c82-d5e346d9d482",
   },
   typechain: {
-    outDir: "typechain/",
+    outDir: "./typechain-types",
     target: "ethers-v5",
     alwaysGenerateOverloads: false,
     externalArtifacts: [],

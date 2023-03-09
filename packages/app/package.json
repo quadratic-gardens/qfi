@@ -4,6 +4,9 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "blake-hash": "^1.1.0",
+    "circomlibjs": "0.0.8",
+    "ffjavascript": "^0.2.57",
     "@chakra-ui/react": "^1.8.6",
     "@coinbase/wallet-sdk": "^3.0.4",
     "@emotion/react": "^11.0.0",
@@ -11,22 +14,13 @@
     "@fontsource/archivo": "^4.5.7",
     "@fontsource/tinos": "^4.5.4",
     "@gnosis.pm/safe-apps-web3modal": "^12.0.0",
-    "@qfi/hooks": "^2.2.0",
-    "@qfi/ui": "^2.2.0",
-    "@testing-library/jest-dom": "^5.9.0",
-    "@testing-library/react": "^10.2.1",
-    "@testing-library/user-event": "^12.0.2",
-    "@types/jest": "^25.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
+    "@qfi/hooks": "^3.0.0",
+    "@qfi/ui": "^3.0.0",
     "@walletconnect/web3-provider": "^1.7.5",
     "chakra-ui-steps": "^1.6.2",
     "ethers": "^5.6.1",
     "framer-motion": "^4.0.0",
     "i18next": "^21.8.16",
-    "maci-crypto": "1.1.1",
-    "maci-domainobjs": "1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.18.3",
@@ -35,15 +29,15 @@
     "react-pose-text": "^3.1.0",
     "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^6.0.2",
-    "react-scripts": "4.0.3",
     "react-spinners": "^0.11.0",
-    "typescript": "^4.3.5",
     "web-vitals": "^0.2.2",
     "web3modal": "^1.9.5"
   },
   "resolutions": {
-    "qaci-crypto/ethers": "^5.6.1"
   },
+  "nohoist": [
+    "**/ethers"
+  ],
   "scripts": {
     "start": "craco start",
     "build": "craco build",
@@ -70,6 +64,16 @@
   "devDependencies": {
     "@craco/craco": "^6.4.1",
     "@types/react-qr-reader": "^2.1.4",
-    "webpack-bundle-analyzer": "^4.5.0"
+    "ts-loader": "^9.4.2",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "@testing-library/jest-dom": "^5.9.0",
+    "@testing-library/react": "^10.2.1",
+    "@testing-library/user-event": "^12.0.2",
+    "@types/jest": "^25.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "react-scripts": "4.0.3",
+    "typescript": "^4.3.5"
   }
 }

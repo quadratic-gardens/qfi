@@ -4,10 +4,10 @@ import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
 import { BigNumber, ethers } from "ethers"
-import { PubKey } from "maci-domainobjs"
+import { PubKey } from "@qfi/macisdk"
 
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
-import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
+import { SimpleHackathon__factory } from "../../../contracts/typechain-types/factories/contracts/flavors/SimpleHackathon__factory.js"
 
 import { directoryExists, jsonToCsv, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
 import {
@@ -182,6 +182,7 @@ async function recover(network: string) {
     spinner.stop()
 
     const stateIndexes = []
+    const _maciPK = PubKey.unserialize("maciPK").asContractParam()
 
     const hacks: { [k: string]: string } = {}
     // const maciStateIndex = Number(await qfi.numSignUps())

@@ -27,8 +27,8 @@ import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDappState } from "../context/DappContext";
 
-import { Keypair, PubKey, PrivKey, Command, Message } from "qaci-domainobjs";
-import { genRandomSalt } from "qaci-crypto";
+import { Keypair, PubKey, PrivKey, PCommand, Message } from "../jubjublib/domainobjs/domainobjs";
+import { genRandomSalt } from "../jubjublib/crypto";
 import { useWallet } from "@qfi/hooks";
 import { BigNumber, ethers } from "ethers";
 import { GrantRound__factory } from "../typechain";
@@ -437,13 +437,14 @@ export const Ballot = () => {
     const quadraticVoteWeight = voteWeight ?? 0;
     const pubkey = userKeypair.pubKey;
 
+    // TODO:porto
     // /stateIndex: BigInt,
     // newPubKey: PubKey,
     // voteOptionIndex: BigInt,
     // newVoteWeight: BigInt,
     // nonce: BigInt,
     // pollId: BigInt,
-    const command = new Command(
+    const command = new PCommand(
       BigInt(userStateIndex),
       pubkey,
       BigInt(voteOptionIndex || 0),

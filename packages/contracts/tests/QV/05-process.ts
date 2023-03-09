@@ -2,9 +2,9 @@ import { ethers } from "hardhat";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-import { Command, Keypair, Message, VerifyingKey } from "qaci-domainobjs";
-import { G1Point, G2Point } from "qaci-crypto";
-import { MaciState, genProcessVkSig, genTallyVkSig } from "qaci-core";
+import { Command, Keypair, Message, VerifyingKey } from "@qfi/macisdk";
+import { G1Point, G2Point } from "@qfi/macisdk";
+import { MaciState, genProcessVkSig, genTallyVkSig } from "@qfi/macisdk";
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
 import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
 

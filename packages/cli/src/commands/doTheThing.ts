@@ -4,7 +4,7 @@ import { clear } from "console"
 import chalk from "chalk"
 import { BigNumber, ethers } from "ethers"
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
-import { SimpleHackathon__factory } from "../../../contracts/typechain/factories/SimpleHackathon__factory.js"
+import { SimpleHackathon__factory } from "../../../contracts/typechain-types/factories/contracts/flavors/SimpleHackathon__factory.js"
 
 import { directoryExists, jsonToCsv, makeDir, readJSONFile, writeLocalJsonFile } from "../lib/files.js"
 import {
@@ -28,9 +28,9 @@ import {
   deployedContractsFilePath
 } from "../lib/constants.js"
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
-import { VerifyingKeyStruct } from "../../../contracts/typechain/VkRegistry.js"
-import { VkRegistry__factory } from "../../../contracts/typechain/factories/VkRegistry__factory.js"
-import { PubKey } from "qaci-domainobjs"
+import { VkRegistry } from "../../../contracts/typechain-types/contracts/VkRegistry.js"
+import { VkRegistry__factory } from "../../../contracts/typechain-types/factories/contracts/VkRegistry__factory.js"
+import { PubKey } from "@qfi/macisdk"
 import { Recipient } from "types/index.js"
 
 /**
@@ -256,8 +256,8 @@ async function doTheThing(network: string) {
     // const _messageTreeDepth = treeDepths.messageTreeDepth
     // const _voteOptionTreeDepth = treeDepths.voteOptionTreeDepth
     // const _messageBatchSize = messageBatchSize.toString()
-    // const _processVk = <VerifyingKeyStruct>ProcessVk.asContractParam()
-    // const _tallyVk = <VerifyingKeyStruct>TallyVk.asContractParam()
+    // const _processVk = <VkRegistry.VerifyingKeyStruct>ProcessVk.asContractParam()
+    // const _tallyVk = <VkRegistry.VerifyingKeyStruct>TallyVk.asContractParam()
 
     // spinner = customSpinner(`Set VKs`, "point")
     // spinner.start()

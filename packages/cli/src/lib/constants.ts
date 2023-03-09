@@ -1,6 +1,6 @@
 import figlet from "figlet"
-import { G1Point, G2Point } from "qaci-crypto"
-import { VerifyingKey } from "qaci-domainobjs"
+import { G1Point, G2Point } from "@qfi/macisdk"
+import { VerifyingKey } from "@qfi/macisdk"
 import { Recipient } from "types"
 
 /** dir/file names */

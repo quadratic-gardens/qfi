@@ -3,8 +3,8 @@ import { BigNumber, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { Keypair, VerifyingKey } from "maci-domainobjs";
-import { G1Point, G2Point } from "maci-crypto";
+import { Keypair, VerifyingKey } from "@qfi/macisdk";
+import { G1Point, G2Point } from "@qfi/macisdk";
 
 import { PoseidonT3 } from "../../typechain/PoseidonT3";
 import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
