@@ -84,9 +84,9 @@ const Guide = () => {
             {t("We know this might be confusing, need help?")}
           </Heading>
           <Text>
-            {t("Drop us a line at sponsors@ethlatam.org or join the")}{" "}
-            <a href={"https://t.me/ethlatam"} rel="noreferrer" target="_blank">
-              {t("ETHLatam Telegram group")}
+            {t("Drop us a line at sponsors@Porto.org or join the")}{" "}
+            <a href={"https://t.me/Porto"} rel="noreferrer" target="_blank">
+              {t("Porto Telegram group")}
             </a>{" "}
             {t("using the hashtag #QF in your post.")}
           </Text>
@@ -113,7 +113,7 @@ const Guide = () => {
                     <VStack spacing={6} alignItems="flex-start">
                       <Text fontSize="xs">
                         {t(
-                          "ETHLatam team will send your MACI key the email address you used to register for the event."
+                          "Porto team will send your MACI key the email address you used to register for the event."
                         )}
                       </Text>
                     </VStack>
@@ -186,7 +186,7 @@ const Guide = () => {
                       <VStack spacing={6} alignItems="flex-start">
                         <Text fontSize="xs">
                           {t(
-                            "Web3 and social impact initiatives that contribute to the Argentine ecosystem can register to receive funding. Within the 'Project List' page of the website you can learn about them and visit their websites and social networks to learn more."
+                            "Web3 and social impact initiatives that contribute to the Porto ecosystem can register to receive funding. Within the 'Project List' page of the website you can learn about them and visit their websites and social networks to learn more."
                           )}
                         </Text>
                         <Text fontSize="xs">

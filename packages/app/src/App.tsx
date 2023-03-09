@@ -32,11 +32,11 @@ export const App = ({ shuffledProjects }) => {
             />
           }
         >
-          <Route index element={<Home />} />
+          {/* <Route index element={<Home />} /> */}
           <Route path="ballot" element={<Ballot />} />
           <Route path="apply" element={<Apply />} />
           <Route
-            path="projects"
+            index
             element={<Projects shuffledProjects={shuffledProjects} />}
           ></Route>
           <Route path="projects/:projectId" element={<Project />} />

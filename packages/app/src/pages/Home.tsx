@@ -113,12 +113,12 @@ export const Home = () => {
           <VStack width="100%">
             <Text pb={4}>
               {t(
-                "You can play a fundamental role as a part of the ETHLatam community, both in supporting the local community, and in exploring new ways to finance public goods through quadratic voting."
+                "You can play a fundamental role as a part of the Porto community, both in supporting the local community, and in exploring new ways to finance public goods through quadratic voting."
               )}
             </Text>
             <Text pb={4} w={"full"}>
               {t(
-                "During the venue, our ETH Latam team will send you an email with a password. This is the “MACI” key you’ll use to vote."
+                "During the venue, our Porto team will send you an email with a password. This is the “MACI” key you’ll use to vote."
               )}
             </Text>
             <Text pb={4} w={"full"}>
@@ -147,7 +147,7 @@ export const Home = () => {
                     <Text lineHeight={8} pl={8} fontSize="sm" py={2}>
                       <ul>
                         <li>{t("Project submission deadline: August 11th")}</li>
-                        <li>{t("ETHLatam: August 11th - 13th")}</li>
+                        <li>{t("Porto: August 11th - 13th")}</li>
                         <li>{t("Voting opens: August 13th @ 2:00 pm GTM-3")}</li>
                         <li>{t("Voting closes: August 19th")}</li>
                         <li>{t("Count of votes: August 22nd")}</li>
@@ -168,7 +168,7 @@ export const Home = () => {
 
                   <AccordionPanel pb={4}>
                     <Text fontSize="sm" pb={8}>
-                      {t("All ETH Latam attendees will receive an email with a MACI key.")}
+                      {t("All Porto attendees will receive an email with a MACI key.")}
                     </Text>
                     <Text fontSize="sm" pb={8}>
                       {t(
@@ -177,7 +177,7 @@ export const Home = () => {
                     </Text>
                     <Text fontSize="sm" pb={8}>
                       {t(
-                        "Voting is pseudo-anonymous, but to record the vote, your MACI key will be sent to your email address by the ETHLatam team."
+                        "Voting is pseudo-anonymous, but to record the vote, your MACI key will be sent to your email address by the Porto team."
                       )}
                     </Text>
                     <Text fontSize="sm" pb={8}>
@@ -186,7 +186,7 @@ export const Home = () => {
                       )}
                     </Text>
                     <Text fontSize="sm" pb={8}>
-                      {t("If you have any questions, please, feel free to ask any of the ETHLatam volunteers.")}
+                      {t("If you have any questions, please, feel free to ask any of the Porto volunteers.")}
                     </Text>
                   </AccordionPanel>
                 </AccordionItem>

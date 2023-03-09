@@ -453,12 +453,12 @@ export const Ballot = () => {
         {displayOptions ? (
           <VStack spacing={0} alignItems="flex-start" style={{ marginTop: 48 }} w="full" display={isEmptyBallot ? "flex" : "none"}>
             {ballotData.map((project, index) => (
-              <BallotOption key={index} lastOption={index === ballotOptions.length - 1 ? true : false} ballotOption={project} votes={votes[index]} onClick={updateVotes[index]} to={`/projects/${project.id}`} />
+              <BallotOption key={index} lastOption={index === ballotOptions.length - 1 ? true : false} ballotOption={project} votes={votes[index]} onClick={updateVotes[index]} to={`/${project.id}`} />
             ))}
           </VStack>
         ) : (
           <VStack style={{ marginTop: 48 }} alignItems="center" w="full">
-            <Button as={Link} variant="porto" fontSize={{ base: "lg", xl: "xl" }} maxW={{ base: 250, md: 400 }} to={`/projects?${searchParams.toString()}`}>
+            <Button as={Link} variant="porto" fontSize={{ base: "lg", xl: "xl" }} maxW={{ base: 250, md: 400 }} to={`/?${searchParams.toString()}`}>
               {t("CHECK OUT THE PROJECTS")}
             </Button>
           </VStack>
