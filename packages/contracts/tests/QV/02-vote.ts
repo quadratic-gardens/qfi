@@ -8,29 +8,27 @@ import { MaciState } from "@qfi/macisdk";
 import { G1Point, G2Point } from "@qfi/macisdk";
 import { PCommand } from "@qfi/macisdk";
 
-import { PoseidonT3 } from "../../typechain/PoseidonT3";
-import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
-import { PoseidonT4 } from "../../typechain/PoseidonT4";
-import { PoseidonT4__factory } from "../../typechain/factories/PoseidonT4__factory";
-import { PoseidonT5 } from "../../typechain/PoseidonT5";
-import { PoseidonT5__factory } from "../../typechain/factories/PoseidonT5__factory";
-import { PoseidonT6 } from "../../typechain/PoseidonT6";
-import { PoseidonT6__factory } from "../../typechain/factories/PoseidonT6__factory";
+import { PoseidonT3__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT3__factory";
+import { PoseidonT4__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT4__factory";
+import { PoseidonT5__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT5__factory";
+import { PoseidonT6__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT6__factory";
+import { MessageTreeLibraryAddresses, MessageTree__factory } from "../../typechain-types/factories/contracts/MessageTree__factory";
+import { JubjubLibraryAddresses, Jubjub__factory } from "../../typechain-types/factories/contracts/Jubjub__factory";
+import { JubjubFactoryLibraryAddresses, JubjubFactory__factory } from "../../typechain-types/factories/contracts/JubjubFactory__factory";
+import { ConstantInitialVoiceCreditProxy__factory } from "../../typechain-types/factories/contracts/flavors/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy__factory";
+import { FreeForAllGatekeeper__factory } from "../../typechain-types/factories/contracts/flavors/F.sol/FreeForAllGatekeeper__factory";
+import { StateTreeLibraryAddresses, StateTree__factory } from "../../typechain-types/factories/contracts/StateTree__factory";
 
-import { OptimisticRecipientRegistry } from "../../typechain/OptimisticRecipientRegistry";
-import { OptimisticRecipientRegistry__factory } from "../../typechain/factories/OptimisticRecipientRegistry__factory";
-import { MessageTreeLibraryAddresses, MessageTree__factory } from "../../typechain/factories/MessageTree__factory";
-import { JubjubLibraryAddresses, Jubjub__factory } from "../../typechain/factories/Jubjub__factory";
-import { Jubjub, MessageStruct, PubKeyStruct } from "../../typechain/Jubjub";
-import { JubjubFactory, VerifyingKeyStruct } from "../../typechain/JubjubFactory";
-import { JubjubFactoryLibraryAddresses, JubjubFactory__factory } from "../../typechain/factories/JubjubFactory__factory";
-import { ConstantInitialVoiceCreditProxy } from "../../typechain/ConstantInitialVoiceCreditProxy";
-import { FreeForAllGatekeeper } from "../../typechain/FreeForAllGatekeeper";
-import { ConstantInitialVoiceCreditProxy__factory } from "../../typechain/factories/ConstantInitialVoiceCreditProxy__factory";
-import { FreeForAllGatekeeper__factory } from "../../typechain/factories/FreeForAllGatekeeper__factory";
-import { StateTreeLibraryAddresses, StateTree__factory } from "../../typechain/factories/StateTree__factory";
-import { StateTree } from "../../typechain/StateTree";
-import { MessageTree } from "../../typechain/MessageTree";
+import { PoseidonT3 } from "../../typechain-types/contracts/poseidon/PoseidonT3";
+import { PoseidonT4 } from "../../typechain-types/contracts/poseidon/PoseidonT4"; 
+import { PoseidonT5 } from "../../typechain-types/contracts/poseidon/PoseidonT5";
+import { PoseidonT6 } from "../../typechain-types/contracts/poseidon/PoseidonT6";
+import { Jubjub } from "../../typechain-types/contracts/Jubjub";
+import { JubjubFactory, VerifyingKeyStruct } from "../../typechain-types/contracts/JubjubFactory";
+import { ConstantInitialVoiceCreditProxy } from "../../typechain-types/contracts/flavors/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy";
+import { FreeForAllGatekeeper } from "../../typechain-types/contracts/flavors/F.sol/FreeForAllGatekeeper";
+import { StateTree } from "../../typechain-types/contracts/StateTree";
+import { MessageTree } from "../../typechain-types/contracts/MessageTree";
 
 chai.use(solidity);
 const { expect } = chai;
@@ -219,6 +217,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
       .publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())
       .then((tx) => tx.wait());
     const iface = jubjubInstance.interface;
+    console.log(logs)
     const event = iface.parseLog(logs[logs.length - 1]);
 
     const expectOkStatus = 1;
@@ -226,15 +225,16 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
       return BigNumber.from(data);
     });
     expect(status).to.equal(expectOkStatus);
-    expect(event.args[0][1]).to.deep.equal(expectedMessage);
+    expect(event.args[0][1].map((n)=>n.toString())).to.deep.equal(expectedMessage.map((n)=>n.toString()));
   });
   it("verify - can vote multiple times", async () => {
     const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
     await jubjubInstance.startVoting(BigNumber.from(3), BigNumber.from(60 * 60), coordinatorPubkey);
+    let _stateIndex = BigInt(0);
     for (const user of users) {
       const keypair = users[0].maciKey;
 
-      const _stateIndex = BigInt(1);
+      _stateIndex + 1n;
       const _newPubKey = keypair.pubKey;
       const _voteOptionIndex = BigInt(0);
       const _newVoteWeight = BigInt(9);

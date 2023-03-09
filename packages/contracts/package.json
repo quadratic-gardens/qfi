@@ -38,6 +38,7 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
+    "@qfi/macisdk":"*",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.1",
     "@nomiclabs/hardhat-ganache": "^2.0.0",

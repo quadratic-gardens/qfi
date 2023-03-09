@@ -29,7 +29,7 @@
     "strict": false,
     "outDir": "./build",
     "skipDefaultLibCheck": true,
-
+    "module": "commonjs",
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true
   },

@@ -13,49 +13,129 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "OwnableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OwnableUpgradeable__factory>;
+    getContractFactory(
+      name: "Initializable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Initializable__factory>;
+    getContractFactory(
+      name: "ContextUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ContextUpgradeable__factory>;
+    getContractFactory(
       name: "Ownable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
-      name: "ERC20",
+      name: "ERC721",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC20__factory>;
+    ): Promise<Contracts.ERC721__factory>;
     getContractFactory(
-      name: "IERC20Metadata",
+      name: "IERC721Metadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20Metadata__factory>;
+    ): Promise<Contracts.IERC721Metadata__factory>;
     getContractFactory(
-      name: "IERC20",
+      name: "IERC721",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20__factory>;
+    ): Promise<Contracts.IERC721__factory>;
     getContractFactory(
-      name: "BaseERC20Token",
+      name: "IERC721Receiver",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.BaseERC20Token__factory>;
+    ): Promise<Contracts.IERC721Receiver__factory>;
     getContractFactory(
-      name: "FundsManager",
+      name: "ERC165",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.FundsManager__factory>;
+    ): Promise<Contracts.ERC165__factory>;
     getContractFactory(
-      name: "GrantRound",
+      name: "IERC165",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GrantRound__factory>;
+    ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "GrantRoundFactory",
+      name: "AccQueue",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GrantRoundFactory__factory>;
+    ): Promise<Contracts.AccQueue__factory>;
+    getContractFactory(
+      name: "AccQueueBinary",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AccQueueBinary__factory>;
+    getContractFactory(
+      name: "AccQueueQuinary",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AccQueueQuinary__factory>;
+    getContractFactory(
+      name: "PoseidonT3",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PoseidonT3__factory>;
+    getContractFactory(
+      name: "PoseidonT6",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PoseidonT6__factory>;
+    getContractFactory(
+      name: "ConstantInitialVoiceCreditProxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ConstantInitialVoiceCreditProxy__factory>;
     getContractFactory(
       name: "InitialVoiceCreditProxy",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.InitialVoiceCreditProxy__factory>;
     getContractFactory(
+      name: "FreeForAllGatekeeper",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.FreeForAllGatekeeper__factory>;
+    getContractFactory(
+      name: "IInitialVoiceCreditProxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IInitialVoiceCreditProxy__factory>;
+    getContractFactory(
+      name: "ISignUpGatekeeper",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ISignUpGatekeeper__factory>;
+    getContractFactory(
+      name: "InitialVoiceCreditProxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.InitialVoiceCreditProxy__factory>;
+    getContractFactory(
+      name: "NFTSignup",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.NFTSignup__factory>;
+    getContractFactory(
+      name: "SignUpNFT",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.SignUpNFT__factory>;
+    getContractFactory(
       name: "SimpleHackathon",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.SimpleHackathon__factory>;
     getContractFactory(
-      name: "QFI",
+      name: "Jubjub",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.QFI__factory>;
+    ): Promise<Contracts.Jubjub__factory>;
+    getContractFactory(
+      name: "JubjubFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.JubjubFactory__factory>;
+    getContractFactory(
+      name: "MessageTree",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MessageTree__factory>;
+    getContractFactory(
+      name: "PoseidonT3",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PoseidonT3__factory>;
+    getContractFactory(
+      name: "PoseidonT4",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PoseidonT4__factory>;
+    getContractFactory(
+      name: "PoseidonT5",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PoseidonT5__factory>;
+    getContractFactory(
+      name: "PoseidonT6",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PoseidonT6__factory>;
     getContractFactory(
       name: "BaseRecipientRegistry",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -73,193 +153,177 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.SimpleRecipientRegistry__factory>;
     getContractFactory(
-      name: "Hasher",
+      name: "StateTree",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Hasher__factory>;
+    ): Promise<Contracts.StateTree__factory>;
     getContractFactory(
-      name: "PoseidonT3",
+      name: "LibClone",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT3__factory>;
+    ): Promise<Contracts.LibClone__factory>;
     getContractFactory(
-      name: "PoseidonT4",
+      name: "Multicallable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT4__factory>;
-    getContractFactory(
-      name: "PoseidonT5",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT5__factory>;
-    getContractFactory(
-      name: "PoseidonT6",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT6__factory>;
-    getContractFactory(
-      name: "IVerifier",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IVerifier__factory>;
-    getContractFactory(
-      name: "MockVerifier",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MockVerifier__factory>;
-    getContractFactory(
-      name: "Verifier",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Verifier__factory>;
-    getContractFactory(
-      name: "DomainObjs",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.DomainObjs__factory>;
-    getContractFactory(
-      name: "FreeForAllGatekeeper",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.FreeForAllGatekeeper__factory>;
-    getContractFactory(
-      name: "SignUpGatekeeper",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SignUpGatekeeper__factory>;
-    getContractFactory(
-      name: "IMACI",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IMACI__factory>;
-    getContractFactory(
-      name: "ConstantInitialVoiceCreditProxy",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ConstantInitialVoiceCreditProxy__factory>;
-    getContractFactory(
-      name: "InitialVoiceCreditProxy",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.InitialVoiceCreditProxy__factory>;
-    getContractFactory(
-      name: "InitialVoiceCreditProxy",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.InitialVoiceCreditProxy__factory>;
-    getContractFactory(
-      name: "MACI",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MACI__factory>;
-    getContractFactory(
-      name: "MessageAqFactory",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MessageAqFactory__factory>;
-    getContractFactory(
-      name: "Poll",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Poll__factory>;
-    getContractFactory(
-      name: "PollFactory",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PollFactory__factory>;
-    getContractFactory(
-      name: "PollProcessorAndTallyer",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PollProcessorAndTallyer__factory>;
-    getContractFactory(
-      name: "AccQueue",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueue__factory>;
-    getContractFactory(
-      name: "AccQueueBinary",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueueBinary__factory>;
-    getContractFactory(
-      name: "AccQueueBinary0",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueueBinary0__factory>;
-    getContractFactory(
-      name: "AccQueueBinaryMaci",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueueBinaryMaci__factory>;
-    getContractFactory(
-      name: "AccQueueQuinary",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueueQuinary__factory>;
-    getContractFactory(
-      name: "AccQueueQuinary0",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueueQuinary0__factory>;
-    getContractFactory(
-      name: "AccQueueQuinaryBlankSl",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueueQuinaryBlankSl__factory>;
-    getContractFactory(
-      name: "AccQueueQuinaryMaci",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AccQueueQuinaryMaci__factory>;
+    ): Promise<Contracts.Multicallable__factory>;
     getContractFactory(
       name: "VkRegistry",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.VkRegistry__factory>;
-    getContractFactory(
-      name: "PoseidonT3",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT3__factory>;
-    getContractFactory(
-      name: "PoseidonT4",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT4__factory>;
-    getContractFactory(
-      name: "PoseidonT5",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT5__factory>;
-    getContractFactory(
-      name: "PoseidonT6",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PoseidonT6__factory>;
 
+    getContractAt(
+      name: "OwnableUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OwnableUpgradeable>;
+    getContractAt(
+      name: "Initializable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Initializable>;
+    getContractAt(
+      name: "ContextUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ContextUpgradeable>;
     getContractAt(
       name: "Ownable",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Ownable>;
     getContractAt(
-      name: "ERC20",
+      name: "ERC721",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.ERC20>;
+    ): Promise<Contracts.ERC721>;
     getContractAt(
-      name: "IERC20Metadata",
+      name: "IERC721Metadata",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.IERC20Metadata>;
+    ): Promise<Contracts.IERC721Metadata>;
     getContractAt(
-      name: "IERC20",
+      name: "IERC721",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.IERC20>;
+    ): Promise<Contracts.IERC721>;
     getContractAt(
-      name: "BaseERC20Token",
+      name: "IERC721Receiver",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.BaseERC20Token>;
+    ): Promise<Contracts.IERC721Receiver>;
     getContractAt(
-      name: "FundsManager",
+      name: "ERC165",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.FundsManager>;
+    ): Promise<Contracts.ERC165>;
     getContractAt(
-      name: "GrantRound",
+      name: "IERC165",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.GrantRound>;
+    ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "GrantRoundFactory",
+      name: "AccQueue",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.GrantRoundFactory>;
+    ): Promise<Contracts.AccQueue>;
+    getContractAt(
+      name: "AccQueueBinary",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AccQueueBinary>;
+    getContractAt(
+      name: "AccQueueQuinary",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AccQueueQuinary>;
+    getContractAt(
+      name: "PoseidonT3",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PoseidonT3>;
+    getContractAt(
+      name: "PoseidonT6",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PoseidonT6>;
+    getContractAt(
+      name: "ConstantInitialVoiceCreditProxy",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ConstantInitialVoiceCreditProxy>;
     getContractAt(
       name: "InitialVoiceCreditProxy",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.InitialVoiceCreditProxy>;
     getContractAt(
+      name: "FreeForAllGatekeeper",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.FreeForAllGatekeeper>;
+    getContractAt(
+      name: "IInitialVoiceCreditProxy",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IInitialVoiceCreditProxy>;
+    getContractAt(
+      name: "ISignUpGatekeeper",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ISignUpGatekeeper>;
+    getContractAt(
+      name: "InitialVoiceCreditProxy",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.InitialVoiceCreditProxy>;
+    getContractAt(
+      name: "NFTSignup",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.NFTSignup>;
+    getContractAt(
+      name: "SignUpNFT",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.SignUpNFT>;
+    getContractAt(
       name: "SimpleHackathon",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.SimpleHackathon>;
     getContractAt(
-      name: "QFI",
+      name: "Jubjub",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.QFI>;
+    ): Promise<Contracts.Jubjub>;
+    getContractAt(
+      name: "JubjubFactory",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.JubjubFactory>;
+    getContractAt(
+      name: "MessageTree",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MessageTree>;
+    getContractAt(
+      name: "PoseidonT3",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PoseidonT3>;
+    getContractAt(
+      name: "PoseidonT4",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PoseidonT4>;
+    getContractAt(
+      name: "PoseidonT5",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PoseidonT5>;
+    getContractAt(
+      name: "PoseidonT6",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PoseidonT6>;
     getContractAt(
       name: "BaseRecipientRegistry",
       address: string,
@@ -281,170 +345,25 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.SimpleRecipientRegistry>;
     getContractAt(
-      name: "Hasher",
+      name: "StateTree",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.Hasher>;
+    ): Promise<Contracts.StateTree>;
     getContractAt(
-      name: "PoseidonT3",
+      name: "LibClone",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT3>;
+    ): Promise<Contracts.LibClone>;
     getContractAt(
-      name: "PoseidonT4",
+      name: "Multicallable",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT4>;
-    getContractAt(
-      name: "PoseidonT5",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT5>;
-    getContractAt(
-      name: "PoseidonT6",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT6>;
-    getContractAt(
-      name: "IVerifier",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IVerifier>;
-    getContractAt(
-      name: "MockVerifier",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.MockVerifier>;
-    getContractAt(
-      name: "Verifier",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Verifier>;
-    getContractAt(
-      name: "DomainObjs",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.DomainObjs>;
-    getContractAt(
-      name: "FreeForAllGatekeeper",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.FreeForAllGatekeeper>;
-    getContractAt(
-      name: "SignUpGatekeeper",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.SignUpGatekeeper>;
-    getContractAt(
-      name: "IMACI",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IMACI>;
-    getContractAt(
-      name: "ConstantInitialVoiceCreditProxy",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ConstantInitialVoiceCreditProxy>;
-    getContractAt(
-      name: "InitialVoiceCreditProxy",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.InitialVoiceCreditProxy>;
-    getContractAt(
-      name: "InitialVoiceCreditProxy",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.InitialVoiceCreditProxy>;
-    getContractAt(
-      name: "MACI",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.MACI>;
-    getContractAt(
-      name: "MessageAqFactory",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.MessageAqFactory>;
-    getContractAt(
-      name: "Poll",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Poll>;
-    getContractAt(
-      name: "PollFactory",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PollFactory>;
-    getContractAt(
-      name: "PollProcessorAndTallyer",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PollProcessorAndTallyer>;
-    getContractAt(
-      name: "AccQueue",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueue>;
-    getContractAt(
-      name: "AccQueueBinary",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueueBinary>;
-    getContractAt(
-      name: "AccQueueBinary0",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueueBinary0>;
-    getContractAt(
-      name: "AccQueueBinaryMaci",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueueBinaryMaci>;
-    getContractAt(
-      name: "AccQueueQuinary",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueueQuinary>;
-    getContractAt(
-      name: "AccQueueQuinary0",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueueQuinary0>;
-    getContractAt(
-      name: "AccQueueQuinaryBlankSl",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueueQuinaryBlankSl>;
-    getContractAt(
-      name: "AccQueueQuinaryMaci",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AccQueueQuinaryMaci>;
+    ): Promise<Contracts.Multicallable>;
     getContractAt(
       name: "VkRegistry",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.VkRegistry>;
-    getContractAt(
-      name: "PoseidonT3",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT3>;
-    getContractAt(
-      name: "PoseidonT4",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT4>;
-    getContractAt(
-      name: "PoseidonT5",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT5>;
-    getContractAt(
-      name: "PoseidonT6",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PoseidonT6>;
 
     // default types
     getContractFactory(

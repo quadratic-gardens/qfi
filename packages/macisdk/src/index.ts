@@ -1,7 +1,7 @@
 // Export all the functions and classes from the SDK so that they can be imported from the top level
 // e.g. import { genRandomSalt } from '@qfi/maci-sdk'
 
-export { Keypair, PubKey, PrivKey, TCommand as Command, Message } from "./domainobjs/domainobjs";
+export { Keypair, PubKey, PrivKey, TCommand, PCommand, Command, Message, StateLeaf, Ballot, type VoteOptionTreeLeaf, VerifyingKey, type Proof } from "./domainobjs/domainobjs";
 export { poseidonEncrypt, poseidonDecrypt, poseidon, poseidonPerm } from "./poseidonencryption";
 export {
   NOTHING_UP_MY_SLEEVE,

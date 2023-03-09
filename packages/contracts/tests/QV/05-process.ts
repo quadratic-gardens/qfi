@@ -5,17 +5,28 @@ import { solidity } from "ethereum-waffle";
 import { Command, Keypair, Message, VerifyingKey } from "@qfi/macisdk";
 import { G1Point, G2Point } from "@qfi/macisdk";
 import { MaciState, genProcessVkSig, genTallyVkSig } from "@qfi/macisdk";
-import { PoseidonT3 } from "../../typechain/PoseidonT3";
-import { PoseidonT3__factory } from "../../typechain/factories/PoseidonT3__factory";
 
-import { PoseidonT4 } from "../../typechain/PoseidonT4";
-import { PoseidonT4__factory } from "../../typechain/factories/PoseidonT4__factory";
+import { PoseidonT3__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT3__factory";
+import { PoseidonT4__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT4__factory";
+import { PoseidonT5__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT5__factory";
+import { PoseidonT6__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT6__factory";
+import { MessageTreeLibraryAddresses, MessageTree__factory } from "../../typechain-types/factories/contracts/MessageTree__factory";
+import { JubjubLibraryAddresses, Jubjub__factory } from "../../typechain-types/factories/contracts/Jubjub__factory";
+import { JubjubFactoryLibraryAddresses, JubjubFactory__factory } from "../../typechain-types/factories/contracts/JubjubFactory__factory";
+import { ConstantInitialVoiceCreditProxy__factory } from "../../typechain-types/factories/contracts/flavors/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy__factory";
+import { FreeForAllGatekeeper__factory } from "../../typechain-types/factories/contracts/flavors/F.sol/FreeForAllGatekeeper__factory";
+import { StateTreeLibraryAddresses, StateTree__factory } from "../../typechain-types/factories/contracts/StateTree__factory";
 
-import { PoseidonT5 } from "../../typechain/PoseidonT5";
-import { PoseidonT5__factory } from "../../typechain/factories/PoseidonT5__factory";
-
-import { PoseidonT6 } from "../../typechain/PoseidonT6";
-import { PoseidonT6__factory } from "../../typechain/factories/PoseidonT6__factory";
+import { PoseidonT3 } from "../../typechain-types/contracts/poseidon/PoseidonT3";
+import { PoseidonT4 } from "../../typechain-types/contracts/poseidon/PoseidonT4"; 
+import { PoseidonT5 } from "../../typechain-types/contracts/poseidon/PoseidonT5";
+import { PoseidonT6 } from "../../typechain-types/contracts/poseidon/PoseidonT6";
+import { Jubjub } from "../../typechain-types/contracts/Jubjub";
+import { JubjubFactory, VerifyingKeyStruct } from "../../typechain-types/contracts/JubjubFactory";
+import { ConstantInitialVoiceCreditProxy } from "../../typechain-types/contracts/flavors/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy";
+import { FreeForAllGatekeeper } from "../../typechain-types/contracts/flavors/F.sol/FreeForAllGatekeeper";
+import { StateTree } from "../../typechain-types/contracts/StateTree";
+import { MessageTree } from "../../typechain-types/contracts/MessageTree";
 
 chai.use(solidity);
 const { expect } = chai;
