@@ -1,1 +1,0 @@
-{"version":3,"file":"poseidon.js","sourceRoot":"","sources":["../../src/poseidonencryption/poseidon.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,YAAY,EAAC,MAAM,gBAAgB,CAAC;AAE5C,MAAM,UAAU,QAAQ,CAAC,MAAM;IAC3B,OAAO,YAAY,CAAC,CAAC,CAAC,EAAE,GAAG,MAAM,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC;AAC3C,CAAC"}
