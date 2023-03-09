@@ -8,11 +8,10 @@
     "outDir": "dist",
     "resolveJsonModule": true
   },
-  "include": ["./scripts", "./tests", "./typechain"],
+  "include": ["./scripts", "./test", "./typechain-types"],
   "files": [
     "./hardhat.config.ts",
     "./node_modules/@nomiclabs/hardhat-ethers/src/type-extensions.d.ts",
     "./node_modules/@nomiclabs/hardhat-waffle/src/type-extensions.d.ts"
   ]
 }
-

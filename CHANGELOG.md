@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.2](https://github.com/compare/v3.7.0...v3.7.2) (2022-11-07)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+# [3.7.0](https://github.com/compare/v3.5.5...v3.7.0) (2022-11-07)
+
+
+### Features
+
+* delete the keys of stateIndexByPubKey and userSignUps which are over 258 ([809a565](https://github.com/commit/809a5651764e322318922596f8102ec7353680f2))
+* modify the projects data and the provider network setting ([e5dc704](https://github.com/commit/e5dc704ce3c4d2eb7b1d661935f5729c6a3b3988))
+
+
+
+
+
+## [3.5.5](https://github.com/compare/v3.5.4...v3.5.5) (2022-10-26)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+## [3.5.4](https://github.com/compare/v3.5.3...v3.5.4) (2022-10-19)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+## [3.5.3](https://github.com/compare/v3.5.1...v3.5.3) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+## [3.5.1](https://github.com/compare/v3.4.5...v3.5.1) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+## [3.4.5](https://github.com/compare/v3.4.2...v3.4.5) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/qfi
+
+
+
+
+
+## [3.4.2](https://github.com/compare/v3.1.0...v3.4.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* fix commNode images ([e15d941](https://github.com/commit/e15d941295a9e0da289d7c198db725cd70d456fa))
+* fix projects mobile ([f6d00a6](https://github.com/commit/f6d00a61ae7adb8d9ee0b3851d44cc5581c0d655))
+
+
+### Features
+
+* add expediente crypto ([85f80dd](https://github.com/commit/85f80dde31892411b7695047528e41c21e71654a))
+* update Expediente Crypto logo picture ([2eb6d8a](https://github.com/commit/2eb6d8af6bc0aa241a8705c8ff30a9dd8ece1611))
+
+
+
+
+
 # [2.1.0](https://github.com/compare/v2.0.1...v2.1.0) (2022-07-08)
 
 

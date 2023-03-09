@@ -1,16 +1,6 @@
 import React, { useState } from "react";
-import {
-  HStack,
-  IconButton,
-  Icon,
-  Link as ExternalLink,
-  Select,
-  Tooltip,
-  useColorModeValue,
-  VStack,
-  Text,
-  Button
-} from "@chakra-ui/react";
+import { HStack, IconButton, Icon, Link as ExternalLink, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
+
 import { MdDashboard } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
@@ -26,33 +16,16 @@ export const SideNav = () => {
   return (
     <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
       <VStack>
-        <IconButton
-          bg={backgroundColor}
-          to={`/?${searchParams.toString()}`}
-          as={Link}
-          mb={6}
-          icon={<Logo />}
-          aria-label="Home"
-        />
+        <IconButton bg={backgroundColor} to={`/?${searchParams.toString()}`} as={Link} mb={6} icon={<Logo />} aria-label="Home" />
 
-        <Tooltip label="Ballot" placement="right">
-          <IconButton
-            to={`/ballot?${searchParams.toString()}`}
-            as={Link}
-            color="gray.500"
-            icon={<Icon as={MdDashboard} boxSize={4} />}
-            aria-label="Ballot"
-          />
-        </Tooltip>
-        <Tooltip label="Projects" placement="right">
-          <IconButton
-            to={`/projects?${searchParams.toString()}`}
-            as={Link}
-            color="gray.500"
-            icon={<Icon as={HiCollection} boxSize={4} />}
-            aria-label="Projects"
-          />
-        </Tooltip>
+        {/* <Tooltip label="Ballot" placement="right">
+          <IconButton to={`/ballot?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={MdDashboard} boxSize={4} />} aria-label="Ballot" />
+        </Tooltip> */}
+        {/* <Tooltip label="Projects" placement="right"> */}
+        {/* <IconButton to={`/projects?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiCollection} boxSize={4} />} aria-label="Projects" /> */}
+        {/* </Tooltip> */}
+
+        <ColorModeSwitcher color="gray.500" aria-label="dark mode" h="50px" borderRadius={useColorModeValue("3px", "8px")} />
         {/* <Tooltip label="How it Works" placement="right">
               <IconButton
                 to="/howitworks"
@@ -72,16 +45,16 @@ export const SideNav = () => {
               />
             </Tooltip> */}
       </VStack>
-      <VStack>
-        
-      </VStack>
+      <VStack></VStack>
+
     </VStack>
   );
 };
 
 export const Navbar = () => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
-  const color = useColorModeValue("gray.800", "#FDFDFD"); 
+  const color = useColorModeValue("gray.800", "#FDFDFD");
+
   let [searchParams] = useSearchParams();
   const { i18n, t } = useTranslation();
   const [selectedLang, setSelectedLang] = useState<string>(i18n.language);
@@ -92,17 +65,7 @@ export const Navbar = () => {
   };
 
   return (
-    <HStack
-      zIndex={9}
-      position={"fixed"}
-      top={0}
-      left={0}
-      bg={backgroundColor}
-      p={4}
-      justifyContent="space-between"
-      alignItems="center"
-      w="full"
-      minH={"32px"}>
+    <HStack zIndex={9} position={"fixed"} top={0} left={0} bg={backgroundColor} p={4} justifyContent="space-between" alignItems="center" w="full" minH={"32px"}>
       <HStack>
         {/* <IconButton
           w={"40px"}
@@ -127,37 +90,17 @@ export const Navbar = () => {
 
       <HStack>
         <Tooltip label="..." placement="right">
-     
-    
-            <Button
-              height="50px"
-              boxSizing="border-box"
-          
-              variant={"porto"}
-              fontSize={{ base: "lg", xl: "xl" }}
-              >
-              Learn More
-            </Button>
-  
+          <Button to={`/ballot?${searchParams.toString()}`} as={Link} height="50px" boxSizing="border-box" variant={"porto"} fontSize={{ base: "lg", xl: "xl" }}>
+            Vote
+          </Button>
         </Tooltip>
-        <Select
-          bg={backgroundColor}
-          color={color}
-          borderColor={color}
-          borderRadius={useColorModeValue("3px", "8px")}
-          value={selectedLang}
-          onChange={({ target: { value } }) => handleLangChange(value)}
-          w={20}
-          h="50px"
-          _focus={{ border: "none" }}
-        >
+        <Select bg={backgroundColor} color={color} borderColor={color} borderRadius={useColorModeValue("3px", "8px")} value={selectedLang} onChange={({ target: { value } }) => handleLangChange(value)} w={20} h="50px" _focus={{ border: "none" }}>
           <option
             value="en"
             style={{
               background: backgroundColor,
               fontWeight: "bold",
-            }}
-          >
+            }}>
             EN
           </option>
           <option
@@ -165,12 +108,10 @@ export const Navbar = () => {
             style={{
               background: backgroundColor,
               fontWeight: "bold",
-            }}
-          >
-            ES
+            }}>
+            PT
           </option>
         </Select>
-        <ColorModeSwitcher color="gray.500" aria-label="dark mode"   h="50px"  borderRadius={useColorModeValue("3px", "8px")}/>
       </HStack>
     </HStack>
   );

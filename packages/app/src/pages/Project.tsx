@@ -106,7 +106,7 @@ export function Project() {
       as="main"
       h="full"
       flex={1}
-      borderRightColor={color}
+      borderRightColor={backgroundColor}
       borderRightWidth={1}
       overflowY={"scroll"}
       sx={{
@@ -136,7 +136,7 @@ export function Project() {
         >
           <VStack
             pb={120}
-            borderColor={color}
+            borderColor={backgroundColor}
             borderLeftWidth={1}
             borderRightWidth={1}
             my={0}
@@ -150,7 +150,7 @@ export function Project() {
               mt={0.5}
               py={0.5}
               w="full"
-              borderBottomColor="gray.100"
+              borderBottomColor={backgroundColor}
               borderBottomWidth={1}
             >
               <VStack
@@ -164,7 +164,7 @@ export function Project() {
                   boxSize="34px"
                   variant="ghost"
                   rounded="full"
-                  to={`/projects?${searchParams.toString()}`}
+                  to={`/?${searchParams.toString()}`}
                   as={Link}
                   icon={<Icon as={HiArrowLeft} />}
                   aria-label="Home"
@@ -227,7 +227,7 @@ export function Project() {
               spacing={0}
             >
               <AspectRatio
-                borderColor="grey.300"
+                borderColor={backgroundColor}
                 borderWidth={3}
                 zIndex="1"
                 w={{ base: "25%", md: "25%" }}

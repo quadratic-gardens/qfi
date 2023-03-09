@@ -1,0 +1,38 @@
+{
+  "name": "@qfi/macisdk",
+  "version": "3.0.0",
+  "description": "",
+  "main": "./build/index.js",
+  "scripts": {
+    "watch": "tsc --watch",
+    "build": "tsc --build"
+  },
+  "dependencies": {
+    "@adraffy/ens-normalize": "^1.9.0",
+    "assert": "^2.0.0",
+    "blake-hash": "^1.1.0",
+    "circomlibjs": "0.0.8",
+    "ethers": "5.5.1",
+    "ffjavascript": "^0.2.57"
+  },
+  "browserslist": {
+    "production": [
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "nohoist": [
+    "**/ethers"
+  ],
+  "devDependencies": {
+    "typescript": "4.9.5"
+  }
+}

@@ -1,22 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
-import {
-  Container,
-  VStack,
-  Grid,
-  GridItem,
-  Flex,
-  Text,
-  Heading,
-  Button,
-  useColorModeValue,
-  useToast,
-  FormControl,
-  FormHelperText,
-  Input,
-  Tooltip,
-  useMediaQuery,
-  AspectRatio,
-} from "@chakra-ui/react";
+import { Container, VStack, Grid, GridItem, Flex, Text, Heading, Button, useColorModeValue, useToast, FormControl, FormHelperText, Input, Tooltip, useMediaQuery, AspectRatio } from "@chakra-ui/react";
 
 import { MagikButton } from "@qfi/ui";
 import { getProject, getRecipientIdbyId } from "../data";
@@ -27,11 +10,12 @@ import { BallotExplainer } from "../components/prague/BallotExplainer";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDappState } from "../context/DappContext";
 
-import { Keypair, PubKey, PrivKey, Command, Message } from "qaci-domainobjs";
-import { genRandomSalt } from "qaci-crypto";
+import { Keypair, PubKey, PrivKey, PCommand, Message } from "../jubjublib/domainobjs/domainobjs";
+import { genRandomSalt } from "../jubjublib/crypto";
 import { useWallet } from "@qfi/hooks";
+import { Jubjub__factory } from "../typechain/factories/contracts/Jubjub__factory";
+import { Jubjub } from "../typechain/contracts/Jubjub";
 import { BigNumber, ethers } from "ethers";
-import { GrantRound__factory } from "../typechain";
 import { getStateIndex } from "../quickBallotConfig";
 import { useTranslation } from "react-i18next";
 
@@ -59,44 +43,16 @@ interface SubmitBallotButtonProps {
   t: (arg: string) => any;
 }
 
-const SubmitBallotButton = ({
-  isConnected,
-  disableSubmitButton,
-  my = 0,
-  onSubmit,
-  t,
-}: SubmitBallotButtonProps) =>
+const SubmitBallotButton = ({ isConnected, disableSubmitButton, my = 0, onSubmit, t }: SubmitBallotButtonProps) =>
   isConnected ? (
-    <Tooltip
-      isDisabled={!disableSubmitButton}
-      label={t(
-        "Unregistered MACI Keypair: Enter a valid MACI passphrase to continue."
-      )}
-      placement="top"
-      shouldWrapChildren
-    >
-      <Button
-        m="auto"
-        my={my}
-        maxWidth={{ md: "150px" }}
-        width="100%"
-        h={20}
-        display="block"
-        disabled={disableSubmitButton}
-        onClick={onSubmit}
-        variant={"porto"}
-        fontSize={{ base: "md", xl: "lg" }}
-      >
+    <Tooltip isDisabled={!disableSubmitButton} label={t("Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.")} placement="top" shouldWrapChildren>
+      <Button m="auto" my={my} maxWidth={{ md: "150px" }} width="100%" h={20} display="block" disabled={disableSubmitButton} onClick={onSubmit} variant={"porto"} fontSize={{ base: "md", xl: "lg" }}>
         <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
       </Button>
     </Tooltip>
   ) : (
     <VStack my={my} textAlign="center" w="full">
-      <Text
-        display={isConnected ? "none" : "flex"}
-        fontSize="xs"
-        fontWeight="extrabold"
-      >
+      <Text display={isConnected ? "none" : "flex"} fontSize="xs" fontWeight="extrabold">
         {t("Not Connected: Sign in to continue")}
       </Text>
     </VStack>
@@ -109,7 +65,6 @@ const headerYourBallotLogo = {
 
 export const Ballot = () => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
- 
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();
@@ -136,9 +91,7 @@ export const Ballot = () => {
 
         toast({
           title: t("New Maci Key"),
-          description: t(
-            "You have updated your MACI key, and are registered to vote."
-          ),
+          description: t("You have updated your MACI key, and are registered to vote."),
           status: "success",
           duration: 6000,
           isClosable: true,
@@ -151,9 +104,7 @@ export const Ballot = () => {
     } catch (e) {
       toast({
         title: t("Invalid Maci Key"),
-        description: t(
-          "The MACI Key you have provided is either incorrect or not registered"
-        ),
+        description: t("The MACI Key you have provided is either incorrect or not registered"),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -188,9 +139,7 @@ export const Ballot = () => {
 
   //TODO: IDs of all the projects on the users ballot according to recipient registry
   const recipientRegistryIds = useMemo(() => {
-    return voteOptions
-      .filter((s) => !isNaN(parseInt(s)))
-      .map((s) => parseInt(s));
+    return voteOptions.filter((s) => !isNaN(parseInt(s))).map((s) => parseInt(s));
   }, [voteOptions]);
 
   const displayOptions: boolean = useMemo(() => {
@@ -222,26 +171,8 @@ export const Ballot = () => {
   //TODO: number of votes per vote option, lines up with recipientRegistryIds
   //TODO: take this data along with recipientRegistryIds and use it to populate messages, then submit
   const votes = useMemo(
-    () => [
-      ballotOption1Votes,
-      ballotOption2Votes,
-      ballotOption3Votes,
-      ballotOption4Votes,
-      ballotOption5Votes,
-      ballotOption6Votes,
-      ballotOption7Votes,
-      ballotOption8Votes,
-    ],
-    [
-      ballotOption1Votes,
-      ballotOption2Votes,
-      ballotOption3Votes,
-      ballotOption4Votes,
-      ballotOption5Votes,
-      ballotOption6Votes,
-      ballotOption7Votes,
-      ballotOption8Votes,
-    ]
+    () => [ballotOption1Votes, ballotOption2Votes, ballotOption3Votes, ballotOption4Votes, ballotOption5Votes, ballotOption6Votes, ballotOption7Votes, ballotOption8Votes],
+    [ballotOption1Votes, ballotOption2Votes, ballotOption3Votes, ballotOption4Votes, ballotOption5Votes, ballotOption6Votes, ballotOption7Votes, ballotOption8Votes]
   );
 
   const resetAllVotes = useCallback(() => {
@@ -253,24 +184,10 @@ export const Ballot = () => {
     setBallotOption6Votes(0);
     setBallotOption7Votes(0);
     setBallotOption8Votes(0);
-  }, [
-    setBallotOption1Votes,
-    setBallotOption2Votes,
-    setBallotOption3Votes,
-    setBallotOption4Votes,
-    setBallotOption5Votes,
-    setBallotOption6Votes,
-    setBallotOption7Votes,
-    setBallotOption8Votes,
-  ]);
+  }, [setBallotOption1Votes, setBallotOption2Votes, setBallotOption3Votes, setBallotOption4Votes, setBallotOption5Votes, setBallotOption6Votes, setBallotOption7Votes, setBallotOption8Votes]);
 
   const addBallotOption1Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption1Votes ** 2 -
-        (ballotOption1Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption1Votes ** 2 - (ballotOption1Votes + 1) ** 2 < 0) {
       return setBallotOption1Votes(0);
     }
     if (ballotOption1Votes < 9) {
@@ -279,12 +196,7 @@ export const Ballot = () => {
     return setBallotOption1Votes(0);
   }, [ballotOption1Votes, voiceCreditBalance]);
   const addBallotOption2Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption2Votes ** 2 -
-        (ballotOption2Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption2Votes ** 2 - (ballotOption2Votes + 1) ** 2 < 0) {
       return setBallotOption2Votes(0);
     }
     if (ballotOption2Votes < 9) {
@@ -293,12 +205,7 @@ export const Ballot = () => {
     return setBallotOption2Votes(0);
   }, [ballotOption2Votes, voiceCreditBalance]);
   const addBallotOption3Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption3Votes ** 2 -
-        (ballotOption3Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption3Votes ** 2 - (ballotOption3Votes + 1) ** 2 < 0) {
       return setBallotOption3Votes(0);
     }
     if (ballotOption3Votes < 9) {
@@ -307,12 +214,7 @@ export const Ballot = () => {
     return setBallotOption3Votes(0);
   }, [ballotOption3Votes, voiceCreditBalance]);
   const addBallotOption4Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption4Votes ** 2 -
-        (ballotOption4Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption4Votes ** 2 - (ballotOption4Votes + 1) ** 2 < 0) {
       return setBallotOption4Votes(0);
     }
     if (ballotOption4Votes < 9) {
@@ -321,12 +223,7 @@ export const Ballot = () => {
     return setBallotOption4Votes(0);
   }, [ballotOption4Votes, voiceCreditBalance]);
   const addBallotOption5Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption5Votes ** 2 -
-        (ballotOption5Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption5Votes ** 2 - (ballotOption5Votes + 1) ** 2 < 0) {
       return setBallotOption5Votes(0);
     }
     if (ballotOption5Votes < 9) {
@@ -335,12 +232,7 @@ export const Ballot = () => {
     return setBallotOption5Votes(0);
   }, [ballotOption5Votes, voiceCreditBalance]);
   const addBallotOption6Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption6Votes ** 2 -
-        (ballotOption6Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption6Votes ** 2 - (ballotOption6Votes + 1) ** 2 < 0) {
       return setBallotOption6Votes(0);
     }
     if (ballotOption6Votes < 9) {
@@ -349,12 +241,7 @@ export const Ballot = () => {
     return setBallotOption6Votes(0);
   }, [ballotOption6Votes, voiceCreditBalance]);
   const addBallotOption7Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption7Votes ** 2 -
-        (ballotOption7Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption7Votes ** 2 - (ballotOption7Votes + 1) ** 2 < 0) {
       return setBallotOption7Votes(0);
     }
     if (ballotOption7Votes < 9) {
@@ -363,12 +250,7 @@ export const Ballot = () => {
     return setBallotOption7Votes(0);
   }, [ballotOption7Votes, voiceCreditBalance]);
   const addBallotOption8Votes = useCallback(() => {
-    if (
-      voiceCreditBalance +
-        ballotOption8Votes ** 2 -
-        (ballotOption8Votes + 1) ** 2 <
-      0
-    ) {
+    if (voiceCreditBalance + ballotOption8Votes ** 2 - (ballotOption8Votes + 1) ** 2 < 0) {
       return setBallotOption8Votes(0);
     }
     if (ballotOption8Votes < 9) {
@@ -381,21 +263,10 @@ export const Ballot = () => {
   const totalVoiceCredits = useMemo(() => {
     return votes.reduce((acc, curr) => acc + curr ** 2, 0);
   }, [votes]);
-  const updateVotes = [
-    addBallotOption1Votes,
-    addBallotOption2Votes,
-    addBallotOption3Votes,
-    addBallotOption4Votes,
-    addBallotOption5Votes,
-    addBallotOption6Votes,
-    addBallotOption7Votes,
-    addBallotOption8Votes,
-  ];
+  const updateVotes = [addBallotOption1Votes, addBallotOption2Votes, addBallotOption3Votes, addBallotOption4Votes, addBallotOption5Votes, addBallotOption6Votes, addBallotOption7Votes, addBallotOption8Votes];
   useEffect(() => {
     const intialBallotOptions = [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN];
-    const options = voteOptions
-      .filter((s) => !isNaN(parseInt(s)))
-      .map((s) => parseInt(s));
+    const options = voteOptions.filter((s) => !isNaN(parseInt(s))).map((s) => parseInt(s));
 
     const initialVoiceCreditBalance = 99;
     resetAllVotes();
@@ -412,10 +283,7 @@ export const Ballot = () => {
   }, [ballotOptions]);
 
   useEffect(() => {
-    const totalVoiceCreditsUsed = votes.reduce(
-      (acc, curr) => acc + curr ** 2,
-      0
-    );
+    const totalVoiceCreditsUsed = votes.reduce((acc, curr) => acc + curr ** 2, 0);
     const newVoiceCreditBalance = 99 - totalVoiceCreditsUsed;
     setVoiceCreditBBalance(newVoiceCreditBalance);
   }, [votes]);
@@ -424,40 +292,23 @@ export const Ballot = () => {
 
   const disableSubmitButton = !isConnected || !isValidMaciKey || txLoading;
 
-  function createMessage(
-    userStateIndex: number,
-    userKeypair: Keypair,
-    coordinatorPubKey: PubKey,
-    voteOptionIndex: number | null,
-    voteWeight: number | null,
-    nonce: number
-  ): [Message, PubKey] {
+  function createMessage(userStateIndex: number, userKeypair: Keypair, coordinatorPubKey: PubKey, voteOptionIndex: number | null, voteWeight: number | null, nonce: number): [Message, PubKey] {
     const salt = genRandomSalt();
 
     const quadraticVoteWeight = voteWeight ?? 0;
     const pubkey = userKeypair.pubKey;
 
+    // TODO:porto
     // /stateIndex: BigInt,
     // newPubKey: PubKey,
     // voteOptionIndex: BigInt,
     // newVoteWeight: BigInt,
     // nonce: BigInt,
     // pollId: BigInt,
-    const command = new Command(
-      BigInt(userStateIndex),
-      pubkey,
-      BigInt(voteOptionIndex || 0),
-      BigInt(quadraticVoteWeight),
-      BigInt(nonce),
-      BigInt(0),
-      salt
-    );
+    const command = new PCommand(BigInt(userStateIndex), pubkey, BigInt(voteOptionIndex || 0), BigInt(quadraticVoteWeight), BigInt(nonce), BigInt(0), salt);
 
     const signature = command.sign(userKeypair.privKey);
-    const message = command.encrypt(
-      signature,
-      Keypair.genEcdhSharedKey(userKeypair.privKey, coordinatorPubKey)
-    );
+    const message = command.encrypt(signature, Keypair.genEcdhSharedKey(userKeypair.privKey, coordinatorPubKey));
     return [message, userKeypair.pubKey];
   }
 
@@ -466,63 +317,43 @@ export const Ballot = () => {
     const signer = provider.getSigner(address);
     const grantRoundAddress = "0xF1D72F065fcBF6e1Ad623456fBb05A8777E27052";
 
-    const grantRound = new ethers.Contract(
-      grantRoundAddress,
-      GrantRound__factory.abi,
-      signer
-    );
+    const grantRound = new ethers.Contract(grantRoundAddress, Jubjub__factory.abi, signer);
 
     setTxLoading(true);
     console.log("-----------------------------------------------------");
-    const txData: [Message, PubKey][] = recipientRegistryIds.map(
-      (projectId, index) => {
-        try {
-          const recipientVoteOptionIndex = getRecipientIdbyId(
-            projectId.toString()
-          );
-          console.log("recipientVoteOptionIndex", recipientVoteOptionIndex);
-          let maciKeyPair: Keypair;
-          let serializedMaciPublicKey: string;
-          let userStateIndex: number;
-          let nonce: number;
-          let voteWeight: number;
+    const txData: [Message, PubKey][] = recipientRegistryIds.map((projectId, index) => {
+      try {
+        const recipientVoteOptionIndex = getRecipientIdbyId(projectId.toString());
+        console.log("recipientVoteOptionIndex", recipientVoteOptionIndex);
+        let maciKeyPair: Keypair;
+        let serializedMaciPublicKey: string;
+        let userStateIndex: number;
+        let nonce: number;
+        let voteWeight: number;
 
-          if (isMaciPrivKey(maciKey)) {
-            maciKeyPair = new Keypair(PrivKey.unserialize(maciKey));
-            serializedMaciPublicKey = maciKeyPair.pubKey.serialize();
-            console.log("serializedMaciPublicKey", serializedMaciPublicKey);
-            userStateIndex = getStateIndex(serializedMaciPublicKey);
-            console.log("stateIndex", userStateIndex);
-            nonce = index;
-            voteWeight = votes[index];
-          }
-          if (
-            isMaciPrivKey(maciKey) &&
-            getStateIndex(serializedMaciPublicKey)
-          ) {
-            console.log("User is registered, signing ballot with private key");
-            const coordinatorKey = PubKey.unserialize(
-              "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
-            );
-
-            const [message, encPubKey] = createMessage(
-              userStateIndex,
-              maciKeyPair,
-              coordinatorKey,
-              recipientVoteOptionIndex,
-              voteWeight,
-              nonce
-            );
-            return [message, encPubKey];
-          } else {
-            console.log("user is not registered, throw message");
-            throw new Error("User is not registered");
-          }
-        } catch (e) {
-          return [null, null];
+        if (isMaciPrivKey(maciKey)) {
+          maciKeyPair = new Keypair(PrivKey.unserialize(maciKey));
+          serializedMaciPublicKey = maciKeyPair.pubKey.serialize();
+          console.log("serializedMaciPublicKey", serializedMaciPublicKey);
+          userStateIndex = getStateIndex(serializedMaciPublicKey);
+          console.log("stateIndex", userStateIndex);
+          nonce = index;
+          voteWeight = votes[index];
         }
+        if (isMaciPrivKey(maciKey) && getStateIndex(serializedMaciPublicKey)) {
+          console.log("User is registered, signing ballot with private key");
+          const coordinatorKey = PubKey.unserialize("macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04");
+
+          const [message, encPubKey] = createMessage(userStateIndex, maciKeyPair, coordinatorKey, recipientVoteOptionIndex, voteWeight, nonce);
+          return [message, encPubKey];
+        } else {
+          console.log("user is not registered, throw message");
+          throw new Error("User is not registered");
+        }
+      } catch (e) {
+        return [null, null];
       }
-    );
+    });
     const messages: Message[] = [];
     const encPubKeys: PubKey[] = [];
 
@@ -548,9 +379,7 @@ export const Ballot = () => {
       await tx.wait();
       toast({
         title: t("Ballot Submitted"),
-        description: t(
-          "You have submitted your ballot! Feel free to resubmit if you change your mind."
-        ),
+        description: t("You have submitted your ballot! Feel free to resubmit if you change your mind."),
         status: "success",
         duration: 10000,
         isClosable: true,
@@ -589,29 +418,27 @@ export const Ballot = () => {
           background: "transparent",
           borderRadius: "0px",
         },
-      }}
-    >
+      }}>
       <Container style={{ marginTop: 64, maxWidth: 1042 }}>
         {isViewportMd ? (
           <Heading w="full">
-            <AspectRatio ratio={24 / 4} w='full'overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
-              <Hero/>
+            <AspectRatio ratio={24 / 4} w="full" overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
+              <Hero />
             </AspectRatio>
           </Heading>
         ) : (
           <Flex w="full" alignItems="center" flexDirection="column">
             <Heading w="full">
-              <AspectRatio ratio={24 / 4} w='full'overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
-                <Hero/>
+              <AspectRatio ratio={24 / 4} w="full" overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
+                <Hero />
               </AspectRatio>
             </Heading>
-            <MagikButton 
-        borderRadius={"8px"} mt={6} maxWidth={{ md: 175 }} />
+            <MagikButton borderRadius={"8px"} mt={6} maxWidth={{ md: 175 }} />
           </Flex>
         )}
 
         <VStack spacing={2} alignItems="flex-start" w="full">
-        <Heading style={{ marginTop: 56 }} textAlign={{ base: "center" }}>
+          <Heading style={{ marginTop: 56 }} textAlign={{ base: "center" }}>
             Voting Ballot
           </Heading>
           <BallotExplainer />
@@ -619,63 +446,30 @@ export const Ballot = () => {
             {t("VOICE CREDIT BALANCE")}: {voiceCreditBalance}
           </Heading>
           <Text px={"1px"}>
-            {t("Voice Credits spent")}: {ballotOption1Votes ** 2} +{" "}
-            {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +
-            {ballotOption4Votes ** 2} + {ballotOption5Votes ** 2} +{" "}
-            {ballotOption6Votes ** 2} + {ballotOption7Votes ** 2} +{" "}
-            {ballotOption8Votes ** 2} = {totalVoiceCredits}
+            {t("Voice Credits spent")}: {ballotOption1Votes ** 2} + {ballotOption2Votes ** 2} + {ballotOption3Votes ** 2} +{ballotOption4Votes ** 2} + {ballotOption5Votes ** 2} + {ballotOption6Votes ** 2} + {ballotOption7Votes ** 2} + {ballotOption8Votes ** 2} = {totalVoiceCredits}
           </Text>
         </VStack>
         {displayOptions ? (
-          <VStack
-            spacing={0}
-            alignItems="flex-start"
-            style={{ marginTop: 48 }}
-            w="full"
-            display={isEmptyBallot ? "flex" : "none"}
-          >
+          <VStack spacing={0} alignItems="flex-start" style={{ marginTop: 48 }} w="full" display={isEmptyBallot ? "flex" : "none"}>
             {ballotData.map((project, index) => (
-              <BallotOption
-                key={index}
-                lastOption={index === ballotOptions.length - 1 ? true : false}
-                ballotOption={project}
-                votes={votes[index]}
-                onClick={updateVotes[index]}
-                to={`/projects/${project.id}`}
-              />
+              <BallotOption key={index} lastOption={index === ballotOptions.length - 1 ? true : false} ballotOption={project} votes={votes[index]} onClick={updateVotes[index]} to={`/${project.id}`} />
             ))}
           </VStack>
         ) : (
           <VStack style={{ marginTop: 48 }} alignItems="center" w="full">
-            <Button
-              as={Link}
-              variant="porto"
-              fontSize={{ base: "lg", xl: "xl" }}
-              maxW={{ base: 250, md: 400 }}
-              to={`/projects?${searchParams.toString()}`}
-            >
+            <Button as={Link} variant="porto" fontSize={{ base: "lg", xl: "xl" }} maxW={{ base: 250, md: 400 }} to={`/?${searchParams.toString()}`}>
               {t("CHECK OUT THE PROJECTS")}
             </Button>
           </VStack>
         )}
-        <VStack
-          spacing={3}
-          py={8}
-          alignItems={{ base: "center", md: "flex-start" }}
-          justifyContent={{ base: "center", md: "space-between" }}
-          w="full"
-        >
+        <VStack spacing={3} py={8} alignItems={{ base: "center", md: "flex-start" }} justifyContent={{ base: "center", md: "space-between" }} w="full">
           {isViewportMd ? (
             <Flex w="full" alignItems="center" justifyContent="space-between">
-              <Heading textAlign={{ base: "center" }}>
-                {t("BALLOT (MACI) PASSPHRASE")}
-              </Heading>
+              <Heading textAlign={{ base: "center" }}>{t("BALLOT (MACI) PASSPHRASE")}</Heading>
               <MagikButton maxWidth={{ md: 175 }} />
             </Flex>
           ) : (
-            <Heading textAlign={{ base: "center" }}>
-              {t("BALLOT (MACI) PASSPHRASE")}
-            </Heading>
+            <Heading textAlign={{ base: "center" }}>{t("BALLOT (MACI) PASSPHRASE")}</Heading>
           )}
 
           <Grid
@@ -689,82 +483,32 @@ export const Ballot = () => {
             templateRows={{
               base: "repeat(1, minmax(0, 1fr))",
               md: "repeat(2, minmax(0, 1fr))",
-            }}
-          >
+            }}>
             <GridItem colSpan={{ base: 1, md: 8 }} rowSpan={{ md: 2 }}>
               <Text textAlign="justify">
-                {t(
-                  "The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page)."
-                )}{" "}
-                {t(
-                  "Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it."
-                )}{" "}
+                {t("The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page).")}{" "}
+                {t("Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it.")}{" "}
                 {t("'Not your MACI, not your vote'.")}{" "}
-                {t(
-                  "Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count."
-                )}
+                {t("Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count.")}
               </Text>
             </GridItem>
             {isViewportMd && (
-              <GridItem
-                colSpan={{ base: 1, md: 2 }}
-                w={{ base: "full", md: "90%" }}
-                m={{ base: "32px auto 0 auto", md: "auto" }}
-              >
-                <SubmitBallotButton
-                  disableSubmitButton={disableSubmitButton}
-                  isConnected={isConnected}
-                  onSubmit={handleSubmit}
-                  t={t}
-                />
+              <GridItem colSpan={{ base: 1, md: 2 }} w={{ base: "full", md: "90%" }} m={{ base: "32px auto 0 auto", md: "auto" }}>
+                <SubmitBallotButton disableSubmitButton={disableSubmitButton} isConnected={isConnected} onSubmit={handleSubmit} t={t} />
               </GridItem>
             )}
           </Grid>
 
           <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
-            <FormControl
-              w="full"
-              display={{ base: "flex", md: "block" }}
-              flexDir={{ base: "column" }}
-              alignItems={{ base: "center" }}
-              isInvalid={isError}
-              variant="floating"
-              id="key"
-              isRequired
-              mt={{ base: 12 }}
-            >
-              <Input
-                w={{ base: "full", md: "80%" }}
-                type="password"
-                placeholder={t("MACI Key")}
-                variant="porto"
-                value={key}
-                onChange={handleInputChange}
-              />
+            <FormControl w="full" display={{ base: "flex", md: "block" }} flexDir={{ base: "column" }} alignItems={{ base: "center" }} isInvalid={isError} variant="floating" id="key" isRequired mt={{ base: 12 }}>
+              <Input w={{ base: "full", md: "80%" }} type="password" placeholder={t("MACI Key")} variant="porto" value={key} onChange={handleInputChange} />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormHelperText fontFamily="Space Grotesk">
-                {numChars ?? "-"} / 71
-              </FormHelperText>
-              <Button
-                variant="porto"
-                fontSize={{ base: "lg", xl: "xl" }}
-                type="submit"
-                w={{ base: "full", md: "80%" }}
-                mt={6}
-                alignItems="center"
-              >
+              <FormHelperText fontFamily="Space Grotesk">{numChars ?? "-"} / 71</FormHelperText>
+              <Button variant="porto" fontSize={{ base: "lg", xl: "xl" }} type="submit" w={{ base: "full", md: "80%" }} mt={6} alignItems="center">
                 {t("SAVE")}
               </Button>
             </FormControl>
-            {!isViewportMd && (
-              <SubmitBallotButton
-                disableSubmitButton={disableSubmitButton}
-                isConnected={isConnected}
-                my={6}
-                onSubmit={handleSubmit}
-                t={t}
-              />
-            )}
+            {!isViewportMd && <SubmitBallotButton disableSubmitButton={disableSubmitButton} isConnected={isConnected} my={6} onSubmit={handleSubmit} t={t} />}
           </form>
         </VStack>
       </Container>

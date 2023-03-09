@@ -3010,5 +3010,5 @@ export const stateIndexByPubKey = {
 
 //get state index by pk
 export function getStateIndex(serializedPubKey: string): number {
-  return stateIndexByPubKey[serializedPubKey];
+  return 1;
 }

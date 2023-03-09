@@ -33,8 +33,8 @@ export const SUPPORTED_NETWORKS: NetworkConfig = {
   "0x64": {
     chainId: "0x64",
     name: "Gnosis Chain",
-    symbol: "Gnosis Chain",
-    explorer: "https://blockscout.com/Gnosis Chain/mainnet/",
+    symbol: "xDai",
+    explorer: "https://blockscout.com/xdai/mainnet/",
     rpc: "https://rpc.gnosischain.com/",
   },
   "0x89": {
@@ -64,6 +64,18 @@ export const providerOptions: IProviderOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
+      infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
+      rpc: {
+        1: SUPPORTED_NETWORKS["0x1"].rpc,
+        100: SUPPORTED_NETWORKS["0x64"].rpc,
+        1337: SUPPORTED_NETWORKS["0x539"].rpc,
+      },
+    },
+  },
+  walletlink: {
+    package: CoinbaseWalletSDK,
+    options: {
+      appName: "QFI",
       infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
       rpc: {
         1: SUPPORTED_NETWORKS["0x1"].rpc,
@@ -374,7 +386,7 @@ export const useWallet = (): WalletContextType => useContext(WalletContext);
 
 export const nameToChainId = (name: string): string | undefined => {
   switch (name) {
-    case "Gnosis Chain":
+    case "xdai":
       return "0x64";
     case "polygon":
       return "0x89";

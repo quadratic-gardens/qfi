@@ -3,12 +3,80 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.2](https://github.com/quadratic-funding/qfi/compare/v3.7.0...v3.7.2) (2022-11-07)
+
+**Note:** Version bump only for package @qfi/ethPortocli
+
+
+
+
+
+# [3.7.0](https://github.com/quadratic-funding/qfi/compare/v3.5.5...v3.7.0) (2022-11-07)
+
+
+### Features
+
+* delete the keys of stateIndexByPubKey and userSignUps which are over 258 ([809a565](https://github.com/quadratic-funding/qfi/commit/809a5651764e322318922596f8102ec7353680f2))
+* modify the projects data and the provider network setting ([e5dc704](https://github.com/quadratic-funding/qfi/commit/e5dc704ce3c4d2eb7b1d661935f5729c6a3b3988))
+
+
+
+
+
+## [3.5.5](https://github.com/quadratic-funding/qfi/compare/v3.5.4...v3.5.5) (2022-10-26)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
+## [3.5.4](https://github.com/quadratic-funding/qfi/compare/v3.5.3...v3.5.4) (2022-10-19)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
+## [3.5.3](https://github.com/quadratic-funding/qfi/compare/v3.5.1...v3.5.3) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
+## [3.5.1](https://github.com/quadratic-funding/qfi/compare/v3.4.5...v3.5.1) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
+## [3.4.5](https://github.com/quadratic-funding/qfi/compare/v3.4.2...v3.4.5) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
+## [3.4.2](https://github.com/quadratic-funding/qfi/compare/v3.1.0...v3.4.2) (2022-09-27)
+
+**Note:** Version bump only for package @qfi/ethtaiwancli
+
+
+
+
+
 # [2.1.0](https://github.com/quadratic-funding/qfi/compare/v2.0.1...v2.1.0) (2022-07-08)
 
 
 ### Features
 
-* **ethlatam: cli easy setup:** change max projects ([9a88f84](https://github.com/quadratic-funding/qfi/commit/9a88f843f621ac6e83ded42dc64a7059b51ecc7b))
+* **ethPorto: cli easy setup:** change max projects ([9a88f84](https://github.com/quadratic-funding/qfi/commit/9a88f843f621ac6e83ded42dc64a7059b51ecc7b))
 
 
 
@@ -16,7 +84,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.0.1](https://github.com/quadratic-funding/qfi/compare/v2.0.0...v2.0.1) (2022-06-29)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 
 
@@ -27,7 +95,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **ethlatam cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
+* **ethPorto cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
 * **polygon support:** gas price tweaks, eject csv of public keys on key gen ([0ff3ab0](https://github.com/quadratic-funding/qfi/commit/0ff3ab0526069b21e808d73239c0d1c19d706826))
 
 
@@ -39,7 +107,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* **ethlatam cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
+* **ethPorto cli:** configure cli for eth barcelona: polygon support ([5c87081](https://github.com/quadratic-funding/qfi/commit/5c8708192f0ab5615d8a2c909917e4a9a73d4df9))
 * **polygon support:** gas price tweaks, eject csv of public keys on key gen ([0ff3ab0](https://github.com/quadratic-funding/qfi/commit/0ff3ab0526069b21e808d73239c0d1c19d706826))
 
 
@@ -48,7 +116,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.5.0](https://github.com/quadratic-funding/qfi/compare/v1.4.1...v1.5.0) (2022-06-11)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 
 
@@ -56,7 +124,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.4.1](https://github.com/quadratic-funding/qfi/compare/v1.4.0...v1.4.1) (2022-06-11)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 
 
@@ -86,7 +154,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [1.2.0](https://github.com/quadratic-funding/qfi/compare/v1.1.0...v1.2.0) (2022-06-10)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 
 
@@ -148,15 +216,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.3.0](https://github.com/quadratic-funding/qfi/compare/v0.2.2...v0.3.0) (2022-06-08)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 ## [0.2.1](https://github.com/quadratic-funding/qfi/compare/v0.2.0...v0.2.1) (2022-06-08)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 # [0.2.0](https://github.com/quadratic-funding/qfi/compare/v0.1.0...v0.2.0) (2022-06-03)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 # [0.1.0](https://github.com/quadratic-funding/qfi/compare/v0.0.4...v0.1.0) (2022-06-02)
 
@@ -166,7 +234,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.0.4](https://github.com/quadratic-funding/qfi/compare/v0.0.3...v0.0.4) (2022-06-01)
 
-**Note:** Version bump only for package @qfi/ethlatamcli
+**Note:** Version bump only for package @qfi/ethPortocli
 
 ## [0.0.3](https://github.com/quadratic-funding/qfi/compare/v0.0.2...v0.0.3) (2022-06-01)
 

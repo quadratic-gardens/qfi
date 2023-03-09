@@ -5,12 +5,7 @@ import { readLocalJsonFile } from "./lib/files.js"
 import {
   auth,
   genkeys,
-  deploy,
-  initialize,
-  addRecipients,
-  signup,
   doTheThing,
-  fund,
   recover,
   tally
 } from "./commands/index.js"
@@ -41,45 +36,7 @@ program
   .action((amount: number) => {
     genkeys(amount)
   })
-  .addHelpCommand(`ethportocli genkeys 3000`)
-
-program
-  .command("initialize")
-  .description("Initialize the deployed MACI/QFI smart contracts")
-  .argument("<network>", "the network where the contracts has been deployed")
-  .action((network: string) => {
-    initialize(network)
-  })
-
-program
-  .command("contracts:deploy")
-  .description(
-    "Deploy the smart contracts infrastructure necessary for running a new QFI/MACI instance for a specified network"
-  )
-  .argument("<network>", "the network where the contracts will be deployed")
-  .action((network: string) => {
-    deploy(network)
-  })
-
-program
-  .command("contracts:add-recipients")
-  .description(
-    "Add recipients on RecipientRegistry Smart Contract deployed on the network by taking data from CSV input file specified in the path"
-  )
-  .argument("<network>", "the network where the contracts has been deployed")
-  .argument("<path>", "the path of the CSV input file where the recipients data is stored")
-  .action((network: string, path: string) => {
-    addRecipients(network, path)
-  })
-
-program
-  .command("contracts:signup")
-  .description("Signup users and refill with some crypto their addresses")
-  .argument("<network>", "the network where the contracts has been deployed")
-  .argument("<path>", "the path of the CSV input file where the signup data for users is stored")
-  .action((network: string, path: string) => {
-    signup(network, path)
-  })
+  .addHelpCommand(`ethPortoCli genkeys 3000`)
 
 program
   .command("dothething")
@@ -90,28 +47,46 @@ program
   })
 
 program
-  .command("fund")
-  .description("seeds user keys with 0.1 base network currency")
-  .argument("<network>", "the network where the contracts has been deployed")
-  .action((network: string) => {
-    fund(network)
-  })
-
-program
   .command("recover")
   .description("continues signups at specified stateindex")
   .argument("<network>", "the network where the contracts has been deployed")
   .action((network: string) => {
     recover(network)
   })
-  program
+program
   .command("tally")
   .description("calculates the tally of the current vote offchain")
   .argument("<network>", "the network where the contracts has been deployed")
   .argument("<coordinatorPrivkey>", "MACI privatekey used by coodinator in Diffie Hellman Secret")
   .argument("<matchingPoolAmount>", "Amount of xDAI to use for matching pool (dollar amount)")
-  .action((network: string, coordinatorPrivkey:string, matchingPoolAmount: string) => {
-    tally(network, coordinatorPrivkey, matchingPoolAmount)
-  })
+  .argument("<qfiContractAddress>", "Block QFI contracts were deployed on")
+  .argument("<startBlock>", "Block QFI contracts were deployed on")
+  .argument("<grantRoundStartBlock>", "Block Grant Round Started on")
+  .argument("<firstVoteBlock>", "First block a vote was cast")
+  .argument("<lastblock>", "Last block to check for vote messages on, 'latest' for current block number")
+  .action(
+    (
+      network: string,
+      coordinatorPrivkey: string,
+      matchingPoolAmount: string,
+      qfiContractAddress: string,
+      startBlock: string,
+      grantRoundStartBlock: string,
+      firstVoteBlock: string,
+      lastBlock: string
+    ) => {
+      const optionalLastBlock = lastBlock === "latest" ? "latest" : lastBlock
+      tally(
+        network,
+        coordinatorPrivkey,
+        matchingPoolAmount,
+        qfiContractAddress,
+        startBlock,
+        grantRoundStartBlock,
+        firstVoteBlock,
+        optionalLastBlock
+      )
+    }
+  )
 
 program.parseAsync()
