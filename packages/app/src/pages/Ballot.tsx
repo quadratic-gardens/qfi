@@ -318,7 +318,7 @@ export const Ballot = () => {
     const signer = provider.getSigner(address);
     const grantRoundAddress = "0xF1D72F065fcBF6e1Ad623456fBb05A8777E27052";
 
-    const grantRound: Jubjub = new ethers.Contract(grantRoundAddress, Jubjub__factory.abi, signer);
+    const grantRound = new ethers.Contract(grantRoundAddress, Jubjub__factory.abi, signer);
 
     setTxLoading(true);
     console.log("-----------------------------------------------------");
