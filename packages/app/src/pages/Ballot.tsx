@@ -65,7 +65,6 @@ const headerYourBallotLogo = {
 
 export const Ballot = () => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
-
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   const [key, setKey] = useState<string>();
   const { maciKey, setMaciKey } = useDappState();

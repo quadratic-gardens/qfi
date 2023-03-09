@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { HStack, IconButton, Icon, Link as ExternalLink, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
+
 import { MdDashboard } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
@@ -45,6 +46,7 @@ export const SideNav = () => {
             </Tooltip> */}
       </VStack>
       <VStack></VStack>
+
     </VStack>
   );
 };
@@ -52,6 +54,7 @@ export const SideNav = () => {
 export const Navbar = () => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
   const color = useColorModeValue("gray.800", "#FDFDFD");
+
   let [searchParams] = useSearchParams();
   const { i18n, t } = useTranslation();
   const [selectedLang, setSelectedLang] = useState<string>(i18n.language);
