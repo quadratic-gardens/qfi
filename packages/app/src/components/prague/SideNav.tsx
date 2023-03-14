@@ -17,13 +17,16 @@ export const SideNav = () => {
     <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
       <VStack>
         <IconButton bg={backgroundColor} to={`/?${searchParams.toString()}`} as={Link} mb={6} icon={<Logo />} aria-label="Home" />
-
-        {/* <Tooltip label="Ballot" placement="right">
+{/* 
+        <Tooltip label="Ballot" placement="right">
           <IconButton to={`/ballot?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={MdDashboard} boxSize={4} />} aria-label="Ballot" />
         </Tooltip> */}
-        {/* <Tooltip label="Projects" placement="right"> */}
-        {/* <IconButton to={`/projects?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiCollection} boxSize={4} />} aria-label="Projects" /> */}
-        {/* </Tooltip> */}
+        {/* <Tooltip label="Projects" placement="right">
+          <IconButton to={`/projects?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiCollection} boxSize={4} />} aria-label="Projects" />
+        </Tooltip> */}
+        <Tooltip label="About" placement="right">
+          <IconButton to="/about" as={Link} color="gray.500" icon={<Icon as={HiQuestionMarkCircle} boxSize={4} />} aria-label="About" />
+        </Tooltip>
 
         <ColorModeSwitcher color="gray.500" aria-label="dark mode" h="50px" borderRadius={useColorModeValue("3px", "8px")} />
         {/* <Tooltip label="How it Works" placement="right">
