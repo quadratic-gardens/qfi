@@ -5,51 +5,14 @@ import {
    Flex,
    Text,
    Heading,
-   Button,
    useColorModeValue,
-   Accordion,
-   AccordionButton,
-   AccordionIcon,
-   AccordionItem,
-   AccordionPanel,
-   HStack,
-   Stack,
    AspectRatio,
 } from "@chakra-ui/react";
 import {  useTranslation } from "react-i18next";
-import {  useSearchParams,  Link as RouterLink } from "react-router-dom";
-import {  Hero } from "../components/Hero";
 
 export const About = () => {
   const { t } = useTranslation();
   const color = useColorModeValue("gray.800", "gray.700");
-  const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
-  let [searchParams] = useSearchParams();
-  const heroLightmode = (
-    <AspectRatio
-      ratio={1}
-      w="50%"
-      h={"auto"}
-      overflow="hidden"
-      alignItems={"flex-start"}
-      justifyContent={"flex-start"}
-      flexDir={"row"}>
-      <Hero></Hero>
-    </AspectRatio>
-  );
-  const heroDarkmode = (
-    <AspectRatio
-      ratio={16 / 9}
-      w="full"
-      h={"auto"}
-      overflow="hidden"
-      alignItems={"flex-start"}
-      justifyContent={"flex-start"}
-      flexDir={"row"}>
-      <Hero h={"auto !important"}></Hero>
-    </AspectRatio>
-  );
-
 
   return (
     <Flex
