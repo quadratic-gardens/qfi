@@ -5,16 +5,7 @@ import {
   Flex,
   Text,
   Heading,
-  Button,
   useColorModeValue,
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  HStack,
-  Stack,
-  AspectRatio,
 } from "@chakra-ui/react";
 import {  useTranslation } from "react-i18next";
 
@@ -132,7 +123,7 @@ export const About = () => {
             </Text>
             <Text pb={4} w={"full"}>
               {t("You can learn more about ETHPorto")}{" "}
-              <a href=gd{"https://ethporto.org/"} rel="noreferrer" target="_blank">
+              <a href="https://ethporto.org/" rel="noreferrer" target="_blank">
                 {t("here")}
               </a>
               .
