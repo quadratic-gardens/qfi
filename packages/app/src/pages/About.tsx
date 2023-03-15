@@ -69,18 +69,18 @@ export const About = () => {
             </Text>
             <Text pb={4} w={"full"}>
               {t(
-                "During the venue, our Porto team will send you an email with a password. This is the “MACI” key you’ll use to vote."
+                "During ETHPorto, our team will send you an email with a “MACI” key. This is your private password you’ll use to submit your votes."
               )}
             </Text>
             <Text pb={4} w={"full"}>
-              {t("Below you will find instructions to help support local projects. Learn more about Quadratic Funding")}{" "}
+              {t("You can learn more about Quadratic Funding")}{" "}
               <a href={"https://wtfisqf.com/?grant=&grant=&grant=&grant=&match=1000"} rel="noreferrer" target="_blank">
                 {t("here")}
               </a>
               .
             </Text>
             <Text pb={4} w={"full"}>
-              {t("The future is now.")}
+              {t("The future is now! We hope you participate in this round and help us fund the projects that matter to you!")}
             </Text>
             <Heading size="2xl" style={{ marginBottom: 32 }}>
               {t("About Transformers")}
