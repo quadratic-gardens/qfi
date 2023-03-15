@@ -1,12 +1,20 @@
 import React from "react";
 import {
-   VStack,
-   Container,
-   Flex,
-   Text,
-   Heading,
-   useColorModeValue,
-   AspectRatio,
+  VStack,
+  Container,
+  Flex,
+  Text,
+  Heading,
+  Button,
+  useColorModeValue,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  HStack,
+  Stack,
+  AspectRatio,
 } from "@chakra-ui/react";
 import {  useTranslation } from "react-i18next";
 
@@ -50,8 +58,10 @@ export const About = () => {
         maxWidth={{ lg: "container.lg", md: "container.md" }}
         py={8}>
         <VStack mt={20} spacing={10} h="full" w="full" alignItems="flex-start">
-          <VStack width="100%">
-          <Heading size="4xl">{t("About the round")}</Heading>
+        <VStack spacing={2} alignItems="flex-start" w="full">
+          <Heading size="2xl" style={{ marginBottom: 32 }}>
+            {t("About the round")}
+          </Heading>
             <Text pb={4}>
               {t(
                 "The ETHPorto Quadratic Funding round is a collaboration between ETHPorto and Transformers in an effort to support the local community and explore new ways to finance public goods through quadratic voting."
@@ -69,10 +79,12 @@ export const About = () => {
               </a>
               .
             </Text>
-            <Text pb={4} w={"full"} fontSize={22}>
+            <Text pb={4} w={"full"}>
               {t("The future is now.")}
             </Text>
-            <Heading size="3xl">{t("About Transformers")}</Heading>
+            <Heading size="2xl" style={{ marginBottom: 32 }}>
+              {t("About Transformers")}
+            </Heading>
             <Text pb={4}>
               {t(
                 "Movimento Transformers was born in 2010, when a breakdance group discovered that they could use what they loved (breakdance) to make a difference in their community, leading informal workshops and classes for children and youth deeply at risk of social exclusion."
@@ -110,8 +122,9 @@ export const About = () => {
               </a>
               .
             </Text>
-            
-            <Heading size="3xl">{t("About ETHPorto")}</Heading>
+            <Heading size="2xl" style={{ marginBottom: 32 }}>
+              {t("About ETHPorto")}
+            </Heading>
             <Text pb={4} w={"full"}>
               {t(
                 "ETHPorto is an independently organized event with a Conference, workshops and a 48-hour Hackathon running in parallel. Bringing the first ETH event to the beautiful city of Porto!"
@@ -119,7 +132,7 @@ export const About = () => {
             </Text>
             <Text pb={4} w={"full"}>
               {t("You can learn more about ETHPorto")}{" "}
-              <a href={"https://ethporto.org/"} rel="noreferrer" target="_blank">
+              <a href=gd{"https://ethporto.org/"} rel="noreferrer" target="_blank">
                 {t("here")}
               </a>
               .
