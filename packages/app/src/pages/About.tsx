@@ -8,6 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import {  useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export const About = () => {
   const { t } = useTranslation();
@@ -65,9 +66,9 @@ export const About = () => {
             </Text>
             <Text pb={4} w={"full"}>
               {t("You can learn more about Quadratic Funding")}{" "}
-              <a href={"https://www.figma.com/proto/3oKhn9cHRzKiJ7bSLzWvsi/Quiz?node-id=212-9366&scaling=scale-down&page-id=0%3A1&starting-point-node-id=212%3A9366"} rel="noreferrer" target="_blank">
+              <Text as={Link} to="/quadratic-funding">
                 {t("here")}
-              </a>
+              </Text>
               .
             </Text>
             <Text pb={4} w={"full"}>

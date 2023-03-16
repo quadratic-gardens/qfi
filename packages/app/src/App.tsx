@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import { About } from "./pages/About";
 import { Admin } from "./pages/Admin";
 import { Project } from "./pages/Project";
+import { QuadraticFunding } from "./pages/QuadraticFunding";
 import { Projects } from "./pages/Projects";
 import { Ballot } from "./pages/Ballot";
 import { Home } from "./pages/Home";
@@ -42,6 +43,7 @@ export const App = ({ shuffledProjects }) => {
             element={<Projects shuffledProjects={shuffledProjects} />}
           ></Route>
           <Route path="projects/:projectId" element={<Project />} />
+          <Route path="quadratic-funding" element={<QuadraticFunding />} />
           <Route path="admin" element={<Admin />} />
           <Route path="*" element={<Text> 404 </Text>} />
         </Route>
