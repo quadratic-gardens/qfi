@@ -89,6 +89,9 @@ export const Projects = () => {
                   <Heading fontWeight={"black"} fontSize={"4xl"}>
                     {t("ORGANIZER")}
                   </Heading>
+                  <Heading fontWeight={"500"} fontSize={"2xl"}>
+                  Impact real things in the real world. Today.
+                  </Heading>
                 </VStack>
               </VStack>
               <VStack spacing={0} alignItems="flex-start" w="full">
