@@ -1,12 +1,10 @@
 import { ethers } from "hardhat";
-import { BigNumber, constants, Signer } from "ethers";
+import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-
-import { Keypair, VerifyingKey } from "@qfi/macisdk";
-import { MaciState } from "@qfi/macisdk";
+import { PCommand, Keypair, Message, VerifyingKey } from "@qfi/macisdk";
 import { G1Point, G2Point } from "@qfi/macisdk";
-import { PCommand } from "@qfi/macisdk";
+import { MaciState, genProcessVkSig, genTallyVkSig } from "@qfi/macisdk";
 
 import { PoseidonT3__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT3__factory";
 import { PoseidonT4__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT4__factory";
@@ -32,7 +30,6 @@ import { MessageTree } from "../../typechain-types/contracts/MessageTree";
 
 chai.use(solidity);
 const { expect } = chai;
-
 const testProcessVk = new VerifyingKey(
   new G1Point(BigInt(0), BigInt(1)),
   new G2Point([BigInt(2), BigInt(3)], [BigInt(4), BigInt(5)]),
@@ -49,7 +46,7 @@ const testTallyVk = new VerifyingKey(
   [new G1Point(BigInt(14), BigInt(15)), new G1Point(BigInt(16), BigInt(17))]
 );
 
-describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
+describe("Process - Tally QV poll votes", () => {
   let maciState: MaciState;
   let deployer: Signer;
   let user1: Signer;
@@ -65,6 +62,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
   let users: {
     maciKey: Keypair;
     signer: Signer;
+    stateIndex: number;
   }[] = [];
   let deployerAddress: string;
   let libs: JubjubLibraryAddresses;
@@ -98,6 +96,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
   let freeForAllGateKeeper: FreeForAllGatekeeper;
   let coordinator: Keypair;
   let coordinatorPubkey: PubKeyStruct;
+
   const duration = 15 * 60;
   const stateTreeDepth = 6;
   const intStateTreeDepth = 3;
@@ -114,9 +113,26 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
     maxMessages: 5 ** treeDepths.messageTreeDepth,
     maxVoteOptions: 5 ** treeDepths.voteOptionTreeDepth,
   };
+  let tallyFileData: {
+    maci: any;
+    pollId: number;
+    newTallyCommitment: any;
+    results: {
+      tally: any;
+      salt: any;
+    };
+    totalSpentVoiceCredits: {
+      spent: any;
+      salt: any;
+    };
+    perVOSpentVoiceCredits: {
+      tally: any;
+      salt: any;
+    };
+  };
 
   beforeEach(async function () {
-    this?.timeout(40000);
+    this?.timeout(1200000);
     coordinator = new Keypair();
     coordinatorPubkey = coordinator.pubKey.asContractParam();
     [deployer, user1, user2, user3, user4, user5, user6, user7, user8, user9, user10] = await ethers.getSigners();
@@ -204,100 +220,12 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
 
       const iface = jubjubInstance.interface;
       const signUpEvent = iface.parseLog(logs[logs.length - 1]);
+      const stateIndex = signUpEvent.args._stateIndex.toString();
 
-      users.push({ maciKey: maciKey, signer: user });
+      users.push({ maciKey: maciKey, signer: user, stateIndex: stateIndex });
       // NOTE: Signup users on local maci data structure
       maciState.signUp(maciKey.pubKey, BigInt(signUpEvent.args._voiceCreditBalance.toString()), BigInt(signUpEvent.args._timestamp.toString()));
     }
-  });
-
-  it("verify - vote triggers event with encrypted message", async () => {
-    const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
-    await jubjubInstance.startVoting(BigNumber.from(3), BigNumber.from(60 * 60), coordinatorPubkey);
-
-    const keypair = users[0].maciKey;
-
-    const _stateIndex = BigInt(1);
-    const _newPubKey = keypair.pubKey;
-    const _voteOptionIndex = BigInt(0);
-    const _newVoteWeight = BigInt(9);
-    const _nonce = BigInt(1);
-    const _pollId = BigInt(0);
-    const _salt = BigInt(0);
-
-    const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
-    const command = new PCommand(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
-    const signature = command.sign(keypair.privKey);
-    const message = command.encrypt(signature, sharedKey);
-
-    const { status, logs } = await jubjubInstance
-      .publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())
-      .then((tx) => tx.wait());
-    const iface = jubjubInstance.interface;
-    console.log(logs);
-    const event = iface.parseLog(logs[logs.length - 1]);
-
-    const expectOkStatus = 1;
-    const expectedMessage = message.data.map((data) => {
-      return BigNumber.from(data);
-    });
-    expect(status).to.equal(expectOkStatus);
-    expect(event.args[0][1].map((n) => n.toString())).to.deep.equal(expectedMessage.map((n) => n.toString()));
-  });
-  it("verify - can vote multiple times", async () => {
-    const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
-    await jubjubInstance.startVoting(BigNumber.from(3), BigNumber.from(60 * 60), coordinatorPubkey);
-    let _stateIndex = BigInt(0);
-    for (const user of users) {
-      const keypair = user.maciKey;
-
-      _stateIndex + 1n;
-      const _newPubKey = keypair.pubKey;
-      const _voteOptionIndex = BigInt(0);
-      const _newVoteWeight = BigInt(9);
-      const _nonce = BigInt(1);
-      const _pollId = BigInt(0);
-      const _salt = BigInt(0);
-
-      const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
-      const command = new PCommand(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
-      const signature = command.sign(keypair.privKey);
-      const message = command.encrypt(signature, sharedKey);
-      await expect(jubjubInstance.publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())).to.emit(
-        jubjubInstance,
-        "PublishMessage"
-      );
-    }
-  });
-  it("fails - can vote before voting starts", async () => {
-    const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
-    // await jubjubInstance.startVoting(BigNumber.from(3), BigNumber.from(60 * 60), coordinatorPubkey);
-    let _stateIndex = BigInt(0);
-    for (const user of users) {
-      const keypair = user.maciKey;
-
-      _stateIndex + 1n;
-      const _newPubKey = keypair.pubKey;
-      const _voteOptionIndex = BigInt(0);
-      const _newVoteWeight = BigInt(9);
-      const _nonce = BigInt(1);
-      const _pollId = BigInt(0);
-      const _salt = BigInt(0);
-
-      const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
-      const command = new PCommand(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
-      const signature = command.sign(keypair.privKey);
-      const message = command.encrypt(signature, sharedKey);
-      await expect(jubjubInstance.publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())).to.be.revertedWith(
-        "ERROR_VOTING_PERIOD_PASSED"
-      );
-    }
-  });
-  it("verify - can process votes locally", async function () {
-    this?.timeout(800000);
-    const provider = deployer.provider ?? ethers.getDefaultProvider();
-    // //NOTE: this is where the coordinator key is set on the local maci data structure
-    const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
 
     const { blockHash } = await jubjubInstance
       .connect(deployer)
@@ -305,44 +233,64 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
       .then((tx) => tx.wait());
     const deployTime = (await provider.getBlock(blockHash)).timestamp;
     const _duration = await jubjubInstance.voteDurationSeconds();
-    console.log(_duration);
-    const p = maciState.deployPoll(_duration, BigInt(deployTime + _duration), maxValues, treeDepths, messageBatchSize, coordinator);
-    let index = 1;
+
+    // //NOTE: this is where the coordinator key is set on the local maci data structure
+    const p = maciState.deployPoll(duration, BigInt(deployTime + duration), maxValues, treeDepths, messageBatchSize, coordinator);
+    let index = 0;
     for (const user of users) {
-      const { maciKey: keypair, signer } = user;
-      const _stateIndex = BigInt(index);
+      const { maciKey: keypair, signer, stateIndex } = users[0];
+      const _stateIndex = BigInt(stateIndex);
 
       const _newPubKey = keypair.pubKey;
-      const _voteOptionIndex = BigInt(index);
-      const _newVoteWeight = BigInt(index);
-      const _nonce = BigInt(1);
+      const _voteOptionIndex = BigInt(index + 1);
+      const _newVoteWeight = BigInt(1);
+      //publish last nonce first
+      const _nonce = BigInt(3 - index);
       const _pollId = BigInt(0);
-      const _salt = BigInt(1);
+      const _salt = BigInt(0);
       const command = new PCommand(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
 
       const signature = command.sign(keypair.privKey);
       const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
       const message = command.encrypt(signature, sharedKey);
       maciState.polls[0].publishMessage(message, keypair.pubKey);
+      index++;
+
+      const _message = <MessageStruct>message.asContractParam();
+      const _encPubKey = keypair.pubKey.asContractParam();
+      await expect(jubjubInstance.publishMessage(_message, keypair.pubKey.asContractParam())).to.emit(jubjubInstance, "PublishMessage");
+    }
+    index = 0;
+    for (const user of users) {
+      const { maciKey: keypair, signer, stateIndex } = users[1];
+      const _stateIndex = BigInt(stateIndex);
+
+      const _newPubKey = keypair.pubKey;
+      const _voteOptionIndex = BigInt(index + 1);
+      const _newVoteWeight = BigInt(2);
+      const _nonce = BigInt(3 - index);
+      const _pollId = BigInt(0);
+      const _salt = BigInt(0);
+      const command = new PCommand(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
+
+      const signature = command.sign(keypair.privKey);
+      const sharedKey = Keypair.genEcdhSharedKey(keypair.privKey, coordinator.pubKey);
+      const message = command.encrypt(signature, sharedKey);
+      maciState.polls[0].publishMessage(message, keypair.pubKey);
+      index++;
+      console.log(index);
 
       const _message = <MessageStruct>message.asContractParam();
       const _encPubKey = keypair.pubKey.asContractParam();
       await expect(jubjubInstance.publishMessage(_message, keypair.pubKey.asContractParam())).to.emit(jubjubInstance, "PublishMessage");
     }
 
-    console.log(await jubjubInstance.voteDeadline());
-
+    await jubjubInstance.voteDeadline();
+    const __duration = await jubjubInstance.voteDurationSeconds();
     // const dd = await poll.getDeployTimeAndDuration();
     const hardHatProvider = ethers.provider;
     await hardHatProvider.send("evm_increaseTime", [duration + 1]);
     await hardHatProvider.send("evm_mine", []);
-
-    const maciPoll = maciState.polls[0];
-    maciPoll.messageAq.mergeSubRoots(0); //NOTE: 0 as input attempts to merge all subroots
-    maciPoll.messageAq.merge(treeDepths.messageTreeDepth);
-
-    await jubjubInstance.mergeMessageAqSubRoots(0);
-    await jubjubInstance.mergeMessageAq();
 
     const maciStateAq = maciState.stateAq;
     maciStateAq.mergeSubRoots(0); // 0 as input attempts to merge all subroots
@@ -350,5 +298,59 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
 
     await jubjubInstance.mergeStateAqSubRoots(0);
     await jubjubInstance.mergeStateAq();
+
+    const maciPoll = maciState.polls[0];
+    maciPoll.messageAq.mergeSubRoots(0); //NOTE: 0 as input attempts to merge all subroots
+    maciPoll.messageAq.merge(treeDepths.messageTreeDepth);
+
+    await jubjubInstance.mergeMessageAqSubRoots(0);
+    await jubjubInstance.mergeMessageAq();
+    maciPoll.processMessages();
+  });
+
+  describe("Process and Tally Vote messages", () => {
+    it("verify - generates tally file data", async () => {
+      const pollId = 0;
+      const maciPoll = maciState.polls[pollId];
+      const maciTallyCircuitInputs = maciPoll.tallyVotes(pollId);
+      console.log("maciPollResults");
+      console.log(maciPoll.results);
+      const newTallyCommitment = maciTallyCircuitInputs.newTallyCommitment;
+      const tallyResults = maciPoll.results.map((x: any) => x.toString());
+      const tallySalt = maciTallyCircuitInputs.newResultsRootSalt;
+      const voiceCreditsSpent = maciPoll.totalSpentVoiceCredits.toString();
+      const voiceCreditsSalt = maciTallyCircuitInputs.newSpentVoiceCreditSubtotalSalt;
+      const perVOSpentTally = maciPoll.perVOSpentVoiceCredits.map((x: any) => x.toString());
+      const perVOSpentSalt = maciTallyCircuitInputs.newPerVOSpentVoiceCreditsRootSalt;
+      const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
+
+      tallyFileData = {
+        maci: jubjubInstance.address,
+        pollId: pollId,
+        newTallyCommitment: newTallyCommitment,
+        results: {
+          tally: tallyResults,
+          salt: tallySalt,
+        },
+        totalSpentVoiceCredits: {
+          spent: voiceCreditsSpent,
+          salt: voiceCreditsSalt,
+        },
+        perVOSpentVoiceCredits: {
+          tally: perVOSpentTally,
+          salt: perVOSpentSalt,
+        },
+      };
+      console.log(tallyFileData);
+      Object.values(tallyFileData).forEach((value) => {
+        expect(value).to.not.be.undefined;
+      });
+      Object.values(tallyFileData).forEach((value) => {
+        expect(value).to.not.be.undefined;
+      });
+      expect(maciPoll.hasUntalliedBallots()).to.equal(false);
+      expect(maciPoll.hasUnprocessedMessages()).to.equal(false);
+      expect(maciPoll.messages.length).to.be.equal(users.length * 2); //every user sends an overide message
+    });
   });
 });
