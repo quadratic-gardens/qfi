@@ -4,19 +4,21 @@ import { Link, Outlet, useSearchParams } from "react-router-dom";
 import { Option } from "../propTypes";
 import {  Hero } from "../components/Hero";
 
-import { useTranslation, Trans } from "react-i18next";
-
+import { useTranslation } from "react-i18next";
+import { getShuffledProjects } from "../data";
 const shortenEthAddress = (address: string) => {
   return address.substring(0, 6) + "..." + address.substring(address.length - 4);
 };
 
-export const Projects = ({ shuffledProjects }) => {
+export const Projects = () => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
   const color = useColorModeValue("gray.800", "gray.700");
   let [searchParams] = useSearchParams();
 
   const { t } = useTranslation();
   const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
+
+  const shuffledProjects = getShuffledProjects();
 
   const heroLightmode = (
     <AspectRatio
@@ -115,9 +117,9 @@ export const Projects = ({ shuffledProjects }) => {
                           <Heading my={0.5} fontSize="lg" lineHeight="24px" fontWeight="700">
                             {project.projectName}
                           </Heading>
-                          <Text color="gray.600" fontSize="sm" lineHeight="14px" fontWeight="400" overflow="clip">
+                          {/* <Text color="gray.600" fontSize="sm" lineHeight="14px" fontWeight="400" overflow="clip">
                             {shortenEthAddress(project.ethereumAddress)}
-                          </Text>
+                          </Text> */}
                         </VStack>
                         <Text fontSize="sm" lineHeight="16px" fontWeight="400">
                           {project.tagline}

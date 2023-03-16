@@ -12,7 +12,9 @@ import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
 import { Apply } from "./pages/Apply";
 
-export const App = ({ shuffledProjects }) => {
+
+
+export const App = () => {
   const {
     isOpen: isGuideOpen,
     onOpen: onGuideOpen,
@@ -39,7 +41,7 @@ export const App = ({ shuffledProjects }) => {
           <Route path="about" element={<About />} />
           <Route
             index
-            element={<Projects shuffledProjects={shuffledProjects} />}
+            element={<Projects />}
           ></Route>
           <Route path="projects/:projectId" element={<Project />} />
           <Route path="admin" element={<Admin />} />

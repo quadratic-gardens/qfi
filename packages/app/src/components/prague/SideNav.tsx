@@ -25,7 +25,7 @@ export const SideNav = () => {
           <IconButton to={`/projects?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiCollection} boxSize={4} />} aria-label="Projects" />
         </Tooltip> */}
         <Tooltip label="About" placement="right">
-          <IconButton to="/about" as={Link} color="gray.500" icon={<Icon as={HiQuestionMarkCircle} boxSize={6} />} aria-label="About" />
+          <IconButton to={`/about?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiQuestionMarkCircle} boxSize={6} />} aria-label="About" />
         </Tooltip>
 
         <ColorModeSwitcher color="gray.500" aria-label="dark mode" h="50px" borderRadius={useColorModeValue("3px", "8px")} />
