@@ -1,5 +1,5 @@
 {
-  "ORGANIZER":"Pick your favorite projects, then vote for them.",
+  "ORGANIZER": "Pick your favorite projects, then vote for them.",
   "YOUR BALLOT": "YOUR BALLOT",
   "CONNECT WALLET": "CONNECT WALLET",
   "SUBMIT BALLOT": "SUBMIT",
@@ -38,7 +38,6 @@
   "When a voter is whitelisted": "When a voter is whitelisted they receive a <strong>MACI passphrase</strong> and voice credits.",
   "Everyone will begin with 99 voice credits": "Everyone will begin with 99 <strong>voice credits</strong>.",
 
-
   "These voice credits are used to cast votes": "These <strong>voice credits</strong> are used to cast <strong>votes</strong> for projects on your ballot.",
   "You can add up to 8 projects": "You can add up to <strong>8 projects</strong> to your ballot and distribute your voice credits between them. Choose wisely.",
   "Casting a vote": "Casting a vote for a project will <strong>cost the square (n^2) of the number of votes you want to cast</strong> in voice credits. For example, if you would like to cast 5 votes for Project A, that will cost 25 (5^2) voice credits.",
@@ -51,7 +50,6 @@
   "You can play a fundamental role as a part of the Porto community, both in supporting the local community, and in exploring new ways to finance public goods through quadratic voting.": "You can play a fundamental role as a part of the Porto community, both in supporting the local community, and in exploring new ways to finance public goods through quadratic voting.",
   "During the venue, our Porto team will send you an email with a password. This is the “MACI” key you’ll use to vote.": "During the venue, our Porto team will send you an email with a password. This is the “MACI” key you’ll use to vote.",
   "Below you will find instructions to help support local projects. Learn more about Quadratic Funding": "Below you will find instructions to help support local projects. Learn more about Quadratic Funding",
-  "here": "here",
   "The future is now.": "The future is now.",
   "Project submission deadline: August 11th": "Project submission deadline: August 11th",
   "Porto: August 11th - 13th": "Porto: August 11th - 13th",
@@ -130,5 +128,33 @@
   "Submit your project using this form:": "Submit your project using this form:",
   "The Porto team will contact you if they need to clarify something or if they need more details.": "The Porto team will contact you if they need to clarify something or if they need more details.",
   "If you have any questions during the application process, send an email to sponsors@Porto.org before the submission deadline.": "If you have any questions during the application process, send an email to sponsors@Porto.org before the submission deadline.",
-  "This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@Porto.org.": "This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@Porto.org."
+  "This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@Porto.org.": "This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@Porto.org.",
+
+  "About the round": "About the round",
+
+  "The ETHPorto Quadratic Funding round is a collaboration between ETHPorto and Transformers in an effort to support the local community and explore new ways to finance public goods through quadratic voting.": "The ETHPorto Quadratic Funding round is a collaboration between ETHPorto and Transformers in an effort to support the local community and explore new ways to finance public goods through quadratic voting.",
+
+  "During ETHPorto, our team will send you an email with a “MACI” key. This is your private password you’ll use to submit your votes.": "During ETHPorto, our team will send you an email with a “MACI” key. This is your private password you’ll use to submit your votes.",
+  "You can learn more about Quadratic Funding": "You can learn more about Quadratic Funding",
+  "The future is now! We hope you participate in this round and help us fund the projects that matter to you!": "The future is now! We hope you participate in this round and help us fund the projects that matter to you!",
+  "About Transformers": "About Transformers",
+
+  "Movimento Transformers was born in 2010, when a breakdance group discovered that they could use what they loved (breakdance) to make a difference in their community, leading informal workshops and classes for children and youth deeply at risk of social exclusion.": "Movimento Transformers was born in 2010, when a breakdance group discovered that they could use what they loved (breakdance) to make a difference in their community, leading informal workshops and classes for children and youth deeply at risk of social exclusion.",
+
+  "The Movimento Transformers emerged to massively increase civic and social involvement, in Portugal and in the World. Our mission is to increase the involvement of people in their communities through what they love to do. To turn this into reality we have three axes of intervention:": "The Movimento Transformers emerged to massively increase civic and social involvement, in Portugal and in the World. Our mission is to increase the involvement of people in their communities through what they love to do. To turn this into reality we have three axes of intervention:",
+
+  "Volunteer - Which materializes in our project Schools of Superpowers (SPS) and Reformers. The Superpower Schools (SPS) project works weekly with 600 children and young people at risk by promoting their social awareness, talents and ensuring they are more active and participative citizens. It is with this project that this collaboration with ETF comes to life - our core value in the SPS project is Payback, which means giving back to the community. I transform you so you can transform society around you. Payback actions are implemented by our apprentices and their volunteer mentor to solve a social problem they identify within their communities. Here you will be able to vote on some of the incredible ideas our groups have come up with this year.": "Volunteer - Which materializes in our project Schools of Superpowers (SPS) and Reformers. The Superpower Schools (SPS) project works weekly with 600 children and young people at risk by promoting their social awareness, talents and ensuring they are more active and participative citizens. It is with this project that this collaboration with ETF comes to life - our core value in the SPS project is Payback, which means giving back to the community. I transform you so you can transform society around you. Payback actions are implemented by our apprentices and their volunteer mentor to solve a social problem they identify within their communities. Here you will be able to vote on some of the incredible ideas our groups have come up with this year.",
+
+  "Associativism - Through two capacity projects, one focusing on secondary school association leaders (AELEAD) and the other on youth association leaders or community leaders (XLEAD).": "Associativism - Through two capacity projects, one focusing on secondary school association leaders (AELEAD) and the other on youth association leaders or community leaders (XLEAD).",
+
+  "Awareness - Through T-Academy, an online community for civic and social participation, which emerges towards the democratization of knowledge and where content and training opportunities are shared in the areas of volunteering, participation, creativity, non-formal education, activism, sustainable development goals, associationism and much more! B2C model, where people pay to access the community.": "Awareness - Through T-Academy, an online community for civic and social participation, which emerges towards the democratization of knowledge and where content and training opportunities are shared in the areas of volunteering, participation, creativity, non-formal education, activism, sustainable development goals, associationism and much more! B2C model, where people pay to access the community.",
+
+  "We also have a continuous growing portfolio of tailor-made training and bootcamps, aimed at young people, youth associations, informal movements, activists.": "We also have a continuous growing portfolio of tailor-made training and bootcamps, aimed at young people, youth associations, informal movements, activists.",
+
+  "About ETHPorto": "About ETHPorto",
+
+  "ETHPorto is an independently organized event with a Conference, workshops and a 48-hour Hackathon running in parallel. Bringing the first ETH event to the beautiful city of Porto!": "ETHPorto is an independently organized event with a Conference, workshops and a 48-hour Hackathon running in parallel. Bringing the first ETH event to the beautiful city of Porto!",
+
+  "You can learn more about ETHPorto": "You can learn more about ETHPorto",
+  "here": "here"
 }
