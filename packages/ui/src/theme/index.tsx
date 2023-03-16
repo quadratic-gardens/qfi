@@ -233,7 +233,7 @@ export const theme = extendTheme({
       },
       a: {
         transition: "all 0.15s linear",
-        color: "secondary.400",
+        color:  mode(`secondary.400`, `blue.500`)(props),
         _hover: { textDecoration: "none", color: "secondary.500" },
       },
     }),
