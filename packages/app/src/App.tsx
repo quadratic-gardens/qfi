@@ -3,6 +3,7 @@ import { ChakraProvider, Text, useDisclosure } from "@chakra-ui/react";
 import { theme, Fonts } from "@qfi/ui";
 import { Route, Routes } from "react-router-dom";
 
+import { About } from "./pages/About";
 import { Admin } from "./pages/Admin";
 import { Project } from "./pages/Project";
 import { Projects } from "./pages/Projects";
@@ -35,6 +36,7 @@ export const App = ({ shuffledProjects }) => {
           {/* <Route index element={<Home />} /> */}
           <Route path="ballot" element={<Ballot />} />
           <Route path="apply" element={<Apply />} />
+          <Route path="about" element={<About />} />
           <Route
             index
             element={<Projects shuffledProjects={shuffledProjects} />}

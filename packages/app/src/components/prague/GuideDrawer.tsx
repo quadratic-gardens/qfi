@@ -80,16 +80,7 @@ const Guide = () => {
               "Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count."
             )}
           </Text>
-          <Heading size="md" fontWeight={"bold"}>
-            {t("We know this might be confusing, need help?")}
-          </Heading>
-          <Text>
-            {t("Drop us a line at sponsors@Porto.org or join the")}{" "}
-            <a href={"https://t.me/Porto"} rel="noreferrer" target="_blank">
-              {t("Porto Telegram group")}
-            </a>{" "}
-            {t("using the hashtag #QF in your post.")}
-          </Text>
+          
         </VStack>
 
         <VStack spacing={6} alignItems="flex-start">
