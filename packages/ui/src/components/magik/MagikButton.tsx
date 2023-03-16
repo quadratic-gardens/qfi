@@ -15,12 +15,15 @@ export const MagikButton: React.FC<MagikButtonProps> = ({ children, ...props }) 
   const logoutBg = useColorModeValue(`red.400`, `red.400`);
   const loginBg = useColorModeValue(`#73FFBC`, `#37FFCF`);
   const switchBgHoverColor = isConnected ? logoutBg : loginBg;
+
+  const switchBg = useColorModeValue(`#6953A2`, `rgba(255, 255, 255, 0.08)`)
+  const switchBgColor = switchBg;
   const logoutColor = useColorModeValue(`white`, `white`);
   const loginColor = useColorModeValue(`white`, `white`);
   const switchTextHoverColor = isConnected ? logoutColor : loginColor;
   const switchHeight = isConnected ? [14, 14, 14, 16] : [12, 12, 12, 14];
 
-  const switchIconColor = useColorModeValue("black", "white");
+  const switchIconColor = useColorModeValue("white", "white");
   const BaseIcon = loading ? <CircleLoader size={25} color={switchIconColor} /> : <></>;
   const SwitchAvatar = avatar ? (
     <Image p={1} rounded={"full"} src={avatar} h={12} />
@@ -43,6 +46,8 @@ export const MagikButton: React.FC<MagikButtonProps> = ({ children, ...props }) 
         leftIcon={SwitchIcon}
         variant="magik"
         disabled={isConnecting}
+        bg={switchBgColor}
+        color={switchIconColor}
         _hover={{
           bg: switchBgHoverColor,
           color: switchTextHoverColor,

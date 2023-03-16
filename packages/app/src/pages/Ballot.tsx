@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from "react";
-import { Container, VStack, Grid, GridItem, Flex, Text, Heading, Button, useColorModeValue, useToast, FormControl, FormHelperText, Input, Tooltip, useMediaQuery, AspectRatio } from "@chakra-ui/react";
+import { Container, Image, VStack, Grid, GridItem, Flex, Text, Heading, Button, useColorModeValue, useToast, FormControl, FormHelperText, Input, Tooltip, useMediaQuery, AspectRatio } from "@chakra-ui/react";
 
 import { MagikButton } from "@qfi/ui";
 import { getProject, getRecipientIdbyId } from "../data";
@@ -65,6 +65,7 @@ const headerYourBallotLogo = {
 
 export const Ballot = () => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+  const colorModeSwitch = useColorModeValue(true, false);
 
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   const [key, setKey] = useState<string>();
@@ -420,13 +421,16 @@ export const Ballot = () => {
           borderRadius: "0px",
         },
       }}>
-      <Container style={{ marginTop: 64, maxWidth: 1042 }}>
-        {isViewportMd ? (
-          <Heading w="full">
-            <AspectRatio ratio={24 / 4} w="full" overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
-              <Hero />
-            </AspectRatio>
-          </Heading>
+      <Container style={{ marginTop: 92, maxWidth: 1042 }}>
+        {colorModeSwitch ? (
+          <Flex w="full" alignItems="center" flexDirection="column">
+            <Heading w="full">
+              <AspectRatio ratio={1} w="200px" h="200px" overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
+                <Hero />
+              </AspectRatio>
+            </Heading>
+            <MagikButton borderRadius={"3px"} mt={6}/>
+          </Flex>
         ) : (
           <Flex w="full" alignItems="center" flexDirection="column">
             <Heading w="full">
@@ -434,7 +438,7 @@ export const Ballot = () => {
                 <Hero />
               </AspectRatio>
             </Heading>
-            <MagikButton borderRadius={"8px"} mt={6} maxWidth={{ md: 175 }} />
+            <MagikButton borderRadius={"8px"} mt={6} />
           </Flex>
         )}
 
@@ -457,21 +461,16 @@ export const Ballot = () => {
             ))}
           </VStack>
         ) : (
-          <VStack style={{ marginTop: 48 }} alignItems="center" w="full">
-            <Button as={Link} variant="porto" fontSize={{ base: "lg", xl: "xl" }} maxW={{ base: 250, md: 400 }} to={`/?${searchParams.toString()}`}>
+          <VStack style={{ marginTop: 48 }} alignItems="flex-start" w="full">
+            <Button as={Link} variant="porto" fontSize={{ base: "lg", xl: "xl" }} w="full" to={`/?${searchParams.toString()}`}>
               {t("CHECK OUT THE PROJECTS")}
             </Button>
           </VStack>
         )}
-        <VStack spacing={3} py={8} alignItems={{ base: "center", md: "flex-start" }} justifyContent={{ base: "center", md: "space-between" }} w="full">
-          {isViewportMd ? (
-            <Flex w="full" alignItems="center" justifyContent="space-between">
-              <Heading textAlign={{ base: "center" }}>{t("BALLOT (MACI) PASSPHRASE")}</Heading>
-              <MagikButton maxWidth={{ md: 175 }} />
-            </Flex>
-          ) : (
+        <VStack spacing={3} py={8} alignItems={"flex-start" } justifyContent={"center"} w="full">
+          <Flex w="full" alignItems="center" justifyContent="space-between">
             <Heading textAlign={{ base: "center" }}>{t("BALLOT (MACI) PASSPHRASE")}</Heading>
-          )}
+          </Flex>
 
           <Grid
             w="full"
@@ -485,7 +484,7 @@ export const Ballot = () => {
               base: "repeat(1, minmax(0, 1fr))",
               md: "repeat(2, minmax(0, 1fr))",
             }}>
-            <GridItem colSpan={{ base: 1, md: 8 }} rowSpan={{ md: 2 }}>
+            <GridItem colSpan={12} rowSpan={ 2 }>
               <Text textAlign="justify">
                 {t("The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page).")}{" "}
                 {t("Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it.")}{" "}
@@ -493,23 +492,23 @@ export const Ballot = () => {
                 {t("Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count.")}
               </Text>
             </GridItem>
-            {isViewportMd && (
-              <GridItem colSpan={{ base: 1, md: 2 }} w={{ base: "full", md: "90%" }} m={{ base: "32px auto 0 auto", md: "auto" }}>
+            
+              {/* <GridItem colSpan={{ base: 1, md: 2 }} w={{ base: "full", md: "90%" }} m={{ base: "32px auto 0 auto", md: "auto" }}>
                 <SubmitBallotButton disableSubmitButton={disableSubmitButton} isConnected={isConnected} onSubmit={handleSubmit} t={t} />
               </GridItem>
-            )}
+           */}
           </Grid>
 
           <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
             <FormControl w="full" display={{ base: "flex", md: "block" }} flexDir={{ base: "column" }} alignItems={{ base: "center" }} isInvalid={isError} variant="floating" id="key" isRequired mt={{ base: 12 }}>
-              <Input w={{ base: "full", md: "80%" }} type="password" placeholder={t("MACI Key")} variant="porto" value={key} onChange={handleInputChange} />
+              <Input w="full" type="password" placeholder={t("MACI Key")} variant="porto" value={key} onChange={handleInputChange} borderRadius={"3px"}/>
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormHelperText fontFamily="Space Grotesk">{numChars ?? "-"} / 71</FormHelperText>
-              <Button variant="porto" fontSize={{ base: "lg", xl: "xl" }} type="submit" w={{ base: "full", md: "80%" }} mt={6} alignItems="center">
+              <Button variant="porto" fontSize={{ base: "lg", xl: "xl" }} type="submit" w="full" mt={6} alignItems="center">
                 {t("SAVE")}
               </Button>
             </FormControl>
-            {!isViewportMd && <SubmitBallotButton disableSubmitButton={disableSubmitButton} isConnected={isConnected} my={6} onSubmit={handleSubmit} t={t} />}
+             <SubmitBallotButton disableSubmitButton={disableSubmitButton} isConnected={isConnected} my={6} onSubmit={handleSubmit} t={t} />
           </form>
         </VStack>
       </Container>

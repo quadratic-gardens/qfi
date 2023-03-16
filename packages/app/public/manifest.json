@@ -1,17 +1,11 @@
 {
-  "short_name": "QF",
-  "name": "QF @ Porto",
+  "name": "Transformers QF",
+  "short_name": "QF@Porto",
   "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
     { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
   ],
   "theme_color": "#ffffff",
-  "background_color": "#F5C34B",
-  "start_url": "./",
+  "background_color": "#ffffff",
   "display": "standalone"
 }
