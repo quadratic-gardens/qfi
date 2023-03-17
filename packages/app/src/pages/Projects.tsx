@@ -2,7 +2,7 @@ import React from "react";
 import { VStack, Container, HStack, Flex, Image, AspectRatio, Text, Heading, Box, Stack, Button, useColorModeValue } from "@chakra-ui/react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
 import { Option } from "../propTypes";
-import {  Hero } from "../components/Hero";
+import { Hero } from "../components/Hero";
 
 import { useTranslation } from "react-i18next";
 import { getShuffledProjects } from "../data";
@@ -21,30 +21,15 @@ export const Projects = () => {
   const shuffledProjects = getShuffledProjects();
 
   const heroLightmode = (
-    <AspectRatio
-      ratio={1}
-      w="50%"
-      h={"auto"}
-      overflow="hidden"
-      alignItems={"flex-start"}
-      justifyContent={"flex-start"}
-      flexDir={"row"}>
+    <AspectRatio ratio={1} w="50%" h={"auto"} overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
       <Hero></Hero>
     </AspectRatio>
   );
   const heroDarkmode = (
-    <AspectRatio
-      ratio={16 / 9}
-      w="full"
-      h={"auto"}
-      overflow="hidden"
-      alignItems={"flex-start"}
-      justifyContent={"flex-start"}
-      flexDir={"row"}>
+    <AspectRatio ratio={16 / 9} w="full" h={"auto"} overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
       <Hero h={"auto !important"}></Hero>
     </AspectRatio>
   );
-
 
   return (
     <>
@@ -90,11 +75,16 @@ export const Projects = () => {
                     {t("ORGANIZER")}
                   </Heading>
                   <Heading fontWeight={"500"} fontSize={"2xl"}>
-                  Impact real things in the real world. Today.
+                    Impact real things in the real world. Today.
                   </Heading>
                   <Text fontSize={"sm"}>
-                  Transformers works weekly with 600 children and young people at risk by promoting their social awareness, talents and ensuring they are more active and participative citizens via a project we call the the Super Power School (SPS). Our core value in the SPS project is Payback, which means giving back to the community. I transform you so you can transform society around you. Payback actions are implemented by our apprentices and their volunteer mentor to solve a social problem they identify within their communities. Here you will be able to vote on some of the incredible ideas our groups have come up with this year.
+                    Transformers works weekly with 600 children and young people at risk by promoting their social awareness, talents and ensuring they are more active and participative citizens via a project we call the the Super Power School (SPS). Our core value in the SPS project is Payback,
+                    which means giving back to the community. I transform you so you can transform society around you. Payback actions are implemented by our apprentices and their volunteer mentor to solve a social problem they identify within their communities. Here you will be able to vote on some
+                    of the incredible ideas our groups have come up with this year.
                   </Text>
+                  <Heading fontWeight={"500"} fontSize={"xl"}>
+                    Pick your favorite projects, then vote for them:
+                  </Heading>
                 </VStack>
               </VStack>
               <VStack spacing={0} alignItems="flex-start" w="full">
