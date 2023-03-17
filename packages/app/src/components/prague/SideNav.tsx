@@ -107,7 +107,7 @@ export const Navbar = () => {
             EN
           </option>
           <option
-            value="es"
+            value="pt"
             style={{
               background: backgroundColor,
               fontWeight: "bold",
