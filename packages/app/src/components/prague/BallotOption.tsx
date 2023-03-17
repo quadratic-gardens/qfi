@@ -103,7 +103,7 @@ export const BallotOption = ({
             {ballotOption?.projectName}
           </Heading>
 
-          <Text
+          {/* <Text
             as={Link}
             to={`${to}?${searchParams.toString()}` ?? "/projects"}
             fontFamily="Space Grotesk"
@@ -113,7 +113,7 @@ export const BallotOption = ({
             display={{ base: "none", md: "flex" }}
           >
             {ballotOption?.website}
-          </Text>
+          </Text> */}
         </HStack>
         <Text
           fontSize="xs"
@@ -123,7 +123,7 @@ export const BallotOption = ({
         >
           {ballotOption?.tagline}
         </Text>
-        <Text
+        {/* <Text
           as={Link}
           to={`${to}?${searchParams.toString()}` ?? "/projects"}
           display={{ base: "block", md: "none" }}
@@ -131,7 +131,7 @@ export const BallotOption = ({
           fontWeight="light"
         >
           {ballotOption?.website}
-        </Text>
+        </Text> */}
       </VStack>
       <VStack
         position="relative"
