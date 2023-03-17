@@ -74,22 +74,21 @@ const Guide = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="md">Gnosis Chain (xDai) Wallet</Heading>
           <Text >
-            You will receive keys for an xDai address that is whitelisted for this voting round, pre-loaded with enough gas to cover the transaction fees for ballot submission.
+            Step 1: Download a wallet that supports Gnosis Chain (xDai) such as <a href="https://metamask.io/" rel="noreferrer" target="_blank">MetaMask</a> or <a href="https://www.coinbase.com/wallet" rel="noreferrer" target="_blank">Coinbase Wallet</a>.
+          </Text>
+          <Text >
+            Step 2: Get some xDai on Gnosis Chain (xDai) by using a bridge such as <a href="https://bridge.gnosischain.com/" rel="noreferrer" target="_blank">xDai Bridge</a> or <a href="https://gnosisfaucet.com/" rel="noreferrer" target="_blank">xDai Faucet</a>.
+          </Text>
+          <Text >
+            Step 3: Connect your wallet using the button below.
           </Text>
           <MagikButton />
         </VStack>
-        <VStack spacing={2} alignItems="flex-start">
-          <Heading size="md">Ballot passphrase (MACI key)</Heading>
-          <Text >
-            MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting.
-            Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe. Think of it like a password.
-          </Text>
-        </VStack>
-
 
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="xl">{t("Ballot Passphrase (MACI key)")}</Heading>
         </VStack>
+
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="lg">{t("What is the MACI key?")}</Heading>
           <Text>
@@ -110,7 +109,6 @@ const Guide = () => {
               "Keep it safe! Anyone who has your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters. Make it count!"
             )}
           </Text>
-          
         </VStack>
 
         <VStack spacing={6} alignItems="flex-start">

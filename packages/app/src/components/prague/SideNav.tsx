@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { HStack, IconButton, Icon, Link as ExternalLink, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
+import { HStack, IconButton, Icon, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
 
 import { MdDashboard, MdSettings } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
