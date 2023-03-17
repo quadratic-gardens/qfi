@@ -65,19 +65,19 @@ const Guide = () => {
             Casting a Ballot requires you to have:
             <UnorderedList>
               <ListItem>a wallet on Gnosis Chain</ListItem>
-              <ListItem>xDai to pay for gas</ListItem>
+              <ListItem>xDAI to pay for gas</ListItem>
               <ListItem>a valid ballot passphrase (MACI key)</ListItem>
               </UnorderedList>
             Voting is anonymous but your ballot key is sent to you via email to prevent fraud.
           </Text>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
-          <Heading size="md">Gnosis Chain (xDai) Wallet</Heading>
+          <Heading size="md">Gnosis Chain (xDAI) Wallet</Heading>
           <Text >
-            Step 1: Download a wallet that supports Gnosis Chain (xDai) such as <a href="https://metamask.io/" rel="noreferrer" target="_blank">MetaMask</a> or <a href="https://www.coinbase.com/wallet" rel="noreferrer" target="_blank">Coinbase Wallet</a>.
+            Step 1: Download a wallet that supports Gnosis Chain (xDAI) such as <a href="https://metamask.io/" rel="noreferrer" target="_blank">MetaMask</a> or <a href="https://www.coinbase.com/wallet" rel="noreferrer" target="_blank">Coinbase Wallet</a>.
           </Text>
           <Text >
-            Step 2: Get some xDai on Gnosis Chain (xDai) by using a bridge such as <a href="https://bridge.gnosischain.com/" rel="noreferrer" target="_blank">xDai Bridge</a> or <a href="https://gnosisfaucet.com/" rel="noreferrer" target="_blank">xDai Faucet</a>.
+            Step 2: Get some xDAI on Gnosis Chain (xDAI) by using a bridge such as <a href="https://bridge.gnosischain.com/" rel="noreferrer" target="_blank">xDAI Bridge</a> or get free funds from the <a href="https://gnosisfaucet.com/" rel="noreferrer" target="_blank">xDAI Faucet</a>.
           </Text>
           <Text >
             Step 3: Connect your wallet using the button below.
