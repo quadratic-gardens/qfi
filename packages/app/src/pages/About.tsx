@@ -60,7 +60,7 @@ export const About = () => {
             </Text>
             <Text pb={4} w={"full"}>
               {t(
-                "During ETHPorto, our team will send you an email with a “MACI” key. This is your private password you’ll use to submit your votes."
+                "During ETHPorto, our team will send you an email with a 'MACI key'. This is your private ballot passphrase you’ll use to submit your votes. Think of it like a password."
               )}
             </Text>
             <Text pb={4} w={"full"}>

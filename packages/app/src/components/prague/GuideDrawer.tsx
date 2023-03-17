@@ -15,6 +15,7 @@ import {
   AccordionPanel,
   UnorderedList,
 } from "@chakra-ui/react";
+import { MagikButton } from "@qfi/ui";
 
 import { useTranslation, Trans } from "react-i18next";
 
@@ -52,24 +53,53 @@ const Guide = () => {
         spacing={10}
         h="full"
         alignItems="flex-start"
-        fontSize={"xs"}
+        fontSize={"sm"}
       >
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="4xl">{t("Voter Guide")}</Heading>
         </VStack>
+
         <VStack spacing={6} alignItems="flex-start">
-          <Heading size="xl">{t("Ballot Passphrase (MACI)")}</Heading>
+          <Heading size="2xl">How it works</Heading>
+          <Text >
+            Casting a Ballot requires you to have:
+            <UnorderedList>
+              <ListItem>a wallet on Gnosis Chain</ListItem>
+              <ListItem>xDai to pay for gas</ListItem>
+              <ListItem>a valid ballot passphrase (MACI key)</ListItem>
+              </UnorderedList>
+            Voting is anonymous but your ballot key is sent to you via email to prevent fraud.
+          </Text>
+        </VStack>
+        <VStack spacing={6} alignItems="flex-start">
+          <Heading size="md">Gnosis Chain (xDai) Wallet</Heading>
+          <Text >
+            You will receive keys for an xDai address that is whitelisted for this voting round, pre-loaded with enough gas to cover the transaction fees for ballot submission.
+          </Text>
+          <MagikButton />
+        </VStack>
+        <VStack spacing={2} alignItems="flex-start">
+          <Heading size="md">Ballot passphrase (MACI key)</Heading>
+          <Text >
+            MACI (Minimal Anti-Collusion Infrastructure) uses zero knowledge proofs to protect against censorship and collusion in blockchain voting.
+            Each voter gets a pseudo-random MACI key which is used to encrypt and validate your votes. This is the only way to vote in the round, and can be used to change your ballot at any time while the round is active, so keep it safe. Think of it like a password.
+          </Text>
+        </VStack>
+
+
+        <VStack spacing={6} alignItems="flex-start">
+          <Heading size="xl">{t("Ballot Passphrase (MACI key)")}</Heading>
         </VStack>
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="lg">{t("What is the MACI key?")}</Heading>
           <Text>
             {t(
-              "The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting (read more about MACI on this page)."
+              "The MACI (Minimum Anti-Collision Infrastructure) uses zero-knowledge proofs as a protection against censorship and collisions in blockchain voting."
             )}
           </Text>
           <Text>
             {t(
-              "Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it."
+              "Each voter gets a pseudo-random MACI key, which is used to encrypt and validate your votes. This is the only way to vote in the round, and it can be used to change your vote at any time while the round is active, so keep it safe and don't share it. Think of it like a password."
             )}
           </Text>
           <Text fontWeight={"bold"}>
@@ -77,7 +107,7 @@ const Guide = () => {
           </Text>
           <Text>
             {t(
-              "Keep it safe! Anyone who logs in with your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters, make it count."
+              "Keep it safe! Anyone who has your MACI key will be able to vote on your behalf - and even invalidate your previous votes. Thanks to your vote, community projects can access funds to continue building.  Your vote matters. Make it count!"
             )}
           </Text>
           
@@ -104,7 +134,7 @@ const Guide = () => {
                     <VStack spacing={6} alignItems="flex-start">
                       <Text fontSize="xs">
                         {t(
-                          "Porto team will send your MACI key the email address you used to register for the event."
+                          "The ETHPorto team will send your MACI key to the email address you used to register for the event."
                         )}
                       </Text>
                     </VStack>

@@ -45,7 +45,7 @@ interface SubmitBallotButtonProps {
 
 const SubmitBallotButton = ({ isConnected, disableSubmitButton, my = 0, onSubmit, t }: SubmitBallotButtonProps) =>
   isConnected ? (
-    <Tooltip isDisabled={!disableSubmitButton} label={t("Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.")} placement="top" shouldWrapChildren>
+    <Tooltip isDisabled={!disableSubmitButton} label={t("Unregistered MACI Keypair: Enter a valid MACI key to continue.")} placement="top" shouldWrapChildren>
       <Button m="auto" my={my} maxWidth={{ md: "150px" }} width="100%" h={20} display="block" disabled={disableSubmitButton} onClick={onSubmit} variant={"porto"} fontSize={{ base: "md", xl: "lg" }}>
         <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
       </Button>

@@ -13,11 +13,7 @@ import { Layout } from "./pages/Layout";
 import { Apply } from "./pages/Apply";
 
 export const App = ({ shuffledProjects }) => {
-  const {
-    isOpen: isGuideOpen,
-    onOpen: onGuideOpen,
-    onClose: onGuideClose,
-  } = useDisclosure();
+  const { isOpen: isGuideOpen, onOpen: onGuideOpen, onClose: onGuideClose } = useDisclosure();
 
   return (
     <ChakraProvider theme={theme}>

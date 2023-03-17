@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { HStack, IconButton, Icon, Link as ExternalLink, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
 
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdSettings } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
 import { SideNavProps } from "../../propTypes";
@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Logo } from "../Hero";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
-export const SideNav = () => {
+export const SideNav = ({ onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
   let [searchParams] = useSearchParams();
 
@@ -24,6 +24,14 @@ export const SideNav = () => {
         {/* <Tooltip label="Projects" placement="right">
           <IconButton to={`/projects?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiCollection} boxSize={4} />} aria-label="Projects" />
         </Tooltip> */}
+        <Tooltip label="Guide" placement="right">
+          <IconButton
+            onClick={onGuideOpen}
+            color="gray.500"
+            icon={<Icon as={MdSettings} boxSize={5} />}
+            aria-label="Guide"
+          />
+        </Tooltip>
         <Tooltip label="About" placement="right">
           <IconButton to="/about" as={Link} color="gray.500" icon={<Icon as={HiQuestionMarkCircle} boxSize={6} />} aria-label="About" />
         </Tooltip>
