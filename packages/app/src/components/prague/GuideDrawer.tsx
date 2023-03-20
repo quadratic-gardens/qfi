@@ -104,7 +104,7 @@ const Guide = () => {
             <AccordionItem border="none">
               <VStack>
                 <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
-                  Step 2A: OR get free funds from the xDAI Faucet
+                  Step 2B: OR get free funds from the xDAI Faucet
                   <AccordionIcon></AccordionIcon>
                 </Text>
               </VStack>
