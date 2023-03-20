@@ -66,7 +66,7 @@ const Guide = () => {
                 <VStack spacing={6} alignItems="flex-start" width="full">
                   <Text>
                     Checkout the guide to set up your wallet{" "}
-                    <a title="guide" href="https://scribehow.com/page-embed/Mobile_Wallet_Set_up__OZiM3PehSGmXB73cXh85KQ">
+                    <a title="guide" href="https://scribehow.com/page-embed/Mobile_Wallet_Set_up__OZiM3PehSGmXB73cXh85KQ" rel="noreferrer" target="_blank">
                       {" "}
                       on Mobile{" "}
                     </a>{" "}
