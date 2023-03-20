@@ -92,7 +92,7 @@ const Guide = () => {
                 <VStack spacing={6} alignItems="flex-start" width="full">
                   <Text>
                     Checkout our guide on{" "}
-                    <a title="onramp" href="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ">
+                    <a title="onramp" href="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ" rel="noreferrer" target="_blank">
                       How to Bridge from Eth Mainnet
                     </a>
                   </Text>
