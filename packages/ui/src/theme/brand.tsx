@@ -13,7 +13,6 @@ export const defaultTheme: {
   mode: string;
   headingFont: string;
   bodyFont: string;
-  monoFont: string;
   avatarImg: string;
   bgImg: string;
   text: string;
@@ -30,7 +29,7 @@ export const defaultTheme: {
   mode: "#FFFFFF",
   headingFont: "Space Grotesk",
   bodyFont: "Space Grotesk",
-  monoFont: "Times",
+
   avatarImg: BrandImg,
   bgImg: BgImg,
   text: "#FFFFFF",

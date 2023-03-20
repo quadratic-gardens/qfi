@@ -114,7 +114,6 @@ export const theme = extendTheme({
   fonts: {
     heading: `'Space Grotesk', serif`,
     body: `'Space Grotesk', sans-serif`,
-    mono: brand.monoFont,
     accessory: "Space Grotesk",
     space: "Space Grotesk",
   },

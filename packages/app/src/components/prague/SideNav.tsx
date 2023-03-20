@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { HStack, IconButton, Icon, Link as ExternalLink, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
+import { HStack, IconButton, Icon, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
 
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdSettings } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
 import { Link, useSearchParams } from "react-router-dom";
 import { SideNavProps } from "../../propTypes";
@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Logo } from "../Hero";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
-export const SideNav = () => {
+export const SideNav = ({ onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
   let [searchParams] = useSearchParams();
 
@@ -24,9 +24,19 @@ export const SideNav = () => {
         {/* <Tooltip label="Projects" placement="right">
           <IconButton to={`/projects?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiCollection} boxSize={4} />} aria-label="Projects" />
         </Tooltip> */}
-        {/* <Tooltip label="About" placement="right"> */}
-          <IconButton to={`/about?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiQuestionMarkCircle} boxSize={6} />} aria-label="About" />
-        {/* </Tooltip> */}
+       
+        <Tooltip label="About" placement="right">
+          <IconButton to={`/about?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={MdDashboard } boxSize={6} />} aria-label="About" />
+        </Tooltip>
+        {/* <Tooltip label="Guide" placement="right">
+          <IconButton
+            onClick={onGuideOpen}
+            color="gray.500"
+            icon={<Icon as={HiCollection} boxSize={5} />}
+            aria-label="Guide"
+          />
+        </Tooltip> */}
+
 
         <ColorModeSwitcher color="gray.500" aria-label="dark mode" h="50px" borderRadius={useColorModeValue("3px", "8px")} />
         {/* <Tooltip label="How it Works" placement="right">
@@ -54,7 +64,7 @@ export const SideNav = () => {
   );
 };
 
-export const Navbar = () => {
+export const Navbar = ({ onGuideOpen }: SideNavProps) => {
   const backgroundColor = useColorModeValue("gray.100", "#0D1429");
   const color = useColorModeValue("gray.800", "#FDFDFD");
 
@@ -93,9 +103,20 @@ export const Navbar = () => {
 
       <HStack>
         {/* <Tooltip label="..." placement="right"> */}
-          <Button to={`/ballot?${searchParams.toString()}`} as={Link} height="50px" boxSizing="border-box" variant={"porto"} fontSize={{ base: "lg", xl: "xl" }}>
+        <Tooltip label="Guide" placement="right">
+          <IconButton
+            onClick={onGuideOpen}
+            color="gray.500"
+            icon={<Icon as={HiQuestionMarkCircle} boxSize={5} />}
+            aria-label="Guide"
+          />
+        </Tooltip>
+        <Button to={`/ballot?${searchParams.toString()}`} as={Link} height="50px" boxSizing="border-box" variant={"porto"} fontSize={{ base: "lg", xl: "xl" }}>
             Vote
           </Button>
+         
+
+  
         {/* </Tooltip> */}
         <Select bg={backgroundColor} color={color} borderColor={color} borderRadius={useColorModeValue("3px", "8px")} value={selectedLang} onChange={({ target: { value } }) => handleLangChange(value)} w={20} h="50px" _focus={{ border: "none" }}>
           <option

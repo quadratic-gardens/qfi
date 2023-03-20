@@ -12,14 +12,8 @@ import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
 import { Apply } from "./pages/Apply";
 
-
-
 export const App = () => {
-  const {
-    isOpen: isGuideOpen,
-    onOpen: onGuideOpen,
-    onClose: onGuideClose,
-  } = useDisclosure();
+  const { isOpen: isGuideOpen, onOpen: onGuideOpen, onClose: onGuideClose } = useDisclosure();
 
   return (
     <ChakraProvider theme={theme}>

@@ -45,7 +45,7 @@ interface SubmitBallotButtonProps {
 
 const SubmitBallotButton = ({ isConnected, disableSubmitButton, my = 0, onSubmit, t }: SubmitBallotButtonProps) =>
   isConnected ? (
-    <Tooltip isDisabled={!disableSubmitButton} label={t("Unregistered MACI Keypair: Enter a valid MACI passphrase to continue.")} placement="top" shouldWrapChildren>
+    <Tooltip isDisabled={!disableSubmitButton} label={t("Unregistered MACI Keypair: Enter a valid MACI key to continue.")} placement="top" shouldWrapChildren>
       <Button m="auto" my={my} maxWidth={{ md: "150px" }} width="100%" h={20} display="block" disabled={disableSubmitButton} onClick={onSubmit} variant={"porto"} fontSize={{ base: "md", xl: "lg" }}>
         <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
       </Button>
@@ -367,15 +367,13 @@ export const Ballot = () => {
     console.log(encPubKeys);
     try {
       const gasPrice = await provider.getGasPrice();
-      const double = BigNumber.from("2");
-      const doubleGasPrice = gasPrice.mul(double);
-      const gasLimit = ethers.utils.hexlify(10000000);
+      const gasLimit = ethers.utils.hexlify(1000000 * messages.length);
       const signer = provider.getSigner(address);
 
       const tx = await grantRound.connect(signer).publishMessageBatch(
         messages.reverse().map((msg) => msg.asContractParam()),
         encPubKeys.reverse().map((key) => key.asContractParam()),
-        { gasPrice: doubleGasPrice, gasLimit }
+        { gasPrice: gasPrice, gasLimit }
       );
       await tx.wait();
       toast({
