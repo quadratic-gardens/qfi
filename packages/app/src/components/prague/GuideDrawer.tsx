@@ -71,7 +71,7 @@ const Guide = () => {
                       on Mobile{" "}
                     </a>{" "}
                     or
-                    <a title="onramp" href="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ">
+                    <a title="onramp" href="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ" rel="noreferrer" target="_blank">
                       {" "}
                       Desktop
                     </a>
