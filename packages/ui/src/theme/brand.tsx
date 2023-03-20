@@ -13,7 +13,6 @@ export const defaultTheme: {
   mode: string;
   headingFont: string;
   bodyFont: string;
-  monoFont: string;
   avatarImg: string;
   bgImg: string;
   text: string;

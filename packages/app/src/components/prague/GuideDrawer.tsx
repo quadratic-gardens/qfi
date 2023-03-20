@@ -7,7 +7,7 @@ const Guide = () => {
   const { t } = useTranslation();
   const placeholder =
     '[ { "inputs": [ { "internalType": "uint256[2]", "name": "", "type": "uint256[2]" } ], "name": "hash2", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "pure", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_left", "type": "uint256" }, { "internalType": "uint256", "name": "_right", "type": "uint256" } ], "name": "hashLeftRight", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "pure", "type": "function" } ]';
-  const { onCopy, value, setValue, hasCopied } = useClipboard(placeholder);
+  const { onCopy,value,  hasCopied } = useClipboard(placeholder);
 
   return (
     <Container
@@ -79,7 +79,7 @@ const Guide = () => {
               </VStack>
               <AccordionPanel pb={4}>
                 <VStack spacing={6} alignItems="flex-start">
-                  <iframe title="onramp" src="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ" width="315" height="640" allowfullscreen frameborder="0"></iframe>
+                  <iframe title="onramp" src="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ" width="315" height="640" allowFullScreen frameBorder="0"></iframe>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
@@ -124,7 +124,7 @@ const Guide = () => {
               </VStack>
               <AccordionPanel pb={4}>
                 <VStack spacing={6} alignItems="flex-start">
-                  <iframe title="voteGuide" src="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ" width="315" height="640" frameborder="0"></iframe>
+                  <iframe title="voteGuide" src="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ" width="315"  allowFullScreen height="640" frameBorder="0"></iframe>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>

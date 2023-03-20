@@ -367,15 +367,13 @@ export const Ballot = () => {
     console.log(encPubKeys);
     try {
       const gasPrice = await provider.getGasPrice();
-      const double = BigNumber.from("2");
-      const doubleGasPrice = gasPrice.mul(double);
-      const gasLimit = ethers.utils.hexlify(10000000);
+      const gasLimit = ethers.utils.hexlify(1000000 * messages.length);
       const signer = provider.getSigner(address);
 
       const tx = await grantRound.connect(signer).publishMessageBatch(
         messages.reverse().map((msg) => msg.asContractParam()),
         encPubKeys.reverse().map((key) => key.asContractParam()),
-        { gasPrice: doubleGasPrice, gasLimit }
+        { gasPrice: gasPrice, gasLimit }
       );
       await tx.wait();
       toast({
