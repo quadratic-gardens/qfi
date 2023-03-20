@@ -65,7 +65,7 @@ export const About = () => {
             </Text>
             <Text pb={4} w={"full"}>
               {t("You can learn more about Quadratic Funding")}{" "}
-              <a href={"https://www.figma.com/proto/3oKhn9cHRzKiJ7bSLzWvsi/Quiz?node-id=212-9366&scaling=scale-down&page-id=0%3A1&starting-point-node-id=212%3A9366"} rel="noreferrer" target="_blank">
+              <a href={"https://www.figma.com/proto/3oKhn9cHRzKiJ7bSLzWvsi/Tour?node-id=212-9366&scaling=scale-down-width&page-id=0%3A1&starting-point-node-id=212%3A9366"} rel="noreferrer" target="_blank">
                 {t("here")}
               </a>
               .

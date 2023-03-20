@@ -33,8 +33,9 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
           />
         </Tooltip>
         <Tooltip label="About" placement="right">
-          <IconButton to="/about" as={Link} color="gray.500" icon={<Icon as={HiQuestionMarkCircle} boxSize={6} />} aria-label="About" />
+          <IconButton to={`/about?${searchParams.toString()}`} as={Link} color="gray.500" icon={<Icon as={HiQuestionMarkCircle} boxSize={6} />} aria-label="About" />
         </Tooltip>
+
 
         <ColorModeSwitcher color="gray.500" aria-label="dark mode" h="50px" borderRadius={useColorModeValue("3px", "8px")} />
         {/* <Tooltip label="How it Works" placement="right">
@@ -100,11 +101,11 @@ export const Navbar = () => {
       </HStack>
 
       <HStack>
-        <Tooltip label="..." placement="right">
+        {/* <Tooltip label="..." placement="right"> */}
           <Button to={`/ballot?${searchParams.toString()}`} as={Link} height="50px" boxSizing="border-box" variant={"porto"} fontSize={{ base: "lg", xl: "xl" }}>
             Vote
           </Button>
-        </Tooltip>
+        {/* </Tooltip> */}
         <Select bg={backgroundColor} color={color} borderColor={color} borderRadius={useColorModeValue("3px", "8px")} value={selectedLang} onChange={({ target: { value } }) => handleLangChange(value)} w={20} h="50px" _focus={{ border: "none" }}>
           <option
             value="en"
@@ -115,7 +116,7 @@ export const Navbar = () => {
             EN
           </option>
           <option
-            value="es"
+            value="pt"
             style={{
               background: backgroundColor,
               fontWeight: "bold",
