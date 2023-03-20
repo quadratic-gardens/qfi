@@ -1,4 +1,4 @@
-import { VStack, Container, Text, Heading, Drawer, Code, useClipboard, Button, DrawerOverlay, DrawerContent, DrawerCloseButton, ListItem, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, UnorderedList } from "@chakra-ui/react";
+import { VStack, Container, Text,useBreakpointValue, Heading, Drawer, Code, useClipboard, Button, DrawerOverlay, DrawerContent, DrawerCloseButton, ListItem, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, UnorderedList } from "@chakra-ui/react";
 import { MagikButton } from "@qfi/ui";
 
 import { useTranslation, Trans } from "react-i18next";
@@ -7,7 +7,7 @@ const Guide = () => {
   const { t } = useTranslation();
   const placeholder =
     '[ { "inputs": [ { "internalType": "uint256[2]", "name": "", "type": "uint256[2]" } ], "name": "hash2", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "pure", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_left", "type": "uint256" }, { "internalType": "uint256", "name": "_right", "type": "uint256" } ], "name": "hashLeftRight", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "pure", "type": "function" } ]';
-  const { onCopy,value,  hasCopied } = useClipboard(placeholder);
+  const { onCopy, value, hasCopied } = useClipboard(placeholder);
 
   return (
     <Container
@@ -17,7 +17,7 @@ const Guide = () => {
       right="-24px"
       top={0}
       left={0}
-      position="absolute"
+      position="relative"
       sx={{
         scrollbarColor: "green",
         "::-webkit-scrollbar": {
@@ -54,37 +54,37 @@ const Guide = () => {
         <VStack spacing={6} alignItems="flex-start">
           <Heading size="md">Gnosis Chain (xDAI) Wallet</Heading>
 
-          <Accordion allowToggle>
-            <AccordionItem border="none">
+          <Accordion allowToggle width="full">
+            <AccordionItem border="none" width="full">
               <VStack>
                 <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
                   Step 1: Download a wallet that supports Gnosis Chain (xDAI)
                   <AccordionIcon></AccordionIcon>
                 </Text>
               </VStack>
-              <AccordionPanel pb={4}>
-                <VStack spacing={6} alignItems="flex-start">
-                  <iframe title="guide" src="https://scribehow.com/page-embed/Mobile_Wallet_Set_up__OZiM3PehSGmXB73cXh85KQ" width="315" height="640" allowFullScreen frameBorder="0"></iframe>
+              <AccordionPanel pb={4} width="full">
+                <VStack spacing={6} alignItems="flex-start" width="full">
+                  <iframe title="guide" src="https://scribehow.com/page-embed/Mobile_Wallet_Set_up__OZiM3PehSGmXB73cXh85KQ" width="100%"  height="640" allowFullScreen frameBorder="0"></iframe>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
-          <Accordion allowToggle>
-            <AccordionItem border="none">
+          <Accordion allowToggle width="full">
+            <AccordionItem border="none" width="full">
               <VStack>
                 <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
                   Step 2A: Get some xDAI on Gnosis Chain (xDAI) by using a bridge such as xDAI Bridge
                   <AccordionIcon></AccordionIcon>
                 </Text>
               </VStack>
-              <AccordionPanel pb={4}>
-                <VStack spacing={6} alignItems="flex-start">
-                  <iframe title="onramp" src="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ" width="315" height="640" allowFullScreen frameBorder="0"></iframe>
+              <AccordionPanel pb={4} width="full">
+                <VStack spacing={6} alignItems="flex-start" width="full">
+                  <iframe title="onramp" src="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ" width="100%"  height="640" allowFullScreen frameBorder="0"></iframe>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
-          <Accordion allowToggle>
+          <Accordion allowToggle width="full">
             <AccordionItem border="none">
               <VStack>
                 <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
@@ -114,7 +114,7 @@ const Guide = () => {
             </AccordionItem>
           </Accordion>
 
-          <Accordion allowToggle>
+          <Accordion allowToggle width="full">
             <AccordionItem border="none">
               <VStack>
                 <Text px={0} textAlign={"left"} as={AccordionButton} fontSize="md">
@@ -122,9 +122,9 @@ const Guide = () => {
                   <AccordionIcon></AccordionIcon>
                 </Text>
               </VStack>
-              <AccordionPanel pb={4}>
-                <VStack spacing={6} alignItems="flex-start">
-                  <iframe title="voteGuide" src="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ" width="315"  allowFullScreen height="640" frameBorder="0"></iframe>
+              <AccordionPanel pb={4} width="full">
+                <VStack spacing={6} alignItems="flex-start" width="full">
+                  <iframe title="voteGuide" src="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ" width="100%" allowFullScreen height="640" frameBorder="0"></iframe>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
@@ -151,10 +151,11 @@ type GuideDrawerProps = {
   onClose: () => void;
 };
 export const GuideDrawer = ({ isOpen, onClose }: GuideDrawerProps) => {
+  const drawerSize = useBreakpointValue({ base: 'sm', md:'md', lg: 'lg', xl: 'lg' })
   return (
-    <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+    <Drawer size={drawerSize} isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay>
-        <DrawerContent pt={8} h="full" maxW="405px" w="full" position={"relative"} overflow={"hidden"} justifyContent="flex-start">
+        <DrawerContent pt={8} h="full" w="full"    position={"relative"} overflow={"hidden"} justifyContent="flex-start">
           <DrawerCloseButton zIndex={999} onClick={onClose} />
           <Guide />
         </DrawerContent>
