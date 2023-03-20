@@ -1,4 +1,4 @@
-import { VStack, Container, Text,useBreakpointValue, Heading, Drawer, Code, useClipboard, Button, DrawerOverlay, DrawerContent, DrawerCloseButton, ListItem, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, UnorderedList } from "@chakra-ui/react";
+import { VStack, Container, Text, useBreakpointValue, Heading, Drawer, Code, useClipboard, Button, DrawerOverlay, DrawerContent, DrawerCloseButton, ListItem, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, UnorderedList } from "@chakra-ui/react";
 import { MagikButton } from "@qfi/ui";
 
 import { useTranslation, Trans } from "react-i18next";
@@ -64,7 +64,18 @@ const Guide = () => {
               </VStack>
               <AccordionPanel pb={4} width="full">
                 <VStack spacing={6} alignItems="flex-start" width="full">
-                  <iframe title="guide" src="https://scribehow.com/page-embed/Mobile_Wallet_Set_up__OZiM3PehSGmXB73cXh85KQ" width="100%"  height="640" allowFullScreen frameBorder="0"></iframe>
+                  <Text>
+                    Checkout the guide to set up your wallet{" "}
+                    <a title="guide" href="https://scribehow.com/page-embed/Mobile_Wallet_Set_up__OZiM3PehSGmXB73cXh85KQ">
+                      {" "}
+                      on Mobile{" "}
+                    </a>{" "}
+                    or
+                    <a title="onramp" href="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ">
+                      {" "}
+                      Desktop
+                    </a>
+                  </Text>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
@@ -79,7 +90,12 @@ const Guide = () => {
               </VStack>
               <AccordionPanel pb={4} width="full">
                 <VStack spacing={6} alignItems="flex-start" width="full">
-                  <iframe title="onramp" src="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ" width="100%"  height="640" allowFullScreen frameBorder="0"></iframe>
+                  <Text>
+                    Checkout our guide on{" "}
+                    <a title="onramp" href="https://scribehow.com/page-embed/Voters_guide__Desktop__08cXvIydQrWdpcHMfhSuDQ">
+                      How to Bridge from Eth Mainnet
+                    </a>
+                  </Text>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
@@ -95,11 +111,10 @@ const Guide = () => {
               <AccordionPanel pb={4}>
                 <VStack textAlign={"left"} alignItems={"flex-start"}>
                   <Text>
-                    Copy the following JSON to your clipboard and paste it into the "ABI" field of the{" "}
+                    Request 0.01 xDAI then copy the following JSON to your clipboard and paste it into the "ABI" field of the{" "}
                     <a href="https://gnosisfaucet.com/" rel="noreferrer" target="_blank">
                       xDAI Faucet
                     </a>{" "}
-                    to request 0.01 xDAI.
                   </Text>
 
                   <Button onClick={onCopy}>{hasCopied ? "Copied!" : "Copy"}</Button>
@@ -124,7 +139,13 @@ const Guide = () => {
               </VStack>
               <AccordionPanel pb={4} width="full">
                 <VStack spacing={6} alignItems="flex-start" width="full">
-                  <iframe title="voteGuide" src="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ" width="100%" allowFullScreen height="640" frameBorder="0"></iframe>
+                  <Text>
+                    Follow our guide to{" "}
+                    <a title="voteGuide" href="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ">
+                      select your projects and vote!
+                    </a>
+                    . Voting is anonymous.
+                  </Text>
                 </VStack>
               </AccordionPanel>
             </AccordionItem>
@@ -151,11 +172,11 @@ type GuideDrawerProps = {
   onClose: () => void;
 };
 export const GuideDrawer = ({ isOpen, onClose }: GuideDrawerProps) => {
-  const drawerSize = useBreakpointValue({ base: 'sm', md:'md', lg: 'lg', xl: 'lg' })
+  const drawerSize = useBreakpointValue({ base: "sm", md: "md", lg: "lg", xl: "lg" });
   return (
     <Drawer size={drawerSize} isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay>
-        <DrawerContent pt={8} h="full" w="full"    position={"relative"} overflow={"hidden"} justifyContent="flex-start">
+        <DrawerContent pt={8} h="full" w="full" position={"relative"} overflow={"hidden"} justifyContent="flex-start">
           <DrawerCloseButton zIndex={999} onClick={onClose} />
           <Guide />
         </DrawerContent>
