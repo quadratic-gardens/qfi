@@ -141,7 +141,7 @@ const Guide = () => {
                 <VStack spacing={6} alignItems="flex-start" width="full">
                   <Text>
                     Follow our guide to{" "}
-                    <a title="voteGuide" href="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ">
+                    <a title="voteGuide" href="https://scribehow.com/page-embed/Voter_Guide_Mobile__H5p5wifzRUeBMmSFYcGWdQ" rel="noreferrer" target="_blank">
                       select your projects and vote!
                     </a>
                     . Voting is anonymous.
