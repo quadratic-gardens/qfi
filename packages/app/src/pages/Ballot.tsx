@@ -367,7 +367,7 @@ export const Ballot = () => {
     console.log(encPubKeys);
     try {
       const gasPrice = await provider.getGasPrice();
-      const gasLimit = ethers.utils.hexlify(1000000 * messages.length);
+      const gasLimit = ethers.utils.hexlify(10000000);
       const signer = provider.getSigner(address);
 
       const tx = await grantRound.connect(signer).publishMessageBatch(

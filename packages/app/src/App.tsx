@@ -11,6 +11,11 @@ import { Ballot } from "./pages/Ballot";
 import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
 import { Apply } from "./pages/Apply";
+import { getShuffledProjects } from "./data";
+
+
+const shuffledProjects = getShuffledProjects();
+
 
 export const App = () => {
   const { isOpen: isGuideOpen, onOpen: onGuideOpen, onClose: onGuideClose } = useDisclosure();
@@ -35,7 +40,7 @@ export const App = () => {
           <Route path="about" element={<About />} />
           <Route
             index
-            element={<Projects />}
+            element={<Projects shuffledProjects={shuffledProjects} />}
           ></Route>
           <Route path="projects/:projectId" element={<Project />} />
           <Route path="admin" element={<Admin />} />

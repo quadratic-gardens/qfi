@@ -14,7 +14,7 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
   let [searchParams] = useSearchParams();
 
   return (
-    <VStack zIndex={9} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
+    <VStack zIndex={1} p={4} justifyContent="space-between" alignItems="center" w="full" bg={backgroundColor}>
       <VStack>
         <IconButton bg={backgroundColor} to={`/?${searchParams.toString()}`} as={Link} mb={6} icon={<Logo />} aria-label="Home" />
 {/* 
@@ -78,7 +78,7 @@ export const Navbar = ({ onGuideOpen }: SideNavProps) => {
   };
 
   return (
-    <HStack zIndex={9} position={"fixed"} top={0} left={0} bg={backgroundColor} p={4} justifyContent="space-between" alignItems="center" w="full" minH={"32px"}>
+    <HStack zIndex={1} position={"fixed"} top={0} left={0} bg={backgroundColor} p={4} justifyContent="space-between" alignItems="center" w="full" minH={"32px"}>
       <HStack>
         {/* <IconButton
           w={"40px"}

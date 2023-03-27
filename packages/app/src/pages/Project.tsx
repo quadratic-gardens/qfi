@@ -133,7 +133,7 @@ export function Project() {
               </Box>
             </VStack>
             <HStack pt={3} px={{ base: "4", md: "6" }} justifyContent={"space-between"} w="full" spacing={0}>
-              <AspectRatio borderColor={backgroundColor} borderWidth={3} zIndex="1" w={{ base: "25%", md: "25%" }} mt={{ sm: "-15%", md: "-15%" }} mb="12px" display="block" overflow="visible" rounded="full" maxW="100%" ratio={1}>
+              <AspectRatio borderColor={backgroundColor} borderWidth={3} w={{ base: "25%", md: "25%" }} mt={{ sm: "-15%", md: "-15%" }} mb="12px" display="block" overflow="visible" rounded="full" maxW="100%" ratio={1}>
                 <Image borderRadius="full" src={project.thumbnailImageLink} alt={project.projectName} />
               </AspectRatio>
 

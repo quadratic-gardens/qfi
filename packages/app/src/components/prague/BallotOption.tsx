@@ -196,7 +196,7 @@ export const BallotOption = ({
                 <Icon
                   color="#E573E5"
                   position="relative"
-                  zIndex={1}
+                  zIndex={0}
                   boxSize={"8"}
                   letterSpacing="-0.5px"
 

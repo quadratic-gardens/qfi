@@ -5,20 +5,17 @@ import { Option } from "../propTypes";
 import { Hero } from "../components/Hero";
 
 import { useTranslation } from "react-i18next";
-import { getShuffledProjects } from "../data";
 const shortenEthAddress = (address: string) => {
   return address.substring(0, 6) + "..." + address.substring(address.length - 4);
 };
 
-export const Projects = () => {
+export const Projects = ({ shuffledProjects }) => {
   const fontColor = useColorModeValue("gray.800", "gray.200");
   const color = useColorModeValue("gray.800", "gray.700");
   let [searchParams] = useSearchParams();
 
   const { t } = useTranslation();
   const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
-
-  const shuffledProjects = getShuffledProjects();
 
   const heroLightmode = (
     <AspectRatio ratio={1} w="50%" h={"auto"} overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>

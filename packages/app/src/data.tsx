@@ -1,7 +1,7 @@
 import "@fontsource/archivo";
 let projects = [
   {
-    projectName: "Impact Tinder",
+    projectName: "1 - Impact Tinder",
     tagline: "Web portal for Transformers volunteers to connect with each other and generate impact around social causes",
     description:
       "Our experience as Movimento Transformers volunteers has changed our way of seeing and understanding the world and has impacted, in previous years, career changes (or beginnings) to the Social Entrepreneurship field. If this happens organically, imagine if we actively pursued it! Our proposal is to make use of the online Transformers community with over 450 members, start with a major list of skills, experience and social causes of each member, and create a landing page with all that information. From there, each person interested in learning more about a given field could send a message to someone else (or create a buddy group) and suggest dates with Impact.",
@@ -18,7 +18,7 @@ let projects = [
   },
 
   {
-    projectName: "Gender Equality in Sports",
+    projectName: "2 - Gender Equality in Sports",
     tagline:
       "In-person summit on Gender Equality in Sports for local sencondary school, with the participation of several female athletes, round table discussions and Q&amp;A moments. The closing of the event would be a mix-class and all-gender tournament.",
     description:
@@ -35,7 +35,7 @@ let projects = [
     id: "2",
   },
   {
-    projectName: "Transforming Youth Participation",
+    projectName: "3 - Transforming Youth Participation",
     tagline:
       "Bootcamp to capacitate and empower young people for an active participation in society",
     description:
@@ -52,7 +52,7 @@ let projects = [
     id: "3",
   },
   {
-    projectName: "Toddlers Trip - From IDGs to SDGs",
+    projectName: "4 - Toddlers Trip - From IDGs to SDGs",
     tagline:
       "Work with children of today that are going to be the leaders of tomorrow: develop a program to teach young leaders skills to address Sustainable Development Goals (SDGs)",
     description:
@@ -67,7 +67,7 @@ let projects = [
     id: "4",
   },
   {
-    projectName: "One week to… discover your talent!",
+    projectName: "5 - One week to… discover your talent!",
     tagline:
       "Creative Residence (with arts, sports, STEM, and  personal development workshops for the Transformers community to explore what talents, dreams and passions they have",
     description:
@@ -84,7 +84,7 @@ let projects = [
     id: "5",
   },
   {
-    projectName: "To be a Volunteer - an interactive manual",
+    projectName: "6 - To be a Volunteer - an interactive manual",
     tagline:
       "Interactive volunteering manual that will allow anyone and everyone to grow as a volunteer, an activist, and an overall active participant.",
     description:
@@ -102,7 +102,7 @@ let projects = [
     id: "6",
   },
   {
-    projectName: "Saving the world… with CREATIVITY",
+    projectName: "7 - Saving the world… with CREATIVITY",
     tagline:
       "Fashion show totally produced by the Transformers community, to empahsize sustainability and creativity in Porto.",
     description:
@@ -119,7 +119,7 @@ let projects = [
     id: "7",
   },
   {
-    projectName: "We are… A Play About Us",
+    projectName: "8 - We are… A Play About Us",
     tagline:
       "A theater play about, written, and produced by “youth at risk of social exclusion” in  What we feel, dream, think, and want to do. What makes us angry,",
     description:
@@ -136,7 +136,7 @@ let projects = [
     id: "8",
   },
   {
-    projectName: "Transforming our Public Spaces",
+    projectName: "9 - Transforming our Public Spaces",
     tagline:
       "Rebuilding abandoned and destroyed football and futsal fields, paint dilapidated walls, rethink and rebuild abandoned gardens",
     description:
@@ -153,7 +153,7 @@ let projects = [
     id: "9",
   },
   {
-    projectName: "A Community Vegetable Garden to Include Everyone",
+    projectName: "10 - A Community Vegetable Garden to Include Everyone",
     tagline:
       "A community vegetable and fruit garden in one of the Center for Migrant and Refugee People and Families in our city.",
     description:
@@ -170,7 +170,7 @@ let projects = [
     id: "10",
   },
   {
-    projectName: "Transformation through Animation",
+    projectName: "11 - Transformation through Animation",
     tagline:
       "Creating animated short movies about things like racism, bullying, domestic violence, different treatment of men and women, poverty,",
     description:

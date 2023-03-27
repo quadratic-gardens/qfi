@@ -5,7 +5,6 @@ import { ICoreOptions } from "web3modal";
 import { JsonRpcProvider, Resolver, getDefaultProvider } from "@ethersproject/providers";
 import { IProviderOptions } from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
 import { switchChainOnMetaMask } from "./metamask";
 
@@ -41,17 +40,7 @@ export const providerOptions: IProviderOptions = {
         100: SUPPORTED_NETWORKS["0x64"].rpc,
       },
     },
-  },
-  walletlink: {
-    package: CoinbaseWalletSDK,
-    options: {
-      appName: "QFI",
-      infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
-      rpc: {
-        100: SUPPORTED_NETWORKS["0x64"].rpc,
-      },
-    },
-  },
+  }
   // .. Other providers
 };
 
@@ -263,87 +252,6 @@ export const formatAddress = (address: string | null | undefined, ensName?: stri
   if (ensName) return ensName;
   else if (address) return `${address.substring(0, chars)}...${address.substring(address.length - chars)}`;
   else return "";
-};
-
-export const useENS = ({
-  ens,
-  address,
-}: {
-  ens?: string;
-  address?: string;
-}): {
-  ens?: string;
-  address?: string;
-  resolver?: Resolver;
-  avatar?: string;
-  getAddress: (ens: string) => Promise<string | undefined>;
-  getEns: (address: string) => Promise<string | undefined>;
-  loading: boolean;
-} => {
-  const [localENS, setLocalENS] = useState<string>();
-  const [localAddress, setLocalAddress] = useState<string>();
-  const [avatar, setAvatar] = useState<string>();
-  const [resolver, setResolver] = useState<Resolver>();
-  const [loading, setLoading] = useState(false);
-
-  const { isConnected } = useWallet();
-  const localProvider = getDefaultProvider();
-
-  const populateENS = async () => {
-    if (!localProvider) return;
-
-    try {
-      setLoading(true);
-      if (ens) {
-        const resolver = await (localProvider as JsonRpcProvider).getResolver(ens);
-        const address = resolver?.address;
-        const avatar = await resolver?.getAvatar();
-        setLocalENS(ens);
-        setLocalAddress(address);
-        setAvatar(avatar?.url);
-        setResolver(resolver as Resolver);
-        return;
-      }
-      if (address) {
-        const ens = await (localProvider as JsonRpcProvider).lookupAddress(address);
-        const resolver = await (localProvider as JsonRpcProvider).getResolver(ens ?? "");
-        const avatar = await resolver?.getAvatar();
-        setLocalENS(ens ?? undefined);
-        setLocalAddress(address);
-        setAvatar(avatar?.url);
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    populateENS();
-  }, [isConnected]);
-
-  const getAddress = async (ens: string) => {
-    const resolver = await (localProvider as JsonRpcProvider).getResolver(ens);
-    const address = resolver?.address;
-    return address;
-  };
-
-  const getEns = async (address: string) => {
-    const ens = await (localProvider as JsonRpcProvider).lookupAddress(address);
-    return ens ?? undefined;
-  };
-
-  return {
-    ens: localENS,
-    address: localAddress,
-    avatar,
-    resolver,
-    getAddress,
-    getEns,
-    loading,
-  };
 };
 
 /**
