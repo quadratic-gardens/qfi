@@ -88,7 +88,7 @@ export const hacksFilePath = `${usersStateIndexesBaseDirPath}/${hacksFileName}`
 export const mnemonicFilePath = `${mnemonicBaseDirPath}/${mnemonicFileName}${mnemonicFileExt}`
 
 /** Header */
-export const header = figlet.textSync("ETH Taiwan CLI", {
+export const header = figlet.textSync("ETHDam CLI", {
   font: "ANSI Regular",
   horizontalLayout: "full",
   verticalLayout: "default",
