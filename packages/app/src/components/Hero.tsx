@@ -8,8 +8,8 @@ import {
   AspectRatio,
 } from "@chakra-ui/react";
 
-import logo from "./assets/logo.png";
-import hero from "./assets/hero.png";
+import logo from "./assets/logoLight.png";
+import hero from "./assets/logoDark.png";
 import hero4 from "./assets/hero4.gif";
 
 const spin = keyframes`
