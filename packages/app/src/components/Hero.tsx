@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 import logo from "./assets/logo.png";
-import hero from "./assets/Hero.png";
+import hero from "./assets/hero.png";
 import hero4 from "./assets/hero4.gif";
 
 const spin = keyframes`
@@ -20,7 +20,7 @@ const spin = keyframes`
 export const Logo = forwardRef<ImageProps, "img">((props, ref) => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  const SwitchIcon = useColorModeValue("https://res.cloudinary.com/pse-qf-maci/image/upload/v1678967923/transformersAnimated_lilhwd.gif", "https://res.cloudinary.com/pse-qf-maci/image/upload/v1678967923/transformersAnimated_lilhwd.gif");
+  const SwitchIcon = useColorModeValue(logo, hero);
   // const animation = prefersReducedMotion ? undefined : `${spin} infinite 60s linear`;
 
   return <chakra.img  src={SwitchIcon} ref={ref} {...props} rounded="full" />;
@@ -33,15 +33,15 @@ export const Hero = forwardRef<ImageProps, "img">((props, ref) => {
     const rand = Math.floor(Math.random() * 6) + 2;
     switch (rand) {
       case 2:
-        return "https://res.cloudinary.com/pse-qf-maci/image/upload/v1678968535/transformersAnimated_nokpma.gif";
+        return logo;
       case 3:
-        return "https://res.cloudinary.com/pse-qf-maci/image/upload/v1678968535/transformersAnimated_nokpma.gif";
+        return logo;
       case 6:
-        return "https://res.cloudinary.com/pse-qf-maci/image/upload/v1678968535/transformersAnimated_nokpma.gif";
+        return logo;
       case 7:
-        return "https://res.cloudinary.com/pse-qf-maci/image/upload/v1678968535/transformersAnimated_nokpma.gif";
+        return logo;
       default:
-        return "https://res.cloudinary.com/pse-qf-maci/image/upload/v1678968535/transformersAnimated_nokpma.gif";
+        return logo;
     }
   };
   const RandomHeroDark = () => {

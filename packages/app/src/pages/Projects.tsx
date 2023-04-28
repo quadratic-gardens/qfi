@@ -15,7 +15,7 @@ export const Projects = ({ shuffledProjects }) => {
   let [searchParams] = useSearchParams();
 
   const { t } = useTranslation();
-  const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
+  const backgroundColor = useColorModeValue("#FAFAFA", "#000000");
 
   const heroLightmode = (
     <AspectRatio ratio={1} w="50%" h={"auto"} overflow="hidden" alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"row"}>
@@ -72,16 +72,13 @@ export const Projects = ({ shuffledProjects }) => {
                     {t("ORGANIZER")}
                   </Heading>
                   <Heading fontWeight={"500"} fontSize={"2xl"}>
-                    Impact real things in the real world. Today.
+                  Pick your favorite projects, then vote for them
                   </Heading>
                   <Text fontSize={"sm"}>
-                    Transformers works weekly with 600 children and young people at risk by promoting their social awareness, talents and ensuring they are more active and participative citizens via a project we call the the Super Power School (SPS). Our core value in the SPS project is Payback,
-                    which means giving back to the community. I transform you so you can transform society around you. Payback actions are implemented by our apprentices and their volunteer mentor to solve a social problem they identify within their communities. Here you will be able to vote on some
-                    of the incredible ideas our groups have come up with this year.
+                    ETHDam is powered by CryptoCanal, an education and events platform growing in Amsterdam and spreading its roots to Rotterdam and Zürich. This grass root community is bound by the cypherpunk ideals of privacy, censorship resistance and ownership. Compete in the DeFi and Privacy
+                    track - 15K. The top 10 project selected by our Jury will be able to pitch on the mains stage.
                   </Text>
-                  <Heading fontWeight={"500"} fontSize={"xl"}>
-                    Pick your favorite projects, then vote for them:
-                  </Heading>
+                 
                 </VStack>
               </VStack>
               <VStack spacing={0} alignItems="flex-start" w="full">

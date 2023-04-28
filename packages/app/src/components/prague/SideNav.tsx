@@ -10,7 +10,7 @@ import { Logo } from "../Hero";
 import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
 export const SideNav = ({ onGuideOpen }: SideNavProps) => {
-  const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+  const backgroundColor = useColorModeValue("gray.100", "#000000");
   let [searchParams] = useSearchParams();
 
   return (
@@ -65,7 +65,7 @@ export const SideNav = ({ onGuideOpen }: SideNavProps) => {
 };
 
 export const Navbar = ({ onGuideOpen }: SideNavProps) => {
-  const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+  const backgroundColor = useColorModeValue("gray.100", "#000000");
   const color = useColorModeValue("gray.800", "#FDFDFD");
 
   let [searchParams] = useSearchParams();
@@ -111,7 +111,7 @@ export const Navbar = ({ onGuideOpen }: SideNavProps) => {
             aria-label="Guide"
           />
         </Tooltip>
-        <Button to={`/ballot?${searchParams.toString()}`} as={Link} height="50px" boxSizing="border-box" variant={"porto"} fontSize={{ base: "lg", xl: "xl" }}>
+        <Button to={`/ballot?${searchParams.toString()}`} as={Link} height="50px" boxSizing="border-box" variant={"amsterdam"} fontSize={{ base: "lg", xl: "xl" }}>
             Vote
           </Button>
          

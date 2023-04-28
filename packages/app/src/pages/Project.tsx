@@ -12,7 +12,7 @@ const shortenEthAddress = (address: string) => {
 
 export function Project() {
   const { t } = useTranslation();
-  const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+  const backgroundColor = useColorModeValue("gray.100", "#000000");
   const color = useColorModeValue("gray.900", "#FDFDFD");
 
   const toast = useToast();
@@ -139,7 +139,7 @@ export function Project() {
 
               <Button
                 fontSize="15px"
-                variant="porto"
+                variant="amsterdam"
                 onClick={isInBallot ? handleRemoveFromBallot(projectId?.toString() ?? "noop") : handleAddToBallot}
                 marginTop={{
                   base: "-12% !important",

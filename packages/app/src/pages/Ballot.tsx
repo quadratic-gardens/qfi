@@ -46,7 +46,7 @@ interface SubmitBallotButtonProps {
 const SubmitBallotButton = ({ isConnected, disableSubmitButton, my = 0, onSubmit, t }: SubmitBallotButtonProps) =>
   isConnected ? (
     <Tooltip isDisabled={!disableSubmitButton} label={t("Unregistered MACI Keypair: Enter a valid MACI key to continue.")} placement="top" shouldWrapChildren>
-      <Button m="auto" my={my} maxWidth={{ md: "150px" }} width="100%" h={20} display="block" disabled={disableSubmitButton} onClick={onSubmit} variant={"porto"} fontSize={{ base: "md", xl: "lg" }}>
+      <Button m="auto" my={my} maxWidth={{ md: "150px" }} width="100%" h={20} display="block" disabled={disableSubmitButton} onClick={onSubmit} variant={"amsterdam"} fontSize={{ base: "md", xl: "lg" }}>
         <Text whiteSpace="break-spaces">{t("SUBMIT BALLOT")}</Text>
       </Button>
     </Tooltip>
@@ -64,7 +64,7 @@ const headerYourBallotLogo = {
 };
 
 export const Ballot = () => {
-  const backgroundColor = useColorModeValue("gray.100", "#0D1429");
+  const backgroundColor = useColorModeValue("gray.100", "#000000");
   const colorModeSwitch = useColorModeValue(true, false);
   const [isViewportMd] = useMediaQuery("(min-width: 768px)");
   const [key, setKey] = useState<string>();
@@ -299,7 +299,7 @@ export const Ballot = () => {
     const quadraticVoteWeight = voteWeight ?? 0;
     const pubkey = userKeypair.pubKey;
 
-    // TODO:porto
+    // TODO:amsterdam
     // /stateIndex: BigInt,
     // newPubKey: PubKey,
     // voteOptionIndex: BigInt,
@@ -459,7 +459,7 @@ export const Ballot = () => {
           </VStack>
         ) : (
           <VStack style={{ marginTop: 48 }} alignItems="flex-start" w="full">
-            <Button as={Link} variant="porto" fontSize={{ base: "lg", xl: "xl" }} w="full" to={`/?${searchParams.toString()}`}>
+            <Button as={Link} variant="amsterdam" fontSize={{ base: "lg", xl: "xl" }} w="full" to={`/?${searchParams.toString()}`}>
               {t("CHECK OUT THE PROJECTS")}
             </Button>
           </VStack>
@@ -498,12 +498,12 @@ export const Ballot = () => {
 
           <form style={{ width: "100%" }} onSubmit={handleSubmitMaciChange}>
             <FormControl w="full" display={{ base: "flex", md: "block" }} flexDir={{ base: "column" }} alignItems={{ base: "center" }} isInvalid={isError} variant="floating" id="key" isRequired mt={{ base: 12 }}>
-              <Input color={numChars === 71 ? "#424242" : "red.500"} w="full" type="password" placeholder={t("MACI Key")} variant="porto" value={key} onChange={handleInputChange} borderRadius={"3px"} />
+              <Input color={numChars === 71 ? "#424242" : "red.500"} w="full" type="password" placeholder={t("MACI Key")} variant="amsterdam" value={key} onChange={handleInputChange} borderRadius={"3px"} />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormHelperText fontFamily="Space Grotesk" color={numChars === 71 ? "#424242" : "red.500"}>
                 {numChars ?? "-"} / 71
               </FormHelperText>
-              <Button variant="porto" fontSize={{ base: "lg", xl: "xl" }} type="submit" w="full" mt={6} alignItems="center">
+              <Button variant="amsterdam" fontSize={{ base: "lg", xl: "xl" }} type="submit" w="full" mt={6} alignItems="center">
                 {t("SAVE")}
               </Button>
             </FormControl>

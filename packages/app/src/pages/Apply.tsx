@@ -34,7 +34,7 @@ export const Apply = () => {
     const color = useColorModeValue("gray.800", "gray.700");
     const [isViewportMd] = useMediaQuery("(min-width: 768px)");
     const currLang = i18n.language;
-    const backgroundColor = useColorModeValue("#FAFAFA", "#222222");
+    const backgroundColor = useColorModeValue("#FAFAFA", "#000000");
 
     const headerYourBallotLogo = {
         en: "project_submission_EN.svg",
@@ -136,7 +136,7 @@ export const Apply = () => {
                                                 <UnorderedList>
                                                     <ListItem mb={4}>
                                                         {t(
-                                                            "The project needs to be based, or working with local communities, or in the surroundings of Porto."
+                                                            "The project needs to be based, or working with local communities, or in the surroundings of ETHDam."
                                                         )}
                                                     </ListItem>
                                                     <ListItem mb={4}>
@@ -188,13 +188,13 @@ export const Apply = () => {
                                 </Heading>
                             )}
                             <Text textAlign="justify" mb={4}>
-                                <Trans i18nKey="Submitting your project makes you eligible to receive funds provided for the QF initiative at Porto, <strong>but does not guarantee funding</strong>. There will be a filter to the initiatives presented carried out by a group of volunteers from QF Porto to determine that the initiatives are in accordance with the requirements and that they’re initiatives that do not go against the law." />
+                                <Trans i18nKey="Submitting your project makes you eligible to receive funds provided for the QF initiative at ETHDam, <strong>but does not guarantee funding</strong>. There will be a filter to the initiatives presented carried out by a group of volunteers from QF ETHDam to determine that the initiatives are in accordance with the requirements and that they’re initiatives that do not go against the law." />
                             </Text>
                             <Text textAlign="justify" mb={4}>
-                                {t("This financing is a donation and has no associated reports, returns, or obligations on the part of the project. How much each project receives will be decided by Porto attendees who vote during the event. If you are unsure about this, feel free to contact the team at sponsors@Porto.org.")}
+                                {t("This financing is a donation and has no associated reports, returns, or obligations on the part of the project. How much each project receives will be decided by ETHDam attendees who vote during the event. If you are unsure about this, feel free to contact the team at sponsors@ETHDam.org.")}
                             </Text>
                             <Text textAlign="justify" mb={4}>
-                                {t("This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@Porto.org.")}
+                                {t("This donation will be sent in stablecoin (DAI) via Polygon to the wallet entered during the registration process. Once the funds are sent the transaction is irreversible, so you must be 100% sure of the address you will enter and who has control of the wallet/private keys. If you are unsure about this, feel free to contact the team at the following email address sponsors@ETHDam.org.")}
                             </Text>
                             <Alert status='warning' mb={4}>
                                 <AlertIcon />
@@ -204,12 +204,12 @@ export const Apply = () => {
                             </Alert>
 
                             <Text textAlign="justify" mb={4}>
-                                <Trans i18nKey="Unfortunately, the projects or teams will not be able to appear on stage during Porto, but we do empower them to use the hashtag #PortoQF in your social media posts so that you show and tell attendees about your impact on public goods." />
+                                <Trans i18nKey="Unfortunately, the projects or teams will not be able to appear on stage during ETHDam, but we do empower them to use the hashtag #ETHDamQF in your social media posts so that you show and tell attendees about your impact on public goods." />
                             </Text>
                             <Text textAlign="justify" mb={4}>
-                                {t("If you post on Twitter, tag @Porto and use the corresponding hashtags to achieve greater reach. You can also post within the")}{" "}
-                                <a href={"https://t.me/Porto"} rel="noreferrer" target="_blank">
-                                    {t("Porto Telegram group")}
+                                {t("If you post on Twitter, tag @ETHDam and use the corresponding hashtags to achieve greater reach. You can also post within the")}{" "}
+                                <a href={"https://t.me/ETHDam"} rel="noreferrer" target="_blank">
+                                    {t("ETHDam Telegram group")}
                                 </a>{" "}
                                 {t("using the hashtag #QF in your post.")}
                             </Text>
@@ -231,7 +231,7 @@ export const Apply = () => {
                                             <UnorderedList>
                                                 <ListItem mb={4}>
                                                     {t(
-                                                        "The registration deadline is August 11th at 11:55 pm (Porto time)."
+                                                        "The registration deadline is August 11th at 11:55 pm (ETHDam time)."
                                                     )}
                                                 </ListItem>
                                                 <ListItem mb={4}>
@@ -249,12 +249,12 @@ export const Apply = () => {
                                                 </ListItem>
                                                 <ListItem mb={4}>
                                                     {t(
-                                                        "The Porto team will contact you if they need to clarify something or if they need more details."
+                                                        "The ETHDam team will contact you if they need to clarify something or if they need more details."
                                                     )}
                                                 </ListItem>
                                                 <ListItem mb={4}>
                                                     {t(
-                                                        "If you have any questions during the application process, send an email to sponsors@Porto.org before the submission deadline."
+                                                        "If you have any questions during the application process, send an email to sponsors@ETHDam.org before the submission deadline."
                                                     )}
                                                 </ListItem>
                                             </UnorderedList>

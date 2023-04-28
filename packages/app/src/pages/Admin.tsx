@@ -233,7 +233,7 @@ export const Admin = () => {
               Admin
             </Heading>
             <VStack>
-              {/* <Button
+              <Button
                 onClick={async () => {
                   setStep(13)
                   setLoading(true);
@@ -242,7 +242,7 @@ export const Admin = () => {
                   setStep(1);
                 }}
                 isDisabled={step !== 0}
-                variant="porto"
+                variant="amsterdam"
                 w="100%">
                 Deploy Poseidon Libs
               </Button>
@@ -256,7 +256,7 @@ export const Admin = () => {
                   setStep(2);
                 }}
                 isDisabled={step !== 1}
-                variant="porto"
+                variant="amsterdam"
                 w="100%">
                 Deploy Admin Contract
               </Button>
@@ -269,11 +269,12 @@ export const Admin = () => {
                   setStep(3);
                 }}
                 isDisabled={step !== 2}
-                variant="porto"
+                variant="amsterdam"
                 w="100%">
                 Deploy Round (but dont start voting)
-              </Button> */}
+              </Button>
               <Button
+                isDisabled
                 onClick={async () => {
                   setStep(step + 1);
                   setLoading(true);
@@ -281,7 +282,7 @@ export const Admin = () => {
                   setLoading(false);
                 }}
                 // isDisabled={step !== 99}
-                variant="porto"
+                variant="amsterdam"
                 w="100%">
                 Start Voting
               </Button>

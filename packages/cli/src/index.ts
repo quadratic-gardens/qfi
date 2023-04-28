@@ -36,7 +36,7 @@ program
   .action((amount: number) => {
     genkeys(amount)
   })
-  .addHelpCommand(`ethPortoCli genkeys 3000`)
+  .addHelpCommand(`ethDamCli genkeys 3000`)
 
 program
   .command("dothething")

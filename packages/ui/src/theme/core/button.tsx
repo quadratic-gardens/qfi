@@ -29,6 +29,19 @@ const Button = {
       transform: "rotate(6.41deg)",
       width: "122px",
     },
+    amsterdam: {
+      p:"0",
+      height: "40px",
+      color: "black",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: "full",
+      background: "rgb(143, 252, 255) none repeat scroll 0% 0%",
+      fontFamily: 'Space Grotesk',
+      fontWeight: "700",
+      _hover: {   transition: "all 0s",  color: "white", scale: "0.9" },
+      width: "100px",
+    },
     porto: (props:any )=>({
       height: "50px",
       width: "auto",
@@ -71,7 +84,7 @@ const Button = {
         height: "16px",
         position: "absolute",
        
-        backgroundColor: mode(`transparent`, `#0D1429`)(props),
+        backgroundColor: mode(`transparent`, `#000000`)(props),
         right: "-5px",
         bottom: "-9px",
         zIndex: "3",

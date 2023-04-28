@@ -39,6 +39,14 @@ export const Fonts = () => (
         font-weight: 700;
         src: url(./fonts/dahlia-boldcondensed.woff) format('woff');
       }
+      @font-face {
+        font-family: Rany;
+        src: url("fonts/Rany.otf") format("opentype");
+      } 
+      @font-face {
+        font-family: CatchyMager;
+        src: url("fonts/CatchyMager.otf") format("opentype");
+      }
       /* Copied from https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&family=Raleway&display=swap */
       /* cyrillic-ext */
       @font-face {

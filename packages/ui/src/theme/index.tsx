@@ -34,7 +34,7 @@ const brand = {
   }, {}),
 };
 // Add color mode config
-const colormode: ColorMode | undefined = "light";
+const colormode: ColorMode | undefined = "dark";
 const config = {
   initialColorMode: colormode,
   useSystemColorMode: false,
@@ -112,10 +112,10 @@ export const theme = extendTheme({
     bgImg: brand.bgImg,
   },
   fonts: {
-    heading: `'Space Grotesk', serif`,
-    body: `'Space Grotesk', sans-serif`,
-    accessory: "Space Grotesk",
-    space: "Space Grotesk",
+    heading: `'CatchyMager', serif`,
+    body: `'Rany', sans-serif`,
+    accessory: "Rany",
+    space: "Rany",
   },
   meta: {
     projects: brand.branding.projects,
@@ -153,7 +153,7 @@ export const theme = extendTheme({
               width: "200px",
               height: "30px",
               position: "absolute",
-              backgroundColor: mode(`transparent`, `#0D1429`)(props),
+              backgroundColor: mode(`transparent`, `#000000`)(props),
               right: "-20px",
               top: "-15px",
               zIndex: "-2",
@@ -227,7 +227,7 @@ export const theme = extendTheme({
         lineHeight: "tall",
       },
       body: {
-        bg: mode(`gray.100`, `#0D1429`)(props),
+        bg: mode(`gray.100`, `#000000`)(props),
         color: mode(`gray.800`, `whiteAlpha.900`)(props),
       },
       a: {
