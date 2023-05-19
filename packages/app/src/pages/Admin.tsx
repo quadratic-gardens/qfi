@@ -274,9 +274,7 @@ export const Admin = () => {
                 Deploy Round (but dont start voting)
               </Button>
               <Button
-                isDisabled
                 onClick={async () => {
-                  setStep(step + 1);
                   setLoading(true);
                   await handleStartVotingRound();
                   setLoading(false);
@@ -290,12 +288,12 @@ export const Admin = () => {
                
                 {loading ? <Heading>Processing transactions...</Heading> : <></>}
               
-                {/* <Text>Current PoseidonT3: {poseidonT3?.address}</Text>
+                <Text>Current PoseidonT3: {poseidonT3?.address}</Text>
                 <Text>Current PoseidonT4: {poseidonT4?.address}</Text>
                 <Text>Current PoseidonT5: {poseidonT5?.address}</Text>
                 <Text>Current PoseidonT6: {poseidonT6?.address}</Text>
                 <Text>Current JubjubFactory: {jubjubFactory?.address}</Text>
-                <Text>Current Jubjub: {jubjub?.address}</Text> */}
+                <Text>Current Jubjub: {jubjub?.address}</Text>
               </VStack>
             </VStack>
           </VStack>
