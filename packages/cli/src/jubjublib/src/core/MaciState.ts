@@ -130,8 +130,8 @@ class Poll {
   // Insert topup message into commands
   public topupMessage = (_message: Message) => {
     assert(_message.msgType == BigInt(2));
-    for (const d of _message.data) {
-      assert(d < SNARK_FIELD_SIZE);
+    for (const d  of _message.data) {
+      assert(d as bigint  < SNARK_FIELD_SIZE);
     }
     this.messages.push(_message);
     let padKey = new PubKey([BigInt("10457101036533406547632367118273992217979173478358440826365724437999023779287"), BigInt("19824078218392094440610104313265183977899662750282163392862422243483260492317")]);
@@ -151,9 +151,9 @@ class Poll {
    */
   public publishMessage = (_message: Message, _encPubKey: PubKey) => {
     assert(_message.msgType == BigInt(1));
-    assert(_encPubKey.rawPubKey[0] < SNARK_FIELD_SIZE && _encPubKey.rawPubKey[1] < SNARK_FIELD_SIZE);
+    assert(_encPubKey.rawPubKey[0] as bigint < SNARK_FIELD_SIZE && _encPubKey.rawPubKey[1] as bigint < SNARK_FIELD_SIZE);
     for (const d of _message.data) {
-      assert(d < SNARK_FIELD_SIZE);
+      assert(d as bigint < SNARK_FIELD_SIZE);
     }
 
     this.encPubKeys.push(_encPubKey);
@@ -580,7 +580,7 @@ class Poll {
       }
 
       // If the vote option index is invalid, do nothing
-      if (command.voteOptionIndex < BigInt(0) || command.voteOptionIndex >= BigInt(this.maxValues.maxVoteOptions)) {
+      if (command.voteOptionIndex as bigint < BigInt(0) || command.voteOptionIndex as bigint >= BigInt(this.maxValues.maxVoteOptions) ) {
         // console.log("no op")
         throw Error("no-op");
         return {};

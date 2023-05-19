@@ -228,7 +228,7 @@ const genRandomBabyJubValue = (): BigInt => {
   }
 
   const privKey: IPrivKey = rand % SNARK_FIELD_SIZE;
-  assert(privKey < SNARK_FIELD_SIZE);
+  assert(privKey as bigint < SNARK_FIELD_SIZE);
 
   return privKey;
 };
@@ -283,7 +283,7 @@ const unpackPubKey = (packed: Buffer): IPubKey => {
 const genPubKey = (privKey: IPrivKey): IPubKey => {
   // Check whether privKey is a field element
   privKey = BigInt(privKey.toString());
-  assert(privKey < SNARK_FIELD_SIZE);
+  assert(privKey as bigint < SNARK_FIELD_SIZE);
   return eddsa.prv2pub(bigInt2Buffer(privKey));
 };
 
