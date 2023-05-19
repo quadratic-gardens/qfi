@@ -7,8 +7,8 @@ import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
 import { ethers } from "ethers"
-import { Message, PubKey, PrivKey, Keypair } from "@qfi/macisdk"
-import { MaciState } from "@qfi/macisdk"
+import { Message, PubKey, PrivKey, Keypair } from "../jubjublib/src/index.js"
+import { MaciState } from "../jubjublib/src/index.js"
 
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 

@@ -70,7 +70,12 @@
     "log-symbols": "^5.1.0",
     "ora": "^6.1.0",
     "prompts": "^2.4.2",
-    "qrcode": "^1.5.0"
+    "qrcode": "^1.5.0",
+    "@adraffy/ens-normalize": "^1.9.0",
+    "assert": "^2.0.0",
+    "blake-hash": "^1.1.0",
+    "circomlibjs": "0.0.8",
+    "ffjavascript": "^0.2.57"
   },
   "nohoist": [
     "**/ethers"

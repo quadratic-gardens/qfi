@@ -1,5 +1,5 @@
 import { Wallet, utils } from "ethers"
-import { Keypair as MaciKeyPair } from "@qfi/macisdk"
+import { Keypair as MaciKeyPair } from "../jubjublib/src/index.js"
 import { EthKeyPair, KeyPair } from "../../types/index.js"
 
 /**

@@ -30,7 +30,7 @@ import {
 import { askForConfirmation, customSpinner } from "../lib/prompts.js"
 import { VkRegistry } from "../../../contracts/typechain-types/contracts/VkRegistry.js"
 import { VkRegistry__factory } from "../../../contracts/typechain-types/factories/contracts/VkRegistry__factory.js"
-import { PubKey } from "@qfi/macisdk"
+import { PubKey } from "../jubjublib/src/index.js"
 import { Recipient } from "types/index.js"
 
 /**

@@ -35,7 +35,13 @@
     "@openzeppelin/contracts-upgradeable": "^4.8.2",
     "argparse": "^1.0.10",
     "circomlib": "0.5.1",
-    "mustache": "^4.2.0"
+    "mustache": "^4.2.0",
+    "@adraffy/ens-normalize": "^1.9.0",
+    "assert": "^2.0.0",
+    "blake-hash": "^1.1.0",
+    "circomlibjs": "0.0.8",
+    "ethers": "5.5.1",
+    "ffjavascript": "^0.2.57"
   },
   "devDependencies": {
     "@qfi/macisdk":"*",

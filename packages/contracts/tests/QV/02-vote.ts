@@ -3,10 +3,10 @@ import { BigNumber, constants, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { Keypair, VerifyingKey } from "@qfi/macisdk";
-import { MaciState } from "@qfi/macisdk";
-import { G1Point, G2Point } from "@qfi/macisdk";
-import { PCommand } from "@qfi/macisdk";
+import { Keypair, VerifyingKey } from "../../src";
+import { MaciState } from "../../src";
+import { G1Point, G2Point } from "../../src";
+import { PCommand } from "../../src";
 
 import { PoseidonT3__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT3__factory";
 import { PoseidonT4__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT4__factory";
@@ -24,7 +24,7 @@ import { PoseidonT4 } from "../../typechain-types/contracts/poseidon/PoseidonT4"
 import { PoseidonT5 } from "../../typechain-types/contracts/poseidon/PoseidonT5";
 import { PoseidonT6 } from "../../typechain-types/contracts/poseidon/PoseidonT6";
 import { Jubjub } from "../../typechain-types/contracts/Jubjub";
-import { JubjubFactory, VerifyingKeyStruct } from "../../typechain-types/contracts/JubjubFactory";
+import { JubjubFactory } from "../../typechain-types/contracts/JubjubFactory";
 import { ConstantInitialVoiceCreditProxy } from "../../typechain-types/contracts/flavors/ConstantInitialVoiceCreditProxy.sol/ConstantInitialVoiceCreditProxy";
 import { FreeForAllGatekeeper } from "../../typechain-types/contracts/flavors/F.sol/FreeForAllGatekeeper";
 import { StateTree } from "../../typechain-types/contracts/StateTree";
@@ -97,7 +97,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
   let constantInitialVoiceCreditProxy: ConstantInitialVoiceCreditProxy;
   let freeForAllGateKeeper: FreeForAllGatekeeper;
   let coordinator: Keypair;
-  let coordinatorPubkey: PubKeyStruct;
+  let coordinatorPubkey: Jubjub.PubKeyStruct;
   const duration = 15 * 60;
   const stateTreeDepth = 6;
   const intStateTreeDepth = 3;
@@ -231,7 +231,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
     const message = command.encrypt(signature, sharedKey);
 
     const { status, logs } = await jubjubInstance
-      .publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())
+      .publishMessage(<Jubjub.MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())
       .then((tx) => tx.wait());
     const iface = jubjubInstance.interface;
     console.log(logs);
@@ -263,7 +263,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
       const command = new PCommand(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
       const signature = command.sign(keypair.privKey);
       const message = command.encrypt(signature, sharedKey);
-      await expect(jubjubInstance.publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())).to.emit(
+      await expect(jubjubInstance.publishMessage(<Jubjub.MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())).to.emit(
         jubjubInstance,
         "PublishMessage"
       );
@@ -288,7 +288,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
       const command = new PCommand(_stateIndex, _newPubKey, _voteOptionIndex, _newVoteWeight, _nonce, _pollId, _salt);
       const signature = command.sign(keypair.privKey);
       const message = command.encrypt(signature, sharedKey);
-      await expect(jubjubInstance.publishMessage(<MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())).to.be.revertedWith(
+      await expect(jubjubInstance.publishMessage(<Jubjub.MessageStruct>message.asContractParam(), keypair.pubKey.asContractParam())).to.be.revertedWith(
         "ERROR_VOTING_PERIOD_PASSED"
       );
     }
@@ -306,7 +306,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
     const deployTime = (await provider.getBlock(blockHash)).timestamp;
     const _duration = await jubjubInstance.voteDurationSeconds();
     console.log(_duration);
-    const p = maciState.deployPoll(_duration, BigInt(deployTime + _duration), maxValues, treeDepths, messageBatchSize, coordinator);
+    const p = maciState.deployPoll(_duration.toNumber(), BigInt(deployTime + _duration), maxValues, treeDepths, messageBatchSize, coordinator);
     let index = 1;
     for (const user of users) {
       const { maciKey: keypair, signer } = user;
@@ -325,7 +325,7 @@ describe("Vote - QV 6-8-3-3 Configuration Smart Contracts", () => {
       const message = command.encrypt(signature, sharedKey);
       maciState.polls[0].publishMessage(message, keypair.pubKey);
 
-      const _message = <MessageStruct>message.asContractParam();
+      const _message = <Jubjub.MessageStruct>message.asContractParam();
       const _encPubKey = keypair.pubKey.asContractParam();
       await expect(jubjubInstance.publishMessage(_message, keypair.pubKey.asContractParam())).to.emit(jubjubInstance, "PublishMessage");
     }

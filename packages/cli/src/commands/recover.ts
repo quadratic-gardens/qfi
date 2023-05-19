@@ -4,7 +4,7 @@ import logSymbols from "log-symbols"
 import { clear } from "console"
 import chalk from "chalk"
 import { BigNumber, ethers } from "ethers"
-import { PubKey } from "@qfi/macisdk"
+import { PubKey } from "../jubjublib/src/index.js"
 
 import { connectToBlockchain, getNetworkExplorerUrl } from "../lib/blockchain.js"
 import { SimpleHackathon__factory } from "../../../contracts/typechain-types/factories/contracts/flavors/SimpleHackathon__factory.js"

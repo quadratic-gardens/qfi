@@ -1,6 +1,6 @@
 import figlet from "figlet"
-import { G1Point, G2Point } from "@qfi/macisdk"
-import { VerifyingKey } from "@qfi/macisdk"
+import { G1Point, G2Point } from "../jubjublib/src/index.js"
+import { VerifyingKey } from "../jubjublib/src/index.js"
 import { Recipient } from "types"
 
 /** dir/file names */

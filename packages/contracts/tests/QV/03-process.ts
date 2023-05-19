@@ -2,9 +2,9 @@ import { ethers } from "hardhat";
 import { BigNumber, BigNumberish, Signer } from "ethers";
 import chai from "chai";
 import { solidity } from "ethereum-waffle";
-import { PCommand, Keypair, Message, VerifyingKey } from "@qfi/macisdk";
-import { G1Point, G2Point } from "@qfi/macisdk";
-import { MaciState, genProcessVkSig, genTallyVkSig } from "@qfi/macisdk";
+import { PCommand, Keypair, Message, VerifyingKey } from "../../src";
+import { G1Point, G2Point } from "../../src";
+import { MaciState, genProcessVkSig, genTallyVkSig } from "../../src";
 
 import { PoseidonT3__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT3__factory";
 import { PoseidonT4__factory } from "../../typechain-types/factories/contracts/poseidon/PoseidonT4__factory";
@@ -95,7 +95,7 @@ describe("Process - Tally QV poll votes", () => {
   let constantInitialVoiceCreditProxy: ConstantInitialVoiceCreditProxy;
   let freeForAllGateKeeper: FreeForAllGatekeeper;
   let coordinator: Keypair;
-  let coordinatorPubkey: PubKeyStruct;
+  let coordinatorPubkey: Jubjub.PubKeyStruct;
 
   const duration = 15 * 60;
   const stateTreeDepth = 6;
@@ -256,7 +256,7 @@ describe("Process - Tally QV poll votes", () => {
       maciState.polls[0].publishMessage(message, keypair.pubKey);
       index++;
 
-      const _message = <MessageStruct>message.asContractParam();
+      const _message = <Jubjub.MessageStruct>message.asContractParam();
       const _encPubKey = keypair.pubKey.asContractParam();
       await expect(jubjubInstance.publishMessage(_message, keypair.pubKey.asContractParam())).to.emit(jubjubInstance, "PublishMessage");
     }
@@ -267,7 +267,7 @@ describe("Process - Tally QV poll votes", () => {
 
       const _newPubKey = keypair.pubKey;
       const _voteOptionIndex = BigInt(index + 1);
-      const _newVoteWeight = BigInt(2);
+      const _newVoteWeight = BigInt(3);
       const _nonce = BigInt(3 - index);
       const _pollId = BigInt(0);
       const _salt = BigInt(0);
@@ -280,7 +280,7 @@ describe("Process - Tally QV poll votes", () => {
       index++;
       console.log(index);
 
-      const _message = <MessageStruct>message.asContractParam();
+      const _message = <Jubjub.MessageStruct>message.asContractParam();
       const _encPubKey = keypair.pubKey.asContractParam();
       await expect(jubjubInstance.publishMessage(_message, keypair.pubKey.asContractParam())).to.emit(jubjubInstance, "PublishMessage");
     }
@@ -305,14 +305,14 @@ describe("Process - Tally QV poll votes", () => {
 
     await jubjubInstance.mergeMessageAqSubRoots(0);
     await jubjubInstance.mergeMessageAq();
-    maciPoll.processMessages();
+    maciPoll.processMessages(0);
   });
 
   describe("Process and Tally Vote messages", () => {
     it("verify - generates tally file data", async () => {
       const pollId = 0;
       const maciPoll = maciState.polls[pollId];
-      const maciTallyCircuitInputs = maciPoll.tallyVotes(pollId);
+      const maciTallyCircuitInputs = maciPoll.tallyVotes();
       console.log("maciPollResults");
       console.log(maciPoll.results);
       const newTallyCommitment = maciTallyCircuitInputs.newTallyCommitment;
