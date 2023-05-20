@@ -162,20 +162,21 @@ export const Admin = () => {
     console.log(jubjubInstance);
     console.log(await jubjubInstance.hash(0, 0));
   };
+
   const handleStartVotingRound = async () => {
     const deployer = provider.getSigner(address);
     
     let JubjubTemplateFactory: Jubjub__factory;
     let libs: JubjubLibraryAddresses;
     libs = {
-      ["contracts/poseidon/PoseidonT6.sol:PoseidonT6"]: "0xf74e750e2b4C58Eb532d44b129BA954507CF6203",
-      ["contracts/poseidon/PoseidonT5.sol:PoseidonT5"]: "0x1DC58993421d92376C21230177DD46B9e9087Ad5",
-      ["contracts/poseidon/PoseidonT3.sol:PoseidonT3"]: "0xD94810B65FB5914EcdE631bd00a4768E7B6AD51a",
-      ["contracts/poseidon/PoseidonT4.sol:PoseidonT4"]: "0x23DD5d6472E88E411A6B78950669b7637F1E6151",
+      ["contracts/poseidon/PoseidonT6.sol:PoseidonT6"]: poseidonT6.address,
+      ["contracts/poseidon/PoseidonT5.sol:PoseidonT5"]: poseidonT5.address,
+      ["contracts/poseidon/PoseidonT3.sol:PoseidonT3"]: poseidonT3.address,
+      ["contracts/poseidon/PoseidonT4.sol:PoseidonT4"]: poseidonT4.address,
     };
     JubjubTemplateFactory = new Jubjub__factory(libs, deployer);
 
-    const jubjubInstance = JubjubTemplateFactory.attach("0xc7b53f0243201425D8bf83F98B9dC43A878BFD20");
+    const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
     setJubjub(jubjubInstance);
 
     console.log(jubjubInstance);
@@ -189,6 +190,34 @@ export const Admin = () => {
  
     console.log((await jubjubInstance.hash(0, 0)).toString());
     console.log( BigNumber.from("0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864").toString());
+  };
+  const handleStartPresetVotingRound = async () => {
+    const deployer = provider.getSigner(address);
+    
+    let JubjubTemplateFactory: Jubjub__factory;
+    let libs: JubjubLibraryAddresses;
+    libs = {
+      ["contracts/poseidon/PoseidonT6.sol:PoseidonT6"]: "0xb40577bBaB20F9083a20378d36fBcc05B8cFbE69",
+      ["contracts/poseidon/PoseidonT5.sol:PoseidonT5"]: "0x73ec5c589bdFfCB3DcBbCA8De290a1fCe9092d4C",
+      ["contracts/poseidon/PoseidonT3.sol:PoseidonT3"]: "0x99E8C06aC9cb81BdE90336919bdD525aB67d0Ef0",
+      ["contracts/poseidon/PoseidonT4.sol:PoseidonT4"]: "0x158349daACE85AA6b5A1a9e39B6aFD45A7Cc2fc1",
+    };
+    JubjubTemplateFactory = new Jubjub__factory(libs, deployer);
+
+    const jubjubInstance = JubjubTemplateFactory.attach("0xab787044caefa1b0A89Fc9e17cA22C63aD3C5C82");
+    setJubjub(jubjubInstance);
+
+    console.log("jubjubInstance",jubjubInstance);
+
+
+    const _coordinatorPubkey = PubKey.unserialize("macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04").asContractParam()
+    // console.log(_coordinatorPubkey);
+    const tx = await jubjubInstance.startVoting(BigNumber.from(3), BigNumber.from(60*60*24*14), _coordinatorPubkey);
+    console.log(tx);
+    await tx.wait();
+ 
+    console.log("hash:", (await jubjubInstance.hash(0, 0)).toString());
+    console.log("hashShouldEq:",  BigNumber.from("0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864").toString());
   };
 
   // const [jubjubFactory, setjubjubFactory] = React.useState("");
@@ -279,10 +308,21 @@ export const Admin = () => {
                   await handleStartVotingRound();
                   setLoading(false);
                 }}
-                // isDisabled={step !== 99}
+                isDisabled={step !== 3}
                 variant="amsterdam"
                 w="100%">
                 Start Voting
+              </Button>
+              <Button
+                onClick={async () => {
+                  setLoading(true);
+                  await handleStartPresetVotingRound();
+                  setLoading(false);
+                }}
+                // isDisabled={step !== 99}
+                variant="amsterdam"
+                w="100%">
+                Start Voting for: 0xab787044caefa1b0A89Fc9e17cA22C63aD3C5C82 
               </Button>
               <VStack>
                
