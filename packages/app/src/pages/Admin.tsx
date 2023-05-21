@@ -1,6 +1,14 @@
 /* eslint-disable no-useless-computed-key */
 import React, { useState } from "react";
-import { Button, Heading, Flex, VStack, Container, useColorModeValue, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  Flex,
+  VStack,
+  Container,
+  useColorModeValue,
+  Text,
+} from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import { useWallet } from "@qfi/hooks";
 import { BigNumber } from "ethers";
@@ -15,14 +23,20 @@ import { PoseidonT5 } from "../typechain/contracts/poseidon/PoseidonT5";
 import { PoseidonT6 } from "../typechain/contracts/poseidon/PoseidonT6";
 
 import { JubjubFactory } from "../typechain/contracts/JubjubFactory";
-import { JubjubFactoryLibraryAddresses, JubjubFactory__factory } from "../typechain/factories/contracts/JubjubFactory__factory";
-import { Jubjub__factory, JubjubLibraryAddresses } from "../typechain/factories/contracts/Jubjub__factory";
+import {
+  JubjubFactoryLibraryAddresses,
+  JubjubFactory__factory,
+} from "../typechain/factories/contracts/JubjubFactory__factory";
+import {
+  Jubjub__factory,
+  JubjubLibraryAddresses,
+} from "../typechain/factories/contracts/Jubjub__factory";
 import { Jubjub } from "../typechain/contracts/Jubjub";
 
 import { SimpleHackathon__factory } from "../typechain/factories/contracts/flavors/SimpleHackathon__factory";
 import { SimpleHackathon } from "../typechain/contracts/flavors/SimpleHackathon";
 
-import { PubKey } from "../jubjublib/domainobjs/domainobjs"
+import { PubKey } from "../jubjublib/domainobjs/domainobjs";
 
 export const Admin = () => {
   const { provider, address, isConnected } = useWallet();
@@ -115,7 +129,10 @@ export const Admin = () => {
     const deployer = provider.getSigner(address);
     let jubjubFactory: JubjubFactory;
 
-    const jubjubFactoryFactory = new JubjubFactory__factory(factoryLibs, deployer);
+    const jubjubFactoryFactory = new JubjubFactory__factory(
+      factoryLibs,
+      deployer
+    );
     jubjubFactory = await jubjubFactoryFactory.deploy();
     setJubjubFactory(jubjubFactory);
     toast({
@@ -149,14 +166,20 @@ export const Admin = () => {
     await simpleHackathon.deployed();
 
     //NOTE: Deploy Jubjub Instance
-    const tx = await jubjubFactory.deployJubjub("0xDEADBEEF00000000000000000000000000000000000000000000000000000000", simpleHackathon.address, simpleHackathon.address);
+    const tx = await jubjubFactory.deployJubjub(
+      "0xDEADBEEF00000000000000000000000000000000000000000000000000000000",
+      simpleHackathon.address,
+      simpleHackathon.address
+    );
     console.log(tx);
     await tx.wait();
     // sunchronous timeout to wait for the tx to be mined
-    
+
     await new Promise((resolve) => setTimeout(resolve, 10000));
     console.log("waiting for tx to be mined");
-    const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
+    const jubjubInstance = JubjubTemplateFactory.attach(
+      await jubjubFactory.currentJubjub()
+    );
     setJubjub(jubjubInstance);
 
     console.log(jubjubInstance);
@@ -165,7 +188,7 @@ export const Admin = () => {
 
   const handleStartVotingRound = async () => {
     const deployer = provider.getSigner(address);
-    
+
     let JubjubTemplateFactory: Jubjub__factory;
     let libs: JubjubLibraryAddresses;
     libs = {
@@ -176,48 +199,81 @@ export const Admin = () => {
     };
     JubjubTemplateFactory = new Jubjub__factory(libs, deployer);
 
-    const jubjubInstance = JubjubTemplateFactory.attach(await jubjubFactory.currentJubjub());
+    const jubjubInstance = JubjubTemplateFactory.attach(
+      await jubjubFactory.currentJubjub()
+    );
     setJubjub(jubjubInstance);
 
     console.log(jubjubInstance);
 
-
-    const _coordinatorPubkey = PubKey.unserialize("macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04").asContractParam()
+    const _coordinatorPubkey = PubKey.unserialize(
+      "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
+    ).asContractParam();
     console.log(_coordinatorPubkey);
-    const tx = await jubjubInstance.startVoting(BigNumber.from(3), BigNumber.from(60*60*24*14), _coordinatorPubkey);
+    const tx = await jubjubInstance.startVoting(
+      BigNumber.from(3),
+      BigNumber.from(60 * 60 * 24 * 14),
+      _coordinatorPubkey
+    );
     console.log(tx);
     await tx.wait();
- 
+
     console.log((await jubjubInstance.hash(0, 0)).toString());
-    console.log( BigNumber.from("0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864").toString());
+    console.log(
+      BigNumber.from(
+        "0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864"
+      ).toString()
+    );
   };
   const handleStartPresetVotingRound = async () => {
-    const deployer = provider.getSigner(address);
-    
-    let JubjubTemplateFactory: Jubjub__factory;
-    let libs: JubjubLibraryAddresses;
-    libs = {
-      ["contracts/poseidon/PoseidonT6.sol:PoseidonT6"]: "0xb40577bBaB20F9083a20378d36fBcc05B8cFbE69",
-      ["contracts/poseidon/PoseidonT5.sol:PoseidonT5"]: "0x73ec5c589bdFfCB3DcBbCA8De290a1fCe9092d4C",
-      ["contracts/poseidon/PoseidonT3.sol:PoseidonT3"]: "0x99E8C06aC9cb81BdE90336919bdD525aB67d0Ef0",
-      ["contracts/poseidon/PoseidonT4.sol:PoseidonT4"]: "0x158349daACE85AA6b5A1a9e39B6aFD45A7Cc2fc1",
-    };
-    JubjubTemplateFactory = new Jubjub__factory(libs, deployer);
+    try {
+      const deployer = provider.getSigner(address);
 
-    const jubjubInstance = JubjubTemplateFactory.attach("0xab787044caefa1b0A89Fc9e17cA22C63aD3C5C82");
-    setJubjub(jubjubInstance);
+      let JubjubTemplateFactory: Jubjub__factory;
+      let libs: JubjubLibraryAddresses;
+      libs = {
+        ["contracts/poseidon/PoseidonT6.sol:PoseidonT6"]:
+          "0xb40577bBaB20F9083a20378d36fBcc05B8cFbE69",
+        ["contracts/poseidon/PoseidonT5.sol:PoseidonT5"]:
+          "0x73ec5c589bdFfCB3DcBbCA8De290a1fCe9092d4C",
+        ["contracts/poseidon/PoseidonT3.sol:PoseidonT3"]:
+          "0x99E8C06aC9cb81BdE90336919bdD525aB67d0Ef0",
+        ["contracts/poseidon/PoseidonT4.sol:PoseidonT4"]:
+          "0x158349daACE85AA6b5A1a9e39B6aFD45A7Cc2fc1",
+      };
+      JubjubTemplateFactory = new Jubjub__factory(libs, deployer);
 
-    console.log("jubjubInstance",jubjubInstance);
+      const jubjubInstance = JubjubTemplateFactory.attach(
+        "0xab787044caefa1b0A89Fc9e17cA22C63aD3C5C82"
+      );
+      setJubjub(jubjubInstance);
 
+      console.log("jubjubInstance", jubjubInstance);
 
-    const _coordinatorPubkey = PubKey.unserialize("macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04").asContractParam()
-    // console.log(_coordinatorPubkey);
-    const tx = await jubjubInstance.startVoting(BigNumber.from(3), BigNumber.from(60*60*24*14), _coordinatorPubkey);
-    console.log(tx);
-    await tx.wait();
- 
-    console.log("hash:", (await jubjubInstance.hash(0, 0)).toString());
-    console.log("hashShouldEq:",  BigNumber.from("0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864").toString());
+      const _coordinatorPubkey = PubKey.unserialize(
+        "macipk.ec4173e95d2bf03100f4c694d5c26ba6ab9817c0a5a0df593536a8ee2ec7af04"
+      ).asContractParam();
+      console.log(_coordinatorPubkey);
+      // console.log(_coordinatorPubkey);
+      const tx = await jubjubInstance.startVoting(
+        BigNumber.from(3),
+        BigNumber.from(60 * 60 * 24 * 14),
+        _coordinatorPubkey
+      );
+      console.log(tx);
+
+      await tx.wait();
+
+      console.log("hash:", (await jubjubInstance.hash(0, 0)).toString());
+      console.log(
+        "hashShouldEq:",
+        BigNumber.from(
+          "0x2098f5fb9e239eab3ceac3f27b81e481dc3124d55ffed523a839ee8446b64864"
+        ).toString()
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   // const [jubjubFactory, setjubjubFactory] = React.useState("");
@@ -254,7 +310,8 @@ export const Admin = () => {
           background: "transparent",
           borderRadius: "0px",
         },
-      }}>
+      }}
+    >
       <VStack spacing={0} w="full">
         <Container h="full" w="full" maxWidth="container.sm">
           <VStack mt={10} spacing={4} h="full" alignItems="flex-start">
@@ -264,7 +321,7 @@ export const Admin = () => {
             <VStack>
               <Button
                 onClick={async () => {
-                  setStep(13)
+                  setStep(13);
                   setLoading(true);
                   await handleT2Deploy();
                   setLoading(false);
@@ -272,13 +329,13 @@ export const Admin = () => {
                 }}
                 isDisabled={step !== 0}
                 variant="amsterdam"
-                w="100%">
+                w="100%"
+              >
                 Deploy Poseidon Libs
               </Button>
               <Button
-
                 onClick={async () => {
-                  setStep(13)
+                  setStep(13);
                   setLoading(true);
                   await handleFactoryDeploy();
                   setLoading(false);
@@ -286,12 +343,13 @@ export const Admin = () => {
                 }}
                 isDisabled={step !== 1}
                 variant="amsterdam"
-                w="100%">
+                w="100%"
+              >
                 Deploy Admin Contract
               </Button>
               <Button
                 onClick={async () => {
-                  setStep(13)
+                  setStep(13);
                   setLoading(true);
                   await handleCheckDeploy();
                   setLoading(false);
@@ -299,7 +357,8 @@ export const Admin = () => {
                 }}
                 isDisabled={step !== 2}
                 variant="amsterdam"
-                w="100%">
+                w="100%"
+              >
                 Deploy Round (but dont start voting)
               </Button>
               <Button
@@ -310,7 +369,8 @@ export const Admin = () => {
                 }}
                 isDisabled={step !== 3}
                 variant="amsterdam"
-                w="100%">
+                w="100%"
+              >
                 Start Voting
               </Button>
               <Button
@@ -321,13 +381,17 @@ export const Admin = () => {
                 }}
                 // isDisabled={step !== 99}
                 variant="amsterdam"
-                w="100%">
-                Start Voting for: 0xab787044caefa1b0A89Fc9e17cA22C63aD3C5C82 
+                w="100%"
+              >
+                Start Voting for: 0xab787044caefa1b0A89Fc9e17cA22C63aD3C5C82
               </Button>
               <VStack>
-               
-                {loading ? <Heading>Processing transactions...</Heading> : <></>}
-              
+                {loading ? (
+                  <Heading>Processing transactions...</Heading>
+                ) : (
+                  <></>
+                )}
+
                 <Text>Current PoseidonT3: {poseidonT3?.address}</Text>
                 <Text>Current PoseidonT4: {poseidonT4?.address}</Text>
                 <Text>Current PoseidonT5: {poseidonT5?.address}</Text>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { HStack, IconButton, Icon, Select, Tooltip, useColorModeValue, VStack, Text, Button } from "@chakra-ui/react";
+import { HStack, IconButton, Icon, Select, Tooltip, useColorModeValue, VStack, Text, Button , Link as Clink} from "@chakra-ui/react";
 
 import { MdDashboard, MdSettings } from "react-icons/md";
 import { HiCollection, HiQuestionMarkCircle } from "react-icons/hi";
@@ -105,7 +105,8 @@ export const Navbar = ({ onGuideOpen }: SideNavProps) => {
         {/* <Tooltip label="..." placement="right"> */}
         <Tooltip label="Guide" placement="right">
           <IconButton
-            onClick={onGuideOpen}
+          href={`https://scribehow.com/shared/Fleek_Workflow__kd1qhZpFS1eYpO6pICWl8g`} as={Clink} rel="noreferrer" target="_blank"
+            // onClick={onGuideOpen}
             color="gray.500"
             icon={<Icon as={HiQuestionMarkCircle} boxSize={5} />}
             aria-label="Guide"
