@@ -7,8 +7,8 @@ let projects = [
     "description": "Idw3 is a PoS portal facilitating private B2C transactions for web2 & web3 markets. It uses SISMO and Railgun to provide selective exposure to sensitive user details in order to undertake transactions for physiucal product with legitimate, verified businesses.",
     "ethereumAddress": "0x33c8C9D6ba627725Ea08322Ce60078F9b6f7E355",
     "website": "https://github.com/immaxkent/idw3",
-    "thumbnailImageLink": " https://i.imgur.com/M5ZeROO.png",
-    "logoCdnUrl": " https://i.imgur.com/M5ZeROO.png",
+    "thumbnailImageLink": "https://i.imgur.com/M5ZeROO.png",
+    "logoCdnUrl": "https://i.imgur.com/M5ZeROO.png",
     "bannerImageLink": "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
     "id": "1"
   },
