@@ -9,7 +9,7 @@ let projects = [
     "website": "https://github.com/immaxkent/idw3",
     "thumbnailImageLink": "https://i.imgur.com/M5ZeROO.png",
     "logoCdnUrl": "https://i.imgur.com/M5ZeROO.png",
-    "bannerImageLink": "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
+    "bannerImageLink": "https://unsplash.com/photos/2LowviVHZ-E",
     "id": "1"
   },
   {
@@ -107,6 +107,54 @@ let projects = [
     "logoCdnUrl": "https://taikai.azureedge.net/MxGA4N7P3QtLsyqGx_7bTNIGmdqN2f0VS3L8CXKm0-o/rs:fit:350:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy8zNDNhNDk1MC1mN2MwLTExZWQtYjgzZC05ZjhkMjljMTdjNDVsb2dvLnBuZw",
     "bannerImageLink": "https://taikai.azureedge.net/wBcHYAmCR1F9DxmEHhKCyJGKZfLkJDfzukXlrDuC_Kw/rs:fit:1920:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy80ZjRhNjMxMC1mN2MwLTExZWQtYjgzZC05ZjhkMjljMTdjNDVjb3Zlci5wbmc",
     "id": "9"
+  },
+  {
+    "recipientId": 10,
+    "projectName": "Analyzing MEV Sandwich Trades on Dune",
+    "tagline": "I created a dex.sandwiches table in Dune spellbook that has all MEV sandwich trades data. To showcase the table, I also made a Dune dashboard with some high level MEV data.",
+    "description": "I created a dex.sandwiches table in Dune spellbook that has all MEV sandwich trades data. To showcase the table, I also made a Dune dashboard with some high level MEV data.",
+    "ethereumAddress": "0x09a5943a6d10919571eE2C9F63380aEA747ECA97",
+    "website": "https://github.com/duneanalytics/spellbook/pull/3384/files",
+    "thumbnailImageLink": "https://taikai.azureedge.net/3ruB7bN2m8adaX0UkTXPNMFRj2lKGfQanAO8wYVNlbk/rs:fit:350:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy84NTVkMjgxMC1mN2NiLTExZWQtOGYxYy04OTYyMDgwZDU0ZjZZTXhXOFlqUV80MDB4NDAwIGNvcHkuanBn",
+    "logoCdnUrl": "https://taikai.azureedge.net/3ruB7bN2m8adaX0UkTXPNMFRj2lKGfQanAO8wYVNlbk/rs:fit:350:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy84NTVkMjgxMC1mN2NiLTExZWQtOGYxYy04OTYyMDgwZDU0ZjZZTXhXOFlqUV80MDB4NDAwIGNvcHkuanBn",
+    "bannerImageLink": "https://taikai.azureedge.net/J3_-R5tYVyktSpLkx1Z84SgcQC3dnmNi-YudVGDHkz8/rs:fit:1920:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy82ODFiNmJkMC1mN2NjLTExZWQtOWI3Ny0zYmM5NTA3OWQ2NzhTY3JlZW5zaG90IDIwMjMtMDUtMjEgYXQgMTMuMzYuMTMucG5n",
+    "id": "10"
+  },
+  {
+    "recipientId": 11,
+    "projectName": "Secret Angels",
+    "tagline": "Collusion-resistant social recovery. Built on top of Sismo leveraging Safe account abstraction.",
+    "description": "A complete social recovery module integrated into Safe protocol. Usual social recovery mechanism is subject to potential guardians’ collusion. With our project we avoid this pitfall by leveraging Sismo for social recovery through account abstraction. Experience a groundbreaking approach where the guardians ensuring your account's safety remain anonymous to each other. Adding on top several times depended securities mechanisms to ensure maximum safety, also incentivizing honest behavior.",
+    "ethereumAddress": "0x3C57Ece6C13AA7946060690aBE03a4F7b90c4868",
+    "website": "https://github.com/Secret-Angels/frontend",
+    "thumbnailImageLink": "https://taikai.azureedge.net/lhWCKkIpn5KhYE2scYJsUOayxu1kWgEa3mWel-eatkA/rs:fit:350:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy9mNGVhYTVmMC1mN2M1LTExZWQtOGYxYy04OTYyMDgwZDU0ZjZwaG90b18yMDIzLTA1LTIwXzE4LTM3LTUzLmpwZw",
+    "logoCdnUrl": "https://taikai.azureedge.net/lhWCKkIpn5KhYE2scYJsUOayxu1kWgEa3mWel-eatkA/rs:fit:350:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy9mNGVhYTVmMC1mN2M1LTExZWQtOGYxYy04OTYyMDgwZDU0ZjZwaG90b18yMDIzLTA1LTIwXzE4LTM3LTUzLmpwZw",
+    "bannerImageLink": "https://taikai.azureedge.net/-06_C8hA6GLkGLaXsq3gl-GRY6xOWis3c-zxZ-iWzL4/rs:fit:1920:0:0/aHR0cHM6Ly9zdG9yYWdlLmdvb2dsZWFwaXMuY29tL3RhaWthaS1zdG9yYWdlL2ltYWdlcy84MmY5NjNmMC1mN2NhLTExZWQtOGYxYy04OTYyMDgwZDU0ZjZTY3JlZW5zaG90IGZyb20gMjAyMy0wNS0yMSAxMy0yNi0xOS5wbmc",
+    "id": "11"
+  },
+  {
+    "recipientId": 12,
+    "projectName": "AutoFi - automate your investing",
+    "tagline": "AutoFi helps to automate your DeFi investing.",
+    "description": "AutoFi offers the ability to schedule automated transactions like Dollar-cost-averaging (DCA), providing convenience and control without giving up custody. \n\nAn underlying ambition of AutoFi is to onboard people with mostly CeFi experience into the DeFi world, like your crypto-curious friend who is still using Coinbase for all their swaps.\n\nTech:\n- Account Abstraction for seamless integration with other smart contracts. \n- Price aggregation, powered by 1inch router, to find the best rates across multiple DeFi protocols.\n- Web2 accounts via Sismo Connect allows for easy onboarding via social.",
+    "ethereumAddress": "0x36076FA130f6E5dbCb71Aa864363925dAdbc7Bbb",
+    "website": "https://github.com/clement4saunier/ETHDam-Hackathon-2023/",
+    "thumbnailImageLink": "https://user-images.githubusercontent.com/2742107/239897890-40ad9709-a89b-4e48-a54d-9cadca0068e1.png",
+    "logoCdnUrl": "https://user-images.githubusercontent.com/2742107/239898664-6e459500-321d-418b-97ba-e82a03e407eb.png",
+    "bannerImageLink": "https://user-images.githubusercontent.com/2742107/239907729-0d49ccd2-52c0-478f-83cb-c56922179465.png",
+    "id": "12"
+  },
+  {
+    "recipientId": 13,
+    "projectName": "fusion-zk",
+    "tagline": "Combining 1inch fusion and RailGun zk privacy to enable swaps at best rates that respect personal data",
+    "description": "Enabling private swaps at the best rates with fusion-zk\n\nOn polygon Blockchain, with gasless features, fusion-zk is the step forward to connect DeFi values of open finance and Cyberphunk ideology of human right to Privacy.\n\nPriFi - Private Finance revolution with RailGun and 1inch: the meeting of two booming ecosystems\n\n=> Enabling the access to almost all DeFi liquidity for Railway wallet users. \n=> Enabling Private Trading on 1inch\n\n\nSecret strategies for DeFi \n=> Enable Traders to Protect their strategy from competition and monetize them\n\n\nEnjoying DeFi potential in a private way 🦄🔫\n",
+    "ethereumAddress": "0xA573ED241036d43c3E8a7B01d5721af0ED824746",
+    "website": "https://github.com/zkinch/FusionZk",
+    "thumbnailImageLink": "https://drive.google.com/drive/folders/1YKVu99mTwQJf1ohmS-FmTyllTqpOJbci?usp=sharing",
+    "logoCdnUrl": "https://drive.google.com/drive/folders/1YKVu99mTwQJf1ohmS-FmTyllTqpOJbci?usp=sharing",
+    "bannerImageLink": "https://drive.google.com/drive/folders/1YKVu99mTwQJf1ohmS-FmTyllTqpOJbci?usp=sharing",
+    "id": "13"
   }
 ]
 
