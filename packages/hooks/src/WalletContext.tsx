@@ -23,35 +23,13 @@ type WalletContextType = {
 };
 
 export const SUPPORTED_NETWORKS: NetworkConfig = {
-  "0x1": {
-    chainId: "0x1",
-    name: "Mainnet",
-    symbol: "ETH",
-    explorer: "https://etherscan.io",
-    rpc: "https://mainnet.infura.io/v3/<your infura project id>",
-  },
-
-  "0x539": {
-    chainId: "0x539",
-    name: "Hardhat",
-    symbol: "ETH",
-    explorer: "http://localhost:1234",
-    rpc: "http://localhost:8545",
-  },
-  "0x89": {
-    chainId: "0x89",
-    name: "Polygon",
-    symbol: "MATIC",
-    explorer: "https://polygonscan.com",
-    rpc: "https://polygon-rpc.com/",
-  },
-  "0x13881": {
-    chainId: "0x13881",
-    name: "Mumbai Testnet",
-    symbol: "MATIC",
-    explorer: "https://mumbai.polygonscan.com",
-    rpc: "https://matic-mumbai.chainstacklabs.com",
-  },
+  "0x64": {
+    chainId: "0x64",
+    name: "Gnosis Chain",
+    symbol: "xDai",
+    explorer: "https://blockscout.com/xdai/mainnet/",
+    rpc: "https://rpc.gnosischain.com/",
+  }
 };
 
 export const providerOptions: IProviderOptions = {
@@ -60,9 +38,7 @@ export const providerOptions: IProviderOptions = {
     options: {
       infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
       rpc: {
-        1: SUPPORTED_NETWORKS["0x1"].rpc,
-        // 4: SUPPORTED_NETWORKS["0x4"].rpc,
-        1337: SUPPORTED_NETWORKS["0x539"].rpc,
+        100: SUPPORTED_NETWORKS["0x64"].rpc,
       },
     },
   },
@@ -72,9 +48,7 @@ export const providerOptions: IProviderOptions = {
       appName: "QFI",
       infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
       rpc: {
-        1: SUPPORTED_NETWORKS["0x1"].rpc,
-        // 4: SUPPORTED_NETWORKS["0x4"].rpc,
-        1337: SUPPORTED_NETWORKS["0x539"].rpc,
+        100: SUPPORTED_NETWORKS["0x64"].rpc,
       },
     },
   },
@@ -179,7 +153,7 @@ export const WalletProvider: React.FC<{
         handleErrorEvent &&
           handleErrorEvent({
             code: "UNSUPPORTED_NETWORK",
-            message: `Network not supported, please switch to one of the supported networks`,
+            message: `Network not supported, please switch to Gnosis Chain Network`,
           });
         return;
       }
@@ -380,6 +354,10 @@ export const useWallet = (): WalletContextType => useContext(WalletContext);
 
 export const nameToChainId = (name: string): string | undefined => {
   switch (name) {
+    case "xdai":
+      return "0x64";
+    case "polygon":
+      return "0x89";
     case "Mainnet":
       return "0x1";
     case "Hardhat":

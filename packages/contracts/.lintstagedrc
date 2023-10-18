@@ -1,4 +1,0 @@
-{
-  "*.sol": "solhint --fix",
-  "*.ts": "eslint --fix"
-}

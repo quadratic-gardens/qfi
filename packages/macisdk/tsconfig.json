@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+
+    "declaration": false,
+    "importHelpers": true,
+    "lib": ["esnext", "es5", "dom", "dom.iterable"],
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitThis": true,
+    "preserveSymlinks": true,
+    "preserveWatchOutput": true,
+    "pretty": false,
+    "rootDir": "src",
+    "target": "esnext",
+
+    "experimentalDecorators": true,
+    "alwaysStrict": false,
+    "allowJs": true,
+    "noImplicitAny": false,
+    "forceConsistentCasingInFileNames": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "strict": false,
+    "outDir": "./build",
+    "skipDefaultLibCheck": true,
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true
+  },
+  "exclude": ["node_modules", "**/*.d.ts"],
+  "include": ["./src/**/*.ts"]
+}

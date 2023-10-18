@@ -6,10 +6,10 @@ import dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/types";
 import { NetworkUserConfig } from "hardhat/types";
 
-import "@typechain/hardhat";
-import "@nomiclabs/hardhat-ethers";
-// import "@nomiclabs/hardhat-waffle";
-// import "@nomiclabs/hardhat-ganache";
+
+import '@typechain/hardhat'
+import '@nomiclabs/hardhat-ethers'
+import '@nomiclabs/hardhat-waffle'
 
 import "solidity-coverage";
 import "hardhat-gas-reporter";
@@ -19,7 +19,8 @@ import "hardhat-abi-exporter";
 dotenv.config();
 
 const WALLET_MNEMONIC =
-  process.env.WALLET_MNEMONIC || "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
+  process.env.WALLET_MNEMONIC ||
+  "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
 const INFURA_API_KEY = process.env.INFURA_API_KEY || "";
 const GAS_LIMIT = 30000000;
 const CHAIN_IDS = {
@@ -43,7 +44,9 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
   }
 });
 
-function createTestnetConfig(network: keyof typeof CHAIN_IDS): NetworkUserConfig {
+function createTestnetConfig(
+  network: keyof typeof CHAIN_IDS
+): NetworkUserConfig {
   const url: string = "https://" + network + ".infura.io/v3/" + INFURA_API_KEY;
   return {
     accounts: {
@@ -104,30 +107,20 @@ const config: HardhatUserConfig = {
     coinmarketcap: "603bd12e-d2f3-4a9f-8c82-d5e346d9d482",
   },
   typechain: {
-    outDir: "typechain/",
+    outDir: "./typechain-types",
     target: "ethers-v5",
     alwaysGenerateOverloads: false,
-    externalArtifacts: ["precompiled/*.json"],
+    externalArtifacts: [],
   },
   solidity: {
-    version: "0.8.1",
+    version: "0.8.10",
     settings: {
       optimizer: {
         enabled: true,
         runs: 0,
       },
     },
-    overrides: {
-      "contracts/GrantRound.sol": {
-        version: "0.8.1",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 0,
-          },
-        },
-      },
-    },
+    overrides: {},
   },
 };
 

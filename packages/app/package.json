@@ -1,39 +1,43 @@
 {
   "name": "@qfi/app",
-  "version": "0.1.0",
+  "version": "3.0.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@chakra-ui/react": "^1.8.6",
     "@coinbase/wallet-sdk": "^3.0.4",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
+    "@fontsource/archivo": "^4.5.7",
     "@fontsource/tinos": "^4.5.4",
     "@gnosis.pm/safe-apps-web3modal": "^12.0.0",
-    "@qfi/hooks": "^0.1.0",
-    "@qfi/ui": "^0.1.0",
-    "@testing-library/jest-dom": "^5.9.0",
-    "@testing-library/react": "^10.2.1",
-    "@testing-library/user-event": "^12.0.2",
-    "@types/jest": "^25.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
+    "@qfi/hooks": "^3.0.0",
+    "@qfi/ui": "^3.0.0",
     "@walletconnect/web3-provider": "^1.7.5",
+    "base64url": "^3.0.1",
+    "blake-hash": "^1.1.0",
     "chakra-ui-steps": "^1.6.2",
+    "circomlibjs": "0.0.8",
     "ethers": "^5.6.1",
+    "ffjavascript": "^0.2.57",
     "framer-motion": "^4.0.0",
+    "i18next": "^21.8.16",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.18.3",
     "react-icons": "^3.0.0",
     "react-pose": "^4.0.10",
     "react-pose-text": "^3.1.0",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^6.0.2",
-    "react-scripts": "4.0.3",
     "react-spinners": "^0.11.0",
-    "typescript": "^4.3.5",
     "web-vitals": "^0.2.2",
     "web3modal": "^1.9.5"
   },
+  "resolutions": {},
+  "nohoist": [
+    "**/ethers"
+  ],
   "scripts": {
     "start": "craco start",
     "build": "craco build",
@@ -45,9 +49,11 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",
@@ -56,6 +62,18 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^6.4.1"
+    "@craco/craco": "^6.4.1",
+    "@testing-library/jest-dom": "^5.9.0",
+    "@testing-library/react": "^10.2.1",
+    "@testing-library/user-event": "^12.0.2",
+    "@types/jest": "^25.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-qr-reader": "^2.1.4",
+    "react-scripts": "4.0.3",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.3.5",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }
